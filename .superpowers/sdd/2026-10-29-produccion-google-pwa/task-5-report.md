@@ -46,3 +46,16 @@ No remote Supabase project was accessed. Remote RLS policies, Storage policies, 
 Round 1 follow-up commit: `2e1f9b6ec64b803810a517546f3708dd4ab4e019`.
 Round 2 checker-hardening commit: the commit containing this report; obtain its exact hash with `git rev-parse HEAD`.
 Round 3 checker-hardening commit: the commit containing this report; obtain its exact hash with `git rev-parse HEAD`.
+
+## Final fix round
+
+- Replaced the loose upload-guard regex with a bounded source-structure parser that captures the variable assigned by `getImageUploadError(...)` and requires that exact variable as the following `if` condition whose consequent begins with `throw` or `return` before `.upload(...)`.
+- Added synthetic regression coverage: a valid guard passes and an unrelated condition (`otherError`) fails.
+
+Exact validation results from:
+
+`C:\Users\Jaime Tarazona\Documents\GitHub\buscomimascotaperdida.com\.worktrees\production-readiness`
+
+- `node scripts/check-task-5-supabase.mjs` — exit code `0`; output: `Task 5 source-structure assertions passed: bucket targets/limits, legacy policy replacement, ownership, and same-branch pre-upload guards are present.`
+- `npx tsc --noEmit` — exit code `0`; no output.
+- `git diff --check` — exit code `0`; no output.

@@ -34,6 +34,86 @@ if (missingMigrationPatterns.length > 0 || !bucketBlock || !insertPolicyBlock ||
     process.exit(1)
 }
 
+function findMatchingDelimiter(source, start, opening, closing) {
+    let depth = 0
+    let quote = null
+    let escaped = false
+
+    for (let index = start; index < source.length; index += 1) {
+        const character = source[index]
+        const nextCharacter = source[index + 1]
+
+        if (quote) {
+            if (escaped) {
+                escaped = false
+            } else if (character === "\\") {
+                escaped = true
+            } else if (character === quote) {
+                quote = null
+            }
+            continue
+        }
+
+        if ((character === "'" || character === '"' || character === "`")) {
+            quote = character
+            continue
+        }
+        if (character === "/" && nextCharacter === "/") {
+            const lineEnd = source.indexOf("\n", index + 2)
+            index = lineEnd === -1 ? source.length : lineEnd
+            continue
+        }
+        if (character === "/" && nextCharacter === "*") {
+            const commentEnd = source.indexOf("*/", index + 2)
+            index = commentEnd === -1 ? source.length : commentEnd + 1
+            continue
+        }
+        if (character === opening) depth += 1
+        if (character === closing && --depth === 0) return index
+    }
+
+    return -1
+}
+
+function hasExactUploadGuard(source, uploadPosition) {
+    const precedingSource = source.slice(0, uploadPosition)
+    const assignmentMatches = [...precedingSource.matchAll(
+        /\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*getImageUploadError\s*\(([^()]*)\)\s*;?/g,
+    )]
+    const assignment = assignmentMatches.at(-1)
+    if (!assignment) return false
+
+    const variableName = assignment[1]
+    const guardStart = (assignment.index ?? 0) + assignment[0].length
+    const flow = source.slice(guardStart, uploadPosition)
+    const ifPattern = /\bif\s*\(/g
+
+    for (const match of flow.matchAll(ifPattern)) {
+        const ifStart = match.index ?? 0
+        const conditionStart = flow.indexOf("(", ifStart)
+        const conditionEnd = findMatchingDelimiter(flow, conditionStart, "(", ")")
+        if (conditionEnd === -1) continue
+
+        const condition = flow.slice(conditionStart + 1, conditionEnd).trim()
+        if (condition !== variableName) continue
+
+        let consequentStart = conditionEnd + 1
+        while (/\s/.test(flow[consequentStart] ?? "")) consequentStart += 1
+
+        if (flow[consequentStart] === "{") {
+            const bodyEnd = findMatchingDelimiter(flow, consequentStart, "{", "}")
+            if (bodyEnd === -1) continue
+            if (/^\s*(?:throw\b|return\b)/.test(flow.slice(consequentStart + 1, bodyEnd))) {
+                return true
+            }
+        } else if (/^(?:throw\b|return\b)/.test(flow.slice(consequentStart))) {
+            return true
+        }
+    }
+
+    return false
+}
+
 for (const file of appFiles) {
     const source = await readFile(resolve(file), "utf8")
     if (!source.includes('from "@/lib/image-upload"') ||
@@ -49,12 +129,26 @@ for (const file of appFiles) {
     }
 
     const uploadPosition = uploadPositions[0]
-    const beforeUpload = source.slice(0, uploadPosition)
-    const guardPattern = /(?:const|let|var)\s+\w+\s*=\s*getImageUploadError\((?:file|img\.file|imageFile)\)\s*;?\s*[\s\S]{0,300}?\bif\s*\(\s*\w+\s*\)\s*(?:\{[\s\S]{0,120}?(?:throw|return)|throw|return)/i
-    if (!guardPattern.test(beforeUpload)) {
+    if (!hasExactUploadGuard(source, uploadPosition)) {
         console.error(`Task 5 upload assertion failed: ${file} lacks a same-branch getImageUploadError(...) guard with an explicit throw/return before .upload(...).`)
         process.exit(1)
     }
+}
+
+const syntheticValidFlow = `
+    const imageError = getImageUploadError(imageFile)
+    if (imageError) throw new Error(imageError)
+    await storage.upload(imageFile)
+`
+const syntheticUnrelatedCondition = `
+    const imageError = getImageUploadError(imageFile)
+    if (otherError) throw new Error(imageError)
+    await storage.upload(imageFile)
+`
+if (!hasExactUploadGuard(syntheticValidFlow, syntheticValidFlow.indexOf(".upload(")) ||
+    hasExactUploadGuard(syntheticUnrelatedCondition, syntheticUnrelatedCondition.indexOf(".upload("))) {
+    console.error("Task 5 upload assertion regression failed: guard matching is not variable-specific.")
+    process.exit(1)
 }
 
 const utility = await readFile(resolve("src/lib/image-upload.ts"), "utf8")
