@@ -8,6 +8,7 @@ import { sendWelcomeEmail } from "@/lib/email"
 import { translateSupabaseError } from "@/lib/translate-errors"
 import { assertServerEnv } from "@/lib/env"
 import { isSafeInternalPath } from "@/lib/safe-path"
+import { getRecoveryPath } from "@/lib/auth-redirects"
 
 
 export async function loginAction(prevState: any, formData: FormData) {
@@ -122,8 +123,7 @@ export async function registerAction(data: any) {
 export async function resetPasswordAction(email: string, next: string | null = "/dashboard") {
     const supabase = await createClient()
     const origin = assertServerEnv().appUrl || "http://localhost:3000"
-    const safeNext = isSafeInternalPath(next, "/dashboard")
-    const recoveryNext = `/update-password?next=${encodeURIComponent(safeNext)}`
+    const recoveryNext = getRecoveryPath(next)
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(recoveryNext)}`,

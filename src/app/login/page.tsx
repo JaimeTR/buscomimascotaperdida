@@ -9,6 +9,7 @@ import { LoginForm } from "@/components/auth/login-form"
 import { GoogleLoginButton } from "@/components/auth/google-login-button"
 import { createClient } from "@/utils/supabase/client"
 import { isSafeInternalPath } from "@/lib/safe-path"
+import { getForgotPasswordPath } from "@/lib/auth-redirects"
 
 function LoginContent() {
     const searchParams = useSearchParams()
@@ -82,7 +83,7 @@ function LoginContent() {
                     <GoogleLoginButton next={nextUrl} />
 
                     <p className="text-center text-xs text-slate-400 mt-4">
-                        ¿Olvidaste tu contraseña? <Link href="/forgot-password" className="text-blue-500 hover:underline font-medium">Recupérala aquí</Link>
+                        ¿Olvidaste tu contraseña? <Link href={getForgotPasswordPath(nextUrl)} className="text-blue-500 hover:underline font-medium">Recupérala aquí</Link>
                     </p>
 
                     <div className="mt-8 pt-6 border-t border-slate-100 text-center">
