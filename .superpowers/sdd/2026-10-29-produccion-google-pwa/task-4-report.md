@@ -87,4 +87,4 @@ No automated test script is defined in `package.json`; the focused lint, TypeScr
 
 ## Round 1 commit
 
-- `04b9ba13b3e5e30219de0b52c4b370c449f1b8a7` — `fix: complete endpoint method hardening`
+- `35413ab701229f7bdf22562ac9d288449c2621bb` — `fix: complete endpoint method hardening`
