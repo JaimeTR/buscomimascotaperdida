@@ -23,9 +23,9 @@ const requiredMigrationPatterns = [
     [/ON storage\.objects FOR INSERT/i, insertPolicyBlock],
     [/WITH CHECK\s*\([\s\S]*bucket_id\s*=\s*'pet-images'[\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i, insertPolicyBlock],
     [/ON storage\.objects FOR UPDATE/i, updatePolicyBlock],
-    [/USING\s*\([\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text[\s\S]*WITH CHECK\s*\([\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i, updatePolicyBlock],
+    [/USING\s*\([\s\S]*bucket_id\s*=\s*'pet-images'[\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text[\s\S]*WITH CHECK\s*\([\s\S]*bucket_id\s*=\s*'pet-images'[\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i, updatePolicyBlock],
     [/ON storage\.objects FOR DELETE/i, deletePolicyBlock],
-    [/USING\s*\([\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i, deletePolicyBlock],
+    [/USING\s*\([\s\S]*bucket_id\s*=\s*'pet-images'[\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i, deletePolicyBlock],
 ]
 
 const missingMigrationPatterns = requiredMigrationPatterns.filter(([pattern, block]) => !pattern.test(block))
@@ -49,9 +49,10 @@ for (const file of appFiles) {
     }
 
     const uploadPosition = uploadPositions[0]
-    const guardPosition = source.lastIndexOf("getImageUploadError(", uploadPosition)
-    if (guardPosition < 0 || guardPosition > uploadPosition) {
-        console.error(`Task 5 upload assertion failed: ${file} has no getImageUploadError(...) call before .upload(...).`)
+    const beforeUpload = source.slice(0, uploadPosition)
+    const guardPattern = /(?:const|let|var)\s+\w+\s*=\s*getImageUploadError\((?:file|img\.file|imageFile)\)\s*;?\s*[\s\S]{0,300}?\bif\s*\(\s*\w+\s*\)\s*(?:\{[\s\S]{0,120}?(?:throw|return)|throw|return)/i
+    if (!guardPattern.test(beforeUpload)) {
+        console.error(`Task 5 upload assertion failed: ${file} lacks a same-branch getImageUploadError(...) guard with an explicit throw/return before .upload(...).`)
         process.exit(1)
     }
 }
@@ -70,4 +71,4 @@ for (const pattern of [
     }
 }
 
-console.log("Task 5 source-structure assertions passed: bucket target/limits, legacy policy replacement, ownership, and pre-upload guards are present.")
+console.log("Task 5 source-structure assertions passed: bucket targets/limits, legacy policy replacement, ownership, and same-branch pre-upload guards are present.")

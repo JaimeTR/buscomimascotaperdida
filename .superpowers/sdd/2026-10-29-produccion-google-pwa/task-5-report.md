@@ -17,7 +17,7 @@ Reviewed the Task 5 migration and application operations for profiles, pets, pet
 - `supabase/PRODUCTION_CHECKLIST.md`
   - Added migration-order, RLS, Storage, content-type/size, Google provider, and credential-rotation checks without secrets.
 - `scripts/check-task-5-supabase.mjs`
-  - Added deterministic source-structure-only assertions that isolate the target migration/policy blocks, require `id = 'pet-images'` with bucket limits, verify legacy-policy replacement and INSERT/UPDATE/DELETE ownership clauses, and verify a `getImageUploadError(...)` call precedes each flow's Storage upload.
+  - Added deterministic source-structure-only assertions that isolate the target migration/policy blocks, require `id = 'pet-images'` with bucket limits in the bucket block, verify bucket scoping plus legacy-policy replacement and INSERT/UPDATE/DELETE ownership clauses, and verify each flow has a same-branch `getImageUploadError(...)` guard with an explicit throw/return before Storage upload.
 - `.superpowers/sdd/2026-10-29-produccion-google-pwa/task-5-report.md`
   - Recorded scope, checks, limitations, and commit metadata.
 
@@ -30,6 +30,7 @@ Commands were run from:
 - `node scripts/check-task-5-supabase.mjs` — PASS.
 - `git diff --check` — PASS.
 - `node scripts/check-task-5-supabase.mjs` — PASS after round 2 checker strengthening; this is a source-structure check, not a SQL parser or remote execution.
+- Round 3 checker limitation: the guard and SQL checks use bounded regular expressions over source blocks; they are not full JavaScript/SQL parsers and do not prove runtime control flow or remote policy state.
 - `npx tsc --noEmit` — PASS.
 - `npm run build` — FAILS during prerendering of `/_not-found` because the local environment does not provide Supabase URL/API key environment variables. Compilation and TypeScript completed before the environment-dependent prerender failure. The build also emitted existing workspace-root and metadata warnings.
 - `git diff --check` — PASS.
@@ -44,3 +45,4 @@ No remote Supabase project was accessed. Remote RLS policies, Storage policies, 
 
 Round 1 follow-up commit: `2e1f9b6ec64b803810a517546f3708dd4ab4e019`.
 Round 2 checker-hardening commit: the commit containing this report; obtain its exact hash with `git rev-parse HEAD`.
+Round 3 checker-hardening commit: the commit containing this report; obtain its exact hash with `git rev-parse HEAD`.
