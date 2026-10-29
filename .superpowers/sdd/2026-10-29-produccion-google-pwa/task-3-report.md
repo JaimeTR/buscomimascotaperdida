@@ -76,3 +76,18 @@ The repository does not define an automated test script or test files for this f
 | `npx tsc --noEmit` | Passed with exit code 0. |
 | `$env:NEXT_PUBLIC_SUPABASE_URL='https://example.supabase.co'; $env:NEXT_PUBLIC_SUPABASE_ANON_KEY='round2-placeholder-anon-key'; npm run build` | Passed with exit code 0. Compilation, TypeScript, static generation, and route optimization completed. Existing Next.js workspace-root, middleware, and metadata warnings remain. |
 | `git diff --check` | Passed with exit code 0. |
+
+## Round 3 fixes
+
+- Preserved legacy district labels in the canonical dataset so existing stored selections remain represented and editable: `Lima`, `Lurigancho`, `Pachacámac`, and `Victor Larco`; `Miraflores` remains represented as well.
+- Added deterministic regression assertions to `scripts/check-task-3-profile.mjs` for all requested legacy values.
+- Kept the unified location source and existing `LocationPopover` province-aware behavior.
+
+### Round 3 validation commands and exact results
+
+| Command | Result |
+| --- | --- |
+| `node scripts\check-task-3-profile.mjs` | Passed: `Task 3 profile checks passed: shared location source and partial-profile replacement flow.` |
+| `npx tsc --noEmit` | Passed with exit code 0. |
+| `$env:NEXT_PUBLIC_SUPABASE_URL='https://example.supabase.co'; $env:NEXT_PUBLIC_SUPABASE_ANON_KEY='round3-placeholder-anon-key'; npm run build` | Passed with exit code 0. Compilation, TypeScript, static generation, and route optimization completed. Existing Next.js workspace-root, middleware, and metadata warnings remain. |
+| `git diff --check` | Passed with exit code 0. |

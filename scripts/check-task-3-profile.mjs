@@ -20,6 +20,11 @@ assert.match(locationPopover, /import \{ PERU_LOCATIONS, PERU_DEPARTMENTS \} fro
 assert.match(locationPopover, /Object\.keys\(PERU_LOCATIONS\[department\] \|\| \{\}\)/)
 assert.match(locations, /"Callao": \["Bellavista"/)
 
+// Legacy persisted district labels must remain selectable/editable.
+for (const legacyValue of ["Lima", "Lurigancho", "Pachacámac", "Miraflores", "Victor Larco"]) {
+    assert.match(locations, new RegExp(legacyValue.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")))
+}
+
 // A profile with a district but no department must render both selectors.
 assert.match(dialog, /const showDistrict = missing\.district \|\| missing\.department/)
 assert.match(dialog, /\(missing\.department \|\| showDistrict\)/)
