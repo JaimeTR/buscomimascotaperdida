@@ -72,7 +72,7 @@ npm run dev
 
 ### Paso 3: Probar en Chrome
 
-1. Abre Chrome y ve a `https://your-production-domain.example`
+1. Abre Chrome y ve a la URL local que imprimió `npm run dev` (por ejemplo, `<local-development-url>`)
 
 2. Abre **DevTools** (F12) → pestaña **"Application"**
 
