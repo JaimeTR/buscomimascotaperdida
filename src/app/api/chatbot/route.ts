@@ -153,3 +153,4 @@ export const GET = methodNotAllowedResponse
 export const PUT = methodNotAllowedResponse
 export const PATCH = methodNotAllowedResponse
 export const DELETE = methodNotAllowedResponse
+export const OPTIONS = methodNotAllowedResponse

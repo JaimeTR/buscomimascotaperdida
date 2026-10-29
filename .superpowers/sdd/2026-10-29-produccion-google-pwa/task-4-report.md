@@ -88,3 +88,19 @@ No automated test script is defined in `package.json`; the focused lint, TypeScr
 ## Round 1 commit
 
 - `35413ab701229f7bdf22562ac9d288449c2621bb` — `fix: complete endpoint method hardening`
+
+## Round 2 fixes
+
+- Added explicit `OPTIONS` handlers to the chatbot, nearby-notification, and email-test routes.
+- Each `OPTIONS` request uses the shared method rejection response and returns `405 {"error":"Método no permitido"}`.
+
+### Round 2 validation commands and exact results
+
+| Command | Result |
+| --- | --- |
+| `npx tsc --noEmit` | Passed with exit code 0. |
+| `npx eslint src\app\api src\app\auth src\lib src\components\auth` | Passed with exit code 0. |
+| `git diff --check` | Passed with exit code 0. |
+| Live smoke: `OPTIONS /api/chatbot` | `405 {"error":"Método no permitido"}`. |
+| Live smoke: `OPTIONS /api/notify-nearby-users` | `405 {"error":"Método no permitido"}`. |
+| Live smoke: `OPTIONS /api/email/test` | `405 {"error":"Método no permitido"}`. |
