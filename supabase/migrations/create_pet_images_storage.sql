@@ -9,7 +9,10 @@ ON CONFLICT (id) DO NOTHING;
 CREATE POLICY "Authenticated users can upload pet images"
 ON storage.objects FOR INSERT
 TO authenticated
-WITH CHECK (bucket_id = 'pet-images');
+WITH CHECK (
+    bucket_id = 'pet-images'
+    AND (storage.foldername(name))[1] = auth.uid()::text
+);
 
 -- 3. Allow public read access to pet images
 CREATE POLICY "Anyone can view pet images"
