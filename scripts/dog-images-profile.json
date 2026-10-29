@@ -1,0 +1,413 @@
+{
+  "metadata": {
+    "totalPerros": 50,
+    "totalImagenes": 143,
+    "fuente": "https://www.buscomiperroperdido.com",
+    "fechaExtraccion": "2026-01-17",
+    "nota": "Imágenes de perfil extraídas de las fichas individuales de cada perro"
+  },
+  "perros": [
+    {
+      "id": "2652",
+      "nombre": "Tina",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2652_Item/perro-Perdido-Gerona-Sant-Feliu-De-Guixols---S%E2%80%99agaro-0.jpeg",
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2652_Item/perro-Perdido-Gerona-Sant-Feliu-De-Guixols---S%E2%80%99agaro-1.jpeg",
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2652_Item/perro-Perdido-Gerona-Sant-Feliu-De-Guixols---S%E2%80%99agaro-2.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2652_Item/perro-Perdido-Gerona-Sant-Feliu-De-Guixols---S%E2%80%99agaro-0.jpeg"
+    },
+    {
+      "id": "2650",
+      "nombre": "Laika",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2650_Item/perro-Perdido-Cantabria-Dualez-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2650_Item/perro-Perdido-Cantabria-Dualez-0.jpeg"
+    },
+    {
+      "id": "2648",
+      "nombre": "Oso",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2648_Item/perro-Perdido-Coruna-Sada-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2648_Item/perro-Perdido-Coruna-Sada-0.jpeg"
+    },
+    {
+      "id": "2647",
+      "nombre": "Mamba",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2647_Item/perro-Perdido-Coruna-Betanzos-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2647_Item/perro-Perdido-Coruna-Betanzos-0.jpeg"
+    },
+    {
+      "id": "2646",
+      "nombre": "Mesi",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2646_Item/perro-Perdido-Vizcaya-Llodio-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2646_Item/perro-Perdido-Vizcaya-Llodio-0.jpeg"
+    },
+    {
+      "id": "2645",
+      "nombre": "Roma",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2645_Item/perro-Perdido-Zamora-Zamora-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2645_Item/perro-Perdido-Zamora-Zamora-0.jpeg"
+    },
+    {
+      "id": "2643",
+      "nombre": "Rufu",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2643_Item/perro-Perdido-Tarragona-Reus-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2643_Item/perro-Perdido-Tarragona-Reus-0.jpeg"
+    },
+    {
+      "id": "2641",
+      "nombre": "Brandy",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2641_Item/perro-Perdido-Coruna-Noia-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2641_Item/perro-Perdido-Coruna-Noia-0.jpeg"
+    },
+    {
+      "id": "2638",
+      "nombre": "Isla",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2638_Item/perro-Perdido-Soria-Vinuesa-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2638_Item/perro-Perdido-Soria-Vinuesa-0.jpeg"
+    },
+    {
+      "id": "2636",
+      "nombre": "Floky",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2636_Item/perro-Perdido-Madrid-Pinto-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2636_Item/perro-Perdido-Madrid-Pinto-0.jpeg"
+    },
+    {
+      "id": "2635",
+      "nombre": "Amis",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2635_Item/perro-Perdido-Guadalajara-Azuqueca-De-Henares-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2635_Item/perro-Perdido-Guadalajara-Azuqueca-De-Henares-0.jpeg"
+    },
+    {
+      "id": "2632",
+      "nombre": "Napoleon",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2632_Item/perro-Perdido-Madrid-Alcala-De-Henares-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2632_Item/perro-Perdido-Madrid-Alcala-De-Henares-0.jpeg"
+    },
+    {
+      "id": "2631",
+      "nombre": "Maripepa",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2631_Item/perro-Perdido-Cadiz-Jerez-De-La-Frontera-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2631_Item/perro-Perdido-Cadiz-Jerez-De-La-Frontera-0.jpeg"
+    },
+    {
+      "id": "2630",
+      "nombre": "Dama",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2630_Item/perro-Perdido-Granada-Motril-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2630_Item/perro-Perdido-Granada-Motril-0.jpeg"
+    },
+    {
+      "id": "2629",
+      "nombre": "Simba",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2629_Item/perro-Perdido-Sevilla-Sevilla-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2629_Item/perro-Perdido-Sevilla-Sevilla-0.jpeg"
+    },
+    {
+      "id": "2627",
+      "nombre": "Chicha",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2627_Item/perro-Perdido-Cordoba-Cordoba-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2627_Item/perro-Perdido-Cordoba-Cordoba-0.jpeg"
+    },
+    {
+      "id": "2626",
+      "nombre": "Bruno",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2626_Item/perro-Perdido-Murcia-Valle-del-Sol-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2626_Item/perro-Perdido-Murcia-Valle-del-Sol-0.jpeg"
+    },
+    {
+      "id": "2625",
+      "nombre": "Drac",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2625_Item/perro-Perdido-Barcelona-Barcelona-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2625_Item/perro-Perdido-Barcelona-Barcelona-0.jpeg"
+    },
+    {
+      "id": "2624",
+      "nombre": "Naruto",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2624_Item/perro-Perdido-Asturias-Oviedo-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2624_Item/perro-Perdido-Asturias-Oviedo-0.jpeg"
+    },
+    {
+      "id": "2623",
+      "nombre": "Luna",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2623_Item/perro-Perdido-Barcelona-Barcelona-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2623_Item/perro-Perdido-Barcelona-Barcelona-0.jpeg"
+    },
+    {
+      "id": "2622",
+      "nombre": "Laika",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2622_Item/perro-Perdido-Toledo-Toledo-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2622_Item/perro-Perdido-Toledo-Toledo-0.jpeg"
+    },
+    {
+      "id": "2621",
+      "nombre": "Pinocho",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2621_Item/perro-Perdido-Coruna-Santiago-De-Compostela-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2621_Item/perro-Perdido-Coruna-Santiago-De-Compostela-0.jpeg"
+    },
+    {
+      "id": "2620",
+      "nombre": "Blanca",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2620_Item/perro-Perdido-Alicante-Alicante-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2620_Item/perro-Perdido-Alicante-Alicante-0.jpeg"
+    },
+    {
+      "id": "2618",
+      "nombre": "Triskel",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2618_Item/perro-Perdido-Asturias-Gijon-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2618_Item/perro-Perdido-Asturias-Gijon-0.jpeg"
+    },
+    {
+      "id": "2615",
+      "nombre": "Bruno",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2615_Item/perro-Perdido-Madrid-Leganes-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2615_Item/perro-Perdido-Madrid-Leganes-0.jpeg"
+    },
+    {
+      "id": "2614",
+      "nombre": "Sabi",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2614_Item/perro-Perdido-Tarragona-Reus-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2614_Item/perro-Perdido-Tarragona-Reus-0.jpeg"
+    },
+    {
+      "id": "2613",
+      "nombre": "Pachu",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2613_Item/perro-Perdido-Ponteareas-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2613_Item/perro-Perdido-Ponteareas-0.jpeg"
+    },
+    {
+      "id": "2612",
+      "nombre": "Luna",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2612_Item/perro-Perdido-Asturias-Aviles-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2612_Item/perro-Perdido-Asturias-Aviles-0.jpeg"
+    },
+    {
+      "id": "2611",
+      "nombre": "Gringa",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2611_Item/perro-Perdido-Barcelona-Barcelona-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2611_Item/perro-Perdido-Barcelona-Barcelona-0.jpeg"
+    },
+    {
+      "id": "2608",
+      "nombre": "Iryem",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2608_Item/perro-Perdido-Alicante-Elche-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2608_Item/perro-Perdido-Alicante-Elche-0.jpeg"
+    },
+    {
+      "id": "2607",
+      "nombre": "Martin",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2607_Item/perro-Perdido-Murcia-Murcia-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2607_Item/perro-Perdido-Murcia-Murcia-0.jpeg"
+    },
+    {
+      "id": "2606",
+      "nombre": "Rayo",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2606_Item/perro-Perdido-Avila-Avila-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2606_Item/perro-Perdido-Avila-Avila-0.jpeg"
+    },
+    {
+      "id": "2604",
+      "nombre": "Toby",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2604_Item/perro-Perdido-Asturias-Langreo-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2604_Item/perro-Perdido-Asturias-Langreo-0.jpeg"
+    },
+    {
+      "id": "2602",
+      "nombre": "Ares",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2602_Item/perro-Perdido-Salamanca-Salamanca-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2602_Item/perro-Perdido-Salamanca-Salamanca-0.jpeg"
+    },
+    {
+      "id": "2601",
+      "nombre": "Taco",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2601_Item/perro-Perdido-Navarra-Pamplona-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2601_Item/perro-Perdido-Navarra-Pamplona-0.jpeg"
+    },
+    {
+      "id": "2599",
+      "nombre": "Lucky",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2599_Item/perro-Perdido-Tarragona-Tarragona-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2599_Item/perro-Perdido-Tarragona-Tarragona-0.jpeg"
+    },
+    {
+      "id": "2597",
+      "nombre": "Flora",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2597_Item/perro-Perdido-Granada-Granada-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2597_Item/perro-Perdido-Granada-Granada-0.jpeg"
+    },
+    {
+      "id": "2594",
+      "nombre": "Tina",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2594_Item/perro-Perdido-Cordoba-Cordoba-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2594_Item/perro-Perdido-Cordoba-Cordoba-0.jpeg"
+    },
+    {
+      "id": "2593",
+      "nombre": "Manchita",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2593_Item/perro-Perdido-Cadiz-Algeciras-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2593_Item/perro-Perdido-Cadiz-Algeciras-0.jpeg"
+    },
+    {
+      "id": "2591",
+      "nombre": "Jim Hopper",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2591_Item/perro-Perdido-Granada-Armilla-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2591_Item/perro-Perdido-Granada-Armilla-0.jpeg"
+    },
+    {
+      "id": "2584",
+      "nombre": "Shark",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2584_Item/perro-Perdido-Navarra-Baranain-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2584_Item/perro-Perdido-Navarra-Baranain-0.jpeg"
+    },
+    {
+      "id": "2580",
+      "nombre": "Lucky",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2580_Item/perro-Perdido-Gerona-Lloret-De-Mar-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2580_Item/perro-Perdido-Gerona-Lloret-De-Mar-0.jpeg"
+    },
+    {
+      "id": "2575",
+      "nombre": "Thunder",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2575_Item/perro-Perdido-Baleares-Palma-De-Mallorca-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2575_Item/perro-Perdido-Baleares-Palma-De-Mallorca-0.jpeg"
+    },
+    {
+      "id": "2573",
+      "nombre": "Flaca",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2573_Item/perro-Perdido-Murcia-Torre-Pacheco-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2573_Item/perro-Perdido-Murcia-Torre-Pacheco-0.jpeg"
+    },
+    {
+      "id": "2568",
+      "nombre": "Ever",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2568_Item/perro-Perdido-Valencia-Valencia-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2568_Item/perro-Perdido-Valencia-Valencia-0.jpeg"
+    },
+    {
+      "id": "2566",
+      "nombre": "Quinto",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2566_Item/perro-Perdido-Toledo-Talavera-De-La-Reina-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2566_Item/perro-Perdido-Toledo-Talavera-De-La-Reina-0.jpeg"
+    },
+    {
+      "id": "2563",
+      "nombre": "Olivia",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2563_Item/perro-Perdido-Madrid-Fuenlabrada-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2563_Item/perro-Perdido-Madrid-Fuenlabrada-0.jpeg"
+    },
+    {
+      "id": "2560",
+      "nombre": "Deimon",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2560_Item/perro-Perdido-Valladolid-Valladolid-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2560_Item/perro-Perdido-Valladolid-Valladolid-0.jpeg"
+    },
+    {
+      "id": "2555",
+      "nombre": "Fada",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2555_Item/perro-Perdido-Pontevedra-Pontevedra-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2555_Item/perro-Perdido-Pontevedra-Pontevedra-0.jpeg"
+    },
+    {
+      "id": "2549",
+      "nombre": "Casio",
+      "imagenes": [
+        "https://www.buscomiperroperdido.com/Catalogo/Item/2549_Item/perro-Perdido-Cantabria-Castro-Urdiales-0.jpeg"
+      ],
+      "imagenPerfil": "https://www.buscomiperroperdido.com/Catalogo/Item/2549_Item/perro-Perdido-Cantabria-Castro-Urdiales-0.jpeg"
+    }
+  ]
+}
