@@ -7,44 +7,13 @@ import { MapPin, Search, ChevronRight } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { PERU_LOCATIONS, PERU_DEPARTMENTS } from '@/lib/peru-locations'
 
 // Dynamically import Map to avoid SSR issues
 const MapPicker = dynamic(() => import('./map-picker').then(mod => mod.MapPicker), {
     ssr: false,
     loading: () => <div className="h-48 w-full bg-slate-100 animate-pulse rounded-xl flex items-center justify-center text-slate-400 text-xs">Cargando mapa...</div>
 })
-
-// Simplified Peru Data (subset)
-const PERU_DATA: Record<string, Record<string, string[]>> = {
-    "Lima": {
-        "Lima": [
-            "Ancón", "Ate", "Barranco", "Breña", "Carabayllo", "Chaclacayo", "Chorrillos", "Cieneguilla",
-            "Comas", "El Agustino", "Independencia", "Jesús María", "La Molina", "La Victoria",
-            "Lima (Cercado)", "Lince", "Los Olivos", "Lurigancho-Chosica", "Lurín", "Magdalena del Mar",
-            "Miraflores", "Pachacamac", "Pucusana", "Pueblo Libre", "Puente Piedra", "Punta Hermosa",
-            "Punta Negra", "Rímac", "San Bartolo", "San Borja", "San Isidro", "San Juan de Lurigancho",
-            "San Juan de Miraflores", "San Luis", "San Martín de Porres", "San Miguel", "Santa Anita",
-            "Santa María del Mar", "Santa Rosa", "Santiago de Surco", "Surquillo", "Villa El Salvador",
-            "Villa María del Triunfo"
-        ],
-        "Callao": ["Bellavista", "Callao", "Carmen de la Legua-Reynoso", "La Perla", "La Punta", "Ventanilla", "Mi Perú"]
-    },
-    "Arequipa": {
-        "Arequipa": ["Arequipa", "Yanahuara", "Cayma", "Selva Alegre", "Miraflores (Arequipa)", "Jose Luis Bustamante"]
-    },
-    "Cusco": {
-        "Cusco": ["Cusco", "San Jerónimo", "San Sebastián", "Wanchaq", "Saylla"]
-    },
-    "La Libertad": {
-        "Trujillo": ["Trujillo", "Victor Larco Herrera", "Huanchaco", "Moche", "Laredo"]
-    },
-    "Piura": {
-        "Piura": ["Piura", "Castilla", "Catacaos", "Veintiseis de Octubre"]
-    },
-    "Lambayeque": {
-        "Chiclayo": ["Chiclayo", "Jose Leonardo Ortiz", "La Victoria", "Pimentel"]
-    }
-}
 
 // Geographic data with approx coordinates for centering
 const AREA_COORDS: Record<string, { lat: number, lng: number, zoom: number }> = {
@@ -80,9 +49,9 @@ export function LocationPopover({ onLocationChange, initialValues, showMap = tru
         zoom: initialValues?.lat ? 15 : 11
     })
 
-    const departments = Object.keys(PERU_DATA)
-    const provinces = department ? Object.keys(PERU_DATA[department]) : []
-    const districts = (department && province) ? PERU_DATA[department][province] : []
+    const departments = PERU_DEPARTMENTS
+    const provinces = department ? Object.keys(PERU_LOCATIONS[department] || {}) : []
+    const districts = (department && province) ? PERU_LOCATIONS[department]?.[province] || [] : []
 
     const handleDepartmentChange = (v: string) => {
         setDepartment(v)

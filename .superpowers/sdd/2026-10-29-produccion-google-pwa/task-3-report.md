@@ -61,3 +61,18 @@ The repository does not define an automated test script or test files for this f
 | `npx tsc --noEmit` | Passed with exit code 0. |
 | `$env:NEXT_PUBLIC_SUPABASE_URL='https://example.supabase.co'; $env:NEXT_PUBLIC_SUPABASE_ANON_KEY='round1-placeholder-anon-key'; npm run build` | Passed with exit code 0. Compilation, TypeScript, static generation, and route optimization completed. Existing Next.js workspace-root, middleware, and metadata warnings remain. |
 | `npx eslint src\components\auth\profile-location-fields.tsx src\components\auth\complete-profile-dialog.tsx src\components\auth\register-form.tsx src\lib\peru-locations.ts` | Failed only on the pre-existing `no-explicit-any` error and unused `useActionState` warning in `register-form.tsx`; the new shared selector, canonical dataset, and dialog have no lint errors. |
+
+## Round 2 fixes
+
+- Expanded `src/lib/peru-locations.ts` to preserve the province-aware dataset and labels previously local to `LocationPopover`, including Lima/Callao and the additional province districts.
+- Migrated `src/components/location-popover.tsx` to import `PERU_LOCATIONS` and `PERU_DEPARTMENTS` from the canonical module while preserving its province-first selection flow and map labels.
+- Extended `scripts/check-task-3-profile.mjs` to assert that `LocationPopover` has no local `PERU_DATA`, imports the canonical source, and retains the Callao province dataset.
+
+### Round 2 validation commands and exact results
+
+| Command | Result |
+| --- | --- |
+| `node scripts\check-task-3-profile.mjs` | Passed: `Task 3 profile checks passed: shared location source and partial-profile replacement flow.` |
+| `npx tsc --noEmit` | Passed with exit code 0. |
+| `$env:NEXT_PUBLIC_SUPABASE_URL='https://example.supabase.co'; $env:NEXT_PUBLIC_SUPABASE_ANON_KEY='round2-placeholder-anon-key'; npm run build` | Passed with exit code 0. Compilation, TypeScript, static generation, and route optimization completed. Existing Next.js workspace-root, middleware, and metadata warnings remain. |
+| `git diff --check` | Passed with exit code 0. |
