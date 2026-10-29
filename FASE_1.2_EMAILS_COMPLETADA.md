@@ -126,17 +126,17 @@ Usa la API de prueba que creamos:
 
 #### **1. Probar Email de Bienvenida:**
 ```bash
-curl -X POST "http://localhost:3000/api/email/test?type=welcome&email=TU_EMAIL@gmail.com"
+curl -X POST "https://your-production-domain.example/api/email/test?type=welcome&email=TU_EMAIL@gmail.com"
 ```
 
 #### **2. Probar Email de Alerta:**
 ```bash
-curl -X POST "http://localhost:3000/api/email/test?type=alert&email=TU_EMAIL@gmail.com"
+curl -X POST "https://your-production-domain.example/api/email/test?type=alert&email=TU_EMAIL@gmail.com"
 ```
 
 #### **3. Probar Email de Avistamiento:**
 ```bash
-curl -X POST "http://localhost:3000/api/email/test?type=sighting&email=TU_EMAIL@gmail.com"
+curl -X POST "https://your-production-domain.example/api/email/test?type=sighting&email=TU_EMAIL@gmail.com"
 ```
 
 **Reemplaza `TU_EMAIL@gmail.com` con tu email real para recibirlo.**
@@ -147,7 +147,7 @@ curl -X POST "http://localhost:3000/api/email/test?type=sighting&email=TU_EMAIL@
 
 #### **En Postman:**
 ```
-POST http://localhost:3000/api/email/test?type=welcome&email=tu@email.com
+POST https://your-production-domain.example/api/email/test?type=welcome&email=tu@email.com
 ```
 
 #### **En el Navegador:**
@@ -158,7 +158,7 @@ No puedes usar GET, necesitas hacer POST. Mejor usa curl o Postman.
 ### **Método 3: Probar el Flujo Real**
 
 #### **Email de Bienvenida:**
-1. Ve a `http://localhost:3000/register`
+1. Ve a `https://your-production-domain.example/register`
 2. Regístrate con tu email real
 3. Revisa tu bandeja de entrada
 4. Deberías recibir el email de bienvenida ✉️

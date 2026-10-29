@@ -6,6 +6,7 @@ import { redirect } from "next/navigation"
 import { loginSchema, registerSchema } from "@/lib/schemas/auth"
 import { sendWelcomeEmail } from "@/lib/email"
 import { translateSupabaseError } from "@/lib/translate-errors"
+import { assertServerEnv } from "@/lib/env"
 
 
 export async function loginAction(prevState: any, formData: FormData) {
@@ -45,7 +46,7 @@ export async function loginAction(prevState: any, formData: FormData) {
 
 export async function resendConfirmationAction(email: string) {
     const supabase = await createClient()
-    const origin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+    const origin = assertServerEnv().appUrl || "http://localhost:3000"
 
     const { error } = await supabase.auth.resend({
         type: 'signup',
@@ -64,7 +65,7 @@ export async function resendConfirmationAction(email: string) {
 
 export async function registerAction(data: any) {
     const supabase = await createClient()
-    const origin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000" // Fallback
+    const origin = assertServerEnv().appUrl || "http://localhost:3000"
 
     const result = registerSchema.safeParse(data)
 
@@ -119,7 +120,7 @@ export async function registerAction(data: any) {
 
 export async function resetPasswordAction(email: string) {
     const supabase = await createClient()
-    const origin = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+    const origin = assertServerEnv().appUrl || "http://localhost:3000"
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${origin}/auth/callback?next=/update-password`,

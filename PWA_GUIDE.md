@@ -81,7 +81,7 @@ src/
    npm run dev
    ```
 
-2. **Abre Chrome** y ve a `http://localhost:3000`
+2. **Abre Chrome** y ve a `https://your-production-domain.example`
 
 3. **Abre DevTools** (F12) → pestaña **Application**
 
@@ -166,7 +166,7 @@ Usa Lighthouse (Chrome DevTools → Lighthouse):
 ## 🐛 Troubleshooting
 
 ### El Service Worker no se registra
-- Verifica que estés en HTTPS o localhost
+- Verifica que estés en HTTPS o un entorno local
 - Revisa la consola del navegador (F12)
 - Limpia caché y cookies
 

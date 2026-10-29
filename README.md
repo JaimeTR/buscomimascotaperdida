@@ -7,7 +7,7 @@ En producción, `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 son obligatorias. `RESEND_API_KEY` y `HUGGINGFACE_API_KEY` son opcionales, pero
 deben configurarse si se habilitan sus servicios. `NEXT_PUBLIC_APP_URL` debe
 apuntar al dominio público de producción para que funcionen los callbacks de
-autenticación.
+autenticación; en desarrollo puede omitirse y se usa un fallback local.
 
 No guardes valores reales en `.env.example`, README, ni otros archivos
 documentales.

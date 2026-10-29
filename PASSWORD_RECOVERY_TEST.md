@@ -3,7 +3,7 @@
 ## 📧 **SISTEMA ACTUAL**
 
 ### **Cómo funciona:**
-1. Usuario va a: `http://localhost:3000/forgot-password`
+1. Usuario va a: `https://your-production-domain.example/forgot-password`
 2. Ingresa su email
 3. **Supabase envía un email de recuperación** (automático)
 4. Usuario hace clic en el link del email
@@ -16,7 +16,7 @@
 
 ### **Paso 1: Ir a la página**
 ```
-http://localhost:3000/forgot-password
+https://your-production-domain.example/forgot-password
 ```
 
 ### **Paso 2: Ingresar tu email**
@@ -122,7 +122,7 @@ Cambiar el código para que:
 
 Haz estas pruebas:
 
-- [ ] Ir a `http://localhost:3000/forgot-password`
+- [ ] Ir a `https://your-production-domain.example/forgot-password`
 - [ ] Ingresar `jaimetr1309@gmail.com`
 - [ ] Enviar formulario
 - [ ] Revisar bandeja de entrada

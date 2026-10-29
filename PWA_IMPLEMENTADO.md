@@ -72,7 +72,7 @@ npm run dev
 
 ### Paso 3: Probar en Chrome
 
-1. Abre Chrome y ve a `http://localhost:3000`
+1. Abre Chrome y ve a `https://your-production-domain.example`
 
 2. Abre **DevTools** (F12) → pestaña **"Application"**
 
@@ -162,7 +162,7 @@ npm run dev
 ## 🐛 TROUBLESHOOTING
 
 ### ❌ "El Service Worker no se registra"
-- ✅ Verifica que estés en HTTPS o localhost
+- ✅ Verifica que estés en HTTPS o un entorno local
 - ✅ Revisa la consola del navegador (F12)
 - ✅ Limpia caché: DevTools → Application → Clear storage
 

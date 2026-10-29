@@ -12,7 +12,7 @@ El problema tiene 2 posibles causas:
 
 ### **1. URL de Redirección no configurada en Supabase**
 
-Supabase necesita tener la URL `http://localhost:3000/auth/callback` en su lista de URLs permitidas.
+Supabase necesita tener la URL `https://your-production-domain.example/auth/callback` en su lista de URLs permitidas.
 
 ### **2. Variable de entorno**
 
@@ -29,9 +29,9 @@ Supabase necesita tener la URL `http://localhost:3000/auth/callback` en su lista
 3. **Ve a:** Authentication → URL Configuration
 4. **En "Redirect URLs", agrega:**
    ```
-   http://localhost:3000/auth/callback
-   http://localhost:3000/update-password
-   http://localhost:3000/**
+   https://your-production-domain.example/auth/callback
+   https://your-production-domain.example/update-password
+   https://your-production-domain.example/**
    ```
 5. **Guarda los cambios**
 
@@ -40,7 +40,7 @@ Supabase necesita tener la URL `http://localhost:3000/auth/callback` en su lista
 Abre tu archivo `.env.local` y asegúrate de tener:
 
 ```bash
-NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_URL=https://your-production-domain.example
 ```
 
 ---
@@ -49,7 +49,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 
 Si el enlace de email te lleva a `/login`, puedes:
 
-1. **Ir manualmente a:** `http://localhost:3000/update-password`
+1. **Ir manualmente a:** `https://your-production-domain.example/update-password`
 2. **Cambiar tu contraseña ahí**
 3. **Funciona igual** porque después de hacer clic en el enlace del email, tu sesión queda "authenticated" por un momento
 
@@ -57,7 +57,7 @@ Si el enlace de email te lleva a `/login`, puedes:
 
 ## 🧪 **PRUEBA DESPUÉS DEL FIX**
 
-1. Ve a: `http://localhost:3000/forgot-password`
+1. Ve a: `https://your-production-domain.example/forgot-password`
 2. Ingresa tu email
 3. Revisa tu bandeja de entrada
 4. Haz clic en "Reset Password"

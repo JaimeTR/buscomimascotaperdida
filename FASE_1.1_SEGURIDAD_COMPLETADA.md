@@ -10,7 +10,7 @@ Hemos movido la lógica del chatbot de IA del **cliente** (navegador) al **servi
 
 ```typescript
 // ❌ API key expuesta en el navegador
-const HF_API_KEY = "hf_REDACTED"
+const HF_API_KEY = "your_huggingface_api_key_here"
 
 // ❌ Cualquiera puede ver y usar tu API key
 const response = await fetch(
@@ -70,7 +70,7 @@ const HF_API_KEY = process.env.HUGGINGFACE_API_KEY // ← PRIVADO
 
 ```bash
 # Agregado:
-HUGGINGFACE_API_KEY=hf_REDACTED
+HUGGINGFACE_API_KEY=your_huggingface_api_key_here
 ```
 
 ### **3. Componente del Chatbot**
@@ -99,7 +99,7 @@ npm run dev
 
 ### **2. Prueba el Chatbot**
 
-1. Abre `http://localhost:3000`
+1. Abre `https://your-production-domain.example`
 2. Haz clic en el botón del chatbot (floating button)
 3. Escribe un mensaje:
    ```

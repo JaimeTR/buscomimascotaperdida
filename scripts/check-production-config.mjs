@@ -4,10 +4,10 @@ import process from 'node:process'
 
 const root = process.cwd()
 const placeholderPattern =
-    /your[_-]|your-production|example|changeme|replace[-_ ]?me|tu[-_ ]?dominio/i
+    /your[_-]|your-production|example|changeme|replace[-_ ]?me|tu[-_ ]?(?:dominio|api[_-]?key)/i
 const localUrlPattern = /\b(?:localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])\b/i
 const sensitiveAssignmentPattern =
-    /\b(?:API_KEY|SECRET|TOKEN|PASSWORD|PRIVATE_KEY)\s*=\s*([^\s#]+)/i
+    /\b[A-Z0-9_]*(?:API_KEY|SECRET|TOKEN|PASSWORD|PRIVATE_KEY)\s*=\s*([^\s#]+)/i
 
 async function documentationFiles(directory) {
     const entries = await readdir(directory, { withFileTypes: true })
@@ -35,14 +35,20 @@ async function documentationFiles(directory) {
     return files
 }
 
+async function rootDocumentationFiles() {
+    const entries = await readdir(root, { withFileTypes: true })
+    return entries
+        .filter((entry) => entry.isFile() && entry.name.toLowerCase().endsWith('.md'))
+        .map((entry) => path.join(root, entry.name))
+}
+
 function isAllowedPlaceholder(value) {
     return placeholderPattern.test(value)
 }
 
 const files = [
     path.join(root, '.env.example'),
-    path.join(root, 'README.md'),
-    path.join(root, 'DEPLOYMENT.md'),
+    ...(await rootDocumentationFiles()),
     ...(await documentationFiles(path.join(root, 'docs')).catch(() => [])),
 ].filter((file, index, all) => all.indexOf(file) === index)
 
@@ -73,13 +79,18 @@ for (const file of files) {
         const assignment = line.match(sensitiveAssignmentPattern)
         if (assignment) {
             const value = assignment[1].replace(/^['"]|['"]$/g, '')
-            if (!isAllowedPlaceholder(value)) {
+            if (!value.startsWith('process.env.') && !isAllowedPlaceholder(value)) {
                 findings.push(
                     `${relativeFile}:${lineNumber} contains a non-placeholder sensitive value`
                 )
             }
+
         }
     })
+}
+
+if (process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_APP_URL?.trim()) {
+    findings.push('production requires NEXT_PUBLIC_APP_URL')
 }
 
 if (findings.length > 0) {

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { assertServerEnv } from '@/lib/env'
 
 // Rate limiting simple en memoria (para producción, usa Redis)
 const requestCounts = new Map<string, { count: number; resetTime: number }>()
@@ -53,7 +54,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Llamar a HuggingFace desde el backend (API key segura)
-        const HF_API_KEY = process.env.HUGGINGFACE_API_KEY
+        const HF_API_KEY = assertServerEnv().huggingfaceApiKey
 
         if (!HF_API_KEY) {
             console.error('HUGGINGFACE_API_KEY no configurada')

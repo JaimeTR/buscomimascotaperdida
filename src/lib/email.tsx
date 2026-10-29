@@ -1,13 +1,10 @@
 import React from 'react'
 import { Resend } from 'resend'
 import { render } from '@react-email/render'
-
-// Inicializar Resend
-const resend = new Resend(process.env.RESEND_API_KEY)
+import { assertServerEnv } from '@/lib/env'
 
 // Configuración
 const FROM_EMAIL = 'BuscoMiMascota <onboarding@resend.dev>' // Cambiar a tu dominio verificado
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
 export interface SendEmailOptions {
     to: string | string[]
@@ -20,11 +17,13 @@ export interface SendEmailOptions {
  */
 export async function sendEmail({ to, subject, react }: SendEmailOptions) {
     try {
+        const { resendApiKey } = assertServerEnv()
         // Validar que Resend esté configurado
-        if (!process.env.RESEND_API_KEY) {
+        if (!resendApiKey) {
             console.error('❌ RESEND_API_KEY no configured')
             throw new Error('Email service not configured')
         }
+        const resend = new Resend(resendApiKey)
 
         // Renderizar el template a HTML
         const html = await render(react)
@@ -96,7 +95,8 @@ export async function sendPasswordResetEmail(
     resetToken: string,
     firstName: string
 ) {
-    const resetUrl = `${APP_URL}/update-password?token=${resetToken}`
+    const appUrl = assertServerEnv().appUrl || 'http://localhost:3000'
+    const resetUrl = `${appUrl}/update-password?token=${resetToken}`
 
     const PasswordResetTemplate = (
         <div style={{ fontFamily: 'Arial, sans-serif', maxWidth: '600px', margin: '0 auto' }}>

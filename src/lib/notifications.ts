@@ -2,8 +2,7 @@ import { Resend } from 'resend'
 import { createClient } from '@/utils/supabase/server'
 import { render } from '@react-email/render'
 import { PetAlertEmail } from '@/emails/pet-alert-template'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
+import { assertServerEnv } from '@/lib/env'
 
 /**
  * Calculate distance between two coordinates using Haversine formula
@@ -50,6 +49,13 @@ interface PetReportData {
  */
 export async function notifyNearbyUsers(reportData: PetReportData) {
     const supabase = await createClient()
+    const { resendApiKey, appUrl } = assertServerEnv()
+
+    if (!resendApiKey) {
+        throw new Error('Email service not configured')
+    }
+
+    const resend = new Resend(resendApiKey)
 
     try {
         // Get all users with notification preferences and coordinates
@@ -72,7 +78,7 @@ export async function notifyNearbyUsers(reportData: PetReportData) {
 
         // Filter users within radius and send emails
         let notifiedCount = 0
-        const reportUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/pets/${reportData.petId}`
+        const reportUrl = `${appUrl || 'http://localhost:3000'}/pets/${reportData.petId}`
 
         for (const user of users) {
             const distance = calculateDistance(
