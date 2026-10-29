@@ -9,17 +9,27 @@ const appFiles = [
     "src/app/mascotas/[id]/avistamiento/page.tsx",
 ]
 
+const bucketBlock = migration.match(/UPDATE\s+storage\.buckets\b[\s\S]*?WHERE\b[\s\S]*?;/i)?.[0] ?? ""
+const policyBlocks = [...migration.matchAll(/(?:DROP POLICY IF EXISTS|CREATE POLICY)[\s\S]*?;/gi)].map(match => match[0])
+const insertPolicyBlock = policyBlocks.find(block => /CREATE POLICY "Authenticated users can upload pet images"/i.test(block)) ?? ""
+const updatePolicyBlock = policyBlocks.find(block => /CREATE POLICY "Users can update their own pet images"/i.test(block)) ?? ""
+const deletePolicyBlock = policyBlocks.find(block => /CREATE POLICY "Users can delete their own pet images"/i.test(block)) ?? ""
+
 const requiredMigrationPatterns = [
-    /UPDATE\s+storage\.buckets[\s\S]*file_size_limit\s*=\s*5242880/i,
-    /allowed_mime_types\s*=\s*ARRAY\['image\/jpeg',\s*'image\/png',\s*'image\/webp'\]/i,
-    /DROP POLICY IF EXISTS "Authenticated users can upload pet images" ON storage\.objects/i,
-    /CREATE POLICY "Authenticated users can upload pet images"[\s\S]*ON storage\.objects FOR INSERT[\s\S]*WITH CHECK\s*\([\s\S]*bucket_id\s*=\s*'pet-images'[\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i,
-    /CREATE POLICY "Users can update their own pet images"[\s\S]*ON storage\.objects FOR UPDATE[\s\S]*USING\s*\([\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text[\s\S]*WITH CHECK\s*\([\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i,
-    /CREATE POLICY "Users can delete their own pet images"[\s\S]*ON storage\.objects FOR DELETE[\s\S]*USING\s*\([\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i,
+    [/DROP POLICY IF EXISTS "Authenticated users can upload pet images" ON storage\.objects/i, migration],
+    [/id\s*=\s*'pet-images'/i, bucketBlock],
+    [/file_size_limit\s*=\s*5242880/i, bucketBlock],
+    [/allowed_mime_types\s*=\s*ARRAY\['image\/jpeg',\s*'image\/png',\s*'image\/webp'\]/i, bucketBlock],
+    [/ON storage\.objects FOR INSERT/i, insertPolicyBlock],
+    [/WITH CHECK\s*\([\s\S]*bucket_id\s*=\s*'pet-images'[\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i, insertPolicyBlock],
+    [/ON storage\.objects FOR UPDATE/i, updatePolicyBlock],
+    [/USING\s*\([\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text[\s\S]*WITH CHECK\s*\([\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i, updatePolicyBlock],
+    [/ON storage\.objects FOR DELETE/i, deletePolicyBlock],
+    [/USING\s*\([\s\S]*storage\.foldername\(name\)\s*\)\[1\]\s*=\s*auth\.uid\(\)::text/i, deletePolicyBlock],
 ]
 
-const missingMigrationPatterns = requiredMigrationPatterns.filter(pattern => !pattern.test(migration))
-if (missingMigrationPatterns.length > 0) {
+const missingMigrationPatterns = requiredMigrationPatterns.filter(([pattern, block]) => !pattern.test(block))
+if (missingMigrationPatterns.length > 0 || !bucketBlock || !insertPolicyBlock || !updatePolicyBlock || !deletePolicyBlock) {
     console.error("Task 5 SQL assertion failed: hardened migration is incomplete.")
     process.exit(1)
 }
@@ -27,9 +37,21 @@ if (missingMigrationPatterns.length > 0) {
 for (const file of appFiles) {
     const source = await readFile(resolve(file), "utf8")
     if (!source.includes('from "@/lib/image-upload"') ||
-        !source.includes("getImageUploadError") ||
         !source.includes("accept=\"image/jpeg,image/png,image/webp\"")) {
-        console.error(`Task 5 upload assertion failed: ${file} lacks shared MIME/size enforcement hooks.`)
+        console.error(`Task 5 upload assertion failed: ${file} lacks shared upload constraints.`)
+        process.exit(1)
+    }
+
+    const uploadPositions = [...source.matchAll(/\.upload\s*\(/g)].map(match => match.index ?? -1)
+    if (uploadPositions.length !== 1) {
+        console.error(`Task 5 upload assertion failed: ${file} must contain exactly one Storage upload call.`)
+        process.exit(1)
+    }
+
+    const uploadPosition = uploadPositions[0]
+    const guardPosition = source.lastIndexOf("getImageUploadError(", uploadPosition)
+    if (guardPosition < 0 || guardPosition > uploadPosition) {
+        console.error(`Task 5 upload assertion failed: ${file} has no getImageUploadError(...) call before .upload(...).`)
         process.exit(1)
     }
 }
@@ -48,4 +70,4 @@ for (const pattern of [
     }
 }
 
-console.log("Task 5 assertions passed: legacy policy replacement, Storage limits, ownership, and app upload constraints are present.")
+console.log("Task 5 source-structure assertions passed: bucket target/limits, legacy policy replacement, ownership, and pre-upload guards are present.")
