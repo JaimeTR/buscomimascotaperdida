@@ -8,29 +8,10 @@ import { registerSchema, RegisterSchema } from "@/lib/schemas/auth"
 import { registerAction } from "@/app/auth/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Loader2, User, Phone, Mail, Lock, Eye, EyeOff } from "lucide-react"
 import { useToast } from "@/components/ui/toast-modern"
 import { useRouter } from "next/navigation"
-
-const PERU_DATA: Record<string, string[]> = {
-    "Lima": [
-        "Ancón", "Ate", "Barranco", "Breña", "Carabayllo", "Chaclacayo", "Chorrillos",
-        "Cieneguilla", "Comas", "El Agustino", "Independencia", "Jesús María",
-        "La Molina", "La Victoria", "Lima", "Lince", "Los Olivos", "Lurigancho",
-        "Lurín", "Magdalena del Mar", "Miraflores", "Pachacámac", "Pucusana",
-        "Pueblo Libre", "Puente Piedra", "Punta Hermosa", "Punta Negra", "Rímac",
-        "San Bartolo", "San Borja", "San Isidro", "San Juan de Lurigancho",
-        "San Juan de Miraflores", "San Luis", "San Martín de Porres", "San Miguel",
-        "Santa Anita", "Santa María del Mar", "Santa Rosa", "Santiago de Surco",
-        "Surquillo", "Villa El Salvador", "Villa María del Triunfo"
-    ],
-    "Arequipa": ["Arequipa", "Yanahuara", "Cayma", "Selva Alegre", "Miraflores", "Jose Luis Bustamante"],
-    "Cusco": ["Cusco", "San Jerónimo", "San Sebastián", "Wanchaq"],
-    "La Libertad": ["Trujillo", "Victor Larco", "Huanchaco", "Moche"],
-    "Piura": ["Piura", "Castilla", "Catacaos"],
-    "Lambayeque": ["Chiclayo", "Jose Leonardo Ortiz", "La Victoria"]
-}
+import { ProfileLocationFields } from "@/components/auth/profile-location-fields"
 
 interface RegisterFormProps {
     onSuccess?: () => void
@@ -133,31 +114,19 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
                 {errors.phone && <p className="text-xs text-red-500">{errors.phone.message}</p>}
             </div>
 
-            <div className="grid grid-cols-2 gap-3 animate-in fade-in slide-in-from-left-2 duration-300 delay-100">
-                <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase">Departamento</label>
-                    <Select onValueChange={(v) => { setValue("department", v); setValue("district", ""); }}>
-                        <SelectTrigger className={`h-12 bg-slate-50 border-slate-200 ${errors.department ? 'border-red-500' : ''}`}>
-                            <SelectValue placeholder="DPTO" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {Object.keys(PERU_DATA).map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
-                        </SelectContent>
-                    </Select>
-                    {errors.department && <p className="text-xs text-red-500">{errors.department.message}</p>}
-                </div>
-                <div className="space-y-2">
-                    <label className="text-xs font-bold text-slate-500 uppercase">Distrito</label>
-                    <Select onValueChange={(v) => setValue("district", v)} disabled={!department}>
-                        <SelectTrigger className={`h-12 bg-slate-50 border-slate-200 ${errors.district ? 'border-red-500' : ''}`}>
-                            <SelectValue placeholder="DIST" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            {department && PERU_DATA[department]?.map(d => <SelectItem key={d} value={d}>{d}</SelectItem>)}
-                        </SelectContent>
-                    </Select>
-                    {errors.district && <p className="text-xs text-red-500">{errors.district.message}</p>}
-                </div>
+            <div className="animate-in fade-in slide-in-from-left-2 duration-300 delay-100">
+                <ProfileLocationFields
+                    department={department}
+                    district={watch("district")}
+                    onDepartmentChange={(value) => {
+                        setValue("department", value, { shouldValidate: true })
+                        setValue("district", "", { shouldValidate: true })
+                    }}
+                    onDistrictChange={(value) => setValue("district", value, { shouldValidate: true })}
+                    departmentError={errors.department?.message}
+                    districtError={errors.district?.message}
+                    compact
+                />
             </div>
 
             <div className="space-y-2">

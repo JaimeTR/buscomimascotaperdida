@@ -44,3 +44,20 @@ The repository does not define an automated test script or test files for this f
 - Full lint remains blocked by unrelated pre-existing errors and warnings.
 - Production build requires the configured Supabase environment variables; the failure was environmental during prerendering, not a TypeScript or compilation failure.
 - The completion dialog uses the same limited Peru department/district dataset already used by the registration form; locations outside that existing dataset remain an existing product limitation.
+
+## Round 1 fixes
+
+- Added `src/lib/peru-locations.ts` as the canonical profile department/district dataset.
+- Added `src/components/auth/profile-location-fields.tsx` so registration and profile completion share the same selectors and reset behavior.
+- Removed the duplicated location dataset from `register-form.tsx` and `complete-profile-dialog.tsx`.
+- Fixed the partial-profile case where `district` existed but `department` was missing: both location selectors render, choosing a department clears the stale district, and the replacement district remains required and selectable.
+- Added `scripts/check-task-3-profile.mjs` for deterministic checks of shared data usage and the partial-profile replacement flow.
+
+### Round 1 validation commands and exact results
+
+| Command | Result |
+| --- | --- |
+| `node scripts\check-task-3-profile.mjs` | Passed: `Task 3 profile checks passed: shared location source and partial-profile replacement flow.` |
+| `npx tsc --noEmit` | Passed with exit code 0. |
+| `$env:NEXT_PUBLIC_SUPABASE_URL='https://example.supabase.co'; $env:NEXT_PUBLIC_SUPABASE_ANON_KEY='round1-placeholder-anon-key'; npm run build` | Passed with exit code 0. Compilation, TypeScript, static generation, and route optimization completed. Existing Next.js workspace-root, middleware, and metadata warnings remain. |
+| `npx eslint src\components\auth\profile-location-fields.tsx src\components\auth\complete-profile-dialog.tsx src\components\auth\register-form.tsx src\lib\peru-locations.ts` | Failed only on the pre-existing `no-explicit-any` error and unused `useActionState` warning in `register-form.tsx`; the new shared selector, canonical dataset, and dialog have no lint errors. |
