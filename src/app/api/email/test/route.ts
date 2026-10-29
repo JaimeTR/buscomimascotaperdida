@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendWelcomeEmail, sendPetAlertEmail, sendSightingNotification } from '@/lib/email'
 import { assertServerEnv } from '@/lib/env'
-import { getSafeErrorCode } from '@/lib/safe-error'
+import { getSafeErrorCode, methodNotAllowedResponse } from '@/lib/safe-error'
 
 /**
  * API Route para probar el envío de emails
@@ -82,6 +82,7 @@ export async function POST(request: NextRequest) {
     }
 }
 
-export function GET() {
-    return NextResponse.json({ error: 'Método no permitido' }, { status: 405 })
-}
+export const GET = methodNotAllowedResponse
+export const PUT = methodNotAllowedResponse
+export const PATCH = methodNotAllowedResponse
+export const DELETE = methodNotAllowedResponse

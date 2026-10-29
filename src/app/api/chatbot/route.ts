@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { assertServerEnv } from '@/lib/env'
-import { getSafeErrorCode } from '@/lib/safe-error'
+import {
+    getSafeErrorCode,
+    invalidPayloadResponse,
+    methodNotAllowedResponse,
+    parseJsonBody,
+} from '@/lib/safe-error'
 
 const requestCounts = new Map<string, { count: number; resetTime: number }>()
 const RATE_LIMIT_WINDOW = 60 * 1000
@@ -36,7 +41,12 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        const body: unknown = await request.json()
+        const parsedBody = await parseJsonBody(request)
+        if (!parsedBody.ok) {
+            return invalidPayloadResponse()
+        }
+
+        const body: unknown = parsedBody.body
         const message = (
             typeof body === 'object' &&
             body !== null &&
@@ -139,6 +149,7 @@ Responde EXACTAMENTE en este formato JSON (sin markdown):
     }
 }
 
-export function GET() {
-    return NextResponse.json({ error: 'Método no permitido' }, { status: 405 })
-}
+export const GET = methodNotAllowedResponse
+export const PUT = methodNotAllowedResponse
+export const PATCH = methodNotAllowedResponse
+export const DELETE = methodNotAllowedResponse

@@ -68,3 +68,23 @@ No automated test script is defined in `package.json`; the focused lint, TypeScr
 - The email test route now intentionally requires `EMAIL_TEST_TOKEN` even outside production; local callers must provide the matching `x-email-test-token` header.
 - Nearby notification delivery still uses the existing Supabase admin lookup and provider configuration; this task only hardens its authorization, validation, error handling, and logging.
 - Existing Next.js warnings about workspace-root detection, middleware naming, and metadata placement remain unrelated to Task 4.
+
+## Round 1 fixes
+
+- Added guarded JSON parsing shared by the chatbot and nearby-notification routes. Malformed or empty request bodies now return the standard `400 {"error":"Payload inválido"}` response instead of falling through to a generic `500`.
+- Added shared stable method rejection and explicit `GET`, `PUT`, `PATCH`, and `DELETE` handlers for all three routes. Each returns `405 {"error":"Método no permitido"}`.
+
+### Round 1 validation commands and exact results
+
+| Command | Result |
+| --- | --- |
+| `npx tsc --noEmit` | Passed with exit code 0. |
+| `npx eslint src\app\api src\app\auth src\lib src\components\auth` | Passed with exit code 0. |
+| `git diff --check` | Passed with exit code 0. |
+| Live smoke: malformed `POST` body `{` to `/api/chatbot` and `/api/notify-nearby-users` | Both returned `400 {"error":"Payload inválido"}`. |
+| Live smoke: empty `POST` body to `/api/chatbot` and `/api/notify-nearby-users` | Both returned `400 {"error":"Payload inválido"}`. |
+| Live smoke: `GET`, `PUT`, `PATCH`, and `DELETE` against chatbot, nearby-notification, and email-test routes | All 12 calls returned `405 {"error":"Método no permitido"}`. |
+
+## Round 1 commit
+
+- `04b9ba13b3e5e30219de0b52c4b370c449f1b8a7` — `fix: complete endpoint method hardening`

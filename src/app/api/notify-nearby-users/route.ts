@@ -1,20 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { notifyNearbyUsers } from '@/lib/notifications'
 import { createClient } from '@/utils/supabase/server'
-import { getSafeErrorCode } from '@/lib/safe-error'
+import {
+    getSafeErrorCode,
+    invalidPayloadResponse,
+    methodNotAllowedResponse,
+    parseJsonBody,
+} from '@/lib/safe-error'
 
 export async function POST(request: NextRequest) {
     try {
+        const parsedBody = await parseJsonBody(request)
+        if (!parsedBody.ok) {
+            return invalidPayloadResponse()
+        }
+
+        const body: unknown = parsedBody.body
+        if (typeof body !== 'object' || body === null) {
+            return invalidPayloadResponse()
+        }
+
         const supabase = await createClient()
         const { data: { user }, error: authError } = await supabase.auth.getUser()
 
         if (authError || !user) {
             return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-        }
-
-        const body: unknown = await request.json()
-        if (typeof body !== 'object' || body === null) {
-            return NextResponse.json({ error: 'Payload inválido' }, { status: 400 })
         }
 
         const {
@@ -51,10 +61,7 @@ export async function POST(request: NextRequest) {
             !petType.trim() ||
             !lastSeenDistrict.trim()
         ) {
-            return NextResponse.json(
-                { error: 'Payload inválido' },
-                { status: 400 }
-            )
+            return invalidPayloadResponse()
         }
 
         const result = await notifyNearbyUsers({
@@ -91,6 +98,7 @@ export async function POST(request: NextRequest) {
     }
 }
 
-export function GET() {
-    return NextResponse.json({ error: 'Método no permitido' }, { status: 405 })
-}
+export const GET = methodNotAllowedResponse
+export const PUT = methodNotAllowedResponse
+export const PATCH = methodNotAllowedResponse
+export const DELETE = methodNotAllowedResponse
