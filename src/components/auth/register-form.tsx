@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useActionState } from "react"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { registerSchema, RegisterSchema } from "@/lib/schemas/auth"
@@ -75,11 +75,9 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
                     }
                 }, 1000)
             }
-        } catch (error: any) {
-            console.error("Register Error:", error)
+        } catch {
+            console.error("register action failed")
             // Ignore standard Next.js redirect errors if they happen
-            if (error?.message === 'NEXT_REDIRECT') return;
-
             toast("Ocurrió un error inesperado al procesar el registro.", { type: 'error' })
         } finally {
             setIsLoading(false)

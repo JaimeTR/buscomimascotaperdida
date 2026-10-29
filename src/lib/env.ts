@@ -6,6 +6,7 @@ export type ServerEnv = {
     appUrl?: string
     resendApiKey?: string
     huggingfaceApiKey?: string
+    emailTestToken?: string
 }
 
 function readEnv(name: string): string | undefined {
@@ -39,5 +40,6 @@ export function assertServerEnv(): ServerEnv {
         appUrl,
         resendApiKey: readEnv('RESEND_API_KEY'),
         huggingfaceApiKey: readEnv('HUGGINGFACE_API_KEY'),
+        emailTestToken: readEnv('EMAIL_TEST_TOKEN'),
     }
 }

@@ -2,6 +2,7 @@ import React from 'react'
 import { Resend } from 'resend'
 import { render } from '@react-email/render'
 import { assertServerEnv } from '@/lib/env'
+import { getSafeErrorCode } from '@/lib/safe-error'
 
 // Configuración
 const FROM_EMAIL = 'BuscoMiMascota <onboarding@resend.dev>' // Cambiar a tu dominio verificado
@@ -20,7 +21,7 @@ export async function sendEmail({ to, subject, react }: SendEmailOptions) {
         const { resendApiKey } = assertServerEnv()
         // Validar que Resend esté configurado
         if (!resendApiKey) {
-            console.error('❌ RESEND_API_KEY no configured')
+            console.error('email provider is not configured')
             throw new Error('Email service not configured')
         }
         const resend = new Resend(resendApiKey)
@@ -37,15 +38,14 @@ export async function sendEmail({ to, subject, react }: SendEmailOptions) {
         })
 
         if (error) {
-            console.error('❌ Error sending email:', error)
+            console.error('email provider request failed', { code: getSafeErrorCode(error) })
             throw error
         }
 
-        console.log('✅ Email sent successfully:', data?.id)
         return { success: true, id: data?.id }
 
-    } catch (error) {
-        console.error('❌ Email service error:', error)
+    } catch (error: unknown) {
+        console.error('email service error', { code: getSafeErrorCode(error) })
         throw error
     }
 }

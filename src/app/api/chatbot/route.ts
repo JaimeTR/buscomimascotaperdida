@@ -1,21 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { assertServerEnv } from '@/lib/env'
+import { getSafeErrorCode } from '@/lib/safe-error'
 
-// Rate limiting simple en memoria (para producción, usa Redis)
 const requestCounts = new Map<string, { count: number; resetTime: number }>()
-
-const RATE_LIMIT_WINDOW = 60 * 1000 // 1 minuto
-const MAX_REQUESTS_PER_WINDOW = 10 // 10 requests por minuto
+const RATE_LIMIT_WINDOW = 60 * 1000
+const MAX_REQUESTS_PER_WINDOW = 10
 
 function checkRateLimit(ip: string): boolean {
     const now = Date.now()
     const userRecord = requestCounts.get(ip)
 
     if (!userRecord || now > userRecord.resetTime) {
-        requestCounts.set(ip, {
-            count: 1,
-            resetTime: now + RATE_LIMIT_WINDOW
-        })
+        requestCounts.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW })
         return true
     }
 
@@ -29,12 +25,10 @@ function checkRateLimit(ip: string): boolean {
 
 export async function POST(request: NextRequest) {
     try {
-        // Obtener IP del usuario para rate limiting
         const ip = request.headers.get('x-forwarded-for') ||
             request.headers.get('x-real-ip') ||
             'unknown'
 
-        // Verificar rate limit
         if (!checkRateLimit(ip)) {
             return NextResponse.json(
                 { error: 'Demasiadas solicitudes. Por favor espera un momento.' },
@@ -42,38 +36,35 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        // Obtener el mensaje del usuario
-        const body = await request.json()
-        const { message } = body
+        const body: unknown = await request.json()
+        const message = (
+            typeof body === 'object' &&
+            body !== null &&
+            'message' in body &&
+            typeof body.message === 'string'
+        ) ? body.message.trim() : ''
 
-        if (!message || typeof message !== 'string' || message.length > 500) {
-            return NextResponse.json(
-                { error: 'Mensaje inválido' },
-                { status: 400 }
-            )
+        if (!message || message.length > 500) {
+            return NextResponse.json({ error: 'Mensaje inválido' }, { status: 400 })
         }
 
-        // Llamar a HuggingFace desde el backend (API key segura)
-        const HF_API_KEY = assertServerEnv().huggingfaceApiKey
+        const { huggingfaceApiKey } = assertServerEnv()
 
-        if (!HF_API_KEY) {
-            console.error('HUGGINGFACE_API_KEY no configurada')
+        if (!huggingfaceApiKey) {
+            console.error('chatbot provider is not configured')
             return NextResponse.json(
-                {
-                    error: 'Servicio temporalmente no disponible',
-                    fallback: true
-                },
+                { error: 'Servicio temporalmente no disponible', fallback: true },
                 { status: 503 }
             )
         }
 
         const hfResponse = await fetch(
-            "https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf",
+            'https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf',
             {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${HF_API_KEY}`,
-                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${huggingfaceApiKey}`,
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     inputs: `Eres un asistente para buscar mascotas perdidas en Perú. Analiza este mensaje y responde SOLO en JSON válido:
@@ -103,58 +94,51 @@ Responde EXACTAMENTE en este formato JSON (sin markdown):
         )
 
         if (!hfResponse.ok) {
-            const errorText = await hfResponse.text()
-            console.error('HuggingFace error:', errorText)
-
+            console.error('chatbot provider request failed', { status: hfResponse.status })
             return NextResponse.json(
-                {
-                    error: 'Error al procesar tu mensaje',
-                    fallback: true
-                },
-                { status: 500 }
+                { error: 'Error al procesar tu mensaje', fallback: true },
+                { status: 502 }
             )
         }
 
-        const hfData = await hfResponse.json()
+        const hfData: unknown = await hfResponse.json()
+        let analysis: unknown = null
 
-        // Extraer y parsear la respuesta JSON
-        let analysis = null
-        if (Array.isArray(hfData) && hfData[0]) {
-            const text = hfData[0].generated_text
-            const jsonMatch = text.match(/\{[\s\S]*\}/)
+        if (
+            Array.isArray(hfData) &&
+            hfData.length > 0 &&
+            typeof hfData[0] === 'object' &&
+            hfData[0] !== null &&
+            'generated_text' in hfData[0] &&
+            typeof hfData[0].generated_text === 'string'
+        ) {
+            const jsonMatch = hfData[0].generated_text.match(/\{[\s\S]*\}/)
             if (jsonMatch) {
                 try {
                     analysis = JSON.parse(jsonMatch[0])
-                } catch (e) {
-                    console.error('Error parsing AI response:', e)
+                } catch {
+                    console.error('chatbot provider returned invalid analysis')
                 }
             }
         }
 
         if (!analysis) {
             return NextResponse.json(
-                {
-                    error: 'No se pudo procesar la respuesta',
-                    fallback: true
-                },
-                { status: 500 }
+                { error: 'No se pudo procesar la respuesta', fallback: true },
+                { status: 502 }
             )
         }
 
-        // Retornar la respuesta procesada
-        return NextResponse.json({
-            success: true,
-            analysis
-        })
-
-    } catch (error) {
-        console.error('API error:', error)
+        return NextResponse.json({ success: true, analysis })
+    } catch (error: unknown) {
+        console.error('chatbot API error', { code: getSafeErrorCode(error) })
         return NextResponse.json(
-            {
-                error: 'Error interno del servidor',
-                fallback: true
-            },
+            { error: 'Error interno del servidor', fallback: true },
             { status: 500 }
         )
     }
+}
+
+export function GET() {
+    return NextResponse.json({ error: 'Método no permitido' }, { status: 405 })
 }

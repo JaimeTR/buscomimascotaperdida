@@ -10,13 +10,22 @@ import { assertServerEnv } from "@/lib/env"
 import { isSafeInternalPath } from "@/lib/safe-path"
 import { getRecoveryPath } from "@/lib/auth-redirects"
 
+export type LoginActionState = {
+    error?: string
+    validationErrors?: Record<string, string[] | undefined>
+    needsConfirmation?: boolean
+    email?: string
+}
 
-export async function loginAction(prevState: any, formData: FormData) {
+export async function loginAction(_prevState: LoginActionState, formData: FormData) {
     const supabase = await createClient()
 
-    const email = formData.get("email") as string
-    const password = formData.get("password") as string
-    const next = isSafeInternalPath(formData.get("next") as string | null, "/dashboard")
+    const emailValue = formData.get("email")
+    const passwordValue = formData.get("password")
+    const nextValue = formData.get("next")
+    const email = typeof emailValue === "string" ? emailValue : ""
+    const password = typeof passwordValue === "string" ? passwordValue : ""
+    const next = isSafeInternalPath(typeof nextValue === "string" ? nextValue : null, "/dashboard")
 
     const result = loginSchema.safeParse({ email, password })
 
@@ -37,7 +46,7 @@ export async function loginAction(prevState: any, formData: FormData) {
             return {
                 error: "Tu correo electrónico no ha sido verificado.",
                 needsConfirmation: true,
-                email: email
+                email
             }
         }
         return { error: translateSupabaseError(error.message) }
@@ -46,13 +55,18 @@ export async function loginAction(prevState: any, formData: FormData) {
     redirect(next)
 }
 
-export async function resendConfirmationAction(email: string) {
+export async function resendConfirmationAction(email: unknown) {
+    const result = loginSchema.shape.email.safeParse(email)
+    if (!result.success) {
+        return { error: "Datos inválidos." }
+    }
+
     const supabase = await createClient()
     const origin = assertServerEnv().appUrl || "http://localhost:3000"
 
     const { error } = await supabase.auth.resend({
         type: 'signup',
-        email: email,
+        email: result.data,
         options: {
             emailRedirectTo: `${origin}/auth/callback`
         }
@@ -65,7 +79,7 @@ export async function resendConfirmationAction(email: string) {
     return { success: true }
 }
 
-export async function registerAction(data: any) {
+export async function registerAction(data: unknown) {
     const supabase = await createClient()
     const origin = assertServerEnv().appUrl || "http://localhost:3000"
 
@@ -80,7 +94,7 @@ export async function registerAction(data: any) {
 
     const { email, password, fullName, phone, department, district } = result.data
 
-    let { error, data: authData } = await supabase.auth.signUp({
+    const { error, data: authData } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -111,8 +125,8 @@ export async function registerAction(data: any) {
         // For server actions, awaiting is usually safer to avoid execution context issues
         try {
             await sendWelcomeEmail(authData.user.email, fullName)
-        } catch (emailError) {
-            console.error("Failed to send welcome email:", emailError)
+        } catch {
+            console.error("welcome email delivery failed")
             // We don't fail the registration if email fails, but we log it
         }
     }
@@ -120,12 +134,17 @@ export async function registerAction(data: any) {
     return { success: true }
 }
 
-export async function resetPasswordAction(email: string, next: string | null = "/dashboard") {
+export async function resetPasswordAction(email: unknown, next: unknown = "/dashboard") {
+    const emailResult = loginSchema.shape.email.safeParse(email)
+    if (!emailResult.success) {
+        return { error: "Datos inválidos." }
+    }
+
     const supabase = await createClient()
     const origin = assertServerEnv().appUrl || "http://localhost:3000"
-    const recoveryNext = getRecoveryPath(next)
+    const recoveryNext = getRecoveryPath(typeof next === "string" ? next : null)
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    const { error } = await supabase.auth.resetPasswordForEmail(emailResult.data, {
         redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(recoveryNext)}`,
     })
 

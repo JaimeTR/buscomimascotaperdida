@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { sendWelcomeEmail, sendPetAlertEmail, sendSightingNotification } from '@/lib/email'
+import { assertServerEnv } from '@/lib/env'
+import { getSafeErrorCode } from '@/lib/safe-error'
 
 /**
  * API Route para probar el envío de emails
@@ -12,18 +14,28 @@ import { sendWelcomeEmail, sendPetAlertEmail, sendSightingNotification } from '@
  */
 export async function POST(request: NextRequest) {
     try {
-        // Solo permitir en desarrollo
-        if (process.env.NODE_ENV === 'production') {
+        const { emailTestToken } = assertServerEnv()
+        const providedToken = request.headers.get('x-email-test-token')
+
+        if (process.env.NODE_ENV === 'production' || !emailTestToken || providedToken !== emailTestToken) {
             return NextResponse.json(
-                { error: 'Not available in production' },
+                { error: 'Acceso no autorizado' },
                 { status: 403 }
             )
         }
 
-        const searchParams = request.url.split('?')[1]
-        const params = new URLSearchParams(searchParams)
-        const type = params.get('type') || 'welcome'
-        const email = params.get('email') || 'test@example.com'
+        const params = new URL(request.url).searchParams
+        const type = params.get('type')
+        const email = params.get('email')
+
+        if (
+            !email ||
+            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+            !type ||
+            !['welcome', 'alert', 'sighting'].includes(type)
+        ) {
+            return NextResponse.json({ error: 'Payload inválido' }, { status: 400 })
+        }
 
         let result
 
@@ -53,25 +65,23 @@ export async function POST(request: NextRequest) {
                 })
                 break
 
-            default:
-                return NextResponse.json(
-                    { error: 'Invalid type. Use: welcome, alert, or sighting' },
-                    { status: 400 }
-                )
         }
 
         return NextResponse.json({
             success: true,
             type,
-            email,
-            result
+            result: Boolean(result),
         })
 
-    } catch (error: any) {
-        console.error('Test email error:', error)
+    } catch (error: unknown) {
+        console.error('test email API error', { code: getSafeErrorCode(error) })
         return NextResponse.json(
-            { error: error.message || 'Failed to send test email' },
+            { error: 'No se pudo enviar el correo de prueba' },
             { status: 500 }
         )
     }
+}
+
+export function GET() {
+    return NextResponse.json({ error: 'Método no permitido' }, { status: 405 })
 }

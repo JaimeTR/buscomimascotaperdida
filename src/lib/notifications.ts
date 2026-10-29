@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server'
 import { render } from '@react-email/render'
 import { PetAlertEmail } from '@/emails/pet-alert-template'
 import { assertServerEnv } from '@/lib/env'
+import { getSafeErrorCode } from '@/lib/safe-error'
 
 /**
  * Calculate distance between two coordinates using Haversine formula
@@ -61,18 +62,19 @@ export async function notifyNearbyUsers(reportData: PetReportData) {
         // Get all users with notification preferences and coordinates
         const { data: users, error: usersError } = await supabase
             .from('profiles')
-            .select('id, full_name, email, notification_lat, notification_lng, notification_radius_km, notifications_enabled')
+            .select('id, full_name, notification_lat, notification_lng, notification_radius_km, notifications_enabled')
             .eq('notifications_enabled', true)
             .not('notification_lat', 'is', null)
             .not('notification_lng', 'is', null)
 
         if (usersError) {
-            console.error('Error fetching users for notifications:', usersError)
-            return { error: usersError.message }
+            console.error('notification recipients query failed', {
+                code: getSafeErrorCode(usersError),
+            })
+            return { error: 'No se pudieron consultar los destinatarios' }
         }
 
         if (!users || users.length === 0) {
-            console.log('No users with notification preferences found')
             return { success: true, notified: 0 }
         }
 
@@ -97,7 +99,9 @@ export async function notifyNearbyUsers(reportData: PetReportData) {
                     const { data: authUser } = await supabase.auth.admin.getUserById(user.id)
 
                     if (!authUser?.user?.email) {
-                        console.log(`No email found for user ${user.id}`)
+                        console.error('notification recipient has no email', {
+                            code: 'missing_recipient_email',
+                        })
                         continue
                     }
 
@@ -126,19 +130,19 @@ export async function notifyNearbyUsers(reportData: PetReportData) {
                     })
 
                     notifiedCount++
-                    console.log(`Notification sent to ${authUser.user.email} (${distance.toFixed(1)}km away)`)
-                } catch (emailError: any) {
-                    console.error(`Failed to send email to user ${user.id}:`, emailError)
+                } catch (emailError: unknown) {
+                    console.error('notification delivery failed', {
+                        code: getSafeErrorCode(emailError),
+                    })
                     // Continue with other users even if one fails
                 }
             }
         }
 
-        console.log(`Successfully notified ${notifiedCount} users`)
         return { success: true, notified: notifiedCount }
 
-    } catch (error: any) {
-        console.error('Error in notifyNearbyUsers:', error)
-        return { error: error.message }
+    } catch (error: unknown) {
+        console.error('notifyNearbyUsers failed', { code: getSafeErrorCode(error) })
+        return { error: 'No se pudieron enviar las notificaciones' }
     }
 }

@@ -4,19 +4,20 @@ import { useActionState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { loginAction, resendConfirmationAction } from "@/app/auth/actions"
+import type { LoginActionState } from "@/app/auth/actions"
 import { Loader2, AlertTriangle, CheckCircle2 } from "lucide-react"
 import { useToast } from "@/components/ui/toast-modern"
 
 // Define the initial state type
-const initialState = {
-    error: "" as string,
-    validationErrors: {} as Record<string, string[]> | undefined,
-    needsConfirmation: false as boolean | undefined,
-    email: undefined as string | undefined
+const initialState: LoginActionState = {
+    error: "",
+    validationErrors: undefined,
+    needsConfirmation: false,
+    email: undefined
 }
 
 export function LoginForm({ next }: { next: string }) {
-    const [state, formAction, isPending] = useActionState(loginAction, initialState as any)
+    const [state, formAction, isPending] = useActionState(loginAction, initialState)
     const { toast } = useToast()
     const [isResending, setIsResending] = useState(false)
 
@@ -30,7 +31,7 @@ export function LoginForm({ next }: { next: string }) {
             } else {
                 toast("Correo de confirmación reenviado. Revisa tu bandeja.", { type: 'success' })
             }
-        } catch (error) {
+        } catch {
             toast("Error al reenviar el correo.", { type: 'error' })
         } finally {
             setIsResending(false)
