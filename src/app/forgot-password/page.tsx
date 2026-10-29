@@ -1,7 +1,8 @@
 
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
+import { useSearchParams } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
@@ -11,6 +12,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/toast-modern"
 import { resetPasswordAction } from "@/app/auth/actions"
+import { isSafeInternalPath } from "@/lib/safe-path"
 
 const forgotPasswordSchema = z.object({
     email: z.string().email({ message: "Ingresa un correo electrónico válido." }),
@@ -18,7 +20,8 @@ const forgotPasswordSchema = z.object({
 
 type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>
 
-export default function ForgotPasswordPage() {
+function ForgotPasswordContent() {
+    const searchParams = useSearchParams()
     const { toast } = useToast()
     const [isLoading, setIsLoading] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
@@ -34,18 +37,21 @@ export default function ForgotPasswordPage() {
     const onSubmit = async (data: ForgotPasswordSchema) => {
         setIsLoading(true)
         try {
-            const result = await resetPasswordAction(data.email)
+            const next = isSafeInternalPath(searchParams.get("next"), "/dashboard")
+            const result = await resetPasswordAction(data.email, next)
             if (result?.error) {
                 toast(result.error, { type: "error" })
             } else {
                 setIsSuccess(true)
                 toast("Correo de recuperación enviado", { type: "success" })
             }
+
         } catch (error) {
             toast("Ocurrió un error inesperado", { type: "error" })
         } finally {
             setIsLoading(false)
         }
+
     }
 
     return (
@@ -115,5 +121,13 @@ export default function ForgotPasswordPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function ForgotPasswordPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400">Cargando...</div>}>
+            <ForgotPasswordContent />
+        </Suspense>
     )
 }

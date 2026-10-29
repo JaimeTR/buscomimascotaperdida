@@ -1,8 +1,8 @@
 
 "use client"
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { Suspense, useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Lock, Loader2, ArrowRight, Eye, EyeOff } from "lucide-react"
 
@@ -10,15 +10,18 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { createClient } from "@/utils/supabase/client"
 import { useToast } from "@/components/ui/toast-modern"
+import { isSafeInternalPath } from "@/lib/safe-path"
 
-export default function UpdatePasswordPage() {
+function UpdatePasswordContent() {
     const router = useRouter()
+    const searchParams = useSearchParams()
     const [isLoading, setIsLoading] = useState(false)
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false)
     const { toast } = useToast()
     const supabase = createClient()
+    const next = isSafeInternalPath(searchParams.get("next"), "/dashboard")
 
     // Función para traducir errores de Supabase al español
     const translateError = (errorMessage: string): string => {
@@ -56,6 +59,7 @@ export default function UpdatePasswordPage() {
             if (errorMessage.toLowerCase().includes(key.toLowerCase())) {
                 return value
             }
+
         }
 
         // Si no hay traducción, devolver mensaje genérico en español
@@ -97,7 +101,7 @@ export default function UpdatePasswordPage() {
 
             // Redirigir al dashboard después de 1 segundo
             setTimeout(() => {
-                router.push('/dashboard')
+                router.push(next)
             }, 1000)
         } catch (error: any) {
             toast(error.message || "Error al actualizar la contraseña", { type: 'error' })
@@ -176,5 +180,13 @@ export default function UpdatePasswordPage() {
                 </div>
             </div>
         </div>
+    )
+}
+
+export default function UpdatePasswordPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400">Cargando...</div>}>
+            <UpdatePasswordContent />
+        </Suspense>
     )
 }

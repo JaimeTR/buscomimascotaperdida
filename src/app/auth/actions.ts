@@ -119,13 +119,14 @@ export async function registerAction(data: any) {
     return { success: true }
 }
 
-export async function resetPasswordAction(email: string, next: string | null = "/update-password") {
+export async function resetPasswordAction(email: string, next: string | null = "/dashboard") {
     const supabase = await createClient()
     const origin = assertServerEnv().appUrl || "http://localhost:3000"
-    const safeNext = isSafeInternalPath(next, "/update-password")
+    const safeNext = isSafeInternalPath(next, "/dashboard")
+    const recoveryNext = `/update-password?next=${encodeURIComponent(safeNext)}`
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(safeNext)}`,
+        redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(recoveryNext)}`,
     })
 
     if (error) {
