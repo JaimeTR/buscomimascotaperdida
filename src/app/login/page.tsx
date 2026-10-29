@@ -6,14 +6,16 @@ import { Plus } from "lucide-react"
 import { useEffect, Suspense } from "react"
 
 import { LoginForm } from "@/components/auth/login-form"
+import { GoogleLoginButton } from "@/components/auth/google-login-button"
 import { createClient } from "@/utils/supabase/client"
+import { isSafeInternalPath } from "@/lib/safe-path"
 
 function LoginContent() {
     const searchParams = useSearchParams()
     const router = useRouter()
     const supabase = createClient()
 
-    const nextUrl = searchParams.get('next') || '/dashboard'
+    const nextUrl = isSafeInternalPath(searchParams.get('next'), '/dashboard')
 
     useEffect(() => {
         const checkUser = async () => {
@@ -67,6 +69,17 @@ function LoginContent() {
                     </div>
 
                     <LoginForm next={nextUrl} />
+
+                    <div className="relative my-6">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-slate-100" />
+                        </div>
+                        <div className="relative flex justify-center text-xs">
+                            <span className="bg-white px-3 text-slate-400">o continúa con</span>
+                        </div>
+                    </div>
+
+                    <GoogleLoginButton next={nextUrl} />
 
                     <p className="text-center text-xs text-slate-400 mt-4">
                         ¿Olvidaste tu contraseña? <Link href="/forgot-password" className="text-blue-500 hover:underline font-medium">Recupérala aquí</Link>

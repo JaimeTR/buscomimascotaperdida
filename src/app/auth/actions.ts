@@ -7,6 +7,7 @@ import { loginSchema, registerSchema } from "@/lib/schemas/auth"
 import { sendWelcomeEmail } from "@/lib/email"
 import { translateSupabaseError } from "@/lib/translate-errors"
 import { assertServerEnv } from "@/lib/env"
+import { isSafeInternalPath } from "@/lib/safe-path"
 
 
 export async function loginAction(prevState: any, formData: FormData) {
@@ -14,7 +15,7 @@ export async function loginAction(prevState: any, formData: FormData) {
 
     const email = formData.get("email") as string
     const password = formData.get("password") as string
-    const next = formData.get("next") as string || "/dashboard"
+    const next = isSafeInternalPath(formData.get("next") as string | null, "/dashboard")
 
     const result = loginSchema.safeParse({ email, password })
 
@@ -118,12 +119,13 @@ export async function registerAction(data: any) {
     return { success: true }
 }
 
-export async function resetPasswordAction(email: string) {
+export async function resetPasswordAction(email: string, next: string | null = "/update-password") {
     const supabase = await createClient()
     const origin = assertServerEnv().appUrl || "http://localhost:3000"
+    const safeNext = isSafeInternalPath(next, "/update-password")
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${origin}/auth/callback?next=/update-password`,
+        redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(safeNext)}`,
     })
 
     if (error) {

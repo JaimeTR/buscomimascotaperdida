@@ -84,7 +84,7 @@ export function LoginForm({ next }: { next: string }) {
                 </div>
             )}
 
-            <Button type="submit" className="w-full h-12 bg-blue-600 hover:bg-blue-700 font-bold shadow-lg shadow-blue-500/20" disabled={isPending}>
+            <Button type="submit" className="w-full h-12 bg-blue-600 hover:bg-blue-700 font-bold shadow-lg shadow-blue-500/20" disabled={isPending} aria-busy={isPending}>
                 {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Ingresar"}
             </Button>
         </form>
