@@ -50,6 +50,7 @@ export default function SettingsPage() {
                         email: session.user.email,
                         full_name: "",
                         phone: "",
+                        department: "",
                         whatsapp: "",
                         instagram: "",
                         facebook_url: "",
@@ -147,6 +148,7 @@ export default function SettingsPage() {
                 .update({
                     full_name: profile.full_name,
                     phone: profile.phone,
+                    department: profile.department,
                     whatsapp: profile.whatsapp,
                     instagram: profile.instagram,
                     facebook_url: profile.facebook_url,
@@ -286,6 +288,13 @@ export default function SettingsPage() {
                                     <Input
                                         value={profile?.district || ""}
                                         onChange={(e) => setProfile({ ...profile, district: e.target.value })}
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Departamento Principal</Label>
+                                    <Input
+                                        value={profile?.department || ""}
+                                        onChange={(e) => setProfile({ ...profile, department: e.target.value })}
                                     />
                                 </div>
                             </div>

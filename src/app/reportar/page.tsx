@@ -37,6 +37,7 @@ import { LocationPopover } from "@/components/location-popover"
 import { BreedPopover } from "@/components/breed-popover"
 import { ColorPopover } from "@/components/color-popover"
 import { LocationMap } from "@/components/location-map"
+import { CompleteProfileDialog } from "@/components/auth/complete-profile-dialog"
 
 export default function ReportPage() {
     const router = useRouter()
@@ -45,6 +46,8 @@ export default function ReportPage() {
     const [isLoading, setIsLoading] = useState(true)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [userId, setUserId] = useState<string | null>(null)
+    const [profile, setProfile] = useState<{ id: string, phone?: string | null, department?: string | null, district?: string | null } | null>(null)
+    const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false)
 
     // Form State
     const [name, setName] = useState("")
@@ -76,6 +79,18 @@ export default function ReportPage() {
                 router.push("/login?next=/reportar")
             } else {
                 setUserId(session.user.id)
+                const { data: currentProfile, error } = await supabase
+                    .from("profiles")
+                    .select("id, phone, department, district")
+                    .eq("id", session.user.id)
+                    .maybeSingle()
+
+                if (error) {
+                    console.error("Error fetching profile:", error)
+                    toast("No pudimos cargar tu perfil.", { type: "error" })
+                }
+
+                setProfile(currentProfile || { id: session.user.id })
                 setIsLoading(false)
             }
         }
@@ -111,6 +126,11 @@ export default function ReportPage() {
 
     const handleSubmit = async () => {
         if (!userId) return
+
+        if (!profile?.phone?.trim() || !profile.department?.trim() || !profile.district?.trim()) {
+            setIsProfileDialogOpen(true)
+            return
+        }
 
         // Validation
         if (!name || !type || !location.district || images.length === 0) {
@@ -241,6 +261,15 @@ export default function ReportPage() {
 
     return (
         <div className="min-h-screen bg-slate-50 pb-20 pt-10">
+            {profile && isProfileDialogOpen && (
+                <CompleteProfileDialog
+                    profile={profile}
+                    onCompleted={(completedProfile) => {
+                        setProfile(completedProfile)
+                        setIsProfileDialogOpen(false)
+                    }}
+                />
+            )}
 
             {/* Top Navbar Placeholder */}
             <div className="absolute top-0 left-0 w-full h-16 bg-white border-b flex items-center justify-between px-6 md:px-12 z-50">

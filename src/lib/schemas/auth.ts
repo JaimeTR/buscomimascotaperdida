@@ -27,3 +27,11 @@ export const registerSchema = z.object({
 })
 
 export type RegisterSchema = z.infer<typeof registerSchema>
+
+export const completeProfileSchema = z.object({
+    phone: z.string().regex(/^\d{9}$/, { message: "El teléfono debe tener exactamente 9 dígitos numéricos." }),
+    department: z.string().min(1, { message: "Debes seleccionar un departamento." }),
+    district: z.string().min(1, { message: "Debes seleccionar un distrito." }),
+})
+
+export type CompleteProfileSchema = z.infer<typeof completeProfileSchema>
