@@ -1,5 +1,17 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Configuración
+
+Copia `.env.example` a `.env.local` y completa las variables en tu entorno local.
+En producción, `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+son obligatorias. `RESEND_API_KEY` y `HUGGINGFACE_API_KEY` son opcionales, pero
+deben configurarse si se habilitan sus servicios. `NEXT_PUBLIC_APP_URL` debe
+apuntar al dominio público de producción para que funcionen los callbacks de
+autenticación.
+
+No guardes valores reales en `.env.example`, README, ni otros archivos
+documentales.
+
 ## Getting Started
 
 First, run the development server:
@@ -14,11 +26,22 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre la URL que indique la terminal para ver la aplicación.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Comprobación de configuración
+
+Antes de desplegar, ejecuta:
+
+```bash
+npm run check:production-config
+```
+
+La comprobación falla si encuentra URLs locales o valores sensibles no
+placeholder en la documentación.
 
 ## Learn More
 
