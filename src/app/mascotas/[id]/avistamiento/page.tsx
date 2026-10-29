@@ -12,6 +12,7 @@ import { createClient } from "@/utils/supabase/client"
 import { useToast } from "@/components/ui/toast-modern"
 import dynamic from 'next/dynamic'
 import { LocationPopover } from "@/components/location-popover"
+import { getImageUploadError } from "@/lib/image-upload"
 
 // Dynamically import MapPicker to avoid SSR issues with Leaflet
 const MapPicker = dynamic(() => import('@/components/map-picker').then(mod => mod.MapPicker), {
@@ -82,6 +83,12 @@ export default function SightingReportPage() {
     const handleImageCapture = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
         if (file) {
+            const imageError = getImageUploadError(file)
+            if (imageError) {
+                toast(imageError, { type: "error" })
+                e.target.value = ""
+                return
+            }
             setImageFile(file)
             const reader = new FileReader()
             reader.onloadend = () => {
@@ -107,6 +114,8 @@ export default function SightingReportPage() {
 
             // Upload image to Supabase Storage if there's an image file
             if (imageFile) {
+                const imageError = getImageUploadError(imageFile)
+                if (imageError) throw new Error(imageError)
                 const fileExt = imageFile.name.split('.').pop()
                 const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
                 
@@ -245,7 +254,7 @@ export default function SightingReportPage() {
                                         <label className="cursor-pointer">
                                             <input
                                                 type="file"
-                                                accept="image/*"
+                                                accept="image/jpeg,image/png,image/webp"
                                                 capture="environment"
                                                 onChange={handleImageCapture}
                                                 className="hidden"
@@ -258,7 +267,7 @@ export default function SightingReportPage() {
                                         <label className="cursor-pointer">
                                             <input
                                                 type="file"
-                                                accept="image/*"
+                                                accept="image/jpeg,image/png,image/webp"
                                                 onChange={handleImageCapture}
                                                 className="hidden"
                                             />

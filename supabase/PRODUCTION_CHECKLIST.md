@@ -5,6 +5,7 @@ This checklist documents the checks to perform in the Supabase project before pr
 ## Local migration review
 
 - [ ] Apply migrations from `supabase/migrations/` in repository order using the project's normal Supabase migration workflow.
+- [ ] For existing deployments, apply `20261029140200_harden_pet_images_storage.sql`; editing or re-running the original bucket migration is not a substitute.
 - [ ] Confirm `create_pet_images_storage.sql` creates the `pet-images` bucket as public only for the intended public image reads.
 - [ ] Confirm authenticated `INSERT`, `UPDATE`, and `DELETE` object policies require the first storage path segment to equal `auth.uid()`.
 - [ ] Run `node scripts/check-task-5-supabase.mjs` from the repository root.
@@ -22,6 +23,7 @@ Record the project URL in the deployment runbook or release system; do not put a
 - [ ] In **Storage > Buckets**, verify `pet-images` is the only intended public image bucket and that no unrelated bucket is public.
 - [ ] In **Storage > Policies**, verify `pet-images` object INSERT, UPDATE, and DELETE policies require `storage.foldername(name)[1] = auth.uid()::text`.
 - [ ] Verify Storage bucket restrictions for allowed image content types and maximum file size. Do not rely only on a filename extension or the client `accept` attribute.
+- [ ] Confirm the bucket limit is 5 MiB and allowed MIME types are exactly `image/jpeg`, `image/png`, and `image/webp`.
 - [ ] Verify public reads work only for intended pet images and that authenticated users cannot write outside their own first-level folder.
 - [ ] Test an oversized file and a non-image payload in a staging project, then confirm production bucket settings and policies reject them.
 - [ ] Confirm credentials are managed in the deployment platform/Supabase secret settings and rotate any credentials exposed during setup.

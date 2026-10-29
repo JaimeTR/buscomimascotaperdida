@@ -38,6 +38,7 @@ import { BreedPopover } from "@/components/breed-popover"
 import { ColorPopover } from "@/components/color-popover"
 import { LocationMap } from "@/components/location-map"
 import { CompleteProfileDialog } from "@/components/auth/complete-profile-dialog"
+import { getImageUploadError } from "@/lib/image-upload"
 
 export default function ReportPage() {
     const router = useRouter()
@@ -100,6 +101,12 @@ export default function ReportPage() {
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const newFiles = Array.from(e.target.files)
+            const invalidFile = newFiles.find(file => getImageUploadError(file))
+            if (invalidFile) {
+                toast(getImageUploadError(invalidFile)!, { type: "error" })
+                e.target.value = ""
+                return
+            }
             const newImages = newFiles.map(file => ({
                 file,
                 url: URL.createObjectURL(file),
@@ -147,6 +154,8 @@ export default function ReportPage() {
             for (let i = 0; i < images.length; i++) {
                 const img = images[i]
                 if (img.file) {
+                    const imageError = getImageUploadError(img.file)
+                    if (imageError) throw new Error(imageError)
                     // Generate unique filename
                     const fileExt = img.file.name.split('.').pop()
                     const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
@@ -481,7 +490,7 @@ export default function ReportPage() {
                                     <ImagePlus className="h-6 w-6" />
                                 </div>
                                 <span className="text-[10px] font-bold uppercase tracking-wide">Añadir Foto</span>
-                                <input type="file" multiple accept="image/*" onChange={handleImageChange} className="hidden" />
+                                <input type="file" multiple accept="image/jpeg,image/png,image/webp" onChange={handleImageChange} className="hidden" />
                             </label>
                         </div>
                         <p className="text-[11px] text-slate-400 text-center font-medium">
