@@ -39,3 +39,6 @@ next-env.d.ts
 
 # isolated agent worktrees
 /.worktrees/
+
+# local brainstorming screens
+/.superpowers/
