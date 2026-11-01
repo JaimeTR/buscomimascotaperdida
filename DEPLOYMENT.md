@@ -5,7 +5,7 @@ Este proyecto es una aplicación Next.js que se puede desplegar en Hostinger usa
 ## 📋 Requisitos Previos
 
 1. **Plan de Hostinger**: Business, Premium o VPS
-2. **Node.js**: Versión 18.18 o superior
+2. **Node.js**: Versión 20.9 o superior (requerida por Next.js 16)
 3. **Git** (para deployment desde GitHub)
 
 ---
@@ -33,21 +33,23 @@ Este proyecto es una aplicación Next.js que se puede desplegar en Hostinger usa
    - **Comando de Build**: `npm ci && npm run build`
    - **Comando de Start**: `npm start`
    - **Puerto**: `3000`
-   - **Node Version**: `18` o superior
+   - **Node Version**: `20` o superior
 
 ### Paso 3: Variables de Entorno
 
 En el panel de Hostinger, agrega estas variables de entorno:
 
 ```env
-NEXT_PUBLIC_SUPABASE_URL=https://qiiwqphdhpzkrjhrxsce.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-RESEND_API_KEY=your_resend_api_key
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=replace-me-with-supabase-anon-key
+RESEND_API_KEY=replace-me-with-resend-key
+HUGGINGFACE_API_KEY=replace-me-if-chatbot-is-enabled
+EMAIL_TEST_TOKEN=replace-me-local-test-token
 NEXT_PUBLIC_APP_URL=https://tu-dominio-en-hostinger.com
 NODE_ENV=production
 ```
 
-⚠️ **IMPORTANTE**: Reemplaza `tu-dominio-en-hostinger.com` con tu dominio real.
+⚠️ **IMPORTANTE**: Reemplaza todos los placeholders en el panel de Hostinger. Nunca subas estas claves al repositorio ni las pegues en esta guía.
 
 ### Paso 4: Desplegar
 
@@ -117,15 +119,34 @@ En Hostinger:
 ### 2. Configurar Supabase
 
 En tu proyecto de Supabase:
-1. Ve a **Settings > API**
-2. Agrega tu dominio de Hostinger a las **Site URLs permitidas**
-3. Configura **Redirect URLs**: `https://tu-dominio.com/auth/callback`
+1. Ve a **Settings > API** y copia la URL y la clave pública anónima en Hostinger.
+2. En **Authentication > URL Configuration**, configura la Site URL de producción.
+3. Agrega `https://tu-dominio.com/auth/callback` a las Redirect URLs.
+4. En **Authentication > Providers > Google**, habilita Google y agrega el Client ID/Secret.
+5. En Google Cloud Console, autoriza la URL de callback que muestra Supabase.
+6. Ejecuta las migraciones y revisa `supabase/PRODUCTION_CHECKLIST.md`.
 
 ### 3. Configurar Email Templates
 
 Si usas Resend:
 1. Verifica que tu API key esté en las variables de entorno
 2. Agrega tu dominio verificado en Resend
+
+### 4. Validar la PWA
+
+La PWA solo almacena recursos públicos y la pantalla offline; no almacena sesiones,
+formularios, reportes, mensajes ni respuestas de API. Verifica en un navegador móvil
+que `/`, `/offline` y los iconos carguen sin conexión y que las rutas privadas no se
+sirvan desde caché.
+
+### 5. Revisar dependencias
+
+Antes de publicar, ejecuta `npm ci`, `npm run lint`, `npx tsc --noEmit`,
+`npm run build` y `npm audit --omit=dev`. La auditoría actual no reporta
+vulnerabilidades críticas, altas ni moderadas en producción; permanecen avisos
+de bajo impacto en la cadena de plantillas de correo (`@react-email`/`deepmerge`)
+sin una corrección disponible. No uses `npm audit fix --force` en producción
+sin revisar los cambios mayores.
 
 ---
 
@@ -139,6 +160,10 @@ Después del despliegue, verifica:
 ✅ Subir mascota funciona
 ✅ Búsqueda funciona
 ✅ Mapa se muestra correctamente
+✅ Login con Google redirige al dashboard y no acepta destinos externos
+✅ Un usuario Google completa teléfono, departamento y distrito antes de reportar
+✅ Rutas privadas y APIs no se entregan desde la caché offline
+✅ No quedan credenciales reales en el repositorio
 
 ---
 

@@ -29,6 +29,7 @@ interface PetSearchFilters {
 
 export function ChatbotWidget() {
     const supabase = createClient()
+    const messageIdRef = useRef(1)
     const [isOpen, setIsOpen] = useState(false)
     const [inputValue, setInputValue] = useState("")
     const [isTyping, setIsTyping] = useState(false)
@@ -169,7 +170,7 @@ export function ChatbotWidget() {
             }
 
             const botMsg: Message = {
-                id: Date.now().toString(),
+                id: String(messageIdRef.current++),
                 role: 'bot',
                 content: botResponse,
                 petResults: results,
@@ -208,7 +209,7 @@ export function ChatbotWidget() {
         if (!inputValue.trim()) return
 
         const userMsg: Message = {
-            id: Date.now().toString(),
+            id: String(messageIdRef.current++),
             role: 'user',
             content: inputValue,
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
@@ -256,7 +257,7 @@ export function ChatbotWidget() {
             }
 
             const botMsg: Message = {
-                id: (Date.now() + 1).toString(),
+                id: String(messageIdRef.current++),
                 role: 'bot',
                 content: analysis.response || "No pude procesar tu mensaje.",
                 petResults: petResults,
@@ -277,7 +278,7 @@ export function ChatbotWidget() {
                 : "Déjame ayudarte paso a paso. ¿Qué tipo de mascota buscas?"
 
             const botMsg: Message = {
-                id: (Date.now() + 1).toString(),
+                id: String(messageIdRef.current++),
                 role: 'bot',
                 content: errorMessage,
                 actions: error instanceof Error && error.message.includes('Demasiadas solicitudes') ? [] : [

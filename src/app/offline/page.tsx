@@ -51,8 +51,8 @@ export default function OfflinePage() {
                 {/* Info */}
                 <div className="pt-6 border-t border-slate-200">
                     <p className="text-xs text-slate-500">
-                        Algunas funciones pueden estar disponibles sin conexión.
-                        Tus reportes se sincronizarán cuando vuelvas a estar en línea.
+                        Solo se guardan recursos públicos para mostrar esta pantalla.
+                        Los formularios y datos de tu cuenta no se almacenan sin conexión.
                     </p>
                 </div>
             </div>

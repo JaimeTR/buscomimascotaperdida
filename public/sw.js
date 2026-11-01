@@ -1,6 +1,6 @@
 // Service Worker for Busco Mi Mascota Perdida PWA
-const CACHE_NAME = 'busco-mascota-v1';
-const RUNTIME_CACHE = 'busco-mascota-runtime-v1';
+const CACHE_NAME = 'busco-mascota-v2';
+const RUNTIME_CACHE = 'busco-mascota-runtime-v2';
 
 // Assets to cache immediately on install
 const STATIC_ASSETS = [
@@ -53,35 +53,43 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Skip API calls and dynamic routes - always get fresh data
+    // Never cache APIs, authentication, user areas, uploads or non-GET requests.
     if (
         url.pathname.startsWith('/api/') ||
         url.pathname.startsWith('/_next/data/') ||
-        url.pathname.includes('/auth/') ||
+        url.pathname.startsWith('/auth/') ||
+        url.pathname.startsWith('/dashboard') ||
+        url.pathname.startsWith('/reportar') ||
+        url.pathname.startsWith('/login') ||
+        url.pathname.startsWith('/register') ||
+        url.pathname.startsWith('/forgot-password') ||
+        url.pathname.startsWith('/update-password') ||
         request.method !== 'GET'
     ) {
         return;
     }
 
-    // For navigation requests (pages)
+    // Only cache the public landing page and the offline fallback.
     if (request.mode === 'navigate') {
+        const isPublicNavigation = url.pathname === '/' || url.pathname === '/offline';
+        if (!isPublicNavigation) {
+            return;
+        }
+
         event.respondWith(
             fetch(request)
                 .then((response) => {
-                    // Clone and cache the response
-                    const responseToCache = response.clone();
-                    caches.open(RUNTIME_CACHE).then((cache) => {
-                        cache.put(request, responseToCache);
-                    });
+                    if (response.ok) {
+                        const responseToCache = response.clone();
+                        caches.open(RUNTIME_CACHE).then((cache) => cache.put(request, responseToCache));
+                    }
                     return response;
                 })
                 .catch(() => {
-                    // If offline, try cache first
                     return caches.match(request).then((cachedResponse) => {
                         if (cachedResponse) {
                             return cachedResponse;
                         }
-                        // Show offline page
                         return caches.match('/offline');
                     });
                 })
@@ -89,7 +97,18 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // For other requests (images, scripts, styles)
+    // Cache only same-origin static assets. Dynamic page responses are never cached.
+    const isStaticAsset =
+        request.destination === 'script' ||
+        request.destination === 'style' ||
+        request.destination === 'font' ||
+        request.destination === 'image' ||
+        url.pathname.startsWith('/_next/static/');
+
+    if (!isStaticAsset) {
+        return;
+    }
+
     event.respondWith(
         caches.match(request).then((cachedResponse) => {
             if (cachedResponse) {
@@ -128,54 +147,6 @@ self.addEventListener('message', (event) => {
                     cacheNames.map((cacheName) => caches.delete(cacheName))
                 );
             })
-        );
-    }
-});
-
-// Background sync for offline reports
-self.addEventListener('sync', (event) => {
-    if (event.tag === 'sync-reports') {
-        event.waitUntil(syncReports());
-    }
-});
-
-async function syncReports() {
-    // TODO: Implement background sync for offline pet reports
-    console.log('[SW] Syncing offline reports...');
-}
-
-// Push notifications
-self.addEventListener('push', (event) => {
-    const options = {
-        body: event.data ? event.data.text() : 'Nueva actualización de mascota',
-        icon: '/icons/icon-192x192.png',
-        badge: '/icons/icon-72x72.png',
-        vibrate: [200, 100, 200],
-        tag: 'pet-notification',
-        actions: [
-            {
-                action: 'view',
-                title: 'Ver Detalles'
-            },
-            {
-                action: 'close',
-                title: 'Cerrar'
-            }
-        ]
-    };
-
-    event.waitUntil(
-        self.registration.showNotification('Busco Mi Mascota', options)
-    );
-});
-
-// Notification click handler
-self.addEventListener('notificationclick', (event) => {
-    event.notification.close();
-
-    if (event.action === 'view') {
-        event.waitUntil(
-            clients.openWindow('/')
         );
     }
 });

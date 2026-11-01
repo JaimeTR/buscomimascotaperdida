@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
 import {
     Download,
@@ -49,10 +49,29 @@ export default function MyReportsPage() {
     const [isLoading, setIsLoading] = useState(true)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [reports, setReports] = useState<any[]>([])
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [filteredReports, setFilteredReports] = useState<any[]>([])
     const [statusFilter, setStatusFilter] = useState("all")
     const [searchQuery, setSearchQuery] = useState("")
+    const filteredReports = useMemo(() => {
+        let filtered = [...reports]
+
+        if (statusFilter !== "all") {
+            const statusMap: Record<string, string> = {
+                lost: "lost",
+                found: "found",
+                closed: "reunited"
+            }
+            filtered = filtered.filter(r => r.status === statusMap[statusFilter])
+        }
+
+        if (searchQuery) {
+            filtered = filtered.filter(r =>
+                r.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                r.last_seen_district?.toLowerCase().includes(searchQuery.toLowerCase())
+            )
+        }
+
+        return filtered
+    }, [reports, statusFilter, searchQuery])
     const [stats, setStats] = useState({
         active: 0,
         totalViews: 0,
@@ -73,14 +92,6 @@ export default function MyReportsPage() {
                 return { label: 'REUNIDO', badgeClass: 'bg-slate-500 text-white' }
         }
     }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
-
-    useEffect(() => {
-        applyFilters()
-    }, [reports, statusFilter, searchQuery])
 
     const fetchData = async () => {
         setIsLoading(true)
@@ -176,27 +187,11 @@ export default function MyReportsPage() {
         }
     }
 
-    const applyFilters = () => {
-        let filtered = [...reports]
-
-        if (statusFilter !== "all") {
-            const statusMap: Record<string, string> = {
-                lost: "lost",
-                found: "found",
-                closed: "reunited"
-            }
-            filtered = filtered.filter(r => r.status === statusMap[statusFilter])
-        }
-
-        if (searchQuery) {
-            filtered = filtered.filter(r =>
-                r.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                r.last_seen_district?.toLowerCase().includes(searchQuery.toLowerCase())
-            )
-        }
-
-        setFilteredReports(filtered)
-    }
+    useEffect(() => {
+        queueMicrotask(() => {
+            void fetchData()
+        })
+    }, [])
 
     // Helper to calculate estimated views for a single pet
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

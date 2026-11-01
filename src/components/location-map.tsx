@@ -26,9 +26,14 @@ interface LocationMapProps {
 }
 
 export function LocationMap({ onLocationSelect, initialLat, initialLng }: LocationMapProps) {
-    const [isClient, setIsClient] = useState(false)
-    const [position, setPosition] = useState<[number, number] | null>(null)
-    const [isLoadingLocation, setIsLoadingLocation] = useState(false)
+    const [position, setPosition] = useState<[number, number] | null>(
+        initialLat !== undefined && initialLng !== undefined
+            ? [initialLat, initialLng]
+            : null
+    )
+    const [isLoadingLocation, setIsLoadingLocation] = useState(
+        initialLat === undefined || initialLng === undefined
+    )
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [MapEventsComponent, setMapEventsComponent] = useState<any>(null)
 
@@ -36,8 +41,6 @@ export function LocationMap({ onLocationSelect, initialLat, initialLng }: Locati
     const defaultCenter: [number, number] = [-12.0464, -77.0428]
 
     useEffect(() => {
-        setIsClient(true)
-
         // Dynamically import the hooks component
         import("react-leaflet").then((mod) => {
             const MapEvents = () => {
@@ -55,11 +58,10 @@ export function LocationMap({ onLocationSelect, initialLat, initialLng }: Locati
         })
 
         // Set initial position if provided
-        if (initialLat && initialLng) {
-            setPosition([initialLat, initialLng])
+        if (initialLat !== undefined && initialLng !== undefined) {
+            return
         } else {
             // Try to get user's current location
-            setIsLoadingLocation(true)
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (pos) => {
@@ -76,13 +78,15 @@ export function LocationMap({ onLocationSelect, initialLat, initialLng }: Locati
                     }
                 )
             } else {
-                setPosition(defaultCenter)
-                setIsLoadingLocation(false)
+                queueMicrotask(() => {
+                    setPosition(defaultCenter)
+                    setIsLoadingLocation(false)
+                })
             }
         }
     }, [initialLat, initialLng, onLocationSelect])
 
-    if (!isClient || !MapEventsComponent) {
+    if (!MapEventsComponent) {
         return (
             <div className="w-full h-[400px] bg-slate-100 rounded-2xl border-2 border-dashed border-slate-200 flex items-center justify-center">
                 <div className="text-center space-y-3">
