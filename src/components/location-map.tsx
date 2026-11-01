@@ -29,6 +29,7 @@ export function LocationMap({ onLocationSelect, initialLat, initialLng }: Locati
     const [isClient, setIsClient] = useState(false)
     const [position, setPosition] = useState<[number, number] | null>(null)
     const [isLoadingLocation, setIsLoadingLocation] = useState(false)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [MapEventsComponent, setMapEventsComponent] = useState<any>(null)
 
     // Default center (Lima, Peru)

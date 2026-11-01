@@ -23,7 +23,9 @@ import { cn } from "@/lib/utils"
 export function UserNav() {
     const router = useRouter()
     const supabase = createClient()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [user, setUser] = useState<any>(null)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [profile, setProfile] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [isOpen, setIsOpen] = useState(false)

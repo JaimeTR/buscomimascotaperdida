@@ -57,6 +57,7 @@ export default function DashboardLayout({
     const pathname = usePathname()
     const router = useRouter()
     const supabase = createClient()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [profile, setProfile] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true)
 

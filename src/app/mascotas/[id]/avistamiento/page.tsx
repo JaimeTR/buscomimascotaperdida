@@ -29,6 +29,7 @@ export default function SightingReportPage() {
 
     const [isLoading, setIsLoading] = useState(true)
     const [isSubmitting, setIsSubmitting] = useState(false)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [pet, setPet] = useState<any>(null)
     const [userId, setUserId] = useState<string | null>(null)
 
@@ -161,9 +162,9 @@ export default function SightingReportPage() {
             toast("Avistamiento reportado con éxito. ¡Gracias por ayudar!", { type: "success", title: "¡Enviado!" })
             router.push(`/mascotas/${petId}`)
             router.refresh()
-        } catch (error: any) {
+        } catch (error) {
             console.error("Error reporting sighting:", error)
-            toast(error.message || "Hubo un error al guardar el reporte.", { type: "error", title: "Error" })
+            toast(error instanceof Error ? error.message : "Hubo un error al guardar el reporte.", { type: "error", title: "Error" })
         } finally {
             setIsSubmitting(false)
         }

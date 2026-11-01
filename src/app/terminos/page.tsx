@@ -23,7 +23,7 @@ export default function TermsPage() {
                         <section>
                             <h2 className="text-xl font-bold text-slate-900 mb-3">1. Aceptación de los Términos</h2>
                             <p>
-                                Al acceder y utilizar BuscoMiMascotaPerdida.com (en adelante, "la Plataforma"), usted acepta cumplir con estos Términos y Condiciones.
+                                Al acceder y utilizar BuscoMiMascotaPerdida.com (en adelante, &quot;la Plataforma&quot;), usted acepta cumplir con estos Términos y Condiciones.
                                 Si no está de acuerdo con alguna parte de estos términos, no debe utilizar nuestros servicios.
                             </p>
                         </section>

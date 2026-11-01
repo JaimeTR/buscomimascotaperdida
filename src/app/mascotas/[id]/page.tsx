@@ -76,6 +76,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
     // Sort sightings by date (most recent first)
     const dbSightings: Sighting[] = (pet.sightings || []).sort(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
 
@@ -219,7 +220,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                                     </div>
                                                 </div>
                                                 <p className="text-slate-600 leading-relaxed font-medium">
-                                                    "{sighting.description}"
+                                                    &quot;{sighting.description}&quot;
                                                 </p>
 
                                                 {/* Sighting Image */}

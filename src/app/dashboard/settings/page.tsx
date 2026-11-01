@@ -21,6 +21,7 @@ export default function SettingsPage() {
     const [isLoading, setIsLoading] = useState(true)
     const [isSaving, setIsSaving] = useState(false)
     const [isUploadingPhoto, setIsUploadingPhoto] = useState(false)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [profile, setProfile] = useState<any>(null)
     const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
 
@@ -61,7 +62,7 @@ export default function SettingsPage() {
                         avatar_url: ""
                     })
                 }
-            } catch (err: any) {
+            } catch (err) {
                 console.error("Error fetching profile:", err)
                 toast("Error al cargar el perfil", { type: "error" })
             } finally {
@@ -132,9 +133,9 @@ export default function SettingsPage() {
             
             setProfile({ ...profile, avatar_url: publicUrl })
             toast("¡Foto actualizada correctamente!", { type: "success" })
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error uploading photo:', error)
-            toast(error.message || "Error al cargar la foto", { type: "error" })
+            toast(error instanceof Error ? error.message : "Error al cargar la foto", { type: "error" })
         } finally {
             setIsUploadingPhoto(false)
         }
@@ -162,8 +163,8 @@ export default function SettingsPage() {
 
             if (error) throw error
             toast("Los cambios se han guardado correctamente.", { type: "success", title: "¡Guardado!" })
-        } catch (error: any) {
-            toast(error.message || "Error al guardar cambios", { type: "error" })
+        } catch (error) {
+            toast(error instanceof Error ? error.message : "Error al guardar cambios", { type: "error" })
         } finally {
             setIsSaving(false)
         }

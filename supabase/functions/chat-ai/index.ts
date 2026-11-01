@@ -13,6 +13,7 @@ interface PetFilters {
   gender?: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function analyzeWithGemini(message: string): Promise<any> {
   try {
     const response = await fetch(
@@ -74,6 +75,7 @@ Si NO es búsqueda, isPetSearch=false y deja filters con valores null.`,
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function analyzeWithHuggingFace(message: string): Promise<any> {
   try {
     const response = await fetch(
@@ -129,8 +131,10 @@ Responde en JSON:
 }
 
 async function searchPets(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   supabase: any,
   filters: PetFilters
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any[]> {
   try {
     let query = supabase
@@ -202,6 +206,7 @@ Deno.serve(async (req: Request) => {
       }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let petResults: any[] = []
 
     // Si es búsqueda de mascota, buscar en BD
@@ -228,7 +233,7 @@ Deno.serve(async (req: Request) => {
         },
       }
     )
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error:", error)
     return new Response(
       JSON.stringify({ error: error.message }),

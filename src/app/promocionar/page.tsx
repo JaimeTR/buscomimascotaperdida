@@ -67,7 +67,7 @@ export default function PromotePage() {
                                         <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover" />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
                                             <div>
-                                                <p className="text-white font-bold text-lg leading-none mb-1">"Max" - Visto hace 2h</p>
+                                                <p className="text-white font-bold text-lg leading-none mb-1">&quot;Max&quot; - Visto hace 2h</p>
                                                 <p className="text-white/80 text-xs">Surco, Lima</p>
                                             </div>
                                         </div>

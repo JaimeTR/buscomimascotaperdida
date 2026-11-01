@@ -240,9 +240,9 @@ export default function EditReportPage() {
             toast("Reporte actualizado con éxito", { type: "success", title: "¡Guardado!" })
             router.push('/dashboard/reports')
 
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error updating pet:', error)
-            toast(error.message || "Error al actualizar el reporte", { type: "error" })
+            toast(error instanceof Error ? error.message : "Error al actualizar el reporte", { type: "error" })
         } finally {
             setIsSubmitting(false)
         }

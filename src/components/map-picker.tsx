@@ -27,6 +27,7 @@ function LocationMarker({ lat, lng, onChange }: { lat: number, lng: number, onCh
             iconSize: [25, 41],
             iconAnchor: [12, 41]
         })
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIcon(DefaultIcon)
     }, [])
 
@@ -56,6 +57,7 @@ export function MapPicker({ lat, lng, zoom = 13, onChange }: MapPickerProps) {
     const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true)
     }, [])
 

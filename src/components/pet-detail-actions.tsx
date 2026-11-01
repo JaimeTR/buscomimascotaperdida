@@ -51,7 +51,7 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
             setStatus(newStatus)
             setIsOpen(false)
             toast("¡Estado actualizado con éxito!", { type: "success" })
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error updating status:', error)
             toast("Error al actualizar el estado", { type: "error" })
         }

@@ -47,7 +47,9 @@ export default function MyReportsPage() {
     const { toast } = useToast()
     const { confirm } = useConfirm()
     const [isLoading, setIsLoading] = useState(true)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [reports, setReports] = useState<any[]>([])
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [filteredReports, setFilteredReports] = useState<any[]>([])
     const [statusFilter, setStatusFilter] = useState("all")
     const [searchQuery, setSearchQuery] = useState("")
@@ -137,12 +139,14 @@ export default function MyReportsPage() {
                 totalViews += petViews
 
                 // Calculate this week vs last week
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const recentSightings = pet.sightings?.filter((s: any) =>
                     new Date(s.created_at) >= oneWeekAgo
                 ).length || 0
 
                 viewsThisWeek += recentSightings * 10
 
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 const oldSightings = pet.sightings?.filter((s: any) => {
                     const sightingDate = new Date(s.created_at)
                     return sightingDate < oneWeekAgo &&
@@ -164,7 +168,7 @@ export default function MyReportsPage() {
                 recentLeads: leadsCount
             })
 
-        } catch (error: any) {
+        } catch (error) {
             console.error("Error fetching dashboard data:", error)
             toast("Error al cargar tus reportes", { type: "error" })
         } finally {
@@ -195,6 +199,7 @@ export default function MyReportsPage() {
     }
 
     // Helper to calculate estimated views for a single pet
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const calculatePetViews = (pet: any): number => {
         const now = new Date()
         const createdAt = new Date(pet.created_at)
@@ -232,7 +237,7 @@ export default function MyReportsPage() {
 
             toast("¡Estado actualizado con éxito!", { type: "success" })
             fetchData() // Refresh data
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error updating status:', error)
             toast("Error al actualizar el estado", { type: "error" })
         }
@@ -262,7 +267,7 @@ export default function MyReportsPage() {
 
             toast("Reporte eliminado exitosamente", { type: "success", title: "¡Listo!" })
             // No necesitamos fetchData() porque ya actualizamos localmente
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error deleting report:', error)
             toast("Error al eliminar el reporte", { type: "error" })
         }

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
@@ -21,7 +21,6 @@ export const metadata: Metadata = {
   title: "Encuentra tu mascota perdida - Red de ayuda comunitaria",
   description: "La red comunitaria más grande y activa para encontrar a tu mejor amigo. Reporta mascotas perdidas y ayúdalas a volver a casa.",
   manifest: "/manifest.json",
-  themeColor: "#3b82f6",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -40,12 +39,14 @@ export const metadata: Metadata = {
       { url: "/icons/icon-180x180.png", sizes: "180x180", type: "image/png" },
     ],
   },
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-    userScalable: true,
-  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+  themeColor: "#3b82f6",
 };
 
 export default function RootLayout({

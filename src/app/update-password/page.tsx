@@ -103,8 +103,8 @@ function UpdatePasswordContent() {
             setTimeout(() => {
                 router.push(next)
             }, 1000)
-        } catch (error: any) {
-            toast(error.message || "Error al actualizar la contraseña", { type: 'error' })
+        } catch (error) {
+            toast(error instanceof Error ? error.message : "Error al actualizar la contraseña", { type: 'error' })
         } finally {
             setIsLoading(false)
         }

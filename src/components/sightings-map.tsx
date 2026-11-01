@@ -45,6 +45,7 @@ export function SightingsMap({ initialLat, initialLng, sightings, className }: S
     const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true)
     }, [])
 

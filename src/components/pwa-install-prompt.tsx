@@ -18,6 +18,7 @@ export function PWAInstallPrompt() {
     useEffect(() => {
         // Check if already installed
         const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsStandalone(isInStandaloneMode)
 
         // Check if iOS
@@ -102,8 +103,8 @@ export function PWAInstallPrompt() {
                         </p>
                         <ol className="text-xs text-slate-600 space-y-2 list-decimal list-inside">
                             <li>Toca el botón de Compartir (cuadrado con flecha)</li>
-                            <li>Desliza y selecciona "Añadir a pantalla de inicio"</li>
-                            <li>Confirma tocando "Añadir"</li>
+                            <li>Desliza y selecciona &quot;Añadir a pantalla de inicio&quot;</li>
+                            <li>Confirma tocando &quot;Añadir&quot;</li>
                         </ol>
                     </div>
                 </div>

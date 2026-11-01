@@ -146,9 +146,9 @@ export function usePets(options: UsePetsOptions = {}) {
 
                 setPets(data as Pet[])
 
-            } catch (err: any) {
+            } catch (err) {
                 console.error("Error fetching pets details:", JSON.stringify(err, null, 2))
-                setError(err.message || "Error desconocido al obtener mascotas")
+                setError(err instanceof Error ? err.message : "Error desconocido al obtener mascotas")
                 setPets([])
             } finally {
                 setIsLoading(false)

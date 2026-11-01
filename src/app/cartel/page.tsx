@@ -65,6 +65,7 @@ function PosterContent() {
 
     useEffect(() => {
         if (!petId) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsLoading(false)
             return
         }
@@ -96,6 +97,7 @@ function PosterContent() {
                     setRewardAmount(pet.reward_amount)
                 }
             }
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setIsLoading(false)
         }
 

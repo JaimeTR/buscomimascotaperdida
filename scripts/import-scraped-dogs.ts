@@ -105,7 +105,7 @@ async function importDogs() {
   
   let successCount = 0
   let errorCount = 0
-  const errors: Array<{ dog: string; error: any }> = []
+  const errors: Array<{ dog: string; error: unknown }> = []
 
   for (const dog of scrapedDogs) {
     try {
@@ -126,7 +126,7 @@ async function importDogs() {
         // o puedes asignar un usuario específico para registros importados
       }
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('pets')
         .insert(petData)
         .select()
@@ -155,7 +155,7 @@ async function importDogs() {
   if (errors.length > 0) {
     console.log('\n⚠️  Detalles de errores:')
     errors.forEach(({ dog, error }) => {
-      console.log(`   - ${dog}: ${error.message}`)
+      console.log(`   - ${dog}: ${String(error)}`)
     })
   }
 }

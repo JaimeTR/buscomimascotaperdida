@@ -13,6 +13,7 @@ interface Message {
     role: 'bot' | 'user'
     content: string
     actions?: { label: string; action: string }[]
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     petResults?: any[]
     timestamp: string
 }
@@ -111,6 +112,7 @@ export function ChatbotWidget() {
     }
 
     // Buscar mascotas en la BD
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const searchPets = async (filters: PetSearchFilters): Promise<any[]> => {
         try {
             let query = supabase
@@ -135,6 +137,7 @@ export function ChatbotWidget() {
     }
 
     const handleActionClick = async (action: string) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const actionMap: Record<string, any> = {
             'dog': { type: 'dog', label: 'Perro' },
             'cat': { type: 'cat', label: 'Gato' },
@@ -177,6 +180,7 @@ export function ChatbotWidget() {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const searchPetsWithFilters = async (filters: PetSearchFilters): Promise<any[]> => {
         try {
             let query = supabase
@@ -245,6 +249,7 @@ export function ChatbotWidget() {
             const { analysis } = data
 
             // Buscar mascotas si es necesario
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             let petResults: any[] = []
             if (analysis.isPetSearch && analysis.filters) {
                 petResults = await searchPetsWithFilters(analysis.filters)
@@ -263,11 +268,11 @@ export function ChatbotWidget() {
                 timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             }
             setMessages(prev => [...prev, botMsg])
-        } catch (error: any) {
+        } catch (error) {
             console.error('Chatbot error:', error)
 
             // FALLBACK: Sistema tradicional de búsqueda guiada
-            const errorMessage = error.message.includes('Demasiadas solicitudes')
+            const errorMessage = error instanceof Error && error.message.includes('Demasiadas solicitudes')
                 ? error.message
                 : "Déjame ayudarte paso a paso. ¿Qué tipo de mascota buscas?"
 
@@ -275,7 +280,7 @@ export function ChatbotWidget() {
                 id: (Date.now() + 1).toString(),
                 role: 'bot',
                 content: errorMessage,
-                actions: error.message.includes('Demasiadas solicitudes') ? [] : [
+                actions: error instanceof Error && error.message.includes('Demasiadas solicitudes') ? [] : [
                     { label: 'Perro', action: 'dog' },
                     { label: 'Gato', action: 'cat' },
                     { label: 'Otro', action: 'other' }

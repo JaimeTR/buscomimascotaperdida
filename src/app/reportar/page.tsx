@@ -256,9 +256,9 @@ export default function ReportPage() {
             toast("Reporte creado con éxito", { type: "success", title: "¡Excelente!" })
             router.push('/dashboard')
 
-        } catch (error: any) {
+        } catch (error) {
             console.error('Error reporting pet:', error)
-            toast(error.message || "Error al crear el reporte", { type: "error" })
+            toast(error instanceof Error ? error.message : "Error al crear el reporte", { type: "error" })
         } finally {
             setIsSubmitting(false)
         }

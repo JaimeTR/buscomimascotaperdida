@@ -42,6 +42,7 @@ function SearchContent() {
     // Sync query from URL if changed elsewhere
     useEffect(() => {
         const q = searchParams.get('q')
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (q) setQuery(q)
     }, [searchParams])
 

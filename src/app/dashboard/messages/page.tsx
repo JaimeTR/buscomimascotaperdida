@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge"
 export default function MessagesPage() {
     const [activeChat, setActiveChat] = useState("1")
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const CONVERSATIONS: any[] = [
         {
             id: "1",
@@ -162,6 +163,7 @@ export default function MessagesPage() {
                 {/* Messages Feed */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-6">
                     {currentChat.messages.length > 0 ? (
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         currentChat.messages.map((msg: any) => (
                             <div key={msg.id} className={`flex ${msg.role === 'me' ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`flex gap-4 max-w-[70%] ${msg.role === 'me' ? 'flex-row-reverse' : 'flex-row'}`}>
