@@ -4,7 +4,7 @@
 import { mkdirSync, writeFileSync } from "node:fs"
 import sharp from "sharp"
 import { TEAL, ORANGE, CREAM, MUTED, NAME, VIEW } from "./brand-core.mjs"
-import { symbol, variants } from "./brand-models.mjs"
+import { symbol, variants, BBOX, place } from "./brand-models.mjs"
 import { path, width, sloganPath } from "./brand-text.mjs"
 
 const symbolColor = symbol(variants.color)
@@ -14,7 +14,7 @@ const svg = (inner, extra = "", box = `0 0 ${VIEW} ${VIEW}`) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box}" ${extra}>${inner}</svg>
 `
 // Recorte ajustado al perro (barra de navegación y favicon).
-const TIGHT = "20 0 88 110"
+const TIGHT = `${BBOX.x0 - 1} ${BBOX.y0 - 1} ${BBOX.w + 2} ${BBOX.h + 2}`
 
 writeFileSync("public/logo_symbol.svg", svg(symbolColor, 'role="img" aria-label="Busco mi mascota"', TIGHT))
 writeFileSync("src/app/icon.svg", svg(symbolColor, "", TIGHT))
@@ -34,7 +34,7 @@ await render(appIcon(0.22), 512, "public/icons/maskable-512x512.png")
 const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="${CREAM}"/>
   <rect width="1200" height="14" fill="${TEAL}"/>
-  <g transform="translate(70 40) scale(4.6)">${symbolColor}</g>
+  ${place(symbolColor, 90, 80, 470)}
   ${path(NAME[0].toUpperCase(), 600, 270, 92, TEAL, 3)}
   ${path(NAME[1].toUpperCase(), 600, 380, 92, ORANGE, 3)}
   ${sloganPath(width(NAME[0].toUpperCase(), 92, 3), 600, 446, MUTED)}

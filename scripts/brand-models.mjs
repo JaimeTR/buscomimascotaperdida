@@ -1,13 +1,24 @@
 // Símbolo definitivo (perro con el gato recortado en negativo) y versiones sueltas. viewBox 120x120.
 import { TEAL, CREAM, ORANGE, ORANGE_LIGHT } from "./brand-core.mjs"
-import { dog, dogCuts, cat } from "./brand-shapes.mjs"
+import { dog, dogCuts, cat, BASE } from "./brand-shapes.mjs"
 
 let n = 0
 const uid = () => `k${n++}`
 const mask = (id, cuts) =>
   `<mask id="${id}" maskUnits="userSpaceOnUse" x="-20" y="-20" width="260" height="360"><rect x="-20" y="-20" width="260" height="360" fill="#fff"/>${cuts}</mask>`
-const T = "translate(-7.5 -14) scale(.6)" // centra el perro (lienzo 200) en 120x120
-const CAT_AT = "translate(94 200) scale(.8) translate(-30 -100)" // gato sentado en la base del pecho
+const T = "translate(-7.5 -4.5) scale(.6)" // centra el perro (lienzo 200) en 120x120
+const CAT_AT = `translate(94 ${BASE}) scale(.78) translate(-30 -100)` // gato sentado en la base del pecho
+
+// Caja real del símbolo dentro del cuadro 120 (para alinearlo con el texto): x 16.5..102.3, y 15.3..104.7.
+export const BBOX = { x0: 40 * 0.6 - 7.5, x1: 183 * 0.6 - 7.5, y0: 33 * 0.6 - 4.5, y1: BASE * 0.6 - 4.5 }
+BBOX.w = BBOX.x1 - BBOX.x0
+BBOX.h = BBOX.y1 - BBOX.y0
+// Coloca el símbolo con su caja a partir de (x, y) y con alto `h` px. Devuelve el grupo SVG.
+export const place = (svg, x, y, h) => {
+  const k = h / BBOX.h
+  return `<g transform="translate(${x - BBOX.x0 * k} ${y - BBOX.y0 * k}) scale(${k})">${svg}</g>`
+}
+export const placedWidth = (h) => (h * BBOX.w) / BBOX.h
 
 // Perro de un solo color con el gato recortado (hueco) en su pecho.
 export const symbol = ({ art }) => {

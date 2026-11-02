@@ -9,8 +9,9 @@
 
 | Pieza | Archivos | Uso |
 |---|---|---|
-| Isologo horizontal (símbolo a la izquierda) | `isologo-horizontal.svg/.png`, `-claro` | Cabeceras anchas, documentos, firmas |
+| Isologo horizontal (símbolo a la izquierda; su alto = de lo alto de "BUSCO MI" a la base del eslogan) | `isologo-horizontal.svg/.png`, `-claro` | Cabeceras anchas, documentos, firmas |
 | Isologo vertical (símbolo arriba) | `isologo-vertical.svg/.png`, `-claro` | Portadas, carteles, espacios cuadrados |
+| Isologo cuadrado 1:1 (todo centrado, aire parejo) | `isologo-cuadrado.svg/.png`, `-claro` | Perfiles, stickers, impresión en formato cuadrado |
 | Logotipo horizontal (solo texto, alineado a la izquierda) | `logotipo-horizontal.*`, `-claro` | Donde el símbolo ya aparece cerca |
 | Logotipo vertical (solo texto, centrado) | `logotipo-vertical.*`, `-claro` | Formatos altos |
 | Avatar de redes 1080² (recorte circular seguro) | `social-avatar.png` | Foto de perfil Instagram, Facebook, TikTok, WhatsApp |

@@ -8,14 +8,16 @@ const isLight = (hex) => [1, 3, 5].reduce((s, i) => s + parseInt(hex.slice(i, i 
 
 // Perro de perfil mirando a la derecha: cráneo redondo, frente suave, hocico de retriever con nariz marcada,
 // oreja caída rellena (tono más oscuro) y cuello grueso. `base` = y inferior (más largo para recortar con un círculo).
-export const dog = (fill, base = 200) => {
+// y inferior del cuello del perro (más corto que antes) y su ancho en la base: x 40..152.
+export const BASE = 182
+export const dog = (fill, base = BASE) => {
   const ear = shade(fill, isLight(fill) ? 0.88 : 0.78)
   return `<g fill="${fill}">
   <path d="M60 124 C58 100 55 66 70 48 C79 38 88 34 98 33 C118 30 133 40 138 54 C150 55 160 57 168 60 L172 96 C158 98 146 100 134 104 C128 108 124 114 122 122 L100 134 Z"/>
   <ellipse cx="168" cy="78" rx="15" ry="18"/>
-  <path d="M60 124 C57 146 55 170 53 ${base} L140 ${base} C139 168 134 140 131 122 C130 114 126 108 120 106 L100 96 Z"/>
+  <path d="M60 124 C56 146 50 168 40 ${base} L152 ${base} C148 168 137 142 131 122 C130 114 126 108 120 106 L100 96 Z"/>
   <ellipse cx="179.5" cy="72" rx="6.2" ry="8" fill="${ear}"/>
-  <path fill="${ear}" d="M90 40 C112 40 121 66 117 94 C115 112 99 120 89 110 C81 102 83 80 83 66 C83 52 85 44 90 40 Z"/>
+  <path fill="${ear}" d="M90 40 C111 40 120 60 116 83 C114 98 99 104 90 97 C82 91 84 76 84 64 C84 52 86 44 90 40 Z"/>
 </g>`
 }
 export const EYE = { cx: 130, cy: 58, r: 5.2 }

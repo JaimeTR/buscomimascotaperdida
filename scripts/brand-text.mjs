@@ -12,6 +12,8 @@ const parse = (buf) => {
 export const braze = parse(readFileSync(new URL("./fonts/Braze.otf", import.meta.url)))
 export const poppins = parse(readFileSync("node_modules/@fontsource/poppins/files/poppins-latin-500-normal.woff"))
 
+// Altura de las mayúsculas (tomada de la B) para alinear líneas y símbolo.
+export const capHeight = (size, f = braze) => (f.charToGlyph("B").getBoundingBox().y2 / f.unitsPerEm) * size
 export const width = (text, size, ls = 0, f = braze) => f.getAdvanceWidth(text, size, { letterSpacing: ls / size })
 
 // Serializador propio: toPathData de opentype.js emite "NaN" en algunos trazos y los corta.
