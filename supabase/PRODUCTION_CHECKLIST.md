@@ -11,6 +11,35 @@ This checklist documents the checks to perform in the Supabase project before pr
 - [ ] Run `node scripts/check-task-5-supabase.mjs` from the repository root.
 - [ ] Review the migration diff and run `git diff --check`.
 
+## Local release gate
+
+Run the complete gate before deployment. Do not copy production secrets into a
+local shell or repository. The production configuration check and build can use
+placeholders where supported:
+
+```bash
+npm ci
+NODE_ENV=production NEXT_PUBLIC_APP_URL=https://your-production-domain.example \
+  node scripts/check-production-config.mjs
+node scripts/check-task-5-supabase.mjs
+npx eslint . --quiet
+npx tsc --noEmit
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co \
+NEXT_PUBLIC_SUPABASE_ANON_KEY=replace-me-with-supabase-anon-key \
+NEXT_PUBLIC_APP_URL=https://your-production-domain.example \
+  npm run build
+npm audit --omit=dev
+git diff --check
+```
+
+The current production audit leaves a low-severity transitive
+`deepmerge@4.3.1` advisory reachable through
+`@react-email/components` → `@react-email/render@2.0.6` →
+`html-to-text@9.0.5`. It is used by the email-template rendering path. npm
+reports no fix available; forced remediation is not approved. Track the
+upstream dependency and re-run the audit after upgrades rather than using
+`npm audit fix --force`.
+
 ## Manual checks in Supabase Dashboard
 
 Record the project URL in the deployment runbook or release system; do not put access tokens, passwords, anon keys, or service-role keys in this file.

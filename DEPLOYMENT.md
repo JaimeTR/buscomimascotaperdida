@@ -176,12 +176,35 @@ en memoria no se comparten entre procesos y dejarían el límite incompleto.
 
 ### 7. Revisar dependencias
 
-Antes de publicar, ejecuta `npm ci`, `npm run lint`, `npx tsc --noEmit`,
-`npm run build` y `npm audit --omit=dev`. La auditoría actual no reporta
-vulnerabilidades críticas, altas ni moderadas en producción; permanecen avisos
-de bajo impacto en la cadena de plantillas de correo (`@react-email`/`deepmerge`)
-sin una corrección disponible. No uses `npm audit fix --force` en producción
-sin revisar los cambios mayores.
+Antes de publicar, ejecuta la compuerta local completa desde la raíz del
+repositorio. Los comprobadores de configuración y Supabase pueden ejecutarse
+sin secretos reales; usa solo placeholders para las variables que esos checks
+aceptan:
+
+```bash
+npm ci
+NODE_ENV=production NEXT_PUBLIC_APP_URL=https://your-production-domain.example \
+  node scripts/check-production-config.mjs
+node scripts/check-task-5-supabase.mjs
+npx eslint . --quiet
+npx tsc --noEmit
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co \
+NEXT_PUBLIC_SUPABASE_ANON_KEY=replace-me-with-supabase-anon-key \
+NEXT_PUBLIC_APP_URL=https://your-production-domain.example \
+  npm run build
+npm audit --omit=dev
+git diff --check
+```
+
+La auditoría de producción debe revisarse por alcance, no solo por su código
+de salida. Actualmente queda un aviso transitorio de baja severidad:
+`@react-email/components` usa `@react-email/render`, que usa
+`html-to-text@9.0.5`, que alcanza `deepmerge@4.3.1`. El aviso afecta la ruta
+de renderizado de plantillas de correo cuando se envían notificaciones; no
+hay una corrección publicada para esa cadena y `npm audit fix --force` no está
+aprobado porque podría introducir cambios mayores. Registra el aviso y
+revalídalo cuando los mantenedores publiquen una actualización; no fuerces
+una resolución en producción.
 
 ---
 
