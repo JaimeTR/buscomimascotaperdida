@@ -77,6 +77,7 @@ export function usePets(options: UsePetsOptions = {}) {
     const supabase = createClient()
 
     useEffect(() => {
+        let cancelled = false
         const fetchPets = async () => {
             setIsLoading(true)
             setError(null)
@@ -143,21 +144,28 @@ export function usePets(options: UsePetsOptions = {}) {
                 }
 
                 const { data, error } = await query
+                if (cancelled) return // respuesta obsoleta: ya hay otra consulta más nueva
 
                 if (error) throw error
 
                 setPets(data as Pet[])
 
             } catch (err) {
+                if (cancelled) return
                 console.error("Error fetching pets details:", JSON.stringify(err, null, 2))
                 setError(err instanceof Error ? err.message : "Error desconocido al obtener mascotas")
                 setPets([])
             } finally {
-                setIsLoading(false)
+                if (!cancelled) setIsLoading(false)
             }
         }
 
-        fetchPets()
+        // Debounce solo al escribir en el buscador; los filtros de selección aplican al instante.
+        const timer = setTimeout(fetchPets, options.searchQuery ? 300 : 0)
+        return () => {
+            cancelled = true
+            clearTimeout(timer)
+        }
     }, [
         options.limit,
         options.featured,

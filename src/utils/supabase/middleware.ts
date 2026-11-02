@@ -26,7 +26,16 @@ export async function updateSession(request: NextRequest) {
         }
     )
 
-    await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // Guard de servidor: el dashboard nunca se sirve sin sesión (RLS sigue siendo la barrera de datos).
+    const { pathname } = request.nextUrl
+    if (!user && (pathname === '/dashboard' || pathname.startsWith('/dashboard/'))) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/login'
+        url.search = `?next=${encodeURIComponent(pathname)}`
+        return NextResponse.redirect(url)
+    }
 
     return response
 }

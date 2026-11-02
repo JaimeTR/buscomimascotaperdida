@@ -81,7 +81,14 @@ export default function Home() {
           </div>
 
           <div className="max-w-4xl mx-auto space-y-6">
-            <div className="relative shadow-2xl shadow-teal-700/10 rounded-full">
+            <form
+              role="search"
+              className="relative shadow-2xl shadow-teal-700/10 rounded-full"
+              onSubmit={(e) => {
+                e.preventDefault()
+                document.getElementById("resultados")?.scrollIntoView({ behavior: "smooth" })
+              }}
+            >
               <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400" />
               <Input
                 aria-label="Buscar mascotas"
@@ -90,10 +97,10 @@ export default function Home() {
                 className="h-16 pl-14 pr-36 rounded-full text-lg shadow-none border-0 ring-1 ring-stone-200 focus-visible:ring-2 focus-visible:ring-teal-700 bg-white"
                 placeholder="Busca por nombre, raza o señas particulares..."
               />
-              <Button className="absolute right-2 top-2 h-12 px-8 rounded-full shadow-lg bg-teal-700 hover:bg-teal-700 text-white font-bold tracking-wide">
+              <Button type="submit" className="absolute right-2 top-2 h-12 px-8 rounded-full font-bold">
                 Buscar
               </Button>
-            </div>
+            </form>
 
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
               {/* LOCATION PILL */}
@@ -211,7 +218,7 @@ export default function Home() {
       </section>
 
       {/* Dynamic Results / Recent Pets Section */}
-      <section className="py-16 md:py-20 bg-secondary/50">
+      <section id="resultados" className="py-16 md:py-20 bg-secondary/50 scroll-mt-16">
         <div className="container mx-auto px-4 md:px-6 space-y-12">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold tracking-tight text-stone-900">
@@ -255,9 +262,19 @@ export default function Home() {
                   <div className="bg-stone-100 p-6 rounded-full mb-4">
                     <Search className="h-10 w-10 text-stone-300" />
                   </div>
-                  <h3 className="text-xl font-bold text-stone-900 mb-2">No encontramos coincidencias</h3>
-                  <p className="text-stone-500 max-w-sm">Prueba ajustando los filtros o buscando en otro distrito.</p>
-                  <Button variant="link" onClick={clearFilters} className="text-teal-700 font-bold mt-4">Ver todas las mascotas</Button>
+                  {hasActiveFilters ? (
+                    <>
+                      <h3 className="text-xl font-bold text-stone-900 mb-2">No encontramos coincidencias</h3>
+                      <p className="text-stone-500 max-w-sm">Prueba ajustando los filtros o buscando en otro distrito.</p>
+                      <Button variant="link" onClick={clearFilters} className="text-teal-700 font-bold mt-4">Quitar filtros</Button>
+                    </>
+                  ) : (
+                    <>
+                      <h3 className="text-xl font-bold text-stone-900 mb-2">Aún no hay reportes publicados</h3>
+                      <p className="text-stone-500 max-w-sm">Si perdiste o encontraste una mascota, publícala para que la comunidad pueda ayudar.</p>
+                      <Button asChild className="mt-4 bg-cta text-cta-foreground hover:bg-cta/90"><Link href="/reportar">Crear un reporte</Link></Button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
