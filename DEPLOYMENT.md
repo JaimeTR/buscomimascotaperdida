@@ -163,7 +163,18 @@ formularios, reportes, mensajes ni respuestas de API. Verifica en un navegador m
 que `/`, `/offline` y los iconos carguen sin conexión y que las rutas privadas no se
 sirvan desde caché.
 
-### 6. Revisar dependencias
+### 6. Modo de rate limiting del chatbot
+
+La aplicación se despliega actualmente como un único proceso Node.js (`npm start`)
+en Hostinger. Por eso el límite del chatbot usa memoria local del proceso y no
+requiere una dependencia externa para compartir contadores.
+
+No habilites múltiples instancias, PM2 en modo cluster ni balanceo horizontal
+sin sustituir este límite por un rate limiter compartido compatible con HTTP
+(por ejemplo, respaldado por Redis o un servicio equivalente). Los contadores
+en memoria no se comparten entre procesos y dejarían el límite incompleto.
+
+### 7. Revisar dependencias
 
 Antes de publicar, ejecuta `npm ci`, `npm run lint`, `npx tsc --noEmit`,
 `npm run build` y `npm audit --omit=dev`. La auditoría actual no reporta

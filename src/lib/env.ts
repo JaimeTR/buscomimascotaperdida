@@ -6,6 +6,7 @@ export type ServerEnv = {
     appUrl?: string
     resendApiKey?: string
     huggingfaceApiKey?: string
+    chatbotProviderReady: boolean
     emailTestToken?: string
 }
 
@@ -40,6 +41,7 @@ export function assertServerEnv(): ServerEnv {
         appUrl,
         resendApiKey: readEnv('RESEND_API_KEY'),
         huggingfaceApiKey: readEnv('HUGGINGFACE_API_KEY'),
+        chatbotProviderReady: Boolean(readEnv('HUGGINGFACE_API_KEY')),
         emailTestToken: readEnv('EMAIL_TEST_TOKEN'),
     }
 }

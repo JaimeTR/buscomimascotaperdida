@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
 import { assertServerEnv } from '@/lib/env'
 import {
     getSafeErrorCode,
@@ -10,6 +11,18 @@ import {
 const requestCounts = new Map<string, { count: number; resetTime: number }>()
 const RATE_LIMIT_WINDOW = 60 * 1000
 const MAX_REQUESTS_PER_WINDOW = 10
+const analysisSchema = z.object({
+    isPetSearch: z.boolean(),
+    response: z.string().trim().min(1).max(500),
+    filters: z.object({
+        type: z.enum(['dog', 'cat', 'rabbit']).nullable().optional().default(null),
+        breed: z.string().trim().max(100).nullable().optional().default(null),
+        color: z.string().trim().max(100).nullable().optional().default(null),
+        size: z.enum(['small', 'medium', 'large']).nullable().optional().default(null),
+        district: z.string().trim().max(100).nullable().optional().default(null),
+        gender: z.enum(['male', 'female']).nullable().optional().default(null),
+    }).strict(),
+}).strict()
 
 function checkRateLimit(ip: string): boolean {
     const now = Date.now()
@@ -58,9 +71,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Mensaje inválido' }, { status: 400 })
         }
 
-        const { huggingfaceApiKey } = assertServerEnv()
+        const { huggingfaceApiKey, chatbotProviderReady } = assertServerEnv()
 
-        if (!huggingfaceApiKey) {
+        if (!chatbotProviderReady || !huggingfaceApiKey) {
             console.error('chatbot provider is not configured')
             return NextResponse.json(
                 { error: 'Servicio temporalmente no disponible', fallback: true },
@@ -68,14 +81,19 @@ export async function POST(request: NextRequest) {
             )
         }
 
-        const hfResponse = await fetch(
+        const controller = new AbortController()
+        const timeout = setTimeout(() => controller.abort(), 15_000)
+        let hfResponse: Response
+        try {
+            hfResponse = await fetch(
             'https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf',
             {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${huggingfaceApiKey}`,
+                    Authorization: 'Bearer ' + huggingfaceApiKey,
                     'Content-Type': 'application/json',
                 },
+                signal: controller.signal,
                 body: JSON.stringify({
                     inputs: `Eres un asistente para buscar mascotas perdidas en Perú. Analiza este mensaje y responde SOLO en JSON válido:
 
@@ -101,7 +119,16 @@ Responde EXACTAMENTE en este formato JSON (sin markdown):
                     },
                 }),
             }
-        )
+            )
+        } catch (error: unknown) {
+            console.error('chatbot provider request failed', { code: getSafeErrorCode(error) })
+            return NextResponse.json(
+                { error: 'Error al procesar tu mensaje', fallback: true },
+                { status: 502 }
+            )
+        } finally {
+            clearTimeout(timeout)
+        }
 
         if (!hfResponse.ok) {
             console.error('chatbot provider request failed', { status: hfResponse.status })
@@ -132,14 +159,16 @@ Responde EXACTAMENTE en este formato JSON (sin markdown):
             }
         }
 
-        if (!analysis) {
+        const validatedAnalysis = analysisSchema.safeParse(analysis)
+        if (!validatedAnalysis.success) {
+            console.error('chatbot provider returned an invalid analysis shape')
             return NextResponse.json(
                 { error: 'No se pudo procesar la respuesta', fallback: true },
                 { status: 502 }
             )
         }
 
-        return NextResponse.json({ success: true, analysis })
+        return NextResponse.json({ success: true, analysis: validatedAnalysis.data })
     } catch (error: unknown) {
         console.error('chatbot API error', { code: getSafeErrorCode(error) })
         return NextResponse.json(

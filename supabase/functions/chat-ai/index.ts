@@ -1,9 +1,22 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { createClient } from "jsr:@supabase/supabase-js@2"
+import { z } from "npm:zod@4.3.5"
 
 const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY")
 const HF_API_KEY = Deno.env.get("HUGGINGFACE_API_KEY")
 const ALLOWED_ORIGIN = Deno.env.get("ALLOWED_ORIGIN") || ""
+const analysisSchema = z.object({
+  isPetSearch: z.boolean(),
+  response: z.string().trim().min(1).max(500),
+  filters: z.object({
+    type: z.enum(["dog", "cat", "rabbit"]).nullable().optional().default(null),
+    breed: z.string().trim().max(100).nullable().optional().default(null),
+    color: z.string().trim().max(100).nullable().optional().default(null),
+    size: z.enum(["small", "medium", "large"]).nullable().optional().default(null),
+    district: z.string().trim().max(100).nullable().optional().default(null),
+    gender: z.enum(["male", "female"]).nullable().optional().default(null),
+  }).strict(),
+}).strict()
 
 interface PetFilters {
   type?: string
@@ -20,11 +33,11 @@ async function analyzeWithGemini(message: string): Promise<any> {
 
   try {
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" +
-        GEMINI_API_KEY,
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
       {
         method: "POST",
         headers: {
+          "x-goog-api-key": GEMINI_API_KEY,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -88,7 +101,7 @@ async function analyzeWithHuggingFace(message: string): Promise<any> {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${HF_API_KEY}`,
+          Authorization: "Bearer " + HF_API_KEY,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -216,34 +229,44 @@ Deno.serve(async (req: Request) => {
       analysis = await analyzeWithGemini(message)
     }
 
-    // Si ambas fallan, respuesta genérica
-    if (!analysis) {
-      analysis = {
+    const validatedAnalysis = analysisSchema.safeParse(
+      analysis ?? {
         isPetSearch: false,
         response:
           "Perdón, tuve un problema procesando tu mensaje. ¿Puedes intentar de nuevo?",
         filters: {},
       }
+    )
+
+    if (!validatedAnalysis.success) {
+      console.error("Chat providers returned an invalid analysis shape")
+      return new Response(JSON.stringify({ error: "Unable to process chat response" }), {
+        status: 502,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": corsOrigin,
+        },
+      })
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let petResults: any[] = []
 
     // Si es búsqueda de mascota, buscar en BD
-    if (analysis.isPetSearch && analysis.filters) {
+    if (validatedAnalysis.data.isPetSearch) {
       const supabaseUrl = Deno.env.get("SUPABASE_URL")
       const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")
 
       if (supabaseUrl && supabaseAnonKey) {
         const supabase = createClient(supabaseUrl, supabaseAnonKey)
-        petResults = await searchPets(supabase, analysis.filters)
+        petResults = await searchPets(supabase, validatedAnalysis.data.filters)
       }
     }
 
     return new Response(
       JSON.stringify({
-        response: analysis.response,
-        isPetSearch: analysis.isPetSearch,
+        response: validatedAnalysis.data.response,
+        isPetSearch: validatedAnalysis.data.isPetSearch,
         petResults: petResults,
       }),
       {
