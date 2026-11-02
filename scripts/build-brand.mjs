@@ -4,11 +4,11 @@
 import { mkdirSync, writeFileSync } from "node:fs"
 import sharp from "sharp"
 import { TEAL, ORANGE, CREAM, MUTED, NAME, SLOGAN, VIEW } from "./brand-core.mjs"
-import { model1, variants } from "./brand-models.mjs"
+import { symbol, variants } from "./brand-models.mjs"
+import { path, poppins } from "./brand-text.mjs"
 
-// Modelo elegido: 1 (perro con el gato en negativo).
-const symbolColor = model1(variants.color)
-const symbolLight = model1(variants.claro)
+const symbolColor = symbol(variants.color)
+const symbolLight = symbol(variants.claro)
 
 const svg = (inner, extra = "", box = `0 0 ${VIEW} ${VIEW}`) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box}" ${extra}>${inner}</svg>
@@ -30,14 +30,14 @@ const render = (source, size, file) => sharp(Buffer.from(source), { density: 384
 for (const s of [72, 96, 128, 144, 152, 180, 192, 384, 512]) await render(appIcon(0.08), s, `public/icons/icon-${s}x${s}.png`)
 await render(appIcon(0.22), 512, "public/icons/maskable-512x512.png")
 
-// Imagen para compartir (Open Graph) 1200x630. Texto en Arial: es solo una miniatura social.
+// Imagen para compartir (Open Graph) 1200x630: símbolo, nombre en dos líneas (Braze) y eslogan (Poppins).
 const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="${CREAM}"/>
   <rect width="1200" height="14" fill="${TEAL}"/>
-  <g transform="translate(90 70) scale(4.2)">${symbolColor}</g>
-  <text x="640" y="290" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="76" fill="${TEAL}">${NAME[0]}</text>
-  <text x="640" y="372" font-family="Arial, Helvetica, sans-serif" font-weight="800" font-size="76" fill="${ORANGE}">${NAME[1]}</text>
-  <text x="644" y="430" font-family="Arial, Helvetica, sans-serif" font-size="30" letter-spacing="3" fill="${MUTED}">${SLOGAN.toUpperCase()}</text>
+  <g transform="translate(70 40) scale(4.6)">${symbolColor}</g>
+  ${path(NAME[0].toUpperCase(), 600, 270, 92, TEAL, 3)}
+  ${path(NAME[1].toUpperCase(), 600, 380, 92, ORANGE, 3)}
+  ${path(SLOGAN, 604, 450, 36, MUTED, 0.5, poppins)}
 </svg>`
 await sharp(Buffer.from(og)).png().toFile("public/og.png")
 console.log("Marca generada")
