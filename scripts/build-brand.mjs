@@ -4,31 +4,15 @@
 import { mkdirSync, writeFileSync } from "node:fs"
 import sharp from "sharp"
 
-const TEAL = "#0f766e"
-const ORANGE = "#c2410c"
-const CREAM = "#faf8f3"
-
-// Lupa con huella dentro. viewBox 96x96. ring/paw/handle son colores.
-const symbol = ({ ring, paw, handle }) => `
-  <circle cx="42" cy="42" r="30" fill="none" stroke="${ring}" stroke-width="8"/>
-  <line x1="64" y1="64" x2="86" y2="86" stroke="${handle}" stroke-width="11" stroke-linecap="round"/>
-  <g fill="${paw}">
-    <ellipse cx="42" cy="51" rx="11.5" ry="9"/>
-    <ellipse cx="27.5" cy="39.5" rx="4.6" ry="6.2" transform="rotate(-22 27.5 39.5)"/>
-    <ellipse cx="36.5" cy="30.5" rx="4.6" ry="6.6"/>
-    <ellipse cx="47.5" cy="30.5" rx="4.6" ry="6.6"/>
-    <ellipse cx="56.5" cy="39.5" rx="4.6" ry="6.2" transform="rotate(22 56.5 39.5)"/>
-  </g>`
+import { TEAL, ORANGE, CREAM, symbolColor as color, symbolLight as light } from "./brand-core.mjs"
 
 const svg = (inner, viewBox = "0 0 96 96", extra = "") =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" ${extra}>${inner}</svg>\n`
 
-const color = symbol({ ring: TEAL, paw: TEAL, handle: ORANGE })
 writeFileSync("public/logo_symbol.svg", svg(color, "0 0 96 96", 'role="img" aria-label="Busco mi mascota"'))
 writeFileSync("src/app/icon.svg", svg(color))
 
 // Ícono de app: fondo teal, símbolo claro, mango naranja claro (contraste sobre teal).
-const light = symbol({ ring: CREAM, paw: CREAM, handle: "#fdba74" })
 const appIcon = (pad) => {
   // pad = fracción del lado reservada como margen (maskable necesita zona segura ~20%)
   const size = 96 * (1 - pad * 2)
