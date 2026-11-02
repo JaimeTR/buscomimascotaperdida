@@ -291,12 +291,24 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                     className="w-full h-16 text-xl font-black rounded-2xl shadow-2xl shadow-teal-700/30 bg-teal-800 hover:bg-teal-800 text-white border-0"
                                     size="lg"
                                 />
-                                <OwnerContactModal
-                                    ownerName={owner.full_name}
-                                    phone={owner.phone}
-                                    whatsapp={owner.whatsapp}
-                                    email={owner.email}
-                                />
+                                {pet.source_url ? (
+                                    <div className="rounded-2xl border bg-card p-4 text-sm">
+                                        <p className="font-semibold">Caso publicado desde una fuente externa</p>
+                                        <p className="mt-1 text-muted-foreground">
+                                            La información de contacto está en la publicación original.
+                                        </p>
+                                        <a href={pet.source_url} target="_blank" rel="noopener noreferrer nofollow" className="mt-2 inline-block font-bold text-primary hover:underline">
+                                            Ver fuente: {pet.source_name || "enlace original"}
+                                        </a>
+                                    </div>
+                                ) : (
+                                                                    <OwnerContactModal
+                                        ownerName={owner.full_name}
+                                        phone={owner.phone}
+                                        whatsapp={owner.whatsapp}
+                                        email={owner.email}
+                                    />
+                                )}
                                 <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-stone-100 text-stone-600 hover:bg-stone-50" size="lg" asChild>
                                     <Link href={`/cartel?id=${pet.id}`}>
                                         <Download className="mr-3 h-5 w-5" /> Generar Cartel PDF
