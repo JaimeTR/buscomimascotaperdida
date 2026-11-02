@@ -4,7 +4,7 @@
 // Salida: public/brand/*.svg|png, simbolo-perro.svg, simbolo-gato.svg y revision.png (lámina de control)
 import { mkdirSync, writeFileSync } from "node:fs"
 import sharp from "sharp"
-import { NAME, SLOGAN, VIEW, TEAL, ORANGE, MUTED, CREAM } from "./brand-core.mjs"
+import { NAME, VIEW, TEAL, ORANGE, MUTED, CREAM } from "./brand-core.mjs"
 import { width, path, doc, sloganPath } from "./brand-text.mjs"
 import { symbol, dogOnly, catOnly, variants } from "./brand-models.mjs"
 
