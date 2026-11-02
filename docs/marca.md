@@ -2,7 +2,7 @@
 
 **Nombre:** Busco mi mascota · **Dominio:** buscomimascotaperdida.com
 **Eslogan:** Juntos, de vuelta a casa
-**Idea del símbolo:** una lupa (buscar) con una huella dentro (la mascota). El mango naranja es el único acento cálido.
+**Idea del símbolo:** la silueta de un perro con un gato recortado en el espacio negativo de su pecho: sirve para los dos tipos de mascota. El nombre va en dos tonos: "Busco mi" en teal y "mascota" en naranja.
 
 ## Piezas (`public/brand/`, regenerar con `node scripts/build-logos.mjs`)
 
@@ -20,7 +20,7 @@
 | Token | Hex | Uso |
 |---|---|---|
 | Teal (primario) | `#0f766e` | Marca, enlaces, botones principales |
-| Naranja (acción) | `#c2410c` | Un solo CTA por pantalla y el mango del logo |
+| Naranja (acento) | `#c2410c` | "mascota" en el logotipo y un solo CTA por pantalla (claro: `#fdba74`) |
 | Crema | `#faf8f3` | Fondo |
 | Tinta | `#0b2b2a` | Texto principal |
 | Gris teal | `#3d5655` | Texto secundario / eslogan |
@@ -31,7 +31,7 @@ Contraste: texto tinta sobre crema ≥ 14:1; blanco sobre teal y sobre naranja �
 Outfit (800 para el nombre, 500 para el eslogan en mayúsculas con espaciado). En los archivos el texto ya está convertido a trazos.
 
 ## Reglas
-- Margen libre mínimo alrededor del logo: el alto del círculo de la lupa ÷ 4.
-- Tamaño mínimo: símbolo 16 px; isologo 120 px de ancho.
-- No cambiar los colores de la lupa y la huella entre sí, no rotar, no añadir sombras.
+- Margen libre mínimo alrededor del logo: el ancho de la oreja del perro.
+- Tamaño mínimo: símbolo 24 px; isologo 120 px de ancho.
+- El símbolo es de un solo color (teal, o crema sobre fondo teal); no rotar, no añadir sombras ni contornos.
 - Sobre fotos: usar la versión `-claro` sobre una capa teal sólida, no directamente sobre la imagen.

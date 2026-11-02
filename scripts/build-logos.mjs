@@ -4,7 +4,7 @@
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs"
 import opentype from "opentype.js"
 import sharp from "sharp"
-import { TEAL, ORANGE, CREAM, INK, MUTED, NAME, SLOGAN, symbolColor, symbolLight } from "./brand-core.mjs"
+import { TEAL, ORANGE, ORANGE_LIGHT, CREAM, MUTED, NAME, SLOGAN, VIEW, symbolColor, symbolLight } from "./brand-core.mjs"
 
 const load = (w) => {
   const b = readFileSync(`node_modules/@fontsource/outfit/files/outfit-latin-${w}-normal.woff`)
@@ -16,6 +16,7 @@ const bold = load(800)
 const medium = load(500)
 
 const width = (font, text, size, ls = 0) => font.getAdvanceWidth(text, size, { letterSpacing: ls / size })
+
 // Serializador propio: toPathData de opentype.js emite "NaN" en algunos trazos (p. ej. la "C" a cierto tamaño).
 const n = (v) => +v.toFixed(2)
 const toD = (cmds) => cmds.map((c) => {
@@ -36,24 +37,24 @@ mkdirSync(out, { recursive: true })
 const save = (name, svg) => writeFileSync(`${out}/${name}.svg`, svg)
 const png = (name, svg, w) => sharp(Buffer.from(svg), { density: 300 }).resize({ width: w }).png().toFile(`${out}/${name}.png`)
 
+// Nombre en dos tonos: "Busco mi" (teal) + "mascota" (naranja).
 const palette = {
-  color: { ink: INK, accent: TEAL, slogan: MUTED, dot: ORANGE, sym: symbolColor, bg: null },
-  claro: { ink: CREAM, accent: "#5eead4", slogan: "#cfe9e5", dot: "#fdba74", sym: symbolLight, bg: TEAL },
+  color: { a: TEAL, b: ORANGE, slogan: MUTED, sym: symbolColor, bg: null },
+  claro: { a: CREAM, b: ORANGE_LIGHT, slogan: "#cfe9e5", sym: symbolLight, bg: TEAL },
 }
 
 // ISOLOGO: símbolo + nombre en dos líneas + eslogan, un solo bloque.
 function isologo(p) {
-  const S = 1.9, size = 70, lh = 66, sl = 22, ls = 3
-  const sx = 12, tx = sx + 96 * S + 28
-  const y1 = 92, y2 = y1 + lh, y3 = y2 + 40
-  const wName = Math.max(width(bold, NAME[0], size), width(bold, NAME[1], size) + 14)
+  const S = 1.7, size = 70, lh = 66, sl = 22, ls = 3
+  const sx = 14, tx = sx + VIEW * S * 0.82 + 30
+  const y1 = 96, y2 = y1 + lh, y3 = y2 + 44
+  const wName = Math.max(width(bold, NAME[0], size), width(bold, NAME[1], size))
   const wSlogan = width(medium, SLOGAN.toUpperCase(), sl, ls)
-  const W = Math.ceil(tx + Math.max(wName, wSlogan) + 24), H = 226
+  const W = Math.ceil(tx + Math.max(wName, wSlogan) + 24), H = 236
   const body =
-    `<g transform="translate(${sx} 18) scale(${S})">${p.sym}</g>` +
-    path(bold, NAME[0], tx, y1, size, p.ink) +
-    path(bold, NAME[1], tx, y2, size, p.accent) +
-    `<circle cx="${tx + width(bold, NAME[1], size) + 12}" cy="${y2 - 8}" r="7" fill="${p.dot}"/>` +
+    `<g transform="translate(${sx - 17 * S} 6) scale(${S})">${p.sym}</g>` +
+    path(bold, NAME[0], tx, y1, size, p.a) +
+    path(bold, NAME[1], tx, y2, size, p.b) +
     path(medium, SLOGAN.toUpperCase(), tx, y3, sl, p.slogan, ls)
   return doc(W, H, body, p.bg)
 }
@@ -63,12 +64,10 @@ function logotipo(p) {
   const size = 120, sl = 30, ls = 5, pad = 40
   const a = `${NAME[0]} `, w1 = width(bold, a, size), w2 = width(bold, NAME[1], size)
   const wSlogan = width(medium, SLOGAN.toUpperCase(), sl, ls)
-  const W = Math.ceil(pad * 2 + w1 + w2 + 26), H = 250
-  const y1 = 130
+  const W = Math.ceil(pad * 2 + w1 + w2), H = 250, y1 = 130
   const body =
-    path(bold, a, pad, y1, size, p.ink) +
-    path(bold, NAME[1], pad + w1, y1, size, p.accent) +
-    `<circle cx="${pad + w1 + w2 + 14}" cy="${y1 - 12}" r="10" fill="${p.dot}"/>` +
+    path(bold, a, pad, y1, size, p.a) +
+    path(bold, NAME[1], pad + w1, y1, size, p.b) +
     path(medium, SLOGAN.toUpperCase(), pad + (W - pad * 2 - wSlogan) / 2, y1 + 66, sl, p.slogan, ls)
   return doc(W, H, body, p.bg)
 }
@@ -82,24 +81,24 @@ for (const [k, p] of Object.entries(palette)) {
 
 // REDES: avatar 1080 (se recorta en círculo: símbolo centrado con margen amplio).
 {
-  const S = 6.4, off = (1080 - 96 * S) / 2
-  const svg = doc(1080, 1080, `<g transform="translate(${off - 8} ${off - 8}) scale(${S})">${symbolLight}</g>`, TEAL)
+  const S = 6.2, off = (1080 - VIEW * S) / 2
+  const svg = doc(1080, 1080, `<g transform="translate(${off} ${off}) scale(${S})">${symbolLight}</g>`, TEAL)
   save("social-avatar", svg); await png("social-avatar", svg, 1080)
 }
 // REDES: cuadrado de publicación 1080 con símbolo, nombre y eslogan.
 {
-  const S = 3.2, size = 108, sl = 34, ls = 6
-  const n1 = NAME[0] + " " + NAME[1]
-  const wn = width(bold, n1, size)
+  const S = 4.4, size = 104, sl = 32, ls = 6
+  const a = NAME[0] + " ", wa = width(bold, a, size), wn = wa + width(bold, NAME[1], size)
   const wsl = width(medium, SLOGAN.toUpperCase(), sl, ls)
+  const x0 = (1080 - wn) / 2
   const body =
-    `<rect x="0" y="0" width="1080" height="18" fill="${TEAL}"/>` +
-    `<g transform="translate(${(1080 - 96 * S) / 2 - 8} 170) scale(${S})">${symbolColor}</g>` +
-    path(bold, NAME[0] + " ", (1080 - wn) / 2, 640, size, INK) +
-    path(bold, NAME[1], (1080 - wn) / 2 + width(bold, NAME[0] + " ", size), 640, size, TEAL) +
-    path(medium, SLOGAN.toUpperCase(), (1080 - wsl) / 2, 720, sl, MUTED, ls) +
-    `<rect x="${1080 / 2 - 190}" y="810" width="380" height="76" rx="38" fill="${ORANGE}"/>` +
-    path(bold, "buscomimascotaperdida.com", 1080 / 2 - width(bold, "buscomimascotaperdida.com", 25) / 2, 858, 25, "#ffffff")
+    `<rect width="1080" height="18" fill="${TEAL}"/>` +
+    `<g transform="translate(${(1080 - VIEW * S) / 2} 100) scale(${S})">${symbolColor}</g>` +
+    path(bold, a, x0, 770, size, TEAL) +
+    path(bold, NAME[1], x0 + wa, 770, size, ORANGE) +
+    path(medium, SLOGAN.toUpperCase(), (1080 - wsl) / 2, 850, sl, MUTED, ls) +
+    `<rect x="${1080 / 2 - 200}" y="920" width="400" height="76" rx="38" fill="${ORANGE}"/>` +
+    path(bold, "buscomimascotaperdida.com", 1080 / 2 - width(bold, "buscomimascotaperdida.com", 25) / 2, 968, 25, "#ffffff")
   const svg = doc(1080, 1080, body, CREAM)
   save("social-cuadrado", svg); await png("social-cuadrado", svg, 1080)
 }
