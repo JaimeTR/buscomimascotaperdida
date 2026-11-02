@@ -205,18 +205,7 @@ export default function ReportPage() {
                     const response = await fetch('/api/notify-nearby-users', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            petId: insertedPet.id,
-                            petName: name,
-                            petType: type,
-                            petBreed: breed,
-                            petDescription: description,
-                            lastSeenAddress: location.address || '',
-                            lastSeenDistrict: location.district,
-                            lastSeenLat: location.lat,
-                            lastSeenLng: location.lng,
-                            petImageUrl: finalImageUrls[0]
-                        })
+                        body: JSON.stringify({ petId: insertedPet.id })
                     })
 
                     const notificationResult = await response.json()

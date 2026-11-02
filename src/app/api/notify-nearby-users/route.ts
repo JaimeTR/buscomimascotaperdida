@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { notifyNearbyUsers } from '@/lib/notifications'
+import { z } from 'zod'
+import { notifyNearbyUsers, type NotifiablePet } from '@/lib/notifications'
 import { createClient } from '@/utils/supabase/server'
 import {
     getSafeErrorCode,
@@ -8,93 +9,35 @@ import {
     parseJsonBody,
 } from '@/lib/safe-error'
 
+const bodySchema = z.object({ petId: z.string().uuid() }).strict()
+
+// El cliente solo envía el id: nombre, ubicación y fotos se leen de la base, y solo el dueño puede disparar el aviso.
 export async function POST(request: NextRequest) {
     try {
-        const parsedBody = await parseJsonBody(request)
-        if (!parsedBody.ok) {
-            return invalidPayloadResponse()
-        }
-
-        const body: unknown = parsedBody.body
-        if (typeof body !== 'object' || body === null) {
-            return invalidPayloadResponse()
-        }
+        const parsed = await parseJsonBody(request)
+        const body = parsed.ok ? bodySchema.safeParse(parsed.body) : null
+        if (!body?.success) return invalidPayloadResponse()
 
         const supabase = await createClient()
         const { data: { user }, error: authError } = await supabase.auth.getUser()
+        if (authError || !user) return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
 
-        if (authError || !user) {
-            return NextResponse.json({ error: 'No autorizado' }, { status: 401 })
-        }
+        const { data: pet } = await supabase
+            .from('pets')
+            .select('id, owner_id, name, type, breed, last_seen_district, last_seen_lat, last_seen_lng, image_urls, notified_at')
+            .eq('id', body.data.petId)
+            .eq('owner_id', user.id)
+            .maybeSingle<NotifiablePet>()
+        if (!pet) return NextResponse.json({ error: 'No autorizado' }, { status: 403 })
 
-        const {
-            petId,
-            petName,
-            petType,
-            petBreed,
-            petDescription,
-            lastSeenAddress,
-            lastSeenDistrict,
-            lastSeenLat,
-            lastSeenLng,
-            petImageUrl
-        } = body as Record<string, unknown>
-
-        const optionalString = (value: unknown): string | undefined =>
-            typeof value === 'string' ? value : undefined
-
-        if (
-            typeof petId !== 'string' ||
-            typeof petName !== 'string' ||
-            typeof petType !== 'string' ||
-            typeof lastSeenDistrict !== 'string' ||
-            typeof lastSeenLat !== 'number' ||
-            typeof lastSeenLng !== 'number' ||
-            !Number.isFinite(lastSeenLat) ||
-            !Number.isFinite(lastSeenLng) ||
-            lastSeenLat < -90 ||
-            lastSeenLat > 90 ||
-            lastSeenLng < -180 ||
-            lastSeenLng > 180 ||
-            !petId.trim() ||
-            !petName.trim() ||
-            !petType.trim() ||
-            !lastSeenDistrict.trim()
-        ) {
-            return invalidPayloadResponse()
-        }
-
-        const result = await notifyNearbyUsers({
-            petId,
-            petName,
-            petType,
-            petBreed: optionalString(petBreed),
-            petDescription: optionalString(petDescription),
-            lastSeenAddress: optionalString(lastSeenAddress) || '',
-            lastSeenDistrict,
-            lastSeenLat,
-            lastSeenLng,
-            petImageUrl: optionalString(petImageUrl)
-        })
-
+        const result = await notifyNearbyUsers(pet)
         if (result.error) {
-            return NextResponse.json(
-                { error: 'No se pudieron enviar las notificaciones' },
-                { status: 500 }
-            )
+            return NextResponse.json({ error: 'No se pudieron enviar las notificaciones' }, { status: 500 })
         }
-
-        return NextResponse.json({
-            success: true,
-            notified: result.notified
-        })
-
+        return NextResponse.json({ success: true, notified: result.notified })
     } catch (error: unknown) {
         console.error('notify-nearby-users API error', { code: getSafeErrorCode(error) })
-        return NextResponse.json(
-            { error: 'Error interno del servidor' },
-            { status: 500 }
-        )
+        return NextResponse.json({ error: 'Error interno del servidor' }, { status: 500 })
     }
 }
 
