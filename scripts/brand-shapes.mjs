@@ -18,7 +18,7 @@ export const dog = (fill, base = 200) => {
   <path fill="${ear}" d="M90 40 C112 40 121 66 117 94 C115 112 99 120 89 110 C81 102 83 80 83 66 C83 52 85 44 90 40 Z"/>
 </g>`
 }
-export const EYE = { cx: 136, cy: 67, r: 5 }
+export const EYE = { cx: 130, cy: 58, r: 5.2 }
 // Huecos del perro: ojo y línea de la boca.
 export const dogCuts = () => `
   <circle cx="${EYE.cx}" cy="${EYE.cy}" r="${EYE.r}" fill="#000"/>
