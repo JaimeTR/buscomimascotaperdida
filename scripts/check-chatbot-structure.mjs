@@ -27,6 +27,14 @@ const checks = [
     'route clears the timeout in finally',
     /finally\s*\{[\s\S]{0,120}clearTimeout\(timeout\)/.test(route),
   ],
+  [
+    'route parses the provider body inside the timed operation',
+    /hfData:\s*unknown\s*=\s*await hfResponse\.json\(\)[\s\S]*finally\s*\{[\s\S]*clearTimeout\(timeout\)/.test(route),
+  ],
+  [
+    'route maps provider body-read failures to HTTP 502',
+    /chatbot provider operation failed[\s\S]*status:\s*502/.test(route),
+  ],
   ['route validates provider output with Zod', /analysisSchema\.safeParse\(analysis\)/.test(route)],
   [
     'route has generic provider readiness and failure responses',
@@ -36,6 +44,16 @@ const checks = [
   ],
   ['edge function validates provider output with a strict schema', /analysisSchema[\s\S]*?\.strict\(\)/.test(edge)],
   ['edge function fails closed when no provider is configured', /status:\s*503/.test(edge) && /!GEMINI_API_KEY && !HF_API_KEY/.test(edge)],
+  [
+    'edge function maps both-provider failures to HTTP 502',
+    /if \(!analysis\)/.test(edge) && /Chat providers failed to return an analysis/.test(edge) &&
+      /status:\s*502/.test(edge),
+  ],
+  [
+    'optional filters normalize empty strings to null',
+    /const optionalFilter = z\.string\(\)\.trim\(\)\.max\(100\)\.transform\(\(value\) => value \|\| null\)/.test(route) &&
+      /const optionalFilter = z\.string\(\)\.trim\(\)\.max\(100\)\.transform\(\(value\) => value \|\| null\)/.test(edge),
+  ],
 ]
 
 const failures = checks.filter(([, passed]) => !passed).map(([name]) => name)

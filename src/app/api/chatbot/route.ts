@@ -11,15 +11,16 @@ import {
 const requestCounts = new Map<string, { count: number; resetTime: number }>()
 const RATE_LIMIT_WINDOW = 60 * 1000
 const MAX_REQUESTS_PER_WINDOW = 10
+const optionalFilter = z.string().trim().max(100).transform((value) => value || null)
 const analysisSchema = z.object({
     isPetSearch: z.boolean(),
     response: z.string().trim().min(1).max(500),
     filters: z.object({
         type: z.enum(['dog', 'cat', 'rabbit']).nullable().optional().default(null),
-        breed: z.string().trim().max(100).nullable().optional().default(null),
-        color: z.string().trim().max(100).nullable().optional().default(null),
+        breed: optionalFilter.nullable().optional().default(null),
+        color: optionalFilter.nullable().optional().default(null),
         size: z.enum(['small', 'medium', 'large']).nullable().optional().default(null),
-        district: z.string().trim().max(100).nullable().optional().default(null),
+        district: optionalFilter.nullable().optional().default(null),
         gender: z.enum(['male', 'female']).nullable().optional().default(null),
     }).strict(),
 }).strict()
@@ -120,8 +121,47 @@ Responde EXACTAMENTE en este formato JSON (sin markdown):
                 }),
             }
             )
+            if (!hfResponse.ok) {
+                console.error('chatbot provider request failed', { status: hfResponse.status })
+                return NextResponse.json(
+                    { error: 'Error al procesar tu mensaje', fallback: true },
+                    { status: 502 }
+                )
+            }
+
+            const hfData: unknown = await hfResponse.json()
+            let analysis: unknown = null
+
+            if (
+                Array.isArray(hfData) &&
+                hfData.length > 0 &&
+                typeof hfData[0] === 'object' &&
+                hfData[0] !== null &&
+                'generated_text' in hfData[0] &&
+                typeof hfData[0].generated_text === 'string'
+            ) {
+                const jsonMatch = hfData[0].generated_text.match(/\{[\s\S]*\}/)
+                if (jsonMatch) {
+                    try {
+                        analysis = JSON.parse(jsonMatch[0])
+                    } catch {
+                        console.error('chatbot provider returned invalid analysis')
+                    }
+                }
+            }
+
+            const validatedAnalysis = analysisSchema.safeParse(analysis)
+            if (!validatedAnalysis.success) {
+                console.error('chatbot provider returned an invalid analysis shape')
+                return NextResponse.json(
+                    { error: 'No se pudo procesar la respuesta', fallback: true },
+                    { status: 502 }
+                )
+            }
+
+            return NextResponse.json({ success: true, analysis: validatedAnalysis.data })
         } catch (error: unknown) {
-            console.error('chatbot provider request failed', { code: getSafeErrorCode(error) })
+            console.error('chatbot provider operation failed', { code: getSafeErrorCode(error) })
             return NextResponse.json(
                 { error: 'Error al procesar tu mensaje', fallback: true },
                 { status: 502 }
@@ -129,46 +169,6 @@ Responde EXACTAMENTE en este formato JSON (sin markdown):
         } finally {
             clearTimeout(timeout)
         }
-
-        if (!hfResponse.ok) {
-            console.error('chatbot provider request failed', { status: hfResponse.status })
-            return NextResponse.json(
-                { error: 'Error al procesar tu mensaje', fallback: true },
-                { status: 502 }
-            )
-        }
-
-        const hfData: unknown = await hfResponse.json()
-        let analysis: unknown = null
-
-        if (
-            Array.isArray(hfData) &&
-            hfData.length > 0 &&
-            typeof hfData[0] === 'object' &&
-            hfData[0] !== null &&
-            'generated_text' in hfData[0] &&
-            typeof hfData[0].generated_text === 'string'
-        ) {
-            const jsonMatch = hfData[0].generated_text.match(/\{[\s\S]*\}/)
-            if (jsonMatch) {
-                try {
-                    analysis = JSON.parse(jsonMatch[0])
-                } catch {
-                    console.error('chatbot provider returned invalid analysis')
-                }
-            }
-        }
-
-        const validatedAnalysis = analysisSchema.safeParse(analysis)
-        if (!validatedAnalysis.success) {
-            console.error('chatbot provider returned an invalid analysis shape')
-            return NextResponse.json(
-                { error: 'No se pudo procesar la respuesta', fallback: true },
-                { status: 502 }
-            )
-        }
-
-        return NextResponse.json({ success: true, analysis: validatedAnalysis.data })
     } catch (error: unknown) {
         console.error('chatbot API error', { code: getSafeErrorCode(error) })
         return NextResponse.json(

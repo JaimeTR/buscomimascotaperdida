@@ -5,15 +5,16 @@ import { z } from "npm:zod@4.3.5"
 const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY")
 const HF_API_KEY = Deno.env.get("HUGGINGFACE_API_KEY")
 const ALLOWED_ORIGIN = Deno.env.get("ALLOWED_ORIGIN") || ""
+const optionalFilter = z.string().trim().max(100).transform((value) => value || null)
 const analysisSchema = z.object({
   isPetSearch: z.boolean(),
   response: z.string().trim().min(1).max(500),
   filters: z.object({
     type: z.enum(["dog", "cat", "rabbit"]).nullable().optional().default(null),
-    breed: z.string().trim().max(100).nullable().optional().default(null),
-    color: z.string().trim().max(100).nullable().optional().default(null),
+    breed: optionalFilter.nullable().optional().default(null),
+    color: optionalFilter.nullable().optional().default(null),
     size: z.enum(["small", "medium", "large"]).nullable().optional().default(null),
-    district: z.string().trim().max(100).nullable().optional().default(null),
+    district: optionalFilter.nullable().optional().default(null),
     gender: z.enum(["male", "female"]).nullable().optional().default(null),
   }).strict(),
 }).strict()
@@ -229,14 +230,18 @@ Deno.serve(async (req: Request) => {
       analysis = await analyzeWithGemini(message)
     }
 
-    const validatedAnalysis = analysisSchema.safeParse(
-      analysis ?? {
-        isPetSearch: false,
-        response:
-          "Perdón, tuve un problema procesando tu mensaje. ¿Puedes intentar de nuevo?",
-        filters: {},
-      }
-    )
+    if (!analysis) {
+      console.error("Chat providers failed to return an analysis")
+      return new Response(JSON.stringify({ error: "Unable to process chat response" }), {
+        status: 502,
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": corsOrigin,
+        },
+      })
+    }
+
+    const validatedAnalysis = analysisSchema.safeParse(analysis)
 
     if (!validatedAnalysis.success) {
       console.error("Chat providers returned an invalid analysis shape")
