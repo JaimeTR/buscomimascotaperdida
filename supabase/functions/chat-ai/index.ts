@@ -32,12 +32,19 @@ interface PetFilters {
 async function fetchProvider(
   input: string,
   init: RequestInit
-): Promise<Response> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> {
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), PROVIDER_TIMEOUT_MS)
 
   try {
-    return await fetch(input, { ...init, signal: controller.signal })
+    const response = await fetch(input, { ...init, signal: controller.signal })
+
+    if (!response.ok) {
+      throw new Error("Provider API error")
+    }
+
+    return await response.json()
   } finally {
     clearTimeout(timeout)
   }
@@ -48,7 +55,7 @@ async function analyzeWithGemini(message: string): Promise<any> {
   if (!GEMINI_API_KEY) return null
 
   try {
-    const response = await fetchProvider(
+    const data = await fetchProvider(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
       {
         method: "POST",
@@ -89,11 +96,6 @@ Si NO es búsqueda, isPetSearch=false y deja filters con valores null.`,
       }
     )
 
-    if (!response.ok) {
-      throw new Error("Gemini API error")
-    }
-
-    const data = await response.json()
     const text = data?.contents?.[0]?.parts?.[0]?.text || "{}"
 
     // Limpiar JSON si viene con markdown
@@ -112,7 +114,7 @@ async function analyzeWithHuggingFace(message: string): Promise<any> {
   if (!HF_API_KEY) return null
 
   try {
-    const response = await fetchProvider(
+    const data = await fetchProvider(
       "https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf",
       {
         method: "POST",
@@ -145,11 +147,6 @@ Responde en JSON:
       }
     )
 
-    if (!response.ok) {
-      throw new Error("HF API error")
-    }
-
-    const data = await response.json()
     const text = Array.isArray(data) ? data[0]?.generated_text : data?.generated_text
 
     if (!text) return null

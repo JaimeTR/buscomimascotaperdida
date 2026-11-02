@@ -50,11 +50,11 @@ const checks = [
       /status:\s*502/.test(edge),
   ],
   [
-    'edge function protects both provider requests with a cleaned-up timeout',
-    /const PROVIDER_TIMEOUT_MS = 15_000/.test(edge) &&
+    'edge function keeps response parsing inside the cleaned-up timeout',
+    /async function fetchProvider\([\s\S]*?const response = await fetch\([\s\S]*?return await response\.json\(\)[\s\S]*?finally\s*\{[\s\S]*?clearTimeout\(timeout\)/.test(edge) &&
+      /const PROVIDER_TIMEOUT_MS = 15_000/.test(edge) &&
       /const controller = new AbortController\(\)/.test(edge) &&
       /setTimeout\(\(\) => controller\.abort\(\), PROVIDER_TIMEOUT_MS\)/.test(edge) &&
-      /clearTimeout\(timeout\)/.test(edge) &&
       (edge.match(/fetchProvider\(/g) || []).length >= 3,
   ],
   [
