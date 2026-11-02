@@ -66,10 +66,12 @@ function PosterContent() {
 
     useEffect(() => {
         let cancelled = false
+        const abortController = new AbortController()
 
         if (!petId) {
             return () => {
                 cancelled = true
+                abortController.abort()
             }
         }
 
@@ -80,6 +82,7 @@ function PosterContent() {
                     .from('pets')
                     .select('*')
                     .eq('id', petId)
+                    .abortSignal(abortController.signal)
                     .single()
 
                 if (!cancelled && pet) {
@@ -110,6 +113,7 @@ function PosterContent() {
 
         return () => {
             cancelled = true
+            abortController.abort()
         }
     }, [petId, supabase])
 
@@ -336,6 +340,8 @@ function PosterContent() {
                                         alt={name}
                                         style={{ objectPosition: 'center 20%' }}
                                         fill
+                                        // Intentional exception: arbitrary uploaded/generated URLs cannot be safely
+                                        // allowlisted, and preserving the source bytes keeps print/export behavior intact.
                                         unoptimized
                                         sizes="(max-width: 1024px) 100vw, 800px"
                                     />
