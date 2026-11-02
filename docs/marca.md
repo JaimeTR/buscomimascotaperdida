@@ -2,7 +2,7 @@
 
 **Nombre:** Busco mi mascota · **Dominio:** buscomimascotaperdida.com
 **Eslogan:** Juntos, de vuelta a casa
-**Símbolo:** un perro de perfil, con oreja caída y nariz marcadas, y un gato sentado recortado en el espacio negativo de su pecho: sirve para perros y gatos. Una lupa pequeña dentro del pecho del gato aporta la idea de "buscar".
+**Símbolo:** un perro de perfil, con oreja caída y nariz marcadas, y un gato sentado recortado en el espacio negativo de su pecho: sirve para perros y gatos. Una lupa pequeña dentro del pecho del gato aporta la idea de "buscar": va de un solo color, verde sobre el gato blanco y blanca sobre el gato verde.
 **Nombre en el logo:** siempre en MAYÚSCULAS y en dos líneas: "BUSCO MI" (teal) y "MASCOTA" (naranja).
 
 ## Piezas (`public/brand/`, se regeneran con `node scripts/build-logos.mjs`)

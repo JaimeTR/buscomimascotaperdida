@@ -10,12 +10,16 @@ const T = "translate(-7.5 -14) scale(.6)" // centra el perro (lienzo 200) en 120
 const CAT_AT = "translate(94 200) scale(.8) translate(-30 -100)" // gato sentado en la base del pecho
 
 // Perro de un solo color con el gato recortado (hueco) en su pecho.
-export const symbol = ({ art, accent }) => {
+export const symbol = ({ art }) => {
   const id = uid()
   const m = mask(id, `${dogCuts()}<g transform="${CAT_AT}">${cat("#000")}</g>`)
-  // Lupa pequeña dentro del pecho del gato (en coordenadas del gato): aro del color del perro y mango de acento.
-  const lupa = `<g transform="${CAT_AT}"><circle cx="28" cy="65" r="8.6" fill="none" stroke="${art}" stroke-width="3.4"/>` +
-    `<line x1="34.2" y1="71.2" x2="41.5" y2="78.5" stroke="${accent}" stroke-width="4.4" stroke-linecap="round"/></g>`
+  // Lupa dentro del pecho del gato (coordenadas del gato). Un solo color = el del perro, que contrasta con el hueco:
+  // verde sobre el gato blanco, blanca sobre el gato verde. Aro, brillo del cristal, collarín y mango.
+  const lupa = `<g transform="${CAT_AT}" fill="none" stroke="${art}" stroke-linecap="round">` +
+    `<circle cx="26.5" cy="66" r="11" stroke-width="4.2"/>` +
+    `<path d="M19.6 64.4 A7.2 7.2 0 0 1 24.6 58.9" stroke-width="2.4"/>` +
+    `<line x1="35.2" y1="74.7" x2="38.8" y2="78.3" stroke-width="7.2"/>` +
+    `<line x1="39.6" y1="79.1" x2="47.2" y2="86.7" stroke-width="5.6"/></g>`
   return `<defs>${m}</defs><g transform="${T}"><g mask="url(#${id})">${dog(art)}</g>${lupa}</g>`
 }
 

@@ -11,4 +11,4 @@
   <path d="M60 124 C57 146 55 170 53 200 L140 200 C139 168 134 140 131 122 C130 114 126 108 120 106 L100 96 Z"/>
   <ellipse cx="179.5" cy="72" rx="6.2" ry="8" fill="#0c5c56"/>
   <path fill="#0c5c56" d="M90 40 C112 40 121 66 117 94 C115 112 99 120 89 110 C81 102 83 80 83 66 C83 52 85 44 90 40 Z"/>
-</g></g><g transform="translate(94 200) scale(.8) translate(-30 -100)"><circle cx="28" cy="65" r="8.6" fill="none" stroke="#0f766e" stroke-width="3.4"/><line x1="34.2" y1="71.2" x2="41.5" y2="78.5" stroke="#c2410c" stroke-width="4.4" stroke-linecap="round"/></g></g></svg>
+</g></g><g transform="translate(94 200) scale(.8) translate(-30 -100)" fill="none" stroke="#0f766e" stroke-linecap="round"><circle cx="26.5" cy="66" r="11" stroke-width="4.2"/><path d="M19.6 64.4 A7.2 7.2 0 0 1 24.6 58.9" stroke-width="2.4"/><line x1="35.2" y1="74.7" x2="38.8" y2="78.3" stroke-width="7.2"/><line x1="39.6" y1="79.1" x2="47.2" y2="86.7" stroke-width="5.6"/></g></g></svg>
