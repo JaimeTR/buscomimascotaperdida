@@ -20,7 +20,8 @@ as $$
     select exists (select 1 from public.admin_users where user_id = (select auth.uid()));
 $$;
 revoke all on function public.is_admin() from public;
-grant execute on function public.is_admin() to authenticated;
+-- anon too: the restrictive pets SELECT policy below evaluates it for every role (returns false for anon).
+grant execute on function public.is_admin() to anon, authenticated;
 
 -- A user may only see their own row; nobody can write from the client.
 drop policy if exists "admin_users_select_self" on public.admin_users;

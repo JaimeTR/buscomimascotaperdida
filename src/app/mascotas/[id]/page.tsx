@@ -20,41 +20,18 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
     const { id } = await params
     const supabase = await createClient()
 
-    // 1. Fetch Pet Details with joined Sightings and Profiles
-    const { data: pet, error } = await supabase
-        .from('pets')
-        .select(`
-            *,
-            profiles:owner_id (
-                full_name,
-                avatar_url,
-                whatsapp,
-                phone,
-                phone_public
-            ),
-            sightings (
-                *,
-                reporter:reporter_id (
-                    full_name,
-                    avatar_url,
-                    whatsapp,
-                    phone,
-                    email
-                )
-            )
-        `)
-        .eq('id', id)
-        .single()
-
-    if (error) {
-        console.error('Error fetching pet details:', error)
-        // If it's a "column does not exist" error, it's a migration issue
-    }
+    // 1. Reporte + contacto. El contacto (teléfono/WhatsApp/correo) solo sale si su dueño
+    // lo marcó público; lo decide la función SQL, nunca el navegador.
+    const { data: pet, error } = await supabase.from('pets').select('*').eq('id', id).single()
+    if (error) console.error('Error fetching pet details:', error.code)
 
     if (!pet) return notFound()
 
+    const { data: extras } = await supabase.rpc('pet_contact_info', { p_pet: id })
+    const owner: { full_name?: string; avatar_url?: string; phone?: string; whatsapp?: string; email?: string } = extras?.owner ?? {}
+
     // Sort sightings by date (most recent first)
-    const dbSightings: Sighting[] = (pet.sightings || []).sort(
+    const dbSightings: Sighting[] = (extras?.sightings ?? []).sort(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
@@ -70,11 +47,11 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
         description: `Punto inicial de extravío: ${pet.last_seen_address || pet.last_seen_district}`,
         created_at: pet.last_seen_date,
         reporter: {
-            full_name: pet.profiles?.full_name || "Dueño",
-            avatar_url: pet.profiles?.avatar_url,
-            whatsapp: pet.profiles?.whatsapp,
-            phone: pet.profiles?.phone,
-            phone_public: pet.profiles?.phone_public
+            full_name: owner.full_name || "Dueño",
+            avatar_url: owner.avatar_url ?? "",
+            whatsapp: owner.whatsapp,
+            phone: owner.phone,
+            phone_public: !!owner.phone
         }
     }
 
@@ -315,10 +292,10 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                     size="lg"
                                 />
                                 <OwnerContactModal
-                                    ownerName={pet.profiles?.full_name}
-                                    phone={pet.profiles?.phone}
-                                    whatsapp={pet.profiles?.whatsapp}
-                                    email={pet.profiles?.email}
+                                    ownerName={owner.full_name}
+                                    phone={owner.phone}
+                                    whatsapp={owner.whatsapp}
+                                    email={owner.email}
                                 />
                                 <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-stone-100 text-stone-600 hover:bg-stone-50" size="lg" asChild>
                                     <Link href={`/cartel?id=${pet.id}`}>
