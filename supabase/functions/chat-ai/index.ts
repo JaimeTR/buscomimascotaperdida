@@ -1,8 +1,9 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts"
 import { createClient } from "jsr:@supabase/supabase-js@2"
 
-const GEMINI_API_KEY = "AIzaSyB3IsU33a_VFRK8DSp65l6cDS1rcF7amjs"
-const HF_API_KEY = "hf_REDACTED"
+const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY")
+const HF_API_KEY = Deno.env.get("HUGGINGFACE_API_KEY")
+const ALLOWED_ORIGIN = Deno.env.get("ALLOWED_ORIGIN") || ""
 
 interface PetFilters {
   type?: string
@@ -15,6 +16,8 @@ interface PetFilters {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function analyzeWithGemini(message: string): Promise<any> {
+  if (!GEMINI_API_KEY) return null
+
   try {
     const response = await fetch(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" +
@@ -77,6 +80,8 @@ Si NO es búsqueda, isPetSearch=false y deja filters con valores null.`,
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function analyzeWithHuggingFace(message: string): Promise<any> {
+  if (!HF_API_KEY) return null
+
   try {
     const response = await fetch(
       "https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf",
@@ -162,27 +167,42 @@ async function searchPets(
 }
 
 Deno.serve(async (req: Request) => {
+  if (!ALLOWED_ORIGIN || (!GEMINI_API_KEY && !HF_API_KEY)) {
+    return new Response(JSON.stringify({ error: "Chat service is not configured" }), {
+      status: 503,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "null",
+      },
+    })
+  }
+
+  const requestOrigin = req.headers.get("origin") || ""
+  const corsOrigin =
+    ALLOWED_ORIGIN && requestOrigin === ALLOWED_ORIGIN ? ALLOWED_ORIGIN : ALLOWED_ORIGIN || "null"
+
   if (req.method === "OPTIONS") {
     return new Response(null, {
       headers: {
-        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Origin": corsOrigin,
         "Access-Control-Allow-Methods": "POST",
-        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
     })
   }
 
   try {
-    const { message } = await req.json()
+    const body = await req.json()
+    const message = typeof body?.message === "string" ? body.message.trim() : ""
 
-    if (!message) {
+    if (!message || message.length > 500) {
       return new Response(
-        JSON.stringify({ error: "Message is required" }),
+        JSON.stringify({ error: "Message is invalid" }),
         {
           status: 400,
           headers: {
             "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Origin": corsOrigin,
           },
         }
       )
@@ -229,19 +249,19 @@ Deno.serve(async (req: Request) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": corsOrigin,
         },
       }
     )
   } catch (error) {
     console.error("Error:", error)
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "Internal server error" }),
       {
         status: 500,
         headers: {
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": corsOrigin,
         },
       }
     )

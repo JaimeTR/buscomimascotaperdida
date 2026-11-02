@@ -44,12 +44,19 @@ NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=replace-me-with-supabase-anon-key
 RESEND_API_KEY=replace-me-with-resend-key
 HUGGINGFACE_API_KEY=replace-me-if-chatbot-is-enabled
+GEMINI_API_KEY=replace-me-if-chatbot-is-enabled
+ALLOWED_ORIGIN=https://tu-dominio-en-hostinger.com
 EMAIL_TEST_TOKEN=replace-me-local-test-token
 NEXT_PUBLIC_APP_URL=https://tu-dominio-en-hostinger.com
 NODE_ENV=production
 ```
 
 ⚠️ **IMPORTANTE**: Reemplaza todos los placeholders en el panel de Hostinger. Nunca subas estas claves al repositorio ni las pegues en esta guía.
+
+Las claves `GEMINI_API_KEY`, `HUGGINGFACE_API_KEY` y `ALLOWED_ORIGIN` de la
+Edge Function deben configurarse como secretos de Supabase. `SUPABASE_SERVICE_ROLE_KEY`
+solo se usa localmente para el importador administrativo y nunca debe configurarse
+como variable pública ni en el navegador.
 
 ### Paso 4: Desplegar
 
@@ -132,14 +139,31 @@ Si usas Resend:
 1. Verifica que tu API key esté en las variables de entorno
 2. Agrega tu dominio verificado en Resend
 
-### 4. Validar la PWA
+### 4. Rotar credenciales históricas antes de publicar
+
+La revocación y rotación de credenciales históricas requiere acceso externo y no
+puede ejecutarse desde este repositorio. Antes del despliegue:
+
+1. Revoca las claves Gemini y Hugging Face que hayan aparecido en commits,
+   documentos, logs o copias de seguridad antiguas.
+2. Crea nuevas claves con el menor alcance posible y configúralas únicamente en
+   los secretos de Supabase.
+3. Rota cualquier `SUPABASE_SERVICE_ROLE_KEY`, Resend API key o secreto de
+   pruebas que haya estado expuesto; revisa también proveedores y paneles
+   externos que acepten esas credenciales.
+4. Configura los nuevos valores en Hostinger/Supabase y reinicia o redespliega
+   la aplicación para que no conserve procesos con el entorno anterior.
+5. Comprueba los logs de auditoría y elimina copias o variables antiguas. No
+   registres valores de secretos en Git, tickets, capturas ni mensajes.
+
+### 5. Validar la PWA
 
 La PWA solo almacena recursos públicos y la pantalla offline; no almacena sesiones,
 formularios, reportes, mensajes ni respuestas de API. Verifica en un navegador móvil
 que `/`, `/offline` y los iconos carguen sin conexión y que las rutas privadas no se
 sirvan desde caché.
 
-### 5. Revisar dependencias
+### 6. Revisar dependencias
 
 Antes de publicar, ejecuta `npm ci`, `npm run lint`, `npx tsc --noEmit`,
 `npm run build` y `npm audit --omit=dev`. La auditoría actual no reporta
