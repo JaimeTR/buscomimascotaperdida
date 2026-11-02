@@ -38,7 +38,7 @@ export function Navbar() {
         <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
             <div className="container mx-auto flex h-16 items-center justify-between px-4">
                 <Link href="/" className="flex items-center gap-3" aria-label="Busco mi mascota, inicio">
-                    <Image src="/logo_symbol.png" alt="" width={72} height={40} className="h-9 w-auto" priority />
+                    <Image src="/logo_symbol.svg" alt="" width={36} height={36} className="h-9 w-9" priority unoptimized />
                     <span className="hidden whitespace-nowrap text-lg font-extrabold tracking-tight text-foreground lg:block">
                         Busco mi mascota
                     </span>

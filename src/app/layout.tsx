@@ -26,6 +26,13 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
     title: "Busco Mascota",
   },
+  openGraph: {
+    title: "Busco mi mascota",
+    description: "Red comunitaria para que las mascotas perdidas vuelvan a casa.",
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
+    locale: "es_PE",
+    type: "website",
+  },
   formatDetection: {
     telephone: false,
   },

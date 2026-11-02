@@ -13,8 +13,6 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    "convert-icons.js",
-    "generate-icons.js",
   ]),
   {
     // Las imágenes vienen de Supabase Storage, URLs externas y previews blob: del navegador;

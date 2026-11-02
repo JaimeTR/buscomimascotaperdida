@@ -116,7 +116,7 @@ function UpdatePasswordContent() {
             <div className="mb-8 text-center flex flex-col items-center">
                 <Link href="/" className="group mb-6">
                     <img
-                        src="/logo_symbol.png"
+                        src="/logo_symbol.svg"
                         alt="Logo"
                         className="h-24 w-auto object-contain transition-transform group-hover:scale-105"
                     />

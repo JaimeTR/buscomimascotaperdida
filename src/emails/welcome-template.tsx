@@ -20,7 +20,7 @@ interface WelcomeEmailProps {
 
 export const WelcomeEmail = ({ firstName = "Usuario" }: WelcomeEmailProps) => {
     const previewText = `¡Bienvenido a BuscoMiMascotaPerdida!`;
-    const logoUrl = "https://img.freepik.com/vector-gratis/lindo-perro-sacando-lengua-ilustracion-icono-dibujos-animados_138676-2709.jpg";
+    const logoUrl = "https://buscomimascotaperdida.com/icons/icon-192x192.png";
 
     return (
         <Html>

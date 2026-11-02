@@ -45,7 +45,7 @@ export const PetAlertEmail = ({
                     {/* Logo */}
                     <Section style={logoSection}>
                         <Img
-                            src="https://img.freepik.com/vector-gratis/lindo-perro-sacando-lengua-ilustracion-icono-dibujos-animados_138676-2709.jpg"
+                            src="https://buscomimascotaperdida.com/icons/icon-192x192.png"
                             width="60"
                             height="60"
                             alt="BuscoMiMascotaPerdida"

@@ -27,7 +27,7 @@ export function Footer() {
             <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-[2fr_1fr_1fr]">
                 <div className="space-y-4">
                     <div className="flex items-center gap-3">
-                        <Image src="/logo_symbol.png" alt="" width={72} height={40} className="h-8 w-auto" />
+                        <Image src="/logo_symbol.svg" alt="" width={32} height={32} className="h-8 w-8" unoptimized />
                         <span className="text-lg font-extrabold tracking-tight">Busco mi mascota</span>
                     </div>
                     <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
