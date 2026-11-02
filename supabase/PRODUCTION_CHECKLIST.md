@@ -32,13 +32,16 @@ npm audit --omit=dev
 git diff --check
 ```
 
-The current production audit leaves a low-severity transitive
-`deepmerge@4.3.1` advisory reachable through
+Currently `npm audit --omit=dev` exits `1` and reports four low-severity
+vulnerability instances of the same reachable transitive
+`deepmerge@4.3.1` advisory; no other production audit findings remain. The
+dependency is reachable through
 `@react-email/components` → `@react-email/render@2.0.6` →
-`html-to-text@9.0.5`. It is used by the email-template rendering path. npm
-reports no fix available; forced remediation is not approved. Track the
-upstream dependency and re-run the audit after upgrades rather than using
-`npm audit fix --force`.
+`html-to-text@9.0.5` and is used by the email-template rendering path. npm
+reports no fix available, so this non-zero result is an accepted documented
+release caveat pending an upstream fix. Forced remediation remains prohibited;
+track the upstream dependency and re-run the audit after upgrades rather than
+using `npm audit fix --force`.
 
 ## Manual checks in Supabase Dashboard
 

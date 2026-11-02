@@ -197,14 +197,17 @@ git diff --check
 ```
 
 La auditoría de producción debe revisarse por alcance, no solo por su código
-de salida. Actualmente queda un aviso transitorio de baja severidad:
-`@react-email/components` usa `@react-email/render`, que usa
+de salida. Actualmente `npm audit --omit=dev` sale con código `1` y reporta
+cuatro instancias de vulnerabilidad de baja severidad correspondientes al mismo
+aviso alcanzable de `deepmerge`; no quedan otros hallazgos de auditoría de
+producción. `@react-email/components` usa `@react-email/render`, que usa
 `html-to-text@9.0.5`, que alcanza `deepmerge@4.3.1`. El aviso afecta la ruta
-de renderizado de plantillas de correo cuando se envían notificaciones; no
-hay una corrección publicada para esa cadena y `npm audit fix --force` no está
-aprobado porque podría introducir cambios mayores. Registra el aviso y
-revalídalo cuando los mantenedores publiquen una actualización; no fuerces
-una resolución en producción.
+de renderizado de plantillas de correo cuando se envían notificaciones. No
+hay una corrección publicada para esa cadena: este resultado no cero es una
+salvedad de release aceptada y documentada, pendiente de una corrección
+upstream. `npm audit fix --force` permanece prohibido porque podría introducir
+cambios mayores; registra el aviso y revalídalo cuando los mantenedores
+publiquen una actualización, sin forzar una resolución en producción.
 
 ---
 
