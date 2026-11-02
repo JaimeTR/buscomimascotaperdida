@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, useEffect, useMemo, Suspense } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useSearchParams } from "next/navigation"
 import {
     ArrowLeft,
@@ -37,7 +38,7 @@ import { createClient } from "@/utils/supabase/client"
 function PosterContent() {
     const searchParams = useSearchParams()
     const petId = searchParams.get("id")
-    const supabase = createClient()
+    const supabase = useMemo(() => createClient(), [])
 
     const [isLoading, setIsLoading] = useState(true)
     const [zoom, setZoom] = useState(100)
@@ -64,51 +65,59 @@ function PosterContent() {
     const [image, setImage] = useState("https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=800&auto=format&fit=crop")
 
     useEffect(() => {
+        let cancelled = false
+
         if (!petId) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setIsLoading(false)
-            return
+            return () => {
+                cancelled = true
+            }
         }
 
         const fetchPet = async () => {
             setIsLoading(true)
-            const { data: pet, error } = await supabase
-                .from('pets')
-                .select('*')
-                .eq('id', petId)
-                .single()
+            try {
+                const { data: pet } = await supabase
+                    .from('pets')
+                    .select('*')
+                    .eq('id', petId)
+                    .single()
 
-            if (pet) {
-                setName(pet.name || "Mascota")
-                setLocation(pet.last_seen_district + ", " + pet.last_seen_department)
-                setStreet(pet.last_seen_detail || "")
-                setPhone(pet.contact_phone || "")
-                if (pet.image_urls && pet.image_urls.length > 0) {
-                    setImage(pet.image_urls[0])
+                if (!cancelled && pet) {
+                    setName(pet.name || "Mascota")
+                    setLocation(pet.last_seen_district + ", " + pet.last_seen_department)
+                    setStreet(pet.last_seen_detail || "")
+                    setPhone(pet.contact_phone || "")
+                    if (pet.image_urls && pet.image_urls.length > 0) {
+                        setImage(pet.image_urls[0])
+                    }
+
+                    // Set headline based on status
+                    if (pet.status === 'lost') setHeadline("SE BUSCA")
+                    if (pet.status === 'found') setHeadline("ENCONTRADO")
+
+                    // Pre-fill reward if available in description or custom field (mock logic for now)
+                    if (pet.reward_amount) {
+                        setShowReward(true)
+                        setRewardAmount(pet.reward_amount)
+                    }
                 }
-
-                // Set headline based on status
-                if (pet.status === 'lost') setHeadline("SE BUSCA")
-                if (pet.status === 'found') setHeadline("ENCONTRADO")
-
-                // Pre-fill reward if available in description or custom field (mock logic for now)
-                if (pet.reward_amount) {
-                    setShowReward(true)
-                    setRewardAmount(pet.reward_amount)
-                }
+            } finally {
+                if (!cancelled) setIsLoading(false)
             }
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setIsLoading(false)
         }
 
-        fetchPet()
-    }, [petId])
+        void fetchPet()
+
+        return () => {
+            cancelled = true
+        }
+    }, [petId, supabase])
 
     const handlePrint = () => {
         window.print()
     }
 
-    if (isLoading) {
+    if (isLoading && petId) {
         return (
             <div className="flex h-screen items-center justify-center bg-slate-100">
                 <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
@@ -321,11 +330,14 @@ function PosterContent() {
 
                                 {/* Photo Container */}
                                 <div className="w-full flex-1 relative rounded-3xl overflow-hidden border-4 border-slate-100 shadow-xl mb-4 max-h-[500px]">
-                                    <img
+                                    <Image
                                         src={image}
                                         className="w-full h-full object-cover"
                                         alt={name}
                                         style={{ objectPosition: 'center 20%' }}
+                                        fill
+                                        unoptimized
+                                        sizes="(max-width: 1024px) 100vw, 800px"
                                     />
                                     {/* Location Badge Overlay */}
                                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-12">
