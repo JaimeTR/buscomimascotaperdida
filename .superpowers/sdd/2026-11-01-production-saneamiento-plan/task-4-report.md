@@ -1,7 +1,7 @@
 # Task 4 — Production release gate report
 
-Date: 2026-11-01  
-Worktree: `.worktrees/production-readiness`  
+Date: 2026-11-01
+Worktree: `.worktrees/production-readiness`
 Base commit: `751155b chore: resolve production quality warnings`
 
 ## Scope

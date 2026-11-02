@@ -5,6 +5,7 @@ import { z } from "npm:zod@4.3.5"
 const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY")
 const HF_API_KEY = Deno.env.get("HUGGINGFACE_API_KEY")
 const ALLOWED_ORIGIN = Deno.env.get("ALLOWED_ORIGIN") || ""
+const PROVIDER_TIMEOUT_MS = 15_000
 const optionalFilter = z.string().trim().max(100).transform((value) => value || null)
 const analysisSchema = z.object({
   isPetSearch: z.boolean(),
@@ -28,12 +29,26 @@ interface PetFilters {
   gender?: string
 }
 
+async function fetchProvider(
+  input: string,
+  init: RequestInit
+): Promise<Response> {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => controller.abort(), PROVIDER_TIMEOUT_MS)
+
+  try {
+    return await fetch(input, { ...init, signal: controller.signal })
+  } finally {
+    clearTimeout(timeout)
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function analyzeWithGemini(message: string): Promise<any> {
   if (!GEMINI_API_KEY) return null
 
   try {
-    const response = await fetch(
+    const response = await fetchProvider(
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
       {
         method: "POST",
@@ -97,7 +112,7 @@ async function analyzeWithHuggingFace(message: string): Promise<any> {
   if (!HF_API_KEY) return null
 
   try {
-    const response = await fetch(
+    const response = await fetchProvider(
       "https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf",
       {
         method: "POST",

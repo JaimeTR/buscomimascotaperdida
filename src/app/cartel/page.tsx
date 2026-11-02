@@ -41,6 +41,7 @@ function PosterContent() {
     const supabase = useMemo(() => createClient(), [])
 
     const [isLoading, setIsLoading] = useState(true)
+    const [loadError, setLoadError] = useState<string | null>(null)
     const [zoom, setZoom] = useState(100)
 
     // Poster State
@@ -77,13 +78,16 @@ function PosterContent() {
 
         const fetchPet = async () => {
             setIsLoading(true)
+            setLoadError(null)
             try {
-                const { data: pet } = await supabase
+                const { data: pet, error } = await supabase
                     .from('pets')
                     .select('*')
                     .eq('id', petId)
                     .abortSignal(abortController.signal)
                     .single()
+
+                if (error) throw error
 
                 if (!cancelled && pet) {
                     setName(pet.name || "Mascota")
@@ -104,6 +108,11 @@ function PosterContent() {
                         setRewardAmount(pet.reward_amount)
                     }
                 }
+            } catch (error) {
+                if (cancelled || abortController.signal.aborted) return
+
+                console.error("Error loading pet for poster:", error)
+                setLoadError("No pudimos cargar los datos de la mascota. Puedes completar el cartel manualmente.")
             } finally {
                 if (!cancelled) setIsLoading(false)
             }
@@ -145,6 +154,11 @@ function PosterContent() {
                         <p className="text-slate-500 text-sm">Personaliza e imprime tu cartel.</p>
                     </div>
                 </div>
+                {loadError && (
+                    <div className="mx-6 mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900" role="alert">
+                        {loadError}
+                    </div>
+                )}
 
                 {/* Scrollable Form Area */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-8">

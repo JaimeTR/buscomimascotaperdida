@@ -50,6 +50,14 @@ const checks = [
       /status:\s*502/.test(edge),
   ],
   [
+    'edge function protects both provider requests with a cleaned-up timeout',
+    /const PROVIDER_TIMEOUT_MS = 15_000/.test(edge) &&
+      /const controller = new AbortController\(\)/.test(edge) &&
+      /setTimeout\(\(\) => controller\.abort\(\), PROVIDER_TIMEOUT_MS\)/.test(edge) &&
+      /clearTimeout\(timeout\)/.test(edge) &&
+      (edge.match(/fetchProvider\(/g) || []).length >= 3,
+  ],
+  [
     'optional filters normalize empty strings to null',
     /const optionalFilter = z\.string\(\)\.trim\(\)\.max\(100\)\.transform\(\(value\) => value \|\| null\)/.test(route) &&
       /const optionalFilter = z\.string\(\)\.trim\(\)\.max\(100\)\.transform\(\(value\) => value \|\| null\)/.test(edge),
