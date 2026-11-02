@@ -111,7 +111,7 @@ function UpdatePasswordContent() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-stone-50 flex flex-col items-center justify-center p-4">
 
             <div className="mb-8 text-center flex flex-col items-center">
                 <Link href="/" className="group mb-6">
@@ -122,32 +122,32 @@ function UpdatePasswordContent() {
                     />
                 </Link>
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-black text-slate-900 tracking-tighter">Actualizar Contraseña</h1>
-                    <p className="text-blue-500 font-bold text-[10px] uppercase tracking-[0.2em] px-4 opacity-80">
+                    <h1 className="text-3xl font-black text-stone-900 tracking-tighter">Actualizar Contraseña</h1>
+                    <p className="text-teal-700 font-bold text-[10px] uppercase tracking-[0.2em] px-4 opacity-80">
                         Crea una nueva clave segura para tu cuenta
                     </p>
                 </div>
             </div>
 
-            <div className="bg-white w-full max-w-md rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+            <div className="bg-white w-full max-w-md rounded-3xl shadow-xl border border-stone-100 overflow-hidden">
                 <div className="p-8">
                     <form onSubmit={handleUpdatePassword} className="space-y-6">
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase">Nueva Contraseña</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase">Nueva Contraseña</label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400" />
                                     <Input
                                         type={showPassword ? "text" : "password"}
                                         placeholder="••••••••"
-                                        className="pl-10 pr-12 h-12 bg-slate-50 border-slate-200"
+                                        className="pl-10 pr-12 h-12 bg-stone-50 border-stone-200"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dynamic-transition"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dynamic-transition"
                                     >
                                         {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                     </button>
@@ -155,13 +155,13 @@ function UpdatePasswordContent() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase">Confirmar Contraseña</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase">Confirmar Contraseña</label>
                                 <div className="relative">
-                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+                                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400" />
                                     <Input
                                         type={showPassword ? "text" : "password"}
                                         placeholder="••••••••"
-                                        className="pl-10 h-12 bg-slate-50 border-slate-200"
+                                        className="pl-10 h-12 bg-stone-50 border-stone-200"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                     />
@@ -171,7 +171,7 @@ function UpdatePasswordContent() {
 
                         <Button
                             type="submit"
-                            className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-lg font-bold shadow-lg shadow-blue-500/20"
+                            className="w-full h-12 bg-teal-800 hover:bg-teal-800 text-lg font-bold shadow-lg shadow-teal-700/20"
                             disabled={isLoading}
                         >
                             {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <>Guardar Nueva Clave <ArrowRight className="ml-2 h-5 w-5" /></>}
@@ -185,7 +185,7 @@ function UpdatePasswordContent() {
 
 export default function UpdatePasswordPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-slate-50 flex items-center justify-center text-slate-400">Cargando...</div>}>
+        <Suspense fallback={<div className="min-h-screen bg-stone-50 flex items-center justify-center text-stone-400">Cargando...</div>}>
             <UpdatePasswordContent />
         </Suspense>
     )

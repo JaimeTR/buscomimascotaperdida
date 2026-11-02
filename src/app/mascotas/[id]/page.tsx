@@ -127,7 +127,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
     const firstImage = gallery[0] || "https://via.placeholder.com/800x600?text=Sin+Foto"
 
     return (
-        <div className="min-h-screen bg-slate-50/50 pb-20">
+        <div className="min-h-screen bg-stone-50/50 pb-20">
             <div className="container px-4 py-8 md:py-12 max-w-7xl mx-auto space-y-10">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
 
@@ -143,23 +143,23 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
 
                         {/* Recent Sightings Section */}
-                        <div className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-slate-100 space-y-8">
+                        <div className="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-stone-100 space-y-8">
                             <div className="flex items-center justify-between">
-                                <h2 className="text-2xl font-black text-slate-900">Historial de avistamientos</h2>
+                                <h2 className="text-2xl font-black text-stone-900">Historial de avistamientos</h2>
                                 <ReportActionButton
                                     nextUrl={`/mascotas/${pet.id}/avistamiento`}
                                     label="Reportar lugar de avistamiento"
                                     icon={<Send className="w-4 h-4 mr-2" />}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl px-6"
+                                    className="bg-teal-800 hover:bg-teal-800 text-white font-bold rounded-xl px-6"
                                 />
                             </div>
 
                             {sightings.length > 0 ? (
-                                <div className="space-y-8 relative before:absolute before:left-7 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-100">
+                                <div className="space-y-8 relative before:absolute before:left-7 before:top-2 before:bottom-2 before:w-0.5 before:bg-stone-100">
                                     {sightings.map((sighting) => (
                                         <div key={sighting.id} className="relative pl-16 group">
                                             {/* Avatar reporter */}
-                                            <div className="absolute left-0 top-0 h-14 w-14 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100 z-10 group-hover:scale-105 transition-transform">
+                                            <div className="absolute left-0 top-0 h-14 w-14 rounded-full border-4 border-white shadow-lg overflow-hidden bg-stone-100 z-10 group-hover:scale-105 transition-transform">
                                                 <img
                                                     src={sighting.reporter?.avatar_url || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + sighting.reporter_id}
                                                     alt={sighting.reporter?.full_name}
@@ -167,14 +167,14 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                                 />
                                             </div>
 
-                                            <div className="bg-slate-50 p-6 rounded-[2rem] space-y-3 group-hover:bg-white group-hover:shadow-md transition-all border border-transparent group-hover:border-slate-100">
+                                            <div className="bg-stone-50 p-6 rounded-[2rem] space-y-3 group-hover:bg-white group-hover:shadow-md transition-all border border-transparent group-hover:border-stone-100">
                                                 <div className="flex items-center justify-between">
                                                     <div>
-                                                        <div className="font-black text-slate-900 flex items-center gap-2">
+                                                        <div className="font-black text-stone-900 flex items-center gap-2">
                                                             {sighting.reporter?.full_name || "Usuario Anónimo"}
                                                             {sighting.id === 'initial' && <Badge variant="secondary" className="bg-red-50 text-red-600 border-0 text-[10px] uppercase font-black tracking-tighter">Punto Inicial</Badge>}
                                                         </div>
-                                                        <div className="text-xs font-bold text-blue-500 uppercase tracking-widest">
+                                                        <div className="text-xs font-bold text-teal-700 uppercase tracking-widest">
                                                             {sighting.id === 'initial' ? "Última vez visto" : `Visto en ${sighting.district}`} • {formatDistanceToNow(new Date(sighting.created_at), { addSuffix: true, locale: es })}
                                                         </div>
                                                     </div>
@@ -197,7 +197,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                                             <Button
                                                                 size="icon"
                                                                 variant="outline"
-                                                                className="h-9 w-9 rounded-xl text-blue-500 border-blue-100 hover:bg-blue-50"
+                                                                className="h-9 w-9 rounded-xl text-teal-700 border-teal-100 hover:bg-teal-50"
                                                                 asChild
                                                             >
                                                                 <a href={`tel:${sighting.reporter.phone}`}>
@@ -209,7 +209,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                                             <Button
                                                                 size="icon"
                                                                 variant="outline"
-                                                                className="h-9 w-9 rounded-xl text-slate-500 border-slate-100 hover:bg-slate-50"
+                                                                className="h-9 w-9 rounded-xl text-stone-500 border-stone-100 hover:bg-stone-50"
                                                                 asChild
                                                             >
                                                                 <a href={`mailto:${sighting.reporter.email}?subject=Avistamiento de ${pet.name}`}>
@@ -219,7 +219,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                                         )}
                                                     </div>
                                                 </div>
-                                                <p className="text-slate-600 leading-relaxed font-medium">
+                                                <p className="text-stone-600 leading-relaxed font-medium">
                                                     &quot;{sighting.description}&quot;
                                                 </p>
 
@@ -235,7 +235,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                                             <img
                                                                 src={sighting.image_url}
                                                                 alt="Foto del avistamiento"
-                                                                className="h-32 w-auto rounded-xl object-cover border-2 border-slate-100 hover:scale-110 hover:shadow-lg transition-all duration-300 cursor-pointer"
+                                                                className="h-32 w-auto rounded-xl object-cover border-2 border-stone-100 hover:scale-110 hover:shadow-lg transition-all duration-300 cursor-pointer"
                                                             />
                                                         </a>
                                                     </div>
@@ -244,13 +244,13 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                     ))}
                                 </div>
                             ) : (
-                                <div className="flex flex-col items-center justify-center py-10 text-center space-y-4 bg-slate-50/50 rounded-[2.5rem] border border-dashed border-slate-200">
+                                <div className="flex flex-col items-center justify-center py-10 text-center space-y-4 bg-stone-50/50 rounded-[2.5rem] border border-dashed border-stone-200">
                                     <div className="h-16 w-16 bg-white rounded-full shadow-sm flex items-center justify-center">
-                                        <Clock className="h-8 w-8 text-slate-300" />
+                                        <Clock className="h-8 w-8 text-stone-300" />
                                     </div>
                                     <div className="max-w-xs">
-                                        <p className="font-bold text-slate-800">No hay avistamientos aún</p>
-                                        <p className="text-sm text-slate-500">Ayuda a {pet.name} a volver a casa reportando si lo has visto.</p>
+                                        <p className="font-bold text-stone-800">No hay avistamientos aún</p>
+                                        <p className="text-sm text-stone-500">Ayuda a {pet.name} a volver a casa reportando si lo has visto.</p>
                                     </div>
                                 </div>
                             )}
@@ -259,56 +259,56 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                     {/* Sidebar: Sticky Info Card */}
                     <div className="lg:col-span-5">
-                        <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-100 overflow-hidden p-8 md:p-10 space-y-8 sticky top-6">
+                        <div className="bg-white rounded-[2.5rem] shadow-2xl border border-stone-100 overflow-hidden p-8 md:p-10 space-y-8 sticky top-6">
                             {/* Breadcrumb */}
-                            <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-                                <Link href="/" className="hover:text-slate-700 transition-colors">Inicio</Link>
+                            <div className="flex items-center gap-2 text-xs text-stone-500 font-medium">
+                                <Link href="/" className="hover:text-stone-700 transition-colors">Inicio</Link>
                                 <ChevronRight className="h-3 w-3 opacity-50" />
-                                <Link href="/mascotas" className="hover:text-slate-700 transition-colors">Mascotas</Link>
+                                <Link href="/mascotas" className="hover:text-stone-700 transition-colors">Mascotas</Link>
                                 <ChevronRight className="h-3 w-3 opacity-50" />
                                 <span>{pet.name}</span>
                             </div>
 
                             <div className="space-y-2">
-                                <h1 className="text-5xl font-black text-slate-900 tracking-tighter">{pet.name}</h1>
-                                <div className="flex items-center text-slate-500 gap-2 font-semibold">
+                                <h1 className="text-5xl font-black text-stone-900 tracking-tighter">{pet.name}</h1>
+                                <div className="flex items-center text-stone-500 gap-2 font-semibold">
                                     <MapPin className="h-5 w-5 text-red-400" />
                                     <span>{pet.last_seen_district}, {pet.last_seen_province}</span>
                                 </div>
                             </div>
 
                             {/* Description */}
-                            <div className="space-y-2 pb-6 border-b border-slate-100">
-                                <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Descripción</span>
-                                <p className="text-slate-600 leading-relaxed whitespace-pre-wrap">
+                            <div className="space-y-2 pb-6 border-b border-stone-100">
+                                <span className="text-xs font-black text-stone-400 uppercase tracking-widest">Descripción</span>
+                                <p className="text-stone-600 leading-relaxed whitespace-pre-wrap">
                                     {pet.description || "Sin descripción proporcionada."}
                                 </p>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
-                                <div className="p-5 bg-slate-50 rounded-3xl space-y-1">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Raza</span>
-                                    <div className="font-bold text-slate-900 truncate">{pet.breed}</div>
+                                <div className="p-5 bg-stone-50 rounded-3xl space-y-1">
+                                    <span className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Raza</span>
+                                    <div className="font-bold text-stone-900 truncate">{pet.breed}</div>
                                 </div>
-                                <div className="p-5 bg-slate-50 rounded-3xl space-y-1">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Género</span>
-                                    <div className="font-bold text-slate-900">{pet.gender || 'No espec.'}</div>
+                                <div className="p-5 bg-stone-50 rounded-3xl space-y-1">
+                                    <span className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Género</span>
+                                    <div className="font-bold text-stone-900">{pet.gender || 'No espec.'}</div>
                                 </div>
-                                <div className="p-5 bg-slate-50 rounded-3xl space-y-1">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tamaño</span>
-                                    <div className="font-bold text-slate-900">{pet.size || 'No espec.'}</div>
+                                <div className="p-5 bg-stone-50 rounded-3xl space-y-1">
+                                    <span className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Tamaño</span>
+                                    <div className="font-bold text-stone-900">{pet.size || 'No espec.'}</div>
                                 </div>
-                                <div className="p-5 bg-slate-50 rounded-3xl space-y-1">
-                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Color</span>
-                                    <div className="font-bold text-slate-900 truncate">{pet.colors?.join(', ') || 'No espec.'}</div>
+                                <div className="p-5 bg-stone-50 rounded-3xl space-y-1">
+                                    <span className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Color</span>
+                                    <div className="font-bold text-stone-900 truncate">{pet.colors?.join(', ') || 'No espec.'}</div>
                                 </div>
                             </div>
 
                             {/* Map Info Box */}
                             <div className="space-y-4">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-bold text-slate-800">Mapa de avistamientos</span>
-                                    <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-0 font-bold">
+                                    <span className="text-sm font-bold text-stone-800">Mapa de avistamientos</span>
+                                    <Badge variant="secondary" className="bg-teal-50 text-teal-800 border-0 font-bold">
                                         Última señal: {lastSightingDateStr}
                                     </Badge>
                                 </div>
@@ -335,7 +335,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                     nextUrl={`/mascotas/${pet.id}/avistamiento`}
                                     label="Reportar avistamiento"
                                     icon={<MapPin className="mr-3 h-6 w-6" />}
-                                    className="w-full h-16 text-xl font-black rounded-2xl shadow-2xl shadow-blue-500/30 bg-blue-600 hover:bg-blue-700 text-white border-0"
+                                    className="w-full h-16 text-xl font-black rounded-2xl shadow-2xl shadow-teal-700/30 bg-teal-800 hover:bg-teal-800 text-white border-0"
                                     size="lg"
                                 />
                                 <OwnerContactModal
@@ -344,7 +344,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                     whatsapp={pet.profiles?.whatsapp}
                                     email={pet.profiles?.email}
                                 />
-                                <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-slate-100 text-slate-600 hover:bg-slate-50" size="lg" asChild>
+                                <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-stone-100 text-stone-600 hover:bg-stone-50" size="lg" asChild>
                                     <Link href={`/cartel?id=${pet.id}`}>
                                         <Download className="mr-3 h-5 w-5" /> Generar Cartel PDF
                                     </Link>
@@ -356,12 +356,12 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                 {/* Similar Pets Section */}
                 {similarPets && similarPets.length > 0 && (
-                    <div className="space-y-8 pt-12 border-t border-slate-100">
+                    <div className="space-y-8 pt-12 border-t border-stone-100">
                         <div className="flex items-center gap-3">
                             <div className="p-3 bg-red-50 rounded-2xl text-red-500 shadow-sm">
                                 <Flag className="h-6 w-6" />
                             </div>
-                            <h2 className="text-3xl font-black text-slate-900 tracking-tight">Otras alertas en {pet.last_seen_district}</h2>
+                            <h2 className="text-3xl font-black text-stone-900 tracking-tight">Otras alertas en {pet.last_seen_district}</h2>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">

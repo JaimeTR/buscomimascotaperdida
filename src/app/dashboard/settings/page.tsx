@@ -173,7 +173,7 @@ export default function SettingsPage() {
     if (isLoading) {
         return (
             <div className="flex h-[60vh] items-center justify-center">
-                <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+                <Loader2 className="h-8 w-8 animate-spin text-teal-800" />
             </div>
         )
     }
@@ -182,12 +182,12 @@ export default function SettingsPage() {
         <div className="container mx-auto py-10 px-4 max-w-4xl space-y-8">
 
             <div>
-                <h1 className="text-3xl font-bold text-slate-900">Configuración</h1>
-                <p className="text-slate-500">Gestiona tu perfil y preferencias de la cuenta.</p>
+                <h1 className="text-3xl font-bold text-stone-900">Configuración</h1>
+                <p className="text-stone-500">Gestiona tu perfil y preferencias de la cuenta.</p>
             </div>
 
             <Tabs defaultValue="profile" className="w-full">
-                <TabsList className="grid w-full grid-cols-3 lg:w-[400px] mb-8 bg-slate-100 p-1 rounded-xl">
+                <TabsList className="grid w-full grid-cols-3 lg:w-[400px] mb-8 bg-stone-100 p-1 rounded-xl">
                     <TabsTrigger value="profile" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">Perfil</TabsTrigger>
                     <TabsTrigger value="notifications" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">Notificaciones</TabsTrigger>
                     <TabsTrigger value="security" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm">Seguridad</TabsTrigger>
@@ -195,7 +195,7 @@ export default function SettingsPage() {
 
                 {/* Profile Tab */}
                 <TabsContent value="profile" className="space-y-6">
-                    <Card className="border-slate-100 shadow-sm">
+                    <Card className="border-stone-100 shadow-sm">
                         <CardHeader>
                             <CardTitle>Información Personal</CardTitle>
                             <CardDescription>Actualiza tu foto y datos de contacto.</CardDescription>
@@ -227,8 +227,8 @@ export default function SettingsPage() {
                                     </div>
                                 </div>
                                 <div className="space-y-1">
-                                    <h3 className="font-medium text-slate-900">Foto de Perfil</h3>
-                                    <p className="text-xs text-slate-500">JPG, GIF o PNG. Max 1MB.</p>
+                                    <h3 className="font-medium text-stone-900">Foto de Perfil</h3>
+                                    <p className="text-xs text-stone-500">JPG, GIF o PNG. Max 1MB.</p>
                                     <Button
                                         variant="outline"
                                         size="sm"
@@ -251,7 +251,7 @@ export default function SettingsPage() {
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Email</Label>
-                                    <Input value={profile?.email || ""} disabled className="bg-slate-50 opacity-60" />
+                                    <Input value={profile?.email || ""} disabled className="bg-stone-50 opacity-60" />
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Teléfono / Celular</Label>
@@ -300,33 +300,33 @@ export default function SettingsPage() {
                                 </div>
                             </div>
 
-                            <div className="pt-6 border-t border-slate-50 space-y-4">
-                                <h3 className="font-bold text-slate-900">Privacidad y Contacto</h3>
+                            <div className="pt-6 border-t border-stone-50 space-y-4">
+                                <h3 className="font-bold text-stone-900">Privacidad y Contacto</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                                    <div className="flex items-center justify-between p-4 bg-stone-50 rounded-2xl">
                                         <div className="space-y-0.5">
                                             <Label className="text-sm font-bold">Mostrar mi teléfono</Label>
-                                            <p className="text-xs text-slate-500">Permite que otros te llamen.</p>
+                                            <p className="text-xs text-stone-500">Permite que otros te llamen.</p>
                                         </div>
                                         <Switch
                                             checked={profile?.phone_public}
                                             onCheckedChange={(v) => setProfile({ ...profile, phone_public: v })}
                                         />
                                     </div>
-                                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                                    <div className="flex items-center justify-between p-4 bg-stone-50 rounded-2xl">
                                         <div className="space-y-0.5">
                                             <Label className="text-sm font-bold">Mostrar mi email</Label>
-                                            <p className="text-xs text-slate-500">Visible en tus reportes públicos.</p>
+                                            <p className="text-xs text-stone-500">Visible en tus reportes públicos.</p>
                                         </div>
                                         <Switch
                                             checked={profile?.email_public}
                                             onCheckedChange={(v) => setProfile({ ...profile, email_public: v })}
                                         />
                                     </div>
-                                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl">
+                                    <div className="flex items-center justify-between p-4 bg-stone-50 rounded-2xl">
                                         <div className="space-y-0.5">
                                             <Label className="text-sm font-bold">Mostrar mi WhatsApp</Label>
-                                            <p className="text-xs text-slate-500">Permite que otros te contacten por WhatsApp.</p>
+                                            <p className="text-xs text-stone-500">Permite que otros te contacten por WhatsApp.</p>
                                         </div>
                                         <Switch
                                             checked={profile?.whatsapp_public}
@@ -337,8 +337,8 @@ export default function SettingsPage() {
                             </div>
 
                         </CardContent>
-                        <CardFooter className="flex justify-end border-t border-slate-50 pt-6">
-                            <Button className="bg-blue-600 hover:bg-blue-700 h-11 px-8 font-bold" onClick={handleSave} disabled={isSaving}>
+                        <CardFooter className="flex justify-end border-t border-stone-50 pt-6">
+                            <Button className="bg-teal-800 hover:bg-teal-800 h-11 px-8 font-bold" onClick={handleSave} disabled={isSaving}>
                                 {isSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                                 Guardar Cambios
                             </Button>
@@ -348,7 +348,7 @@ export default function SettingsPage() {
 
                 {/* Notifications Tab */}
                 <TabsContent value="notifications" className="space-y-6">
-                    <Card className="border-slate-100 shadow-sm">
+                    <Card className="border-stone-100 shadow-sm">
                         <CardHeader>
                             <CardTitle>Preferencias de Alerta</CardTitle>
                             <CardDescription>Controla cuándo y cómo te contactamos.</CardDescription>
@@ -358,21 +358,21 @@ export default function SettingsPage() {
                             <div className="flex items-center justify-between space-x-4">
                                 <div className="space-y-1">
                                     <p className="text-sm font-medium leading-none">Alertas de Avistamiento Cercano</p>
-                                    <p className="text-sm text-slate-500">Recibir notificaciones cuando se reporte una mascota a menos de 5km.</p>
+                                    <p className="text-sm text-stone-500">Recibir notificaciones cuando se reporte una mascota a menos de 5km.</p>
                                 </div>
                                 <Switch defaultChecked />
                             </div>
                             <div className="flex items-center justify-between space-x-4">
                                 <div className="space-y-1">
                                     <p className="text-sm font-medium leading-none">Mensajes Directos</p>
-                                    <p className="text-sm text-slate-500">Cuando alguien te envíe un mensaje sobre tu reporte.</p>
+                                    <p className="text-sm text-stone-500">Cuando alguien te envíe un mensaje sobre tu reporte.</p>
                                 </div>
                                 <Switch defaultChecked />
                             </div>
                             <div className="flex items-center justify-between space-x-4">
                                 <div className="space-y-1">
                                     <p className="text-sm font-medium leading-none">Boletín Semanal</p>
-                                    <p className="text-sm text-slate-500">Resumen de mascotas encontradas y noticias de la comunidad.</p>
+                                    <p className="text-sm text-stone-500">Resumen de mascotas encontradas y noticias de la comunidad.</p>
                                 </div>
                                 <Switch />
                             </div>
@@ -383,7 +383,7 @@ export default function SettingsPage() {
 
                 {/* Security Tab */}
                 <TabsContent value="security" className="space-y-6">
-                    <Card className="border-slate-100 shadow-sm">
+                    <Card className="border-stone-100 shadow-sm">
                         <CardHeader>
                             <CardTitle>Seguridad de la Cuenta</CardTitle>
                             <CardDescription>Mantén tu cuenta protegida.</CardDescription>
@@ -402,7 +402,7 @@ export default function SettingsPage() {
                                 <Input type="password" />
                             </div>
                         </CardContent>
-                        <CardFooter className="flex justify-between border-t border-slate-50 pt-6">
+                        <CardFooter className="flex justify-between border-t border-stone-50 pt-6">
                             <Button variant="ghost" className="text-red-500 hover:text-red-600 hover:bg-red-50">
                                 <LogOut className="h-4 w-4 mr-2" /> Cerrar Sesión en todos los dispositivos
                             </Button>

@@ -12,7 +12,7 @@ import { PERU_LOCATIONS, PERU_DEPARTMENTS } from '@/lib/peru-locations'
 // Dynamically import Map to avoid SSR issues
 const MapPicker = dynamic(() => import('./map-picker').then(mod => mod.MapPicker), {
     ssr: false,
-    loading: () => <div className="h-48 w-full bg-slate-100 animate-pulse rounded-xl flex items-center justify-center text-slate-400 text-xs">Cargando mapa...</div>
+    loading: () => <div className="h-48 w-full bg-stone-100 animate-pulse rounded-xl flex items-center justify-center text-stone-400 text-xs">Cargando mapa...</div>
 })
 
 // Geographic data with approx coordinates for centering
@@ -86,7 +86,7 @@ export function LocationPopover({ onLocationChange, initialValues, showMap = tru
         <div className="space-y-4 p-1">
             <div className="grid grid-cols-1 gap-3">
                 <div className="space-y-1">
-                    <label className="text-[10px] font-bold uppercase text-slate-400">Departamento</label>
+                    <label className="text-[10px] font-bold uppercase text-stone-400">Departamento</label>
                     <Select value={department} onValueChange={handleDepartmentChange}>
                         <SelectTrigger className="h-9 text-sm">
                             <SelectValue placeholder="Seleccionar" />
@@ -99,7 +99,7 @@ export function LocationPopover({ onLocationChange, initialValues, showMap = tru
 
                 {department && (
                     <div className="space-y-1 animate-in fade-in slide-in-from-top-1">
-                        <label className="text-[10px] font-bold uppercase text-slate-400">Provincia</label>
+                        <label className="text-[10px] font-bold uppercase text-stone-400">Provincia</label>
                         <Select value={province} onValueChange={handleProvinceChange}>
                             <SelectTrigger className="h-9 text-sm">
                                 <SelectValue placeholder="Seleccionar" />
@@ -113,7 +113,7 @@ export function LocationPopover({ onLocationChange, initialValues, showMap = tru
 
                 {province && (
                     <div className="space-y-1 animate-in fade-in slide-in-from-top-1">
-                        <label className="text-[10px] font-bold uppercase text-slate-400">Distrito</label>
+                        <label className="text-[10px] font-bold uppercase text-stone-400">Distrito</label>
                         <Select value={district} onValueChange={handleDistrictChange}>
                             <SelectTrigger className="h-9 text-sm">
                                 <SelectValue placeholder="Seleccionar" />
@@ -126,7 +126,7 @@ export function LocationPopover({ onLocationChange, initialValues, showMap = tru
                 )}
 
                 <div className="space-y-1">
-                    <label className="text-[10px] font-bold uppercase text-slate-400">Ubicación Exacta / Referencia</label>
+                    <label className="text-[10px] font-bold uppercase text-stone-400">Ubicación Exacta / Referencia</label>
                     <Input
                         placeholder="Ej: Frente al parque..."
                         value={address}
@@ -136,11 +136,11 @@ export function LocationPopover({ onLocationChange, initialValues, showMap = tru
                 </div>
 
                 {showMap && (
-                    <div className="space-y-2 pt-1 border-t border-slate-100 mt-2">
-                        <p className="text-[10px] font-bold uppercase text-slate-400 flex items-center gap-1">
+                    <div className="space-y-2 pt-1 border-t border-stone-100 mt-2">
+                        <p className="text-[10px] font-bold uppercase text-stone-400 flex items-center gap-1">
                             <MapPin className="h-3 w-3" /> Seleccionar en Mapa
                         </p>
-                        <div className="h-48 rounded-xl overflow-hidden border border-slate-200">
+                        <div className="h-48 rounded-xl overflow-hidden border border-stone-200">
                             <MapPicker
                                 lat={mapCenter.lat}
                                 lng={mapCenter.lng}
@@ -150,13 +150,13 @@ export function LocationPopover({ onLocationChange, initialValues, showMap = tru
                         </div>
                         {coords && (
                             <div className="flex items-center justify-between">
-                                <p className="text-[10px] text-blue-500 font-medium italic">
+                                <p className="text-[10px] text-teal-700 font-medium italic">
                                     Coordenadas fijadas: {coords.lat.toFixed(4)}, {coords.lng.toFixed(4)}
                                 </p>
                                 <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="h-6 text-[9px] text-slate-400 hover:text-red-500"
+                                    className="h-6 text-[9px] text-stone-400 hover:text-red-500"
                                     onClick={() => setCoords(undefined)}
                                 >
                                     Quitar marcador

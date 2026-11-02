@@ -84,17 +84,17 @@ function ToastItem({ toast, onDismiss }: { toast: Toast, onDismiss: () => void }
     const icons = {
         success: <CheckCircle2 className="h-5 w-5 text-emerald-500" />,
         error: <AlertCircle className="h-5 w-5 text-rose-500" />,
-        info: <Info className="h-5 w-5 text-blue-500" />,
+        info: <Info className="h-5 w-5 text-teal-700" />,
         warning: <AlertTriangle className="h-5 w-5 text-amber-500" />,
-        loading: <Loader2 className="h-5 w-5 text-blue-500 animate-spin" />
+        loading: <Loader2 className="h-5 w-5 text-teal-700 animate-spin" />
     }
 
     const bgs = {
         success: "bg-emerald-50 border-emerald-100",
         error: "bg-rose-50 border-rose-100",
-        info: "bg-blue-50 border-blue-100",
+        info: "bg-teal-50 border-teal-100",
         warning: "bg-amber-50 border-amber-100",
-        loading: "bg-slate-50 border-slate-100"
+        loading: "bg-stone-50 border-stone-100"
     }
 
     return (
@@ -106,14 +106,14 @@ function ToastItem({ toast, onDismiss }: { toast: Toast, onDismiss: () => void }
                 {icons[toast.type]}
             </div>
             <div className="flex-1 space-y-1">
-                {toast.title && <h4 className="font-black text-slate-900 leading-none tracking-tight">{toast.title}</h4>}
-                <p className="text-sm font-medium text-slate-600 leading-relaxed">{toast.message}</p>
+                {toast.title && <h4 className="font-black text-stone-900 leading-none tracking-tight">{toast.title}</h4>}
+                <p className="text-sm font-medium text-stone-600 leading-relaxed">{toast.message}</p>
             </div>
             <button
                 onClick={onDismiss}
                 className="shrink-0 p-1 hover:bg-black/5 rounded-full transition-colors"
             >
-                <X className="h-4 w-4 text-slate-400" />
+                <X className="h-4 w-4 text-stone-400" />
             </button>
         </div>
     )

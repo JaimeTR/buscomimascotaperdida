@@ -48,7 +48,7 @@ export function ImageGallery({ images, petName, status }: ImageGalleryProps) {
                             className="h-12 w-12 rounded-full shadow-2xl bg-white/90 hover:bg-white border-0"
                             onClick={goToPrevious}
                         >
-                            <ChevronLeft className="h-6 w-6 text-slate-800" />
+                            <ChevronLeft className="h-6 w-6 text-stone-800" />
                         </Button>
                         <Button
                             variant="secondary"
@@ -56,7 +56,7 @@ export function ImageGallery({ images, petName, status }: ImageGalleryProps) {
                             className="h-12 w-12 rounded-full shadow-2xl bg-white/90 hover:bg-white border-0"
                             onClick={goToNext}
                         >
-                            <ChevronRight className="h-6 w-6 text-slate-800" />
+                            <ChevronRight className="h-6 w-6 text-stone-800" />
                         </Button>
                     </div>
                 )}
@@ -69,7 +69,7 @@ export function ImageGallery({ images, petName, status }: ImageGalleryProps) {
                         <div
                             key={i}
                             className={`shrink-0 w-24 h-24 rounded-2xl border-2 overflow-hidden cursor-pointer transition-all ${i === currentIndex
-                                    ? 'border-blue-500 shadow-md scale-105'
+                                    ? 'border-teal-700 shadow-md scale-105'
                                     : 'border-transparent opacity-70 hover:opacity-100 hover:scale-105'
                                 }`}
                             onClick={() => setCurrentIndex(i)}

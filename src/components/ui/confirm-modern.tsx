@@ -49,7 +49,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => handleClose(false)}
-                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                            className="absolute inset-0 bg-stone-900/40 backdrop-blur-sm"
                         />
 
                         {/* Modal */}
@@ -57,19 +57,19 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="relative bg-white w-full max-w-sm rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100"
+                            className="relative bg-white w-full max-w-sm rounded-[2.5rem] shadow-2xl overflow-hidden border border-stone-100"
                         >
                             <div className="p-8 md:p-10 space-y-6">
                                 <div className="flex flex-col items-center text-center space-y-4">
                                     <div className={cn(
                                         "p-4 rounded-3xl",
-                                        config.variant === "destructive" ? "bg-red-50 text-red-500" : "bg-blue-50 text-blue-500"
+                                        config.variant === "destructive" ? "bg-red-50 text-red-500" : "bg-teal-50 text-teal-700"
                                     )}>
                                         <AlertCircle className="h-8 w-8" />
                                     </div>
                                     <div className="space-y-2">
-                                        <h3 className="text-2xl font-black text-slate-900 tracking-tight">{config.title}</h3>
-                                        <p className="text-slate-500 font-medium leading-relaxed">
+                                        <h3 className="text-2xl font-black text-stone-900 tracking-tight">{config.title}</h3>
+                                        <p className="text-stone-500 font-medium leading-relaxed">
                                             {config.message}
                                         </p>
                                     </div>
@@ -82,7 +82,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                                             "h-14 rounded-2xl font-black text-lg shadow-xl",
                                             config.variant === "destructive"
                                                 ? "bg-red-500 hover:bg-red-600 shadow-red-500/20"
-                                                : "bg-blue-600 hover:bg-blue-700 shadow-blue-500/20"
+                                                : "bg-teal-800 hover:bg-teal-800 shadow-teal-700/20"
                                         )}
                                         onClick={() => handleClose(true)}
                                     >
@@ -91,7 +91,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                                     <Button
                                         variant="ghost"
                                         size="lg"
-                                        className="h-14 rounded-2xl font-bold text-slate-400 hover:text-slate-600 hover:bg-slate-50"
+                                        className="h-14 rounded-2xl font-bold text-stone-400 hover:text-stone-600 hover:bg-stone-50"
                                         onClick={() => handleClose(false)}
                                     >
                                         {config.cancelLabel || "Cancelar"}
@@ -101,7 +101,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
 
                             <button
                                 onClick={() => handleClose(false)}
-                                className="absolute top-6 right-6 p-2 rounded-full hover:bg-slate-50 text-slate-400 transition-colors"
+                                className="absolute top-6 right-6 p-2 rounded-full hover:bg-stone-50 text-stone-400 transition-colors"
                             >
                                 <X className="h-5 w-5" />
                             </button>

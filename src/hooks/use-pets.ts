@@ -137,7 +137,9 @@ export function usePets(options: UsePetsOptions = {}) {
 
                 if (options.searchQuery) {
                     // Broad search on name, breed or description
-                    query = query.or(`name.ilike.%${options.searchQuery}%,breed.ilike.%${options.searchQuery}%,description.ilike.%${options.searchQuery}%`)
+                    // Quitar caracteres con significado en la sintaxis de filtros PostgREST.
+                    const q = options.searchQuery.replace(/[,()%*\\]/g, ' ').trim()
+                    if (q) query = query.or(`name.ilike.%${q}%,breed.ilike.%${q}%,description.ilike.%${q}%`)
                 }
 
                 const { data, error } = await query

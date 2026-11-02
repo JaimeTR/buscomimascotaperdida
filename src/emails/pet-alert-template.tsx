@@ -297,7 +297,7 @@ const locationText = {
 
 const distanceText = {
     fontSize: '13px',
-    color: '#3b82f6',
+    color: '#0f766e',
     fontWeight: '600',
     margin: '0',
 }
@@ -385,6 +385,6 @@ const footerText = {
 
 const footerLink = {
     fontSize: '12px',
-    color: '#3b82f6',
+    color: '#0f766e',
     textDecoration: 'underline',
 }

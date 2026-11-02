@@ -1,84 +1,101 @@
 "use client"
 
 import Link from "next/link"
-import { Search, Plus, PawPrint, Menu } from "lucide-react"
+import Image from "next/image"
+import { usePathname } from "next/navigation"
+import { Plus, Menu, X } from "lucide-react"
 import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { ReportActionButton } from "@/components/report-action-button"
 import { UserNav } from "@/components/user-nav"
+import { cn } from "@/lib/utils"
+
+const LINKS = [
+    { href: "/", label: "Inicio" },
+    { href: "/mascotas", label: "Buscar mascota" },
+    { href: "/promocionar", label: "Difundir" },
+    { href: "/contacto", label: "Contacto" },
+]
 
 export function Navbar() {
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [open, setOpen] = useState(false)
+    const pathname = usePathname()
+
+    // El dashboard y el admin traen su propia navegación.
+    if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) return null
+
+    const reportButton = (className?: string) => (
+        <ReportActionButton
+            nextUrl="/reportar"
+            label="Reportar mascota"
+            icon={<Plus className="mr-2 h-4 w-4" aria-hidden />}
+            className={cn("rounded-full bg-cta text-cta-foreground font-semibold hover:bg-cta/90", className)}
+        />
+    )
 
     return (
-        <header className="border-b bg-white sticky top-0 z-50">
-            <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-                {/* Logo */}
-                <Link href="/" className="flex items-center gap-2 md:gap-3 group">
-                    <img
-                        src="/logo_symbol.png"
-                        alt="Logo"
-                        className="h-12 md:h-10 w-auto object-contain transition-transform group-hover:scale-110"
-                    />
-                    {/* Desktop Text */}
-                    <div className="flex flex-col hidden md:flex">
-                        <span className="text-lg font-black text-slate-900 leading-none tracking-tighter">Encuentra tu mascota</span>
-                        <span className="text-[10px] font-bold text-blue-500 uppercase tracking-widest hidden lg:block">Red de ayuda comunitaria</span>
-                    </div>
+        <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur">
+            <div className="container mx-auto flex h-16 items-center justify-between px-4">
+                <Link href="/" className="flex items-center gap-3" aria-label="Busco mi mascota, inicio">
+                    <Image src="/logo_symbol.png" alt="" width={72} height={40} className="h-9 w-auto" priority />
+                    <span className="hidden whitespace-nowrap text-lg font-extrabold tracking-tight text-foreground lg:block">
+                        Busco mi mascota
+                    </span>
                 </Link>
 
-                {/* Desktop Nav */}
-                <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-                    <Link href="/" className="hover:text-blue-600 transition-colors">Inicio</Link>
-                    <Link href="/mascotas" className="hover:text-blue-600 transition-colors">Buscar Mascota</Link>
-                    <Link href="/contacto" className="hover:text-blue-600 transition-colors">Voluntariado y Contacto</Link>
+                <nav aria-label="Principal" className="hidden items-center gap-1 md:flex">
+                    {LINKS.map((l) => (
+                        <Link
+                            key={l.href}
+                            href={l.href}
+                            aria-current={pathname === l.href ? "page" : undefined}
+                            className={cn(
+                                "rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
+                                pathname === l.href && "bg-accent text-accent-foreground"
+                            )}
+                        >
+                            {l.label}
+                        </Link>
+                    ))}
                 </nav>
 
-                {/* Right Actions - Desktop */}
-                <div className="hidden md:flex items-center gap-4">
-                    <ReportActionButton
-                        nextUrl="/reportar"
-                        label="Reportar Mascota"
-                        icon={<Plus className="mr-2 h-4 w-4" />}
-                        className="rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow-md shadow-blue-500/20"
-                    />
-
+                <div className="hidden items-center gap-3 md:flex">
+                    {reportButton()}
                     <UserNav />
                 </div>
 
-                {/* Mobile Menu Button */}
-                <div className="md:hidden flex items-center gap-3">
+                <div className="flex items-center gap-2 md:hidden">
                     <UserNav />
                     <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="rounded-lg"
+                        aria-expanded={open}
+                        aria-controls="menu-movil"
+                        aria-label={open ? "Cerrar menú" : "Abrir menú"}
+                        onClick={() => setOpen(!open)}
                     >
-                        <Menu className="h-6 w-6" />
+                        {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                     </Button>
                 </div>
             </div>
 
-            {/* Mobile Menu */}
-            {isMobileMenuOpen && (
-                <div className="md:hidden border-t bg-white p-4 space-y-4">
-                    <nav className="flex flex-col gap-3 text-sm font-medium text-slate-600">
-                        <Link href="/" className="hover:text-blue-600 transition-colors py-2">Inicio</Link>
-                        <Link href="/mascotas" className="hover:text-blue-600 transition-colors py-2">Buscar Mascota</Link>
-                        <Link href="/contacto" className="hover:text-blue-600 transition-colors py-2">Voluntariado y Contacto</Link>
+            {open && (
+                <div id="menu-movil" className="space-y-4 border-t bg-background p-4 md:hidden">
+                    <nav aria-label="Principal móvil" className="flex flex-col">
+                        {LINKS.map((l) => (
+                            <Link
+                                key={l.href}
+                                href={l.href}
+                                aria-current={pathname === l.href ? "page" : undefined}
+                                onClick={() => setOpen(false)}
+                                className="rounded-lg px-3 py-3 text-base font-medium text-foreground hover:bg-accent"
+                            >
+                                {l.label}
+                            </Link>
+                        ))}
                     </nav>
-                    <div className="pt-4 border-t space-y-3 flex flex-col gap-2">
-                        <ReportActionButton
-                            nextUrl="/reportar"
-                            label="Reportar Mascota"
-                            icon={<Plus className="mr-2 h-4 w-4" />}
-                            className="rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow-md shadow-blue-500/20 w-full"
-                        />
-                        <UserNav />
-                    </div>
+                    {reportButton("h-12 w-full")}
                 </div>
             )}
         </header>

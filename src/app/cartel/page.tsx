@@ -132,26 +132,26 @@ function PosterContent() {
 
     if (isLoading && petId) {
         return (
-            <div className="flex h-screen items-center justify-center bg-slate-100">
-                <Loader2 className="h-10 w-10 animate-spin text-blue-600" />
+            <div className="flex h-screen items-center justify-center bg-stone-100">
+                <Loader2 className="h-10 w-10 animate-spin text-teal-800" />
             </div>
         )
     }
 
     return (
-        <div className="flex h-screen bg-slate-100 overflow-hidden print:overflow-visible print:h-auto print:bg-white">
+        <div className="flex h-screen bg-stone-100 overflow-hidden print:overflow-visible print:h-auto print:bg-white">
 
             {/* Sidebar Controls - Hidden when printing */}
             <div className="w-96 bg-white border-r flex flex-col h-full z-20 shadow-xl print:hidden">
 
                 {/* Header */}
                 <div className="p-6 border-b space-y-4">
-                    <Link href="/dashboard/reports" className="flex items-center text-xs font-bold text-blue-500 uppercase tracking-wider hover:underline">
+                    <Link href="/dashboard/reports" className="flex items-center text-xs font-bold text-teal-700 uppercase tracking-wider hover:underline">
                         <ArrowLeft className="mr-1 h-3 w-3" /> Volver a Reportes
                     </Link>
                     <div>
-                        <h1 className="text-2xl font-black text-slate-900 leading-none mb-1">Editor de Cartel</h1>
-                        <p className="text-slate-500 text-sm">Personaliza e imprime tu cartel.</p>
+                        <h1 className="text-2xl font-black text-stone-900 leading-none mb-1">Editor de Cartel</h1>
+                        <p className="text-stone-500 text-sm">Personaliza e imprime tu cartel.</p>
                     </div>
                 </div>
                 {loadError && (
@@ -165,13 +165,13 @@ function PosterContent() {
 
                     {/* Section 1: Info */}
                     <div className="space-y-4">
-                        <div className="flex items-center gap-2 bg-blue-50 p-3 rounded-lg text-blue-700 text-sm font-semibold">
+                        <div className="flex items-center gap-2 bg-teal-50 p-3 rounded-lg text-teal-800 text-sm font-semibold">
                             <Info className="h-4 w-4" /> Información Principal
                         </div>
 
                         <div className="space-y-3">
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-500 uppercase">Título</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase">Título</label>
                                 <Select value={headline} onValueChange={setHeadline}>
                                     <SelectTrigger className="h-10">
                                         <SelectValue />
@@ -187,7 +187,7 @@ function PosterContent() {
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-500 uppercase">Nombre de la Mascota</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase">Nombre de la Mascota</label>
                                 <Input value={name} onChange={(e) => setName(e.target.value)} className="h-10" placeholder="Ej. Max" />
                             </div>
                         </div>
@@ -202,8 +202,8 @@ function PosterContent() {
                         <div className="space-y-4 px-1">
                             <div className="space-y-3">
                                 <div className="flex justify-between">
-                                    <label className="text-xs font-bold text-slate-500 uppercase">Tamaño del Título</label>
-                                    <span className="text-xs font-mono text-slate-400">{headlineSize}%</span>
+                                    <label className="text-xs font-bold text-stone-500 uppercase">Tamaño del Título</label>
+                                    <span className="text-xs font-mono text-stone-400">{headlineSize}%</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setHeadlineSize(s => Math.max(50, s - 5))}><Minus className="h-3 w-3" /></Button>
@@ -214,8 +214,8 @@ function PosterContent() {
 
                             <div className="space-y-3">
                                 <div className="flex justify-between">
-                                    <label className="text-xs font-bold text-slate-500 uppercase">Tamaño del Nombre</label>
-                                    <span className="text-xs font-mono text-slate-400">{nameSize}%</span>
+                                    <label className="text-xs font-bold text-stone-500 uppercase">Tamaño del Nombre</label>
+                                    <span className="text-xs font-mono text-stone-400">{nameSize}%</span>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Button variant="outline" size="icon" className="h-8 w-8" onClick={() => setNameSize(s => Math.max(50, s - 5))}><Minus className="h-3 w-3" /></Button>
@@ -234,17 +234,17 @@ function PosterContent() {
 
                         <div className="space-y-3">
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-500 uppercase">Teléfono Principal</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase">Teléfono Principal</label>
                                 <Input value={phone} onChange={(e) => setPhone(e.target.value)} className="h-10 text-lg font-mono" />
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-500 uppercase">WhatsApp / 2do Teléfono</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase">WhatsApp / 2do Teléfono</label>
                                 <Input value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} className="h-10" placeholder="+51 999..." />
                             </div>
 
                             <div className="space-y-1">
-                                <label className="text-xs font-bold text-slate-500 uppercase">Red Social</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase">Red Social</label>
                                 <Input value={social} onChange={(e) => setSocial(e.target.value)} className="h-10" placeholder="@usuario" />
                             </div>
 
@@ -256,15 +256,15 @@ function PosterContent() {
                                         id="reward"
                                         checked={showReward}
                                         onChange={(e) => setShowReward(e.target.checked)}
-                                        className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                        className="h-4 w-4 rounded border-gray-300 text-teal-800 focus:ring-teal-700"
                                     />
-                                    <label htmlFor="reward" className="text-sm font-bold text-slate-700 cursor-pointer select-none">
+                                    <label htmlFor="reward" className="text-sm font-bold text-stone-700 cursor-pointer select-none">
                                         Ofrecer Recompensa
                                     </label>
                                 </div>
                                 {showReward && (
                                     <div className="animate-in slide-in-from-top-2 fade-in duration-200">
-                                        <label className="text-xs font-bold text-slate-500 uppercase">Monto o Detalle</label>
+                                        <label className="text-xs font-bold text-stone-500 uppercase">Monto o Detalle</label>
                                         <Input
                                             value={rewardAmount}
                                             onChange={(e) => setRewardAmount(e.target.value)}
@@ -279,31 +279,31 @@ function PosterContent() {
 
                     <div className="space-y-3">
                         <div className="space-y-1">
-                            <label className="text-xs font-bold text-slate-500 uppercase">Zona / Distrito</label>
+                            <label className="text-xs font-bold text-stone-500 uppercase">Zona / Distrito</label>
                             <Input value={location} onChange={(e) => setLocation(e.target.value)} className="h-10" />
                         </div>
                         <div className="space-y-1">
-                            <label className="text-xs font-bold text-slate-500 uppercase">Calle / Referencia</label>
+                            <label className="text-xs font-bold text-stone-500 uppercase">Calle / Referencia</label>
                             <Input value={street} onChange={(e) => setStreet(e.target.value)} className="h-10" />
                         </div>
                     </div>
 
-                    <Button variant="outline" className="w-full h-12 bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border-dashed border-2 pointer-events-none opacity-50">
+                    <Button variant="outline" className="w-full h-12 bg-stone-50 border-stone-200 text-stone-600 hover:bg-stone-100 hover:text-stone-900 border-dashed border-2 pointer-events-none opacity-50">
                         <ImageIcon className="mr-2 h-4 w-4" /> Cambiar foto (Próximamente)
                     </Button>
                 </div>
 
                 {/* Footer Action */}
-                <div className="p-6 border-t bg-slate-50/50">
-                    <Button onClick={handlePrint} className="w-full h-12 bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-500/20 text-base font-bold tracking-wide">
+                <div className="p-6 border-t bg-stone-50/50">
+                    <Button onClick={handlePrint} className="w-full h-12 bg-teal-800 hover:bg-teal-800 shadow-lg shadow-teal-700/20 text-base font-bold tracking-wide">
                         <Printer className="mr-2 h-5 w-5" /> IMPRIMIR CARTEL
                     </Button>
-                    <p className="text-[10px] text-center text-slate-400 mt-2 uppercase tracking-widest font-medium">Optimizado para impresión A4</p>
+                    <p className="text-[10px] text-center text-stone-400 mt-2 uppercase tracking-widest font-medium">Optimizado para impresión A4</p>
                 </div>
             </div>
 
             {/* Canvas Area */}
-            <div className="flex-1 flex flex-col relative bg-slate-100/50 print:bg-white print:block print:w-full print:h-full">
+            <div className="flex-1 flex flex-col relative bg-stone-100/50 print:bg-white print:block print:w-full print:h-full">
 
                 {/* Canvas Toolbar - Hidden when printing */}
                 <div className="h-16 flex items-center justify-between px-8 print:hidden">
@@ -325,7 +325,7 @@ function PosterContent() {
                             {/* Main Header Strip - Yellow for High Contrast Black */}
                             <div className={`${headline === 'ENCONTRADO' ? 'bg-emerald-400' : 'bg-[#FFD600]'} h-28 flex items-center justify-center shrink-0 print-color-adjust-exact`}>
                                 <h1
-                                    className="font-black text-slate-900 tracking-widest uppercase flex items-center gap-4 text-center leading-none mt-2"
+                                    className="font-black text-stone-900 tracking-widest uppercase flex items-center gap-4 text-center leading-none mt-2"
                                     style={{ fontSize: `${headlineSize * 0.8}px` }}
                                 >
                                     {headline}
@@ -336,7 +336,7 @@ function PosterContent() {
                             {/* Reduced padding here to bring name closer to title */}
                             <div className="pt-0 pb-2 text-center z-10 bg-white">
                                 <h2
-                                    className="leading-none font-black text-blue-600 uppercase tracking-tighter truncate max-w-full px-4"
+                                    className="leading-none font-black text-teal-800 uppercase tracking-tighter truncate max-w-full px-4"
                                     style={{ fontSize: `${nameSize * 0.8}px`, lineHeight: '0.9' }}
                                 >
                                     {name}
@@ -347,7 +347,7 @@ function PosterContent() {
                             <div className="flex-1 px-8 py-2 flex flex-col items-center relative">
 
                                 {/* Photo Container */}
-                                <div className="w-full flex-1 relative rounded-3xl overflow-hidden border-4 border-slate-100 shadow-xl mb-4 max-h-[500px]">
+                                <div className="w-full flex-1 relative rounded-3xl overflow-hidden border-4 border-stone-100 shadow-xl mb-4 max-h-[500px]">
                                     <Image
                                         src={image}
                                         className="w-full h-full object-cover"
@@ -373,7 +373,7 @@ function PosterContent() {
 
                                 {/* Reward Banner - Only shows if active */}
                                 {showReward && rewardAmount && (
-                                    <div className="w-full bg-yellow-400 text-slate-900 p-3 rounded-xl mb-4 shadow-lg flex items-center justify-center gap-4 animate-in zoom-in duration-300 print-color-adjust-exact border-4 border-black border-dashed">
+                                    <div className="w-full bg-yellow-400 text-stone-900 p-3 rounded-xl mb-4 shadow-lg flex items-center justify-center gap-4 animate-in zoom-in duration-300 print-color-adjust-exact border-4 border-black border-dashed">
                                         <span className="text-2xl font-black tracking-widest uppercase">Recompensa:</span>
                                         <span className="text-4xl font-black bg-white text-black px-4 rounded-lg transform -rotate-2 shadow-sm border-2 border-black">{rewardAmount}</span>
                                     </div>
@@ -383,10 +383,10 @@ function PosterContent() {
                                 <div className="w-full grid grid-cols-1 gap-3 mt-auto">
 
                                     {/* Primary Phone - Massive */}
-                                    <div className="bg-white border-4 border-slate-900 text-slate-900 rounded-3xl p-4 flex flex-col items-center justify-center shadow-sm print-color-adjust-exact">
-                                        <p className="text-sm font-black text-slate-500 uppercase tracking-[0.2em] mb-1">SI ME VES, LLAMA AL:</p>
+                                    <div className="bg-white border-4 border-stone-900 text-stone-900 rounded-3xl p-4 flex flex-col items-center justify-center shadow-sm print-color-adjust-exact">
+                                        <p className="text-sm font-black text-stone-500 uppercase tracking-[0.2em] mb-1">SI ME VES, LLAMA AL:</p>
                                         <div className="flex items-center gap-4 justify-center">
-                                            <Phone className="h-10 w-10 text-slate-900 fill-slate-900" />
+                                            <Phone className="h-10 w-10 text-stone-900 fill-stone-900" />
                                             <p className="text-6xl font-black tracking-widest leading-none">{phone}</p>
                                         </div>
                                     </div>
@@ -395,7 +395,7 @@ function PosterContent() {
                                     {(whatsapp || social) && (
                                         <div className="flex gap-3">
                                             {whatsapp && (
-                                                <div className="flex-1 bg-emerald-100 border-2 border-emerald-500 text-slate-900 rounded-2xl p-3 flex items-center gap-3 shadow-md print-color-adjust-exact">
+                                                <div className="flex-1 bg-emerald-100 border-2 border-emerald-500 text-stone-900 rounded-2xl p-3 flex items-center gap-3 shadow-md print-color-adjust-exact">
                                                     <MessageCircle className="h-6 w-6 shrink-0 text-emerald-700" />
                                                     <div className="min-w-0">
                                                         <p className="text-[10px] font-bold opacity-70 uppercase truncate text-emerald-800">WhatsApp</p>
@@ -404,7 +404,7 @@ function PosterContent() {
                                                 </div>
                                             )}
                                             {social && (
-                                                <div className="flex-1 bg-purple-100 border-2 border-purple-500 text-slate-900 rounded-2xl p-3 flex items-center gap-3 shadow-md print-color-adjust-exact">
+                                                <div className="flex-1 bg-purple-100 border-2 border-purple-500 text-stone-900 rounded-2xl p-3 flex items-center gap-3 shadow-md print-color-adjust-exact">
                                                     <Instagram className="h-6 w-6 shrink-0 text-purple-700" />
                                                     <div className="min-w-0">
                                                         <p className="text-[10px] font-bold opacity-70 uppercase truncate text-purple-800">Redes</p>
@@ -418,13 +418,13 @@ function PosterContent() {
                             </div>
 
                             {/* Website Footer Strip */}
-                            <div className="h-16 bg-blue-600 flex items-center justify-between px-8 text-white mt-4 print-color-adjust-exact">
+                            <div className="h-16 bg-teal-800 flex items-center justify-between px-8 text-white mt-4 print-color-adjust-exact">
                                 <div className="flex items-center gap-2 opacity-90">
                                     <Globe className="h-5 w-5" />
                                     <span className="font-bold tracking-wide">buscomimascotaperdida.com</span>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <div className="bg-white text-blue-800 px-3 py-1 rounded-lg font-black text-sm tracking-wide flex items-center gap-3">
+                                    <div className="bg-white text-teal-900 px-3 py-1 rounded-lg font-black text-sm tracking-wide flex items-center gap-3">
                                         <div className="flex items-center gap-1">
                                             <Instagram className="h-4 w-4" />
                                             <Facebook className="h-4 w-4" />

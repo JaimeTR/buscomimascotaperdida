@@ -70,16 +70,16 @@ export function BreedPopover({ onBreedChange, initialBreed, petType = 'dog' }: B
 
     return (
         <div className="flex flex-col h-[400px]">
-            <div className="p-3 border-b border-slate-100 space-y-3">
+            <div className="p-3 border-b border-stone-100 space-y-3">
                 <div className="flex items-center justify-between">
-                    <p className="text-[10px] font-extrabold uppercase text-slate-400 tracking-wider">
+                    <p className="text-[10px] font-extrabold uppercase text-stone-400 tracking-wider">
                         Razas de {petType === 'cat' ? 'Gato' : (petType === 'dog' ? 'Perro' : 'Mascota')}
                     </p>
                     <Button
                         variant={isMestizo ? "default" : "outline"}
                         size="sm"
                         onClick={() => setIsMestizo(!isMestizo)}
-                        className={`h-7 px-3 text-[10px] font-bold rounded-full gap-1.5 transition-all ${isMestizo ? 'bg-orange-400 hover:bg-orange-500 border-none' : 'text-slate-400'}`}
+                        className={`h-7 px-3 text-[10px] font-bold rounded-full gap-1.5 transition-all ${isMestizo ? 'bg-orange-400 hover:bg-orange-500 border-none' : 'text-stone-400'}`}
                     >
                         <Repeat className="h-3 w-3" /> Es Mestizo
                     </Button>
@@ -87,12 +87,12 @@ export function BreedPopover({ onBreedChange, initialBreed, petType = 'dog' }: B
 
                 {!isMestizo && (
                     <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
                         <Input
                             placeholder="Buscar raza..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="h-9 pl-9 text-sm rounded-full bg-slate-50 border-none ring-0 focus-visible:ring-1 focus-visible:ring-blue-100"
+                            className="h-9 pl-9 text-sm rounded-full bg-stone-50 border-none ring-0 focus-visible:ring-1 focus-visible:ring-teal-100"
                         />
                     </div>
                 )}
@@ -111,33 +111,33 @@ export function BreedPopover({ onBreedChange, initialBreed, petType = 'dog' }: B
 
                             <div className="grid grid-cols-2 gap-3 pb-4">
                                 <div className="space-y-2">
-                                    <label className="text-[9px] font-bold text-slate-400 uppercase ml-1">Raza 1</label>
+                                    <label className="text-[9px] font-bold text-stone-400 uppercase ml-1">Raza 1</label>
                                     <select
                                         value={mix1}
                                         onChange={(e) => setMix1(e.target.value)}
-                                        className="w-full h-9 rounded-xl border border-slate-100 text-xs px-2 outline-none focus:ring-2 focus:ring-orange-100"
+                                        className="w-full h-9 rounded-xl border border-stone-100 text-xs px-2 outline-none focus:ring-2 focus:ring-orange-100"
                                     >
                                         <option value="">Seleccionar</option>
                                         {breedList.map(b => <option key={b} value={b}>{b}</option>)}
                                     </select>
                                     {mix1 && (
-                                        <div className="aspect-square bg-slate-100 rounded-xl overflow-hidden border-2 border-white shadow-sm ring-1 ring-slate-100">
+                                        <div className="aspect-square bg-stone-100 rounded-xl overflow-hidden border-2 border-white shadow-sm ring-1 ring-stone-100">
                                             <img src={images[mix1]} className="w-full h-full object-cover" alt={mix1} />
                                         </div>
                                     )}
                                 </div>
                                 <div className="space-y-2">
-                                    <label className="text-[9px] font-bold text-slate-400 uppercase ml-1">Raza 2</label>
+                                    <label className="text-[9px] font-bold text-stone-400 uppercase ml-1">Raza 2</label>
                                     <select
                                         value={mix2}
                                         onChange={(e) => setMix2(e.target.value)}
-                                        className="w-full h-9 rounded-xl border border-slate-100 text-xs px-2 outline-none focus:ring-2 focus:ring-orange-100"
+                                        className="w-full h-9 rounded-xl border border-stone-100 text-xs px-2 outline-none focus:ring-2 focus:ring-orange-100"
                                     >
                                         <option value="">Seleccionar</option>
                                         {breedList.map(b => <option key={b} value={b}>{b}</option>)}
                                     </select>
                                     {mix2 && (
-                                        <div className="aspect-square bg-slate-100 rounded-xl overflow-hidden border-2 border-white shadow-sm ring-1 ring-slate-100">
+                                        <div className="aspect-square bg-stone-100 rounded-xl overflow-hidden border-2 border-white shadow-sm ring-1 ring-stone-100">
                                             <img src={images[mix2]} className="w-full h-full object-cover" alt={mix2} />
                                         </div>
                                     )}
@@ -145,8 +145,8 @@ export function BreedPopover({ onBreedChange, initialBreed, petType = 'dog' }: B
                             </div>
 
                             {mix1 && mix2 && (
-                                <div className="pt-4 border-t border-slate-100 space-y-3">
-                                    <p className="text-[10px] font-bold uppercase text-slate-400 text-center">Resultado Probable</p>
+                                <div className="pt-4 border-t border-stone-100 space-y-3">
+                                    <p className="text-[10px] font-bold uppercase text-stone-400 text-center">Resultado Probable</p>
                                     <div className="relative h-40 rounded-2xl overflow-hidden shadow-xl ring-4 ring-white">
                                         <img src={images["Mestizo"]} className="w-full h-full object-cover" alt="Mezcla" />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4 text-white">
@@ -162,14 +162,14 @@ export function BreedPopover({ onBreedChange, initialBreed, petType = 'dog' }: B
                             <button
                                 key={breed}
                                 onClick={() => setSelectedBreed(breed)}
-                                className={`group relative aspect-square rounded-2xl overflow-hidden transition-all hover:ring-4 hover:ring-blue-100 ${selectedBreed === breed ? 'ring-4 ring-blue-400' : 'bg-slate-50'}`}
+                                className={`group relative aspect-square rounded-2xl overflow-hidden transition-all hover:ring-4 hover:ring-teal-100 ${selectedBreed === breed ? 'ring-4 ring-teal-700' : 'bg-stone-50'}`}
                             >
                                 <img
                                     src={images[breed]}
                                     className="w-full h-full object-cover transition-transform group-hover:scale-110"
                                     alt={breed}
                                 />
-                                <div className={`absolute inset-0 flex flex-col justify-end p-2 ${selectedBreed === breed ? 'bg-blue-500/20' : 'bg-gradient-to-t from-black/60 to-transparent'}`}>
+                                <div className={`absolute inset-0 flex flex-col justify-end p-2 ${selectedBreed === breed ? 'bg-teal-700/20' : 'bg-gradient-to-t from-black/60 to-transparent'}`}>
                                     <p className="text-[10px] font-bold text-white line-clamp-1">{breed}</p>
                                 </div>
                             </button>
@@ -179,10 +179,10 @@ export function BreedPopover({ onBreedChange, initialBreed, petType = 'dog' }: B
             </div>
 
             {selectedBreed && !isMestizo && (
-                <div className="p-3 border-t border-slate-100 flex items-center justify-between bg-slate-50/50">
+                <div className="p-3 border-t border-stone-100 flex items-center justify-between bg-stone-50/50">
                     <div className="flex items-center gap-2">
                         <img src={images[selectedBreed]} className="h-8 w-8 rounded-full border border-white shadow-sm" alt="" />
-                        <p className="text-xs font-bold text-slate-700">{selectedBreed}</p>
+                        <p className="text-xs font-bold text-stone-700">{selectedBreed}</p>
                     </div>
                     <Button variant="ghost" size="icon" className="h-6 w-6 rounded-full" onClick={() => setSelectedBreed("")}>
                         <X className="h-3 w-3" />

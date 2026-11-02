@@ -100,14 +100,14 @@ export async function sendPasswordResetEmail(
 
     const PasswordResetTemplate = (
         <div style={{ fontFamily: 'Arial, sans-serif', maxWidth: '600px', margin: '0 auto' }}>
-            <h1 style={{ color: '#3b82f6' }}>Restablecer Contraseña</h1>
+            <h1 style={{ color: '#0f766e' }}>Restablecer Contraseña</h1>
             <p>Hola {firstName},</p>
             <p>Recibimos una solicitud para restablecer tu contraseña.</p>
             <p>
                 <a
                     href={resetUrl}
                     style={{
-                        backgroundColor: '#3b82f6',
+                        backgroundColor: '#0f766e',
                         color: 'white',
                         padding: '12px 24px',
                         textDecoration: 'none',

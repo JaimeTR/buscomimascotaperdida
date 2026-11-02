@@ -265,11 +265,11 @@ export default function ReportPage() {
     }
 
     if (isLoading) {
-        return <div className="min-h-screen flex items-center justify-center bg-slate-50"><Loader2 className="animate-spin h-10 w-10 text-blue-500" /></div>
+        return <div className="min-h-screen flex items-center justify-center bg-stone-50"><Loader2 className="animate-spin h-10 w-10 text-teal-700" /></div>
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 pb-20 pt-10">
+        <div className="min-h-screen bg-stone-50 pb-20 pt-10">
             {profile && isProfileDialogOpen && (
                 <CompleteProfileDialog
                     profile={profile}
@@ -282,14 +282,14 @@ export default function ReportPage() {
 
             {/* Top Navbar Placeholder */}
             <div className="absolute top-0 left-0 w-full h-16 bg-white border-b flex items-center justify-between px-6 md:px-12 z-50">
-                <div className="flex items-center gap-2 font-bold text-xl text-slate-800">
-                    <div className="bg-blue-500 rounded p-1"><Search className="text-white h-4 w-4" /></div>
+                <div className="flex items-center gap-2 font-bold text-xl text-stone-800">
+                    <div className="bg-teal-700 rounded p-1"><Search className="text-white h-4 w-4" /></div>
                     BuscaMascotas
                 </div>
-                <div className="flex gap-8 text-sm font-medium text-slate-600">
+                <div className="flex gap-8 text-sm font-medium text-stone-600">
                     <Link href="/mascotas">Ver Perdidos</Link>
                 </div>
-                <Button variant="ghost" className="rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700" onClick={() => router.back()}>Cancelar</Button>
+                <Button variant="ghost" className="rounded-full bg-stone-100 hover:bg-stone-200 text-stone-700" onClick={() => router.back()}>Cancelar</Button>
             </div>
 
             <div className="container max-w-3xl mx-auto px-4 mt-12">
@@ -304,47 +304,47 @@ export default function ReportPage() {
                     </div>
 
                     <div className="text-center space-y-2 pt-4">
-                        <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900">Reportar Mascota Perdida</h1>
-                        <p className="text-slate-500">Mientra más detalles nos des, más rápido podrá ayudar nuestra comunidad.</p>
+                        <h1 className="text-3xl md:text-4xl font-extrabold text-stone-900">Reportar Mascota Perdida</h1>
+                        <p className="text-stone-500">Mientra más detalles nos des, más rápido podrá ayudar nuestra comunidad.</p>
                     </div>
                 </div>
 
                 {/* Main Card */}
-                <div className="bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 p-6 md:p-10 border border-slate-100 relative z-10 space-y-12">
+                <div className="bg-white rounded-[2rem] shadow-xl shadow-stone-200/50 p-6 md:p-10 border border-stone-100 relative z-10 space-y-12">
 
                     <section className="space-y-6">
-                        <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                            <PawPrint className="h-5 w-5 text-blue-500" /> Datos de la Mascota
+                        <h3 className="text-xl font-bold text-stone-900 flex items-center gap-2">
+                            <PawPrint className="h-5 w-5 text-teal-700" /> Datos de la Mascota
                         </h3>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase ml-1">Nombre</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Nombre</label>
                                 <Input
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="¿Cómo se llama?"
-                                    className="h-12 bg-slate-50 border-slate-200 focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all rounded-xl"
+                                    className="h-12 bg-stone-50 border-stone-200 focus:bg-white focus:ring-2 focus:ring-teal-100 transition-all rounded-xl"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase ml-1">Tipo de mascota</label>
-                                <div className="flex bg-slate-50 p-1 rounded-xl border border-slate-200 h-12">
+                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Tipo de mascota</label>
+                                <div className="flex bg-stone-50 p-1 rounded-xl border border-stone-200 h-12">
                                     <button
                                         onClick={() => { setType('dog'); setBreed(""); }}
-                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'dog' ? 'bg-white shadow-sm text-blue-600 border border-slate-100' : 'text-slate-500 hover:text-slate-700'}`}
+                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'dog' ? 'bg-white shadow-sm text-teal-800 border border-stone-100' : 'text-stone-500 hover:text-stone-700'}`}
                                     >
                                         <Dog className="h-4 w-4" /> Perro
                                     </button>
                                     <button
                                         onClick={() => { setType('cat'); setBreed(""); }}
-                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'cat' ? 'bg-white shadow-sm text-blue-600 border border-slate-100' : 'text-slate-500 hover:text-slate-700'}`}
+                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'cat' ? 'bg-white shadow-sm text-teal-800 border border-stone-100' : 'text-stone-500 hover:text-stone-700'}`}
                                     >
                                         <Cat className="h-4 w-4" /> Gato
                                     </button>
                                     <button
                                         onClick={() => { setType('other'); setBreed(""); }}
-                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'other' ? 'bg-white shadow-sm text-blue-600 border border-slate-100' : 'text-slate-500 hover:text-slate-700'}`}
+                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'other' ? 'bg-white shadow-sm text-teal-800 border border-stone-100' : 'text-stone-500 hover:text-stone-700'}`}
                                     >
                                         <Squirrel className="h-4 w-4" /> Otro
                                     </button>
@@ -355,10 +355,10 @@ export default function ReportPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             {/* Breed Popover Integration */}
                             <div className="space-y-2 md:col-span-1">
-                                <label className="text-xs font-bold text-slate-500 uppercase ml-1">Raza</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Raza</label>
                                 <Popover>
                                     <PopoverTrigger asChild>
-                                        <Button variant="outline" className="w-full h-12 justify-between bg-slate-50 border-slate-200 rounded-xl px-4 font-medium text-slate-700">
+                                        <Button variant="outline" className="w-full h-12 justify-between bg-stone-50 border-stone-200 rounded-xl px-4 font-medium text-stone-700">
                                             {breed || "Seleccionar"} <ChevronDown className="h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
@@ -369,9 +369,9 @@ export default function ReportPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase ml-1">Género</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Género</label>
                                 <Select value={gender} onValueChange={setGender}>
-                                    <SelectTrigger className="h-12 bg-slate-50 border-slate-200 rounded-xl">
+                                    <SelectTrigger className="h-12 bg-stone-50 border-stone-200 rounded-xl">
                                         <SelectValue placeholder="Seleccionar" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -383,9 +383,9 @@ export default function ReportPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase ml-1">Tamaño</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Tamaño</label>
                                 <Select value={size} onValueChange={setSize}>
-                                    <SelectTrigger className="h-12 bg-slate-50 border-slate-200 rounded-xl">
+                                    <SelectTrigger className="h-12 bg-stone-50 border-stone-200 rounded-xl">
                                         <SelectValue placeholder="Seleccionar" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -398,10 +398,10 @@ export default function ReportPage() {
 
                             {/* Color Popover Integration */}
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-slate-500 uppercase ml-1">Colores</label>
+                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Colores</label>
                                 <Popover>
                                     <PopoverTrigger asChild>
-                                        <Button variant="outline" className="w-full h-12 justify-between bg-slate-50 border-slate-200 rounded-xl px-4 font-medium text-slate-700 overflow-hidden">
+                                        <Button variant="outline" className="w-full h-12 justify-between bg-stone-50 border-stone-200 rounded-xl px-4 font-medium text-stone-700 overflow-hidden">
                                             <span className="truncate">{selectedColors.length > 0 ? selectedColors.join(", ") : "Seleccionar"}</span> <Palette className="h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
@@ -413,26 +413,26 @@ export default function ReportPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-slate-500 uppercase ml-1">Descripción de la mascota</label>
+                            <label className="text-xs font-bold text-stone-500 uppercase ml-1">Descripción de la mascota</label>
                             <Textarea
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="Escribe señas particulares, comportamiento, o qué llevaba puesto..."
-                                className="min-h-[100px] bg-slate-50 border-slate-200 focus:bg-white transition-all rounded-2xl p-4"
+                                className="min-h-[100px] bg-stone-50 border-stone-200 focus:bg-white transition-all rounded-2xl p-4"
                             />
                         </div>
                     </section>
 
                     <section className="space-y-6">
-                        <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <h3 className="text-xl font-bold text-stone-900 flex items-center gap-2">
                             <MapPin className="h-5 w-5 text-red-500" /> Lugar de desaparición
                         </h3>
-                        <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 space-y-6">
+                        <div className="bg-stone-50 rounded-2xl p-6 border border-stone-100 space-y-6">
                             <LocationPopover onLocationChange={(loc) => setLocation(prev => ({ ...prev, ...loc, address: loc.address || "" }))} initialValues={location} showMap={false} />
 
                             <div className="space-y-3">
                                 <div className="flex items-center justify-between">
-                                    <label className="text-xs font-bold text-slate-500 uppercase ml-1">
+                                    <label className="text-xs font-bold text-stone-500 uppercase ml-1">
                                         Ubicación exacta en el mapa
                                     </label>
                                     {location.lat && location.lng && (
@@ -449,7 +449,7 @@ export default function ReportPage() {
                                     initialLat={location.lat}
                                     initialLng={location.lng}
                                 />
-                                <p className="text-xs text-slate-500 font-medium">
+                                <p className="text-xs text-stone-500 font-medium">
                                     💡 Haz clic en el mapa para marcar exactamente dónde viste o perdiste a tu mascota. Esto ayudará a otros usuarios a saber dónde buscar.
                                 </p>
                             </div>
@@ -457,7 +457,7 @@ export default function ReportPage() {
                     </section>
 
                     <section className="space-y-6">
-                        <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                        <h3 className="text-xl font-bold text-stone-900 flex items-center gap-2">
                             <Camera className="h-5 w-5 text-orange-500" /> Fotos de la mascota
                         </h3>
 
@@ -485,15 +485,15 @@ export default function ReportPage() {
                                 </div>
                             ))}
 
-                            <label className="aspect-square border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-slate-50 hover:border-blue-400 transition-all text-slate-400 hover:text-blue-500 group">
-                                <div className="bg-slate-100 p-3 rounded-full group-hover:bg-blue-50 transition-colors">
+                            <label className="aspect-square border-2 border-dashed border-stone-200 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-stone-50 hover:border-teal-700 transition-all text-stone-400 hover:text-teal-700 group">
+                                <div className="bg-stone-100 p-3 rounded-full group-hover:bg-teal-50 transition-colors">
                                     <ImagePlus className="h-6 w-6" />
                                 </div>
                                 <span className="text-[10px] font-bold uppercase tracking-wide">Añadir Foto</span>
                                 <input type="file" multiple accept="image/jpeg,image/png,image/webp" onChange={handleImageChange} className="hidden" />
                             </label>
                         </div>
-                        <p className="text-[11px] text-slate-400 text-center font-medium">
+                        <p className="text-[11px] text-stone-400 text-center font-medium">
                             * Se recomienda subir al menos 3 fotos (frente, perfil, cuerpo entero).
                         </p>
                     </section>
@@ -505,7 +505,7 @@ export default function ReportPage() {
                         </Button>
                         <Button
                             size="lg"
-                            className="rounded-full px-8 bg-blue-500 hover:bg-blue-600 shadow-xl shadow-blue-500/30 text-base h-12"
+                            className="rounded-full px-8 bg-teal-700 hover:bg-teal-800 shadow-xl shadow-teal-700/30 text-base h-12"
                             onClick={handleSubmit}
                             disabled={isSubmitting}
                         >
@@ -520,13 +520,13 @@ export default function ReportPage() {
                 </div>
 
                 {/* Info Footer */}
-                <div className="mt-8 bg-blue-50 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 text-center md:text-left border border-blue-100">
-                    <div className="bg-blue-100 p-3 rounded-full text-blue-600 shrink-0">
+                <div className="mt-8 bg-teal-50 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 text-center md:text-left border border-teal-100">
+                    <div className="bg-teal-100 p-3 rounded-full text-teal-800 shrink-0">
                         <HandHeart className="h-8 w-8" />
                     </div>
                     <div>
-                        <h4 className="font-bold text-slate-900 mb-1">Estamos juntos en esto</h4>
-                        <p className="text-sm text-slate-600 leading-relaxed">
+                        <h4 className="font-bold text-stone-900 mb-1">Estamos juntos en esto</h4>
+                        <p className="text-sm text-stone-600 leading-relaxed">
                             Apenas termines este formulario, notificaremos a todos los usuarios en un radio de 5km de tu última ubicación. Mantén la esperanza.
                         </p>
                     </div>

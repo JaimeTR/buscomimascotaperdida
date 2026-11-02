@@ -59,6 +59,7 @@ self.addEventListener('fetch', (event) => {
         url.pathname.startsWith('/_next/data/') ||
         url.pathname.startsWith('/auth/') ||
         url.pathname.startsWith('/dashboard') ||
+        url.pathname.startsWith('/admin') ||
         url.pathname.startsWith('/reportar') ||
         url.pathname.startsWith('/login') ||
         url.pathname.startsWith('/register') ||

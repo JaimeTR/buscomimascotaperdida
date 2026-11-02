@@ -299,36 +299,36 @@ export function ChatbotWidget() {
 
             {/* Chat Window */}
             {isOpen && (
-                <div className="mb-4 w-[90vw] md:w-[400px] h-[500px] bg-white rounded-3xl shadow-2xl border border-slate-100 flex flex-col overflow-hidden pointer-events-auto animate-in slide-in-from-bottom-5 fade-in duration-200">
+                <div className="mb-4 w-[90vw] md:w-[400px] h-[500px] bg-white rounded-3xl shadow-2xl border border-stone-100 flex flex-col overflow-hidden pointer-events-auto animate-in slide-in-from-bottom-5 fade-in duration-200">
 
                     {/* Header */}
                     <div className="p-4 border-b flex items-center justify-between bg-white">
                         <div className="flex items-center gap-3">
-                            <div className="bg-blue-500 rounded-full p-2 text-white">
+                            <div className="bg-teal-700 rounded-full p-2 text-white">
                                 <Bot className="h-5 w-5" />
                             </div>
                             <div>
-                                <h3 className="font-bold text-slate-900 text-sm">Asistente de Búsqueda IA</h3>
+                                <h3 className="font-bold text-stone-900 text-sm">Asistente de Búsqueda IA</h3>
                                 <p className="text-xs text-emerald-500 font-medium flex items-center gap-1">
                                     <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> En línea para ayudarte
                                 </p>
                             </div>
                         </div>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-slate-100" onClick={() => setIsOpen(false)}>
-                            <X className="h-4 w-4 text-slate-500" />
+                        <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-stone-100" onClick={() => setIsOpen(false)}>
+                            <X className="h-4 w-4 text-stone-500" />
                         </Button>
                     </div>
 
                     {/* Messages Area */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/50" ref={scrollRef}>
+                    <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-stone-50/50" ref={scrollRef}>
                         {messages.map((msg) => (
                             <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`flex gap-3 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
 
                                     {/* Avatar */}
                                     {msg.role === 'bot' ? (
-                                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                                            <Bot className="h-4 w-4 text-blue-600" />
+                                        <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
+                                            <Bot className="h-4 w-4 text-teal-800" />
                                         </div>
                                     ) : (
                                         <Avatar className="w-8 h-8 border border-white">
@@ -340,8 +340,8 @@ export function ChatbotWidget() {
                                     {/* Bubble */}
                                     <div className="space-y-2">
                                         <div className={`p-4 text-sm leading-relaxed shadow-sm ${msg.role === 'user'
-                                            ? 'bg-blue-500 text-white rounded-2xl rounded-tr-sm'
-                                            : 'bg-white text-slate-700 border border-slate-100 rounded-2xl rounded-tl-sm'
+                                            ? 'bg-teal-700 text-white rounded-2xl rounded-tr-sm'
+                                            : 'bg-white text-stone-700 border border-stone-100 rounded-2xl rounded-tl-sm'
                                             }`}>
                                             {msg.content}
                                         </div>
@@ -352,7 +352,7 @@ export function ChatbotWidget() {
                                                 {msg.actions.map(action => (
                                                     <button
                                                         key={action.action}
-                                                        className="text-xs font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-full border border-blue-100 transition-colors flex items-center gap-1"
+                                                        className="text-xs font-medium text-teal-800 bg-teal-50 hover:bg-teal-100 px-3 py-1.5 rounded-full border border-teal-100 transition-colors flex items-center gap-1"
                                                         onClick={() => handleActionClick(action.action)}
                                                     >
                                                         <Sparkles className="h-3 w-3" /> {action.label}
@@ -370,7 +370,7 @@ export function ChatbotWidget() {
                                                         href={`/mascotas/${pet.id}`}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="block bg-white border border-slate-200 hover:border-blue-300 rounded-lg p-2 hover:bg-blue-50 transition-all"
+                                                        className="block bg-white border border-stone-200 hover:border-teal-300 rounded-lg p-2 hover:bg-teal-50 transition-all"
                                                     >
                                                         <div className="flex gap-2">
                                                             {pet.image_urls?.[0] && (
@@ -381,9 +381,9 @@ export function ChatbotWidget() {
                                                                 />
                                                             )}
                                                             <div className="flex-1 text-xs">
-                                                                <p className="font-bold text-slate-900">{pet.name}</p>
-                                                                <p className="text-slate-600">{pet.breed} • {pet.size || 'Med'}</p>
-                                                                <p className="text-slate-500">{pet.last_seen_district}</p>
+                                                                <p className="font-bold text-stone-900">{pet.name}</p>
+                                                                <p className="text-stone-600">{pet.breed} • {pet.size || 'Med'}</p>
+                                                                <p className="text-stone-500">{pet.last_seen_district}</p>
                                                             </div>
                                                         </div>
                                                     </a>
@@ -391,7 +391,7 @@ export function ChatbotWidget() {
                                             </div>
                                         )}
 
-                                        <span className="text-[10px] text-slate-400 block px-1">
+                                        <span className="text-[10px] text-stone-400 block px-1">
                                             {msg.timestamp}
                                         </span>
                                     </div>
@@ -402,13 +402,13 @@ export function ChatbotWidget() {
                         {isTyping && (
                             <div className="flex justify-start">
                                 <div className="flex gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                                        <Bot className="h-4 w-4 text-blue-600" />
+                                    <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
+                                        <Bot className="h-4 w-4 text-teal-800" />
                                     </div>
-                                    <div className="bg-white p-4 rounded-2xl rounded-tl-sm border border-slate-100 shadow-sm flex gap-1">
-                                        <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></span>
-                                        <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                                        <span className="w-2 h-2 bg-blue-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                                    <div className="bg-white p-4 rounded-2xl rounded-tl-sm border border-stone-100 shadow-sm flex gap-1">
+                                        <span className="w-2 h-2 bg-teal-700 rounded-full animate-bounce"></span>
+                                        <span className="w-2 h-2 bg-teal-700 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                                        <span className="w-2 h-2 bg-teal-700 rounded-full animate-bounce [animation-delay:0.4s]"></span>
                                     </div>
                                 </div>
                             </div>
@@ -417,8 +417,8 @@ export function ChatbotWidget() {
 
                     {/* Input Area */}
                     <div className="p-4 bg-white border-t">
-                        <div className="flex items-center gap-2 bg-slate-50 border rounded-2xl px-3 py-2 focus-within:ring-2 focus-within:ring-blue-100 transition-all shadow-sm">
-                            <button className="text-slate-400 hover:text-blue-500 transition-colors">
+                        <div className="flex items-center gap-2 bg-stone-50 border rounded-2xl px-3 py-2 focus-within:ring-2 focus-within:ring-teal-100 transition-all shadow-sm">
+                            <button className="text-stone-400 hover:text-teal-700 transition-colors">
                                 <ImageIcon className="h-5 w-5" />
                             </button>
                             <Input
@@ -428,11 +428,11 @@ export function ChatbotWidget() {
                                 onChange={(e) => setInputValue(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                             />
-                            <Button size="icon" className="h-8 w-8 rounded-full bg-blue-500 hover:bg-blue-600 shrink-0" onClick={handleSendMessage}>
+                            <Button size="icon" className="h-8 w-8 rounded-full bg-teal-700 hover:bg-teal-800 shrink-0" onClick={handleSendMessage}>
                                 <Send className="h-4 w-4" />
                             </Button>
                         </div>
-                        <div className="mt-2 flex items-center justify-between text-[10px] text-slate-400 px-2">
+                        <div className="mt-2 flex items-center justify-between text-[10px] text-stone-400 px-2">
                             <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> Compartir ubicación</span>
                             <span>IA analizando área 500m</span>
                         </div>
@@ -444,7 +444,7 @@ export function ChatbotWidget() {
             {/* Prompt Bubble */}
             {showPrompt && !isOpen && (
                 <div
-                    className="absolute bottom-20 right-0 mr-2 bg-white px-4 py-2 rounded-xl shadow-xl border border-blue-100 flex items-center gap-3 animate-in slide-in-from-right-5 fade-in duration-500 cursor-pointer hover:bg-slate-50 transition-colors w-max max-w-[200px]"
+                    className="absolute bottom-20 right-0 mr-2 bg-white px-4 py-2 rounded-xl shadow-xl border border-teal-100 flex items-center gap-3 animate-in slide-in-from-right-5 fade-in duration-500 cursor-pointer hover:bg-stone-50 transition-colors w-max max-w-[200px]"
                     onClick={() => {
                         setIsOpen(true)
                         setShowPrompt(false)
@@ -452,23 +452,23 @@ export function ChatbotWidget() {
                 >
                     <div className="relative shrink-0">
                         <span className="flex h-3 w-3">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-700 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-teal-700"></span>
                         </span>
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-800">¿Quieres que te ayude a buscar?</p>
-                        <p className="text-[10px] text-slate-500">Asistente IA activo</p>
+                        <p className="text-xs font-bold text-stone-800">¿Quieres que te ayude a buscar?</p>
+                        <p className="text-[10px] text-stone-500">Asistente IA activo</p>
                     </div>
                     {/* Arrow pointer */}
-                    <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white border-b border-r border-blue-100 transform rotate-45"></div>
+                    <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white border-b border-r border-teal-100 transform rotate-45"></div>
                 </div>
             )}
 
             {/* Floating Button */}
             <Button
                 className={`h-16 w-16 rounded-full shadow-2xl transition-all duration-300 pointer-events-auto ${isOpen ? 'scale-0 opacity-0' : 'scale-100 opacity-100'
-                    } bg-gradient-to-tr from-blue-600 to-blue-400 hover:to-blue-500 border-4 border-white`}
+                    } bg-gradient-to-tr from-teal-800 to-teal-700 hover:to-teal-700 border-4 border-white`}
                 onClick={() => {
                     setIsOpen(true)
                     setShowPrompt(false)

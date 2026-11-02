@@ -7,7 +7,7 @@ export const SightingsMapWrapper = dynamic(
     {
         ssr: false,
         loading: () => (
-            <div className="h-full w-full bg-slate-50 animate-pulse flex items-center justify-center text-slate-400 text-xs rounded-[2.5rem]">
+            <div className="h-full w-full bg-stone-50 animate-pulse flex items-center justify-center text-stone-400 text-xs rounded-[2.5rem]">
                 Cargando mapa...
             </div>
         )

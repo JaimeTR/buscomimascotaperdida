@@ -43,14 +43,14 @@ export function LoginForm({ next }: { next: string }) {
             <input type="hidden" name="next" value={next} />
 
             <div className="space-y-2">
-                <Input name="email" type="email" placeholder="Correo electrónico" required className="h-12 bg-slate-50 border-slate-200" defaultValue={state.email || ""} />
+                <Input name="email" type="email" placeholder="Correo electrónico" required className="h-12 bg-stone-50 border-stone-200" defaultValue={state.email || ""} />
                 {state?.validationErrors?.email && (
                     <p className="text-xs text-red-500">{state.validationErrors.email[0]}</p>
                 )}
             </div>
 
             <div className="space-y-2">
-                <Input name="password" type="password" placeholder="Contraseña" required className="h-12 bg-slate-50 border-slate-200" />
+                <Input name="password" type="password" placeholder="Contraseña" required className="h-12 bg-stone-50 border-stone-200" />
                 {state?.validationErrors?.password && (
                     <p className="text-xs text-red-500">{state.validationErrors.password[0]}</p>
                 )}
@@ -85,7 +85,7 @@ export function LoginForm({ next }: { next: string }) {
                 </div>
             )}
 
-            <Button type="submit" className="w-full h-12 bg-blue-600 hover:bg-blue-700 font-bold shadow-lg shadow-blue-500/20" disabled={isPending} aria-busy={isPending}>
+            <Button type="submit" className="w-full h-12 bg-teal-800 hover:bg-teal-800 font-bold shadow-lg shadow-teal-700/20" disabled={isPending} aria-busy={isPending}>
                 {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Ingresar"}
             </Button>
         </form>

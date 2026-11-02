@@ -25,8 +25,8 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
         switch (s) {
             case 'lost': return 'bg-orange-500 text-white'
             case 'found': return 'bg-emerald-500 text-white'
-            case 'in_contact': return 'bg-blue-500 text-white'
-            default: return 'bg-slate-500 text-white'
+            case 'in_contact': return 'bg-teal-700 text-white'
+            default: return 'bg-stone-500 text-white'
         }
     }
 
@@ -69,7 +69,7 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
                 
                 <Popover open={isOpen} onOpenChange={setIsOpen}>
                     <PopoverTrigger asChild>
-                        <button className="h-10 px-4 rounded-xl border-2 border-slate-100 bg-white hover:bg-slate-50 text-slate-600 font-bold text-sm flex items-center gap-2 transition-all">
+                        <button className="h-10 px-4 rounded-xl border-2 border-stone-100 bg-white hover:bg-stone-50 text-stone-600 font-bold text-sm flex items-center gap-2 transition-all">
                             Cambiar estado <ChevronDown className="h-4 w-4" />
                         </button>
                     </PopoverTrigger>
@@ -89,13 +89,13 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
                             </button>
                             <button
                                 onClick={() => handleStatusChange('in_contact')}
-                                className="w-full text-left px-3 py-2 text-sm font-bold rounded-lg hover:bg-blue-50 text-blue-600 transition-colors"
+                                className="w-full text-left px-3 py-2 text-sm font-bold rounded-lg hover:bg-teal-50 text-teal-800 transition-colors"
                             >
                                 En Contacto
                             </button>
                             <button
                                 onClick={() => handleStatusChange('reunited')}
-                                className="w-full text-left px-3 py-2 text-sm font-bold rounded-lg hover:bg-slate-100 text-slate-600 transition-colors"
+                                className="w-full text-left px-3 py-2 text-sm font-bold rounded-lg hover:bg-stone-100 text-stone-600 transition-colors"
                             >
                                 Reunido
                             </button>
@@ -108,13 +108,13 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
                 nextUrl={`/mascotas/${petId}/avistamiento`}
                 label="Reportar avistamiento"
                 icon={<MapPin className="mr-3 h-6 w-6" />}
-                className="w-full h-16 text-xl font-black rounded-2xl shadow-2xl shadow-blue-500/30 bg-blue-600 hover:bg-blue-700 text-white border-0"
+                className="w-full h-16 text-xl font-black rounded-2xl shadow-2xl shadow-teal-700/30 bg-teal-800 hover:bg-teal-800 text-white border-0"
                 size="lg"
             />
-            <Button className="w-full h-16 text-xl font-black rounded-2xl border-2 border-slate-100 bg-white text-slate-900 hover:bg-slate-50" size="lg">
-                <MessageCircle className="mr-3 h-6 w-6 text-blue-500" /> Contactar Dueño
+            <Button className="w-full h-16 text-xl font-black rounded-2xl border-2 border-stone-100 bg-white text-stone-900 hover:bg-stone-50" size="lg">
+                <MessageCircle className="mr-3 h-6 w-6 text-teal-700" /> Contactar Dueño
             </Button>
-            <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-slate-100 text-slate-600 hover:bg-slate-50" size="lg" asChild>
+            <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-stone-100 text-stone-600 hover:bg-stone-50" size="lg" asChild>
                 <Link href={`/cartel?id=${petId}`}>
                     <Download className="mr-3 h-5 w-5" /> Generar Cartel PDF
                 </Link>

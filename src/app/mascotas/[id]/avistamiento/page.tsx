@@ -17,7 +17,7 @@ import { getImageUploadError } from "@/lib/image-upload"
 // Dynamically import MapPicker to avoid SSR issues with Leaflet
 const MapPicker = dynamic(() => import('@/components/map-picker').then(mod => mod.MapPicker), {
     ssr: false,
-    loading: () => <div className="h-[300px] w-full bg-slate-100 animate-pulse rounded-2xl flex items-center justify-center text-slate-400 text-sm">Cargando mapa...</div>
+    loading: () => <div className="h-[300px] w-full bg-stone-100 animate-pulse rounded-2xl flex items-center justify-center text-stone-400 text-sm">Cargando mapa...</div>
 })
 
 export default function SightingReportPage() {
@@ -171,25 +171,25 @@ export default function SightingReportPage() {
     }
 
     if (isLoading) {
-        return <div className="min-h-screen flex items-center justify-center bg-slate-50"><Loader2 className="animate-spin h-10 w-10 text-blue-500" /></div>
+        return <div className="min-h-screen flex items-center justify-center bg-stone-50"><Loader2 className="animate-spin h-10 w-10 text-teal-700" /></div>
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 py-12 px-4">
+        <div className="min-h-screen bg-stone-50 py-12 px-4">
             <div className="max-w-2xl mx-auto space-y-6">
                 <Button variant="ghost" className="rounded-full" onClick={() => router.back()}>
                     <ArrowLeft className="mr-2 h-4 w-4" /> Volver al pet
                 </Button>
 
                 <Card className="border-0 shadow-2xl rounded-[2.5rem] overflow-hidden">
-                    <CardHeader className="bg-blue-600 text-white p-8 md:p-12">
+                    <CardHeader className="bg-teal-800 text-white p-8 md:p-12">
                         <div className="flex items-center gap-4 mb-4">
                             <div className="bg-white/20 p-3 rounded-2xl backdrop-blur-sm">
                                 <MapPin className="h-8 w-8 text-white" />
                             </div>
                             <div>
                                 <CardTitle className="text-3xl font-black">Reportar Avistamiento</CardTitle>
-                                <CardDescription className="text-blue-100 text-lg">¿Viste a {pet?.name}? Cuéntanos dónde y cómo estaba.</CardDescription>
+                                <CardDescription className="text-teal-100 text-lg">¿Viste a {pet?.name}? Cuéntanos dónde y cómo estaba.</CardDescription>
                             </div>
                         </div>
                     </CardHeader>
@@ -197,23 +197,23 @@ export default function SightingReportPage() {
                         <form id="sighting-form" onSubmit={handleSubmit} className="space-y-8">
 
                             <div className="space-y-4">
-                                <label className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                                    <MapPin className="h-4 w-4 text-blue-500" /> Ubicación Exacta
+                                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider flex items-center gap-2">
+                                    <MapPin className="h-4 w-4 text-teal-700" /> Ubicación Exacta
                                 </label>
-                                <div className="h-[300px] rounded-3xl overflow-hidden border-2 border-slate-100 relative">
+                                <div className="h-[300px] rounded-3xl overflow-hidden border-2 border-stone-100 relative">
                                     <MapPicker
                                         onChange={(lat, lng) => setFormData(prev => ({ ...prev, lat, lng }))}
                                         lat={formData.lat}
                                         lng={formData.lng}
                                     />
-                                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1000] bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-slate-100 text-[10px] font-black uppercase text-slate-600">
+                                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1000] bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-stone-100 text-[10px] font-black uppercase text-stone-600">
                                         Mueve el pin azul al lugar exacto
                                     </div>
                                 </div>
                             </div>
 
                             <div className="space-y-4">
-                                <label className="text-sm font-bold text-slate-900 uppercase tracking-wider">Ubicación del Avistamiento</label>
+                                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider">Ubicación del Avistamiento</label>
                                 <LocationPopover
                                     onLocationChange={(loc) => {
                                         setFormData(prev => ({
@@ -235,12 +235,12 @@ export default function SightingReportPage() {
                             </div>
 
                             <div className="space-y-4">
-                                <label className="text-sm font-bold text-slate-900 uppercase tracking-wider flex items-center gap-2">
-                                    <Camera className="h-4 w-4 text-blue-500" /> Foto del Avistamiento (Opcional)
+                                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider flex items-center gap-2">
+                                    <Camera className="h-4 w-4 text-teal-700" /> Foto del Avistamiento (Opcional)
                                 </label>
 
                                 {imagePreview ? (
-                                    <div className="relative rounded-2xl overflow-hidden border-2 border-slate-100">
+                                    <div className="relative rounded-2xl overflow-hidden border-2 border-stone-100">
                                         <img src={imagePreview} alt="Preview" className="w-full h-64 object-cover" />
                                         <button
                                             type="button"
@@ -260,9 +260,9 @@ export default function SightingReportPage() {
                                                 onChange={handleImageCapture}
                                                 className="hidden"
                                             />
-                                            <div className="h-32 bg-blue-50 hover:bg-blue-100 border-2 border-dashed border-blue-200 rounded-2xl flex flex-col items-center justify-center gap-2 transition-colors">
-                                                <Camera className="h-8 w-8 text-blue-500" />
-                                                <span className="text-sm font-bold text-blue-600">Tomar Foto</span>
+                                            <div className="h-32 bg-teal-50 hover:bg-teal-100 border-2 border-dashed border-teal-200 rounded-2xl flex flex-col items-center justify-center gap-2 transition-colors">
+                                                <Camera className="h-8 w-8 text-teal-700" />
+                                                <span className="text-sm font-bold text-teal-800">Tomar Foto</span>
                                             </div>
                                         </label>
                                         <label className="cursor-pointer">
@@ -272,9 +272,9 @@ export default function SightingReportPage() {
                                                 onChange={handleImageCapture}
                                                 className="hidden"
                                             />
-                                            <div className="h-32 bg-slate-50 hover:bg-slate-100 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center justify-center gap-2 transition-colors">
-                                                <Upload className="h-8 w-8 text-slate-500" />
-                                                <span className="text-sm font-bold text-slate-600">Subir Imagen</span>
+                                            <div className="h-32 bg-stone-50 hover:bg-stone-100 border-2 border-dashed border-stone-200 rounded-2xl flex flex-col items-center justify-center gap-2 transition-colors">
+                                                <Upload className="h-8 w-8 text-stone-500" />
+                                                <span className="text-sm font-bold text-stone-600">Subir Imagen</span>
                                             </div>
                                         </label>
                                     </div>
@@ -282,27 +282,27 @@ export default function SightingReportPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-900 uppercase tracking-wider">Descripción del avistamiento</label>
+                                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider">Descripción del avistamiento</label>
                                 <Textarea
                                     required
                                     placeholder="¿Cómo estaba? ¿Tenía collar? ¿Parecía asustado?..."
-                                    className="min-h-[120px] bg-blue-50 border-blue-200 rounded-2xl p-4 text-slate-900 placeholder:text-slate-500"
+                                    className="min-h-[120px] bg-teal-50 border-teal-200 rounded-2xl p-4 text-stone-900 placeholder:text-stone-500"
                                     value={formData.description}
                                     onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                                 />
                             </div>
 
                             <div className="space-y-4">
-                                <label className="text-sm font-bold text-slate-900 uppercase tracking-wider">Opciones de Contacto</label>
-                                <div className="bg-slate-50 rounded-2xl p-6 space-y-4">
+                                <label className="text-sm font-bold text-stone-900 uppercase tracking-wider">Opciones de Contacto</label>
+                                <div className="bg-stone-50 rounded-2xl p-6 space-y-4">
                                     <div className="flex items-center space-x-3">
                                         <Checkbox
                                             id="share-phone"
                                             checked={formData.share_phone}
                                             onCheckedChange={(checked) => setFormData(prev => ({ ...prev, share_phone: checked as boolean }))}
                                         />
-                                        <label htmlFor="share-phone" className="text-sm font-medium text-slate-700 cursor-pointer flex items-center gap-2">
-                                            <Phone className="h-4 w-4 text-blue-500" />
+                                        <label htmlFor="share-phone" className="text-sm font-medium text-stone-700 cursor-pointer flex items-center gap-2">
+                                            <Phone className="h-4 w-4 text-teal-700" />
                                             Compartir mi teléfono con el dueño
                                         </label>
                                     </div>
@@ -312,8 +312,8 @@ export default function SightingReportPage() {
                                             checked={formData.share_email}
                                             onCheckedChange={(checked) => setFormData(prev => ({ ...prev, share_email: checked as boolean }))}
                                         />
-                                        <label htmlFor="share-email" className="text-sm font-medium text-slate-700 cursor-pointer flex items-center gap-2">
-                                            <Mail className="h-4 w-4 text-blue-500" />
+                                        <label htmlFor="share-email" className="text-sm font-medium text-stone-700 cursor-pointer flex items-center gap-2">
+                                            <Mail className="h-4 w-4 text-teal-700" />
                                             Compartir mi correo con el dueño
                                         </label>
                                     </div>
@@ -323,12 +323,12 @@ export default function SightingReportPage() {
                                             checked={formData.share_whatsapp}
                                             onCheckedChange={(checked) => setFormData(prev => ({ ...prev, share_whatsapp: checked as boolean }))}
                                         />
-                                        <label htmlFor="share-whatsapp" className="text-sm font-medium text-slate-700 cursor-pointer flex items-center gap-2">
+                                        <label htmlFor="share-whatsapp" className="text-sm font-medium text-stone-700 cursor-pointer flex items-center gap-2">
                                             <MessageCircle className="h-4 w-4 text-green-500" />
                                             Compartir mi WhatsApp con el dueño
                                         </label>
                                     </div>
-                                    <p className="text-xs text-slate-500 italic mt-2">
+                                    <p className="text-xs text-stone-500 italic mt-2">
                                         Esta información solo será visible para el dueño de la mascota
                                     </p>
                                 </div>
@@ -343,12 +343,12 @@ export default function SightingReportPage() {
 
                         </form>
                     </CardContent>
-                    <CardFooter className="p-8 md:p-12 bg-slate-50 border-t border-slate-100 flex justify-end">
+                    <CardFooter className="p-8 md:p-12 bg-stone-50 border-t border-stone-100 flex justify-end">
                         <Button
                             type="submit"
                             form="sighting-form"
                             size="lg"
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-black px-12 h-14 rounded-full shadow-xl shadow-blue-500/20"
+                            className="bg-teal-800 hover:bg-teal-800 text-white font-black px-12 h-14 rounded-full shadow-xl shadow-teal-700/20"
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" /> Guardando...</> : <>Enviar Reporte <Send className="ml-2 h-5 w-5" /></>}
