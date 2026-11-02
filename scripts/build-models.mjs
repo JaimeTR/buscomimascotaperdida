@@ -1,11 +1,11 @@
 // Genera los 3 modelos de logo (isologo + logotipo, color y claro) y una lámina comparativa.
 //   node scripts/build-models.mjs
-// Salida: public/brand/modelos/modelo-N/*.svg|png y public/brand/modelos/opciones.png
+// Salida: public/brand/modelos/modelo-N/*.svg|png, opciones.png y simbolo-perro/gato.svg
 import { mkdirSync, writeFileSync } from "node:fs"
 import sharp from "sharp"
 import { NAME, SLOGAN, VIEW, TEAL, CREAM } from "./brand-core.mjs"
 import { bold, medium, width, path, doc } from "./brand-text.mjs"
-import { model1, model2, model3, variants } from "./brand-models.mjs"
+import { model1, model2, model3, dogOnly, catOnly, variants } from "./brand-models.mjs"
 
 const SL = SLOGAN
 // Escribe tramos de color seguidos en una línea; devuelve el svg y su ancho.
@@ -16,16 +16,16 @@ const run = (parts, x, y, size, ls = 0, font = bold) => {
 }
 const sym = (fn, v, x, y, size) => `<g transform="translate(${x} ${y}) scale(${size / VIEW})">${fn(v)}</g>`
 
-// ───── Modelo 1: Titulo, horizontal. Modelo 2: minúsculas, horizontal. Modelo 3: mayúsculas, vertical ─────
+// ───── Modelo 1: Título, horizontal. Modelo 2: minúsculas, horizontal. Modelo 3: mayúsculas, vertical ─────
 const MODELS = [
   {
     fn: model1,
     isologo(v) {
-      const S = 200, tx = 14 + S * 0.78 + 26, size = 70
-      const a = run([[NAME[0], v.wordA]], tx, 100, size), b = run([[NAME[1], v.wordB]], tx, 166, size)
-      const sl = path(medium, SL.toUpperCase(), tx, 212, 22, v.slogan, 3)
+      const S = 230, tx = 8 + S * 0.8 + 22, size = 70
+      const a = run([[NAME[0], v.wordA]], tx, 106, size), b = run([[NAME[1], v.wordB]], tx, 172, size)
+      const sl = path(medium, SL.toUpperCase(), tx, 218, 22, v.slogan, 3)
       const W = Math.ceil(tx + Math.max(a.w, b.w, width(medium, SL.toUpperCase(), 22, 3)) + 24)
-      return { w: W, h: 240, body: sym(this.fn, v, 4, 20, S) + a.svg + b.svg + sl }
+      return { w: W, h: 246, body: sym(this.fn, v, 0, 8, S) + a.svg + b.svg + sl }
     },
     logotipo(v) {
       const size = 120, pad = 40, a = run([[NAME[0] + " ", v.wordA], [NAME[1], v.wordB]], pad, 130, size)
@@ -36,13 +36,13 @@ const MODELS = [
   {
     fn: model2,
     isologo(v) {
-      const S = 200, tx = 14 + S * 0.78 + 26, size = 72
-      const a = run([["busco mi", v.wordA]], tx, 100, size), b = run([["mascota", v.wordB]], tx, 168, size)
-      const dot = `<circle cx="${tx + b.w + 12}" cy="${168 - 7}" r="7.5" fill="${v.wordB}"/>`
+      const S = 230, tx = 8 + S * 0.8 + 22, size = 72
+      const a = run([["busco mi", v.wordA]], tx, 106, size), b = run([["mascota", v.wordB]], tx, 174, size)
+      const dot = `<circle cx="${tx + b.w + 12}" cy="${174 - 7}" r="7.5" fill="${v.wordB}"/>`
       const low = SL.toLowerCase()
-      const sl = path(medium, low, tx, 214, 28, v.slogan, 0.5)
+      const sl = path(medium, low, tx, 220, 28, v.slogan, 0.5)
       const W = Math.ceil(tx + Math.max(a.w, b.w + 24, width(medium, low, 28, 0.5)) + 24)
-      return { w: W, h: 240, body: sym(this.fn, v, 4, 20, S) + a.svg + b.svg + dot + sl }
+      return { w: W, h: 246, body: sym(this.fn, v, 0, 8, S) + a.svg + b.svg + dot + sl }
     },
     logotipo(v) {
       const size = 118, pad = 40
@@ -55,12 +55,12 @@ const MODELS = [
   {
     fn: model3,
     isologo(v) {
-      const S = 210, size = 62, ls = 6
+      const S = 220, size = 62, ls = 6
       const a = run([["BUSCO MI ", v.wordA], ["MASCOTA", v.wordB]], 0, 0, size, ls)
       const sw = width(medium, SL.toUpperCase(), 21, 6), W = Math.ceil(Math.max(a.w, sw, S) + 80)
       const x0 = (W - a.w) / 2
-      const a2 = run([["BUSCO MI ", v.wordA], ["MASCOTA", v.wordB]], x0, S + 78, size, ls)
-      return { w: W, h: S + 150, body: sym(this.fn, v, (W - S) / 2, 6, S) + a2.svg + path(medium, SL.toUpperCase(), (W - sw) / 2, S + 124, 21, v.slogan, 6) }
+      const a2 = run([["BUSCO MI ", v.wordA], ["MASCOTA", v.wordB]], x0, S + 82, size, ls)
+      return { w: W, h: S + 154, body: sym(this.fn, v, (W - S) / 2, 4, S) + a2.svg + path(medium, SL.toUpperCase(), (W - sw) / 2, S + 128, 21, v.slogan, 6) }
     },
     logotipo(v) {
       const size = 100, ls = 9, pad = 50
@@ -88,8 +88,12 @@ for (const [i, m] of MODELS.entries()) {
       pieces.push({ i, vk, kind, w, h, body, fond: v.fond })
     }
   }
-  const s = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VIEW} ${VIEW}">${m.fn(variants.color)}</svg>\n`
-  writeFileSync(`${dir}/simbolo.svg`, s)
+  writeFileSync(`${dir}/simbolo.svg`, `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VIEW} ${VIEW}">${m.fn(variants.color)}</svg>\n`)
+}
+
+// Símbolos sueltos: solo perro y solo gato.
+for (const [name, fn] of [["perro", dogOnly], ["gato", catOnly]]) {
+  writeFileSync(`${root}/simbolo-${name}.svg`, `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VIEW} ${VIEW}">${fn(variants.color)}</svg>\n`)
 }
 
 // Lámina comparativa: 3 columnas (modelos) × [isologo, logotipo, isologo claro, logotipo claro].
@@ -111,4 +115,8 @@ for (const [i] of MODELS.entries()) {
 }
 const sheetSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${COL * 3} 1480" width="${COL * 3}" height="1480">${sheet}</svg>`
 await sharp(Buffer.from(sheetSvg), { density: 200 }).resize({ width: 2400 }).png().toFile(`${root}/opciones.png`)
+
+// Lámina de símbolos sueltos (perro, gato) para revisar rápido.
+const tile = (x, fn, bg) => `<g transform="translate(${x} 0)"><rect width="300" height="300" fill="${bg}"/><g transform="scale(2.5)">${fn(bg === TEAL ? variants.claro : variants.color)}</g></g>`
+await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300">${tile(0, dogOnly, CREAM)}${tile(300, catOnly, CREAM)}${tile(600, dogOnly, TEAL)}${tile(900, catOnly, TEAL)}</svg>`)).png().toFile(`${root}/solos.png`)
 console.log("Modelos generados en", root)
