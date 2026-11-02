@@ -46,6 +46,14 @@ function isAllowedPlaceholder(value) {
   return placeholderPattern.test(value)
 }
 
+function isAdministrativeScript(relativeFile) {
+  return relativeFile.replaceAll('\\', '/').split('/')[0] === 'scripts'
+}
+
+function hasAnonymousAdminFallback(relativeFile, content) {
+  return isAdministrativeScript(relativeFile) && anonymousAdminFallbackPattern.test(content)
+}
+
 function addPatternFindings(relativeFile, content, findings) {
   const lines = content.split(/\r?\n/)
   lines.forEach((line, index) => {
@@ -58,7 +66,7 @@ function addPatternFindings(relativeFile, content, findings) {
     }
   })
 
-  if (relativeFile.startsWith('scripts\\') && anonymousAdminFallbackPattern.test(content)) {
+  if (hasAnonymousAdminFallback(relativeFile, content)) {
     findings.push(`${relativeFile} uses NEXT_PUBLIC_SUPABASE_ANON_KEY as an administrative key`)
   }
 }
@@ -70,6 +78,11 @@ if (process.argv.includes('--self-test')) {
     ['concrete Supabase URL', 'const url = "https://qiiwqphdhpzkrjhrxsce.supabase.co";', concreteSupabaseUrlPattern],
   ]
   const failed = fixtures.filter(([, value, pattern]) => !pattern.test(value))
+  const anonymousFallbackFixture =
+    'const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY'
+  if (!hasAnonymousAdminFallback('scripts/import-scraped-dogs.ts', anonymousFallbackFixture)) {
+    failed.push(['anonymous Supabase administrative fallback'])
+  }
   if (failed.length > 0) {
     console.error(`Production configuration self-test failed: ${failed.map(([name]) => name).join(', ')}`)
     process.exitCode = 1
