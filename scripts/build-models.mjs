@@ -3,7 +3,7 @@
 // Salida: public/brand/modelos/modelo-N/*.svg|png, opciones.png y simbolo-perro/gato.svg
 import { mkdirSync, writeFileSync } from "node:fs"
 import sharp from "sharp"
-import { NAME, SLOGAN, VIEW, TEAL, CREAM } from "./brand-core.mjs"
+import { NAME, SLOGAN, VIEW, TEAL, ORANGE, MUTED, CREAM } from "./brand-core.mjs"
 import { bold, medium, width, path, doc } from "./brand-text.mjs"
 import { model1, model2, model3, dogOnly, catOnly, variants } from "./brand-models.mjs"
 
@@ -119,4 +119,39 @@ await sharp(Buffer.from(sheetSvg), { density: 200 }).resize({ width: 2400 }).png
 // Lámina de símbolos sueltos (perro, gato) para revisar rápido.
 const tile = (x, fn, bg) => `<g transform="translate(${x} 0)"><rect width="300" height="300" fill="${bg}"/><g transform="scale(2.5)">${fn(bg === TEAL ? variants.claro : variants.color)}</g></g>`
 await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300">${tile(0, dogOnly, CREAM)}${tile(300, catOnly, CREAM)}${tile(600, dogOnly, TEAL)}${tile(900, catOnly, TEAL)}</svg>`)).png().toFile(`${root}/solos.png`)
+// ───── Piezas definitivas (modelo elegido: 1) en public/brand/ ─────
+const CHOSEN = 0
+const out = "public/brand"
+for (const [vk, v] of Object.entries(variants)) {
+  const suf = vk === "claro" ? "-claro" : ""
+  for (const kind of ["isologo", "logotipo"]) {
+    const { w, h, body } = MODELS[CHOSEN][kind](v)
+    const svg = doc(w, h, body, v.fond)
+    writeFileSync(`${out}/${kind}${suf}.svg`, svg)
+    await sharp(Buffer.from(svg), { density: 300 }).resize({ width: 1600 }).png().toFile(`${out}/${kind}${suf}.png`)
+  }
+}
+const fn = MODELS[CHOSEN].fn
+// Avatar de redes 1080 (recorte circular seguro).
+{
+  const S = 6.4, off = (1080 - VIEW * S) / 2
+  const svg = doc(1080, 1080, `<g transform="translate(${off} ${off}) scale(${S})">${fn(variants.claro)}</g>`, TEAL)
+  writeFileSync(`${out}/social-avatar.svg`, svg); await sharp(Buffer.from(svg)).png().toFile(`${out}/social-avatar.png`)
+}
+// Cuadrado de publicación 1080: símbolo, nombre, eslogan y dominio.
+{
+  const S = 4.4, size = 104, sl = 32, ls = 6
+  const a = NAME[0] + " ", wa = width(bold, a, size), wn = wa + width(bold, NAME[1], size)
+  const wsl = width(medium, SL.toUpperCase(), sl, ls), x0 = (1080 - wn) / 2
+  const dom = "buscomimascotaperdida.com"
+  const body =
+    `<rect width="1080" height="18" fill="${TEAL}"/>` +
+    `<g transform="translate(${(1080 - VIEW * S) / 2} 100) scale(${S})">${fn(variants.color)}</g>` +
+    path(bold, a, x0, 770, size, TEAL) + path(bold, NAME[1], x0 + wa, 770, size, ORANGE) +
+    path(medium, SL.toUpperCase(), (1080 - wsl) / 2, 850, sl, MUTED, ls) +
+    `<rect x="340" y="920" width="400" height="76" rx="38" fill="${ORANGE}"/>` +
+    path(bold, dom, 540 - width(bold, dom, 25) / 2, 968, 25, "#ffffff")
+  const svg = doc(1080, 1080, body, CREAM)
+  writeFileSync(`${out}/social-cuadrado.svg`, svg); await sharp(Buffer.from(svg)).png().toFile(`${out}/social-cuadrado.png`)
+}
 console.log("Modelos generados en", root)

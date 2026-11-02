@@ -3,13 +3,21 @@
 // Salida: public/logo_symbol.svg, src/app/icon.svg, public/icons/*.png, public/og.png
 import { mkdirSync, writeFileSync } from "node:fs"
 import sharp from "sharp"
-import { TEAL, ORANGE, CREAM, MUTED, NAME, SLOGAN, VIEW, symbolColor, symbolLight } from "./brand-core.mjs"
+import { TEAL, ORANGE, CREAM, MUTED, NAME, SLOGAN, VIEW } from "./brand-core.mjs"
+import { model1, variants } from "./brand-models.mjs"
 
-const svg = (inner, extra = "") =>
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${VIEW} ${VIEW}" ${extra}>${inner}</svg>\n`
+// Modelo elegido: 1 (perro con el gato en negativo).
+const symbolColor = model1(variants.color)
+const symbolLight = model1(variants.claro)
 
-writeFileSync("public/logo_symbol.svg", svg(symbolColor, 'role="img" aria-label="Busco mi mascota"'))
-writeFileSync("src/app/icon.svg", svg(symbolColor))
+const svg = (inner, extra = "", box = `0 0 ${VIEW} ${VIEW}`) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${box}" ${extra}>${inner}</svg>
+`
+// Recorte ajustado al perro (barra de navegación y favicon).
+const TIGHT = "20 0 88 110"
+
+writeFileSync("public/logo_symbol.svg", svg(symbolColor, 'role="img" aria-label="Busco mi mascota"', TIGHT))
+writeFileSync("src/app/icon.svg", svg(symbolColor, "", TIGHT))
 
 // Ícono de app: fondo teal, símbolo crema. pad = margen (maskable necesita zona segura ~22%).
 const appIcon = (pad) => {

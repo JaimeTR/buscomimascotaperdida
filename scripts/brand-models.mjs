@@ -9,7 +9,7 @@ const mask = (id, cuts) =>
   `<mask id="${id}" maskUnits="userSpaceOnUse" x="-20" y="-20" width="260" height="360"><rect x="-20" y="-20" width="260" height="360" fill="#fff"/>${cuts}</mask>`
 const cut = `fill="none" stroke="#000" stroke-linecap="round"`
 const T = "translate(-7.5 -14) scale(.6)" // centra el perro (lienzo 200) en 120x120
-const CAT_AT = "translate(92 200) scale(.62) translate(-30 -100)" // gato sentado en la base del pecho
+const CAT_AT = "translate(94 200) scale(.8) translate(-30 -100)" // gato sentado en la base del pecho
 
 // MODELO 1 — "Negativo": perro de un solo color con el gato recortado (hueco) en su pecho.
 export const model1 = ({ art }) => {

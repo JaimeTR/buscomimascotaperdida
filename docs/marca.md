@@ -2,9 +2,9 @@
 
 **Nombre:** Busco mi mascota · **Dominio:** buscomimascotaperdida.com
 **Eslogan:** Juntos, de vuelta a casa
-**Idea del símbolo:** la silueta de un perro con un gato recortado en el espacio negativo de su pecho: sirve para los dos tipos de mascota. El nombre va en dos tonos: "Busco mi" en teal y "mascota" en naranja.
+**Símbolo (modelo 1):** un perro de perfil, con oreja caída y nariz marcadas, y un gato sentado recortado en el espacio negativo de su pecho: sirve para perros y gatos. El nombre va en dos tonos: "Busco mi" en teal y "mascota" en naranja. Sin lupa.
 
-## Piezas (`public/brand/`, regenerar con `node scripts/build-logos.mjs`)
+## Piezas (`public/brand/`, regenerar con `node scripts/build-models.mjs`)
 
 | Pieza | Archivo | Uso |
 |---|---|---|
@@ -13,6 +13,7 @@
 | Avatar de redes (1080², recorte circular seguro) | `social-avatar.png` | Foto de perfil Instagram, Facebook, TikTok, WhatsApp |
 | Cuadrado de publicación (1080²) | `social-cuadrado.png` | Publicación fija, portada de historia destacada |
 | Símbolo | `public/logo_symbol.svg`, `src/app/icon.svg` | Barra de navegación, favicon |
+| Modelos descartados y símbolos sueltos | `public/brand/modelos/` (incluye `simbolo-perro.svg`, `simbolo-gato.svg`) | Alternativas 2 y 3, íconos por tipo de mascota |
 | Íconos PWA / imagen social | `public/icons/*`, `public/og.png` | `node scripts/build-brand.mjs` |
 
 ## Colores
@@ -33,5 +34,5 @@ Outfit (800 para el nombre, 500 para el eslogan en mayúsculas con espaciado). E
 ## Reglas
 - Margen libre mínimo alrededor del logo: el ancho de la oreja del perro.
 - Tamaño mínimo: símbolo 24 px; isologo 120 px de ancho.
-- El símbolo es de un solo color (teal, o crema sobre fondo teal); no rotar, no añadir sombras ni contornos.
+- El símbolo es teal (o crema sobre fondo teal) con la oreja y la nariz en un tono más profundo; no rotar, no añadir sombras ni contornos.
 - Sobre fotos: usar la versión `-claro` sobre una capa teal sólida, no directamente sobre la imagen.
