@@ -26,5 +26,15 @@ export const path = (text, x, y, size, fill, ls = 0, f = braze) => {
   if (/NaN/.test(d)) throw new Error(`NaN en trazo de "${text}"`)
   return `<path fill="${fill}" d="${d}"/>`
 }
+// Eslogan en MAYÚSCULAS ajustado para medir exactamente `target` de ancho (tracking 0.12em).
+export const fitSlogan = (target, em = 0.12) => {
+  const text = SLOGAN.toUpperCase()
+  const size = target / (width(text, 1, 0, poppins) + em * (text.length - 1))
+  return { text, size, ls: em * size }
+}
+export const sloganPath = (target, x, y, fill) => {
+  const { text, size, ls } = fitSlogan(target)
+  return path(text, x, y, size, fill, ls, poppins)
+}
 export const doc = (w, h, body, bg) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" role="img" aria-label="Busco mi mascota. ${SLOGAN}">${bg ? `<rect width="${w}" height="${h}" fill="${bg}"/>` : ""}${body}</svg>\n`

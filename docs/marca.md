@@ -2,7 +2,7 @@
 
 **Nombre:** Busco mi mascota · **Dominio:** buscomimascotaperdida.com
 **Eslogan:** Juntos, de vuelta a casa
-**Símbolo:** un perro de perfil, con oreja caída y nariz marcadas, y un gato sentado recortado en el espacio negativo de su pecho: sirve para perros y gatos. Sin lupa.
+**Símbolo:** un perro de perfil, con oreja caída y nariz marcadas, y un gato sentado recortado en el espacio negativo de su pecho: sirve para perros y gatos. Una lupa pequeña dentro del pecho del gato aporta la idea de "buscar".
 **Nombre en el logo:** siempre en MAYÚSCULAS y en dos líneas: "BUSCO MI" (teal) y "MASCOTA" (naranja).
 
 ## Piezas (`public/brand/`, se regeneran con `node scripts/build-logos.mjs`)
@@ -35,7 +35,7 @@ Contraste: texto tinta sobre crema ≥ 14:1; blanco sobre teal y sobre naranja �
 
 ## Tipografía
 - **Nombre:** Braze (la tipografía de marca de Devmark), solo mayúsculas. El archivo está en `scripts/fonts/Braze.otf`; en los logos el texto ya está convertido a trazos. No incluye licencia visible: confirmar que se puede usar fuera de Devmark.
-- **Eslogan:** Poppins Medium, en minúsculas con mayúscula inicial.
+- **Eslogan:** Poppins Medium en MAYÚSCULAS, con espaciado de 0.12 em y ajustado para medir exactamente lo mismo que la línea "BUSCO MI".
 - **Interfaz web:** Outfit (`next/font`).
 
 ## Reglas

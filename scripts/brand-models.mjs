@@ -10,10 +10,13 @@ const T = "translate(-7.5 -14) scale(.6)" // centra el perro (lienzo 200) en 120
 const CAT_AT = "translate(94 200) scale(.8) translate(-30 -100)" // gato sentado en la base del pecho
 
 // Perro de un solo color con el gato recortado (hueco) en su pecho.
-export const symbol = ({ art }) => {
+export const symbol = ({ art, accent }) => {
   const id = uid()
   const m = mask(id, `${dogCuts()}<g transform="${CAT_AT}">${cat("#000")}</g>`)
-  return `<defs>${m}</defs><g transform="${T}"><g mask="url(#${id})">${dog(art)}</g></g>`
+  // Lupa pequeña dentro del pecho del gato (en coordenadas del gato): aro del color del perro y mango de acento.
+  const lupa = `<g transform="${CAT_AT}"><circle cx="28" cy="65" r="8.6" fill="none" stroke="${art}" stroke-width="3.4"/>` +
+    `<line x1="34.2" y1="71.2" x2="41.5" y2="78.5" stroke="${accent}" stroke-width="4.4" stroke-linecap="round"/></g>`
+  return `<defs>${m}</defs><g transform="${T}"><g mask="url(#${id})">${dog(art)}</g>${lupa}</g>`
 }
 
 // Versiones sueltas: solo perro y solo gato (un color) para íconos por tipo de mascota.

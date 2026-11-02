@@ -3,9 +3,9 @@
 // Salida: public/logo_symbol.svg, src/app/icon.svg, public/icons/*.png, public/og.png
 import { mkdirSync, writeFileSync } from "node:fs"
 import sharp from "sharp"
-import { TEAL, ORANGE, CREAM, MUTED, NAME, SLOGAN, VIEW } from "./brand-core.mjs"
+import { TEAL, ORANGE, CREAM, MUTED, NAME, VIEW } from "./brand-core.mjs"
 import { symbol, variants } from "./brand-models.mjs"
-import { path, poppins } from "./brand-text.mjs"
+import { path, width, sloganPath } from "./brand-text.mjs"
 
 const symbolColor = symbol(variants.color)
 const symbolLight = symbol(variants.claro)
@@ -37,7 +37,7 @@ const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" vi
   <g transform="translate(70 40) scale(4.6)">${symbolColor}</g>
   ${path(NAME[0].toUpperCase(), 600, 270, 92, TEAL, 3)}
   ${path(NAME[1].toUpperCase(), 600, 380, 92, ORANGE, 3)}
-  ${path(SLOGAN, 604, 450, 36, MUTED, 0.5, poppins)}
+  ${sloganPath(width(NAME[0].toUpperCase(), 92, 3), 600, 446, MUTED)}
 </svg>`
 await sharp(Buffer.from(og)).png().toFile("public/og.png")
 console.log("Marca generada")
