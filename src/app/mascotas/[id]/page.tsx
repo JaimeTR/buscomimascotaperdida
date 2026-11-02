@@ -1,32 +1,11 @@
-import { Metadata } from "next"
+
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import {
-    MapPin,
-    Calendar,
-    Share2,
-    Flag,
-    Heart,
-    ShieldCheck,
-    Phone,
-    Download,
-    ChevronLeft,
-    ChevronRight,
-    Facebook,
-    Twitter,
-    MessageCircle,
-    Clock,
-    Instagram,
-    Send,
-    Mail,
-    ChevronDown
-} from "lucide-react"
+import { MapPin, Flag, Phone, Download, ChevronRight, MessageCircle, Clock, Send, Mail } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { PetCard } from "@/components/pet-card"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { PetDetailActions } from "@/components/pet-detail-actions"
 import { createClient } from "@/utils/supabase/server"
 import { Sighting } from "@/hooks/use-pets"
 import { ReportActionButton } from "@/components/report-action-button"
@@ -122,9 +101,6 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
     const validSightings = sightings.filter(s => s.lat != null && s.lng != null)
     const mapCenterLat = validSightings[0]?.lat || pet.last_seen_lat || -12.0464
     const mapCenterLng = validSightings[0]?.lng || pet.last_seen_lng || -77.0428
-
-    const gallery = pet.image_urls || []
-    const firstImage = gallery[0] || "https://via.placeholder.com/800x600?text=Sin+Foto"
 
     return (
         <div className="min-h-screen bg-stone-50/50 pb-20">
@@ -387,7 +363,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
             </div>
 
             {/* Floating Share Button */}
-            <SocialShare petName={pet.name} petId={pet.id} variant="floating" />
+            <SocialShare petName={pet.name} variant="floating" />
         </div>
     )
 }

@@ -2,25 +2,11 @@
 "use client"
 
 import { useState, useEffect, Suspense } from "react"
-import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import {
-    Search,
-    MapPin,
-    Filter,
-    Plus,
-    FileText,
-    UserPlus,
-    Loader2,
-    Calendar,
-    Scissors,
-    Palette,
-    X
-} from "lucide-react"
+import { Search, MapPin, Filter, FileText, UserPlus, Loader2, Calendar, Palette, X } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
 import { PetCard } from "@/components/pet-card"
 import { usePets } from "@/hooks/use-pets"
 import { ReportActionButton } from "@/components/report-action-button"

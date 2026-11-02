@@ -4,21 +4,12 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import {
-    User,
-    FileText,
-    MessageSquare,
-    LogOut,
-    Settings,
-    ChevronDown,
-    Loader2
-} from "lucide-react"
+import { User, FileText, MessageSquare, LogOut, Loader2 } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { createClient } from "@/utils/supabase/client"
-import { cn } from "@/lib/utils"
 
 export function UserNav() {
     const router = useRouter()
@@ -35,6 +26,7 @@ export function UserNav() {
             const { data: { session } } = await supabase.auth.getSession()
             if (session) {
                 setUser(session.user)
+                subscribeProfile(session.user.id)
                 // Fetch extra profile info if needed (like name for fallback)
                 const { data } = await supabase
                     .from('profiles')
@@ -46,11 +38,25 @@ export function UserNav() {
             setIsLoading(false)
         }
 
+        // Realtime de perfil: se crea con el id de sesión real (antes usaba un `user` obsoleto).
+        let profileChannel: ReturnType<typeof supabase.channel> | null = null
+        const subscribeProfile = (id: string) => {
+            profileChannel?.unsubscribe()
+            profileChannel = supabase
+                .channel('profile-changes')
+                .on('postgres_changes',
+                    { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${id}` },
+                    (payload) => setProfile(payload.new)
+                )
+                .subscribe()
+        }
+
         getSession()
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
             if (session) {
                 setUser(session.user)
+                subscribeProfile(session.user.id)
                 // Re-fetch profile when auth state changes
                 supabase
                     .from('profiles')
@@ -65,22 +71,6 @@ export function UserNav() {
                 setProfile(null)
             }
         })
-
-        // Subscribe to profile changes to auto-update avatar
-        const profileChannel = supabase
-            .channel('profile-changes')
-            .on('postgres_changes',
-                {
-                    event: 'UPDATE',
-                    schema: 'public',
-                    table: 'profiles',
-                    filter: `id=eq.${user?.id}`
-                },
-                (payload) => {
-                    setProfile(payload.new)
-                }
-            )
-            .subscribe()
 
         // Refresh profile when window gains focus (useful after updating in settings)
         const handleFocus = async () => {
@@ -98,10 +88,10 @@ export function UserNav() {
 
         return () => {
             subscription.unsubscribe()
-            profileChannel.unsubscribe()
+            profileChannel?.unsubscribe()
             window.removeEventListener('focus', handleFocus)
         }
-    }, [])
+    }, [supabase])
 
     const handleLogout = async () => {
         await supabase.auth.signOut()

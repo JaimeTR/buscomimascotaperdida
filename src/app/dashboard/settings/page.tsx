@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Switch } from "@/components/ui/switch"
-import { Bell, Shield, User, LogOut, Camera, Loader2 } from "lucide-react"
+import { LogOut, Camera, Loader2 } from "lucide-react"
 import { useToast } from "@/components/ui/toast-modern"
 import { useState, useEffect } from "react"
 import { createClient } from "@/utils/supabase/client"
@@ -70,7 +70,7 @@ export default function SettingsPage() {
             }
         }
         fetchProfile()
-    }, [supabase, router])
+    }, [supabase, router, toast])
 
     const handlePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]

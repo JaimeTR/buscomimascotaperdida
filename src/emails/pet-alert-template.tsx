@@ -295,36 +295,9 @@ const locationText = {
     lineHeight: '22px',
 }
 
-const distanceText = {
-    fontSize: '13px',
-    color: '#0f766e',
-    fontWeight: '600',
-    margin: '0',
-}
 
-const mapLinksSection = {
-    margin: '20px 0',
-}
 
-const mapLinksTitle = {
-    fontSize: '13px',
-    color: '#64748b',
-    fontWeight: '600',
-    margin: '0 0 10px',
-}
 
-const mapButton = {
-    display: 'block',
-    backgroundColor: '#f1f5f9',
-    color: '#475569',
-    fontSize: '13px',
-    fontWeight: '600',
-    textAlign: 'center' as const,
-    textDecoration: 'none',
-    padding: '10px',
-    borderRadius: '8px',
-    border: '1px solid #cbd5e1',
-}
 
 const divider = {
     borderColor: '#e2e8f0',

@@ -2,9 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
-import { ArrowLeft, MapPin, Camera, Loader2, Send, AlertCircle, Upload, Phone, Mail, X, Image as ImageIcon, MessageCircle } from "lucide-react"
+import { ArrowLeft, MapPin, Camera, Loader2, Send, AlertCircle, Upload, Phone, Mail, X, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"

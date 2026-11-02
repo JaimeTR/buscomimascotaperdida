@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
-import { MapPin, Search, ChevronRight } from 'lucide-react'
+import { MapPin } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -80,6 +80,7 @@ export function LocationPopover({ onLocationChange, initialValues, showMap = tru
 
     useEffect(() => {
         onLocationChange({ department, province, district, lat: coords?.lat, lng: coords?.lng, address })
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- notificar solo cuando cambia la ubicación; el callback del padre es inline
     }, [department, province, district, coords, address])
 
     return (

@@ -2,7 +2,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Search, ChevronDown, Repeat, Info, X } from "lucide-react"
+import { Search, Repeat, Info, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
@@ -62,6 +62,7 @@ export function BreedPopover({ onBreedChange, initialBreed, petType = 'dog' }: B
         } else if (!isMestizo) {
             onBreedChange(selectedBreed)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- notificar solo cuando cambia la selección; el callback del padre es inline
     }, [selectedBreed, isMestizo, mix1, mix2])
 
     const filteredBreeds = breedList.filter(b =>

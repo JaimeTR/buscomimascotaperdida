@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Search, ChevronDown, Calendar, ArrowRight, Loader2, X, MapPin, Dog, Palette, PawPrint, Cat, Squirrel } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -9,13 +8,11 @@ import { PetCard } from "@/components/pet-card"
 import Link from "next/link"
 import { usePets } from "@/hooks/use-pets"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { LocationPopover } from "@/components/location-popover"
 import { BreedPopover } from "@/components/breed-popover"
 import { ColorPopover } from "@/components/color-popover"
 
 export default function Home() {
-  const router = useRouter()
   const [searchQuery, setSearchQuery] = useState("")
   const [location, setLocation] = useState({
     department: "",

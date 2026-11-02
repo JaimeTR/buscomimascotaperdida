@@ -2,7 +2,7 @@
 "use client"
 
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { registerSchema, RegisterSchema } from "@/lib/schemas/auth"
 import { registerAction } from "@/app/auth/actions"
@@ -28,7 +28,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         register,
         handleSubmit,
         setValue,
-        watch,
+        control,
         formState: { errors },
     } = useForm<RegisterSchema>({
         resolver: zodResolver(registerSchema),
@@ -38,7 +38,8 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
         }
     })
 
-    const department = watch("department")
+    const department = useWatch({ control, name: "department" })
+    const district = useWatch({ control, name: "district" })
 
     const onSubmit = async (data: RegisterSchema) => {
         setIsLoading(true)
@@ -115,7 +116,7 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             <div className="animate-in fade-in slide-in-from-left-2 duration-300 delay-100">
                 <ProfileLocationFields
                     department={department}
-                    district={watch("district")}
+                    district={district}
                     onDepartmentChange={(value) => {
                         setValue("department", value, { shouldValidate: true })
                         setValue("district", "", { shouldValidate: true })

@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, useWatch } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -41,7 +41,7 @@ export function CompleteProfileDialog({ profile, onCompleted }: CompleteProfileD
         register,
         handleSubmit,
         setValue,
-        watch,
+        control,
         formState: { errors },
     } = useForm<CompleteProfileSchema>({
         resolver: zodResolver(completeProfileSchema),
@@ -51,6 +51,9 @@ export function CompleteProfileDialog({ profile, onCompleted }: CompleteProfileD
             district: profile.district || "",
         },
     })
+
+    const department = useWatch({ control, name: "department" })
+    const district = useWatch({ control, name: "district" })
 
     const onSubmit = async (values: CompleteProfileSchema) => {
         setIsSaving(true)
@@ -108,8 +111,8 @@ export function CompleteProfileDialog({ profile, onCompleted }: CompleteProfileD
 
                     {(missing.department || showDistrict) && (
                         <ProfileLocationFields
-                            department={watch("department")}
-                            district={watch("district")}
+                            department={department}
+                            district={district}
                             onDepartmentChange={(value) => {
                                 setValue("department", value, { shouldValidate: true })
                                 setValue("district", "", { shouldValidate: true })

@@ -46,7 +46,7 @@ function ForgotPasswordContent() {
                 toast("Correo de recuperación enviado", { type: "success" })
             }
 
-        } catch (error) {
+        } catch {
             toast("Ocurrió un error inesperado", { type: "error" })
         } finally {
             setIsLoading(false)

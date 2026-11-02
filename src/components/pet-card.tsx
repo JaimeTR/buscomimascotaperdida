@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Clock, MapPin, Dog, Cat, PawPrint, Squirrel } from "lucide-react"
+import { Clock, MapPin, Dog, Cat, Squirrel } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { StatusBadge } from "@/components/status-badge"
@@ -15,7 +15,7 @@ interface PetCardProps {
     imageUrl: string
     lostDate: string
     status: 'lost' | 'found' | 'reunited'
-    timeLeft: string
+    timeLeft?: string
 }
 
 const COLOR_MAP: Record<string, string> = {
@@ -41,8 +41,7 @@ export function PetCard({
     colors = [],
     imageUrl,
     status,
-    lostDate,
-    timeLeft
+    lostDate
 }: PetCardProps) {
     const TypeIcon = type === 'dog' ? Dog : type === 'cat' ? Cat : Squirrel
 

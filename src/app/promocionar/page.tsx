@@ -2,17 +2,7 @@
 "use client"
 
 import { useState } from "react"
-import {
-    Star,
-    Zap,
-    Share2,
-    ArrowUp,
-    CheckCircle2,
-    ShieldCheck,
-    CreditCard,
-    QrCode,
-    ArrowRight
-} from "lucide-react"
+import { Star, Zap, Share2, ArrowUp, ShieldCheck, CreditCard, QrCode, ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -51,7 +41,7 @@ export default function PromotePage() {
                                 {/* Standard Card */}
                                 <div className="bg-white p-3 rounded-2xl border border-stone-200 opacity-60 scale-95 origin-top-right">
                                     <div className="aspect-[4/5] bg-stone-100 rounded-xl mb-3 overflow-hidden relative">
-                                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover grayscale" />
+                                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=400&auto=format&fit=crop" alt="Ejemplo de reporte estándar" className="w-full h-full object-cover grayscale" />
                                         <Badge variant="outline" className="absolute bottom-2 left-2 bg-white/80 text-[10px]">ESTÁNDAR</Badge>
                                     </div>
                                     <h4 className="font-bold text-stone-700 text-sm">Reporte Estándar</h4>
@@ -64,7 +54,7 @@ export default function PromotePage() {
                                         <Star className="h-3 w-3 fill-current" /> Destacado
                                     </div>
                                     <div className="aspect-[4/5] bg-stone-100 rounded-xl mb-3 overflow-hidden relative">
-                                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=400&auto=format&fit=crop" className="w-full h-full object-cover" />
+                                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=400&auto=format&fit=crop" alt="Ejemplo de reporte destacado" className="w-full h-full object-cover" />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
                                             <div>
                                                 <p className="text-white font-bold text-lg leading-none mb-1">&quot;Max&quot; - Visto hace 2h</p>

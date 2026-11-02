@@ -9,12 +9,18 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    ".worktrees/**",
     "out/**",
     "build/**",
     "next-env.d.ts",
     "convert-icons.js",
     "generate-icons.js",
   ]),
+  {
+    // Las imágenes vienen de Supabase Storage, URLs externas y previews blob: del navegador;
+    // next/image no aplica sin lista cerrada de hosts. Se mantiene <img> con alt y loading.
+    rules: { "@next/next/no-img-element": "off" },
+  },
 ]);
 
 export default eslintConfig;

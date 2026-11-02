@@ -2,25 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
-import Link from "next/link"
-import {
-    ArrowLeft,
-    Camera,
-    MapPin,
-    Loader2,
-    Plus,
-    X,
-    Dog,
-    Cat,
-    Squirrel,
-    ChevronDown,
-    Palette,
-    PawPrint,
-    Trash2,
-    CheckCircle2,
-    ImagePlus,
-    Save
-} from "lucide-react"
+import { ArrowLeft, Camera, MapPin, Loader2, Dog, Cat, Squirrel, ChevronDown, Palette, PawPrint, Trash2, ImagePlus, Save } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -65,7 +47,7 @@ export default function EditReportPage() {
 
     // Images State
     const [images, setImages] = useState<{ file: File | null, url: string, isMain: boolean }[]>([])
-    const [existingImageUrls, setExistingImageUrls] = useState<string[]>([])
+    const [, setExistingImageUrls] = useState<string[]>([])
 
     // Auth & Data Loading
     useEffect(() => {
@@ -121,7 +103,7 @@ export default function EditReportPage() {
             setIsLoading(false)
         }
         init()
-    }, [petId, router, supabase])
+    }, [petId, router, supabase, toast])
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {

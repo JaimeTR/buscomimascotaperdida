@@ -1,18 +1,17 @@
 "use client"
 
 import { useState } from "react"
-import { Facebook, Twitter, Share2, Link2, Instagram, X } from "lucide-react"
+import { Facebook, Share2, Link2, Instagram, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useToast } from "@/components/ui/toast-modern"
 
 interface SocialShareProps {
     petName: string
-    petId: string
     variant?: "inline" | "floating"
 }
 
-export function SocialShare({ petName, petId, variant = "inline" }: SocialShareProps) {
+export function SocialShare({ petName, variant = "inline" }: SocialShareProps) {
     const { toast } = useToast()
     const [isOpen, setIsOpen] = useState(false)
     const shareUrl = typeof window !== 'undefined' ? window.location.href : ""

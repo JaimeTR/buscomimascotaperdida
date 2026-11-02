@@ -3,37 +3,10 @@
 
 import { useState, useEffect, useMemo } from "react"
 import Link from "next/link"
-import {
-    Download,
-    Megaphone,
-    Eye,
-    Lightbulb,
-    Search,
-    MoreVertical,
-    Printer,
-    PenLine,
-    CheckCircle2,
-    Share2,
-    Heart,
-    Loader2,
-    Plus,
-    PawPrint,
-    MapPin,
-    AlertTriangle,
-    ChevronDown,
-    Trash2,
-    Facebook,
-    Twitter,
-    Linkedin,
-    Copy,
-    Check,
-    MessageCircle,
-    Instagram
-} from "lucide-react"
+import { Megaphone, Eye, Lightbulb, Search, Printer, PenLine, CheckCircle2, Share2, Heart, Loader2, Plus, PawPrint, MapPin, ChevronDown, Trash2, Facebook, Twitter, Copy, Check, MessageCircle, Instagram } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { createClient } from "@/utils/supabase/client"
@@ -131,6 +104,7 @@ export default function MyReportsPage() {
         queueMicrotask(() => {
             void fetchData()
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- carga inicial única; fetchData se redefine en cada render
     }, [])
 
     // Helper to calculate estimated views for a single pet

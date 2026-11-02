@@ -84,6 +84,7 @@ export function LocationMap({ onLocationSelect, initialLat, initialLng }: Locati
                 })
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- defaultCenter es constante; no debe reiniciar la geolocalización
     }, [initialLat, initialLng, onLocationSelect])
 
     if (!MapEventsComponent) {

@@ -4,17 +4,7 @@
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
-import {
-    LayoutDashboard,
-    FileText,
-    Lightbulb,
-    Settings,
-    Plus,
-    ShieldAlert,
-    Search,
-    LogOut,
-    Loader2
-} from "lucide-react"
+import { LayoutDashboard, FileText, Lightbulb, Settings, Plus, ShieldAlert, Search, LogOut } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"

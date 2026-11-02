@@ -169,7 +169,9 @@ export function usePets(options: UsePetsOptions = {}) {
         options.district,
         options.breed,
         options.color,
-        options.dateFrom
+        options.dateFrom,
+        options.size,
+        supabase
     ])
 
     return { pets, isLoading, error }

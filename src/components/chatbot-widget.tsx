@@ -64,79 +64,6 @@ export function ChatbotWidget() {
         return () => clearTimeout(timer)
     }, [])
 
-    // Extraer características de la búsqueda del texto del usuario
-    const extractSearchFilters = (text: string): PetSearchFilters => {
-        const filters: PetSearchFilters = {}
-        const lowerText = text.toLowerCase()
-
-        // Tipo de animal
-        if (lowerText.includes('perro') || lowerText.includes('perrita') || lowerText.includes('perrito')) {
-            filters.type = 'dog'
-        } else if (lowerText.includes('gato') || lowerText.includes('gatito') || lowerText.includes('gatita')) {
-            filters.type = 'cat'
-        } else if (lowerText.includes('conejo')) {
-            filters.type = 'rabbit'
-        }
-
-        // Raza (palabras clave comunes)
-        const breeds = ['labrador', 'golden', 'pastor', 'bulldog', 'poodle', 'chihuahua', 'siberian', 'persa', 'siamés', 'ragdoll']
-        const foundBreed = breeds.find(b => lowerText.includes(b))
-        if (foundBreed) filters.breed = foundBreed
-
-        // Color
-        const colors = ['blanco', 'negro', 'marrón', 'café', 'gris', 'rojo', 'naranja', 'rojizo', 'café claro', 'café oscuro', 'pardo', 'grisáceo', 'blancuzco', 'multicolor', 'tricolor']
-        const foundColor = colors.find(c => lowerText.includes(c))
-        if (foundColor) filters.color = foundColor
-
-        // Tamaño
-        if (lowerText.includes('pequeño') || lowerText.includes('chiquito') || lowerText.includes('mini')) {
-            filters.size = 'small'
-        } else if (lowerText.includes('mediano') || lowerText.includes('medio')) {
-            filters.size = 'medium'
-        } else if (lowerText.includes('grande') || lowerText.includes('grandote')) {
-            filters.size = 'large'
-        }
-
-        // Género
-        if (lowerText.includes('macho') || lowerText.includes('masculino') || lowerText.includes('él ')) {
-            filters.gender = 'male'
-        } else if (lowerText.includes('hembra') || lowerText.includes('femenino') || lowerText.includes('ella')) {
-            filters.gender = 'female'
-        }
-
-        // Distrito/ubicación (palabras clave)
-        const districts = ['san isidro', 'miraflores', 'barranco', 'surco', 'san borja', 'la molina', 'comas', 'independencia']
-        const foundDistrict = districts.find(d => lowerText.includes(d))
-        if (foundDistrict) filters.district = foundDistrict
-
-        return filters
-    }
-
-    // Buscar mascotas en la BD
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const searchPets = async (filters: PetSearchFilters): Promise<any[]> => {
-        try {
-            let query = supabase
-                .from('pets')
-                .select('id, name, type, breed, colors, size, gender, last_seen_district, image_urls, status, description')
-                .in('status', ['lost', 'found', 'in_contact'])
-
-            if (filters.type) query = query.eq('type', filters.type)
-            if (filters.breed) query = query.ilike('breed', `%${filters.breed}%`)
-            if (filters.size) query = query.eq('size', filters.size)
-            if (filters.gender) query = query.eq('gender', filters.gender)
-            if (filters.district) query = query.ilike('last_seen_district', `%${filters.district}%`)
-
-            const { data, error } = await query.limit(5)
-
-            if (error) throw error
-            return data || []
-        } catch (error) {
-            console.error('Error searching pets:', error)
-            return []
-        }
-    }
-
     const handleActionClick = async (action: string) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const actionMap: Record<string, any> = {
@@ -364,7 +291,7 @@ export function ChatbotWidget() {
                                         {/* Pet Results */}
                                         {msg.petResults && msg.petResults.length > 0 && (
                                             <div className="space-y-2 mt-3">
-                                                {msg.petResults.map((pet, idx) => (
+                                                {msg.petResults.map((pet) => (
                                                     <a
                                                         key={pet.id}
                                                         href={`/mascotas/${pet.id}`}

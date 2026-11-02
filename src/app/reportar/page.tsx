@@ -3,27 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import {
-    ArrowLeft,
-    ArrowRight,
-    Camera,
-    MapPin,
-    Search,
-    AlertTriangle,
-    HandHeart,
-    Loader2,
-    Plus,
-    X,
-    Dog,
-    Cat,
-    Squirrel,
-    ChevronDown,
-    Palette,
-    PawPrint,
-    Trash2,
-    CheckCircle2,
-    ImagePlus
-} from "lucide-react"
+import { ArrowLeft, ArrowRight, Camera, MapPin, Search, AlertTriangle, HandHeart, Loader2, Dog, Cat, Squirrel, ChevronDown, Palette, PawPrint, Trash2, CheckCircle2, ImagePlus } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -96,7 +76,7 @@ export default function ReportPage() {
             }
         }
         checkSession()
-    }, [router, supabase])
+    }, [router, supabase, toast])
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
