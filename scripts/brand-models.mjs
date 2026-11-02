@@ -21,9 +21,9 @@ export const place = (svg, x, y, h) => {
 export const placedWidth = (h) => (h * BBOX.w) / BBOX.h
 
 // Perro de un solo color con el gato recortado (hueco) en su pecho.
-export const symbol = ({ art }) => {
+export const symbol = ({ art, mono = false }) => {
   const id = uid()
-  const m = mask(id, `${dogCuts()}<g transform="${CAT_AT}">${cat("#000")}</g>`)
+  const m = mask(id, `${dogCuts(mono)}<g transform="${CAT_AT}">${cat("#000")}</g>`)
   // Lupa dentro del pecho del gato (coordenadas del gato). Un solo color = el del perro, que contrasta con el hueco:
   // verde sobre el gato blanco, blanca sobre el gato verde. Aro, brillo del cristal, collarín y mango.
   const lupa = `<g transform="${CAT_AT}" fill="none" stroke="${art}" stroke-linecap="round">` +
@@ -31,13 +31,13 @@ export const symbol = ({ art }) => {
     `<path d="M19.6 64.4 A7.2 7.2 0 0 1 24.6 58.9" stroke-width="2.4"/>` +
     `<line x1="35.2" y1="74.7" x2="38.8" y2="78.3" stroke-width="7.2"/>` +
     `<line x1="39.6" y1="79.1" x2="47.2" y2="86.7" stroke-width="5.6"/></g>`
-  return `<defs>${m}</defs><g transform="${T}"><g mask="url(#${id})">${dog(art)}</g>${lupa}</g>`
+  return `<defs>${m}</defs><g transform="${T}"><g mask="url(#${id})">${dog(art, undefined, mono)}</g>${lupa}</g>`
 }
 
 // Versiones sueltas: solo perro y solo gato (un color) para íconos por tipo de mascota.
-export const dogOnly = ({ art }) => {
+export const dogOnly = ({ art, mono = false }) => {
   const id = uid()
-  return `<defs>${mask(id, dogCuts())}</defs><g transform="${T}"><g mask="url(#${id})">${dog(art)}</g></g>`
+  return `<defs>${mask(id, dogCuts(mono))}</defs><g transform="${T}"><g mask="url(#${id})">${dog(art, undefined, mono)}</g></g>`
 }
 export const catOnly = ({ art }) => {
   const id = uid()
@@ -48,4 +48,7 @@ export const catOnly = ({ art }) => {
 export const variants = {
   color: { art: TEAL, accent: ORANGE, wordA: TEAL, wordB: ORANGE, slogan: "#3d5655", fond: null },
   claro: { art: CREAM, accent: ORANGE_LIGHT, wordA: CREAM, wordB: ORANGE_LIGHT, slogan: "#cfe9e5", fond: TEAL },
+  // Monocromo: un solo color y fondo transparente (el fondo oscuro/claro de la lámina es solo de vista previa).
+  blanco: { art: "#ffffff", mono: true, wordA: "#ffffff", wordB: "#ffffff", slogan: "#ffffff", fond: null },
+  negro: { art: "#000000", mono: true, wordA: "#000000", wordB: "#000000", slogan: "#000000", fond: null },
 }

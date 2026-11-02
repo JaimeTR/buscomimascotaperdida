@@ -66,23 +66,24 @@
 
 :root {
   /* Confianza comunitaria: teal = confianza, crema = lectura, naranja = acción */
-  --background: 40 38% 97%;
-  --foreground: 190 35% 11%;
+  /* Valores exactos de la paleta de marca (ver docs/DESIGN.md). */
+  --background: 42.9 41.2% 96.7%; /* crema #faf8f3 */
+  --foreground: 178.1 59.3% 10.6%; /* tinta #0b2b2a */
 
   --card: 0 0% 100%;
-  --card-foreground: 190 35% 11%;
+  --card-foreground: 178.1 59.3% 10.6%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 190 35% 11%;
+  --popover-foreground: 178.1 59.3% 10.6%;
 
-  --primary: 175 77% 26%;
+  --primary: 175.3 77.4% 26.1%; /* teal #0f766e */
   --primary-foreground: 0 0% 100%;
 
   --secondary: 40 30% 93%;
   --secondary-foreground: 190 35% 15%;
 
   --muted: 40 30% 93%;
-  --muted-foreground: 190 12% 36%;
+  --muted-foreground: 177.6 17% 28.8%; /* gris teal #3d5655 */
 
   --accent: 173 40% 92%;
   --accent-foreground: 175 77% 20%;
@@ -90,15 +91,15 @@
   --destructive: 0 72% 42%;
   --destructive-foreground: 0 0% 100%;
 
-  --cta: 21 90% 40%;
+  --cta: 17.5 88.3% 40.4%; /* naranja #c2410c */
   --cta-foreground: 0 0% 100%;
 
-  --success: 152 60% 28%;
-  --warning: 38 92% 30%;
+  --success: 151.8 59.4% 28%; /* #1d724a */
+  --warning: 37.9 92.2% 30%; /* #935f06 */
 
   --border: 40 20% 86%;
   --input: 40 15% 80%;
-  --ring: 175 77% 26%;
+  --ring: 175.3 77.4% 26.1%;
 
   --radius: 0.75rem;
 }
