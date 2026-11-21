@@ -60,7 +60,7 @@ const rows = parsed.data.map((e) => ({
   last_seen_address: e.address ?? null,
   last_seen_lat: e.lat ?? null,
   last_seen_lng: e.lng ?? null,
-  last_seen_date: new Date(e.last_seen_date).toISOString(),
+  last_seen_date: new Date(e.last_seen_date + "T17:00:00Z").toISOString(),
   source_url: e.source_url,
   source_name: e.source_name,
 }))
