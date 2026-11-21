@@ -6,7 +6,7 @@ import { createClient } from "@/utils/supabase/server"
 export async function requireAdmin() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) redirect("/login?next=/admin")
+    if (!user) redirect("/ingresar?next=/admin")
 
     const { data: isAdmin } = await supabase.rpc("is_admin")
     if (isAdmin !== true) notFound()

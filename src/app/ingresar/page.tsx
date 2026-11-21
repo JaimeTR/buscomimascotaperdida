@@ -12,7 +12,7 @@ import { getForgotPasswordPath } from "@/lib/auth-redirects"
 
 function LoginContent() {
     const searchParams = useSearchParams()
-    const nextUrl = isSafeInternalPath(searchParams.get("next"), "/dashboard")
+    const nextUrl = isSafeInternalPath(searchParams.get("next"), "/panel")
     const needsAccount = searchParams.get("reason") === "report"
     const failed = searchParams.get("error") === "auth-callback-failed"
 
@@ -32,7 +32,7 @@ function LoginContent() {
 
             <p className="mt-8 text-center text-muted-foreground">
                 ¿No tienes cuenta?{" "}
-                <Link href={`/register?next=${encodeURIComponent(nextUrl)}`} className="inline-flex min-h-11 items-center font-semibold text-primary underline-offset-4 hover:underline">Crear cuenta</Link>
+                <Link href={`/registro?next=${encodeURIComponent(nextUrl)}`} className="inline-flex min-h-11 items-center font-semibold text-primary underline-offset-4 hover:underline">Crear cuenta</Link>
             </p>
         </AuthShell>
     )

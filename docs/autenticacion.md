@@ -2,7 +2,7 @@
 
 ## Flujo
 - **Rutas protegidas** (`/dashboard/*`, `/reportar`, `/mascotas/:id/avistamiento`): el proxy (`src/proxy.ts` → `src/utils/supabase/middleware.ts`) redirige a `/login?next=…&reason=report` si no hay sesión. La lista está en `src/lib/auth-guard.ts` (con test).
-- **`/login` y `/register` con sesión activa:** redirigen a `next` (validado con `isSafeInternalPath`) o a `/dashboard`.
+- **`/ingresar` y `/registro` con sesión activa:** redirigen a `next` (validado con `isSafeInternalPath`) o a `/panel`.
 - **Botón "Reportar":** sin popup; va directo al login con aviso. Tras entrar vuelve a la ruta original.
 - **Métodos:** correo + contraseña (mínimo 8), Google y Facebook (`src/components/auth/social-buttons.tsx`, OAuth de Supabase).
 - **Registro mínimo:** nombre, correo y contraseña. Teléfono y zona se piden al primer reporte (`complete-profile-dialog.tsx`).

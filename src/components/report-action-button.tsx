@@ -25,11 +25,11 @@ export function ReportActionButton({ nextUrl, label, icon, ...props }: ReportAct
             const { data: { session } } = await supabase.auth.getSession()
 
             // Sin sesión: directo al login con aviso (sin popup); al entrar vuelve a donde ibas.
-            router.push(session ? nextUrl : `/login?next=${encodeURIComponent(nextUrl)}&reason=report`)
+            router.push(session ? nextUrl : `/ingresar?next=${encodeURIComponent(nextUrl)}&reason=report`)
         } catch (error) {
             console.error("Error checking session:", error)
             // Fallback to login just in case
-            router.push(`/login?next=${encodeURIComponent(nextUrl)}`)
+            router.push(`/ingresar?next=${encodeURIComponent(nextUrl)}`)
         } finally {
             setIsChecking(false)
         }

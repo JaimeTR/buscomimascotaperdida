@@ -29,7 +29,7 @@ export const KNOWLEDGE: Doc[] = [
         text: 'En Mascotas puedes buscar por nombre, distrito, raza, color y tamaño, y cambiar entre vista de lista y de mapa. Cada ficha muestra las fotos, la zona y cómo contactar al dueño si él lo permitió.',
     },
     {
-        id: 'alertas', title: 'Alertas cerca de ti', url: '/dashboard/settings',
+        id: 'alertas', title: 'Alertas cerca de ti', url: '/panel/ajustes',
         keywords: 'alertas notificaciones avisos cerca zona radio push correo email avisar',
         text: 'Puedes recibir avisos cuando se reporte una mascota cerca de ti, por correo y con notificaciones en tu dispositivo. Se configuran en Ajustes > Notificaciones de tu cuenta. También avisamos a quien tenga un reporte parecido al tuyo (perdido y encontrado).',
     },
@@ -39,7 +39,7 @@ export const KNOWLEDGE: Doc[] = [
         text: 'El teléfono, WhatsApp y correo del dueño solo se muestran si él los marcó como públicos. Puedes escribirle por WhatsApp desde la ficha cuando esté disponible. No pedimos datos sensibles y nunca compartas contraseñas por chat.',
     },
     {
-        id: 'reunido', title: 'Marcar como reunido', url: '/dashboard/reports',
+        id: 'reunido', title: 'Marcar como reunido', url: '/panel/reportes',
         keywords: 'reunido reencuentro encontre mi mascota cerrar reporte resuelto finalizar',
         text: 'Cuando tu mascota vuelva a casa, entra a Mi panel > Reportes y pulsa "Marcar reunido". Así dejamos de avisar a otros y tu historia puede aparecer en la portada.',
     },

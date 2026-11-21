@@ -54,7 +54,7 @@ export default function EditReportPage() {
         const init = async () => {
             const { data: { session } } = await supabase.auth.getSession()
             if (!session) {
-                router.push(`/login?next=/dashboard/reports/${petId}/edit`)
+                router.push(`/ingresar?next=/panel/reportes/${petId}/editar`)
                 return
             }
             setUserId(session.user.id)
@@ -69,7 +69,7 @@ export default function EditReportPage() {
 
             if (error || !pet) {
                 toast("No se pudo cargar el reporte", { type: "error" })
-                router.push('/dashboard/reports')
+                router.push('/panel/reportes')
                 return
             }
 
@@ -221,7 +221,7 @@ export default function EditReportPage() {
             if (error) throw error
 
             toast("Reporte actualizado con éxito", { type: "success", title: "¡Guardado!" })
-            router.push('/dashboard/reports')
+            router.push('/panel/reportes')
 
         } catch (error) {
             console.error('Error updating pet:', error)

@@ -31,7 +31,7 @@ export async function GET(request: NextRequest) {
         const profile = pet.profiles as unknown as { email: string | null } | null
         if (!profile?.email) continue
         try {
-            await sendReunionReminderEmail(profile.email, pet.name || 'tu mascota', `${base}/dashboard/reports`)
+            await sendReunionReminderEmail(profile.email, pet.name || 'tu mascota', `${base}/panel/reportes`)
             await admin.from('pets').update({ reminded_at: new Date().toISOString() }).eq('id', pet.id)
             sent++
         } catch {

@@ -9,8 +9,8 @@ import { SocialButtons } from "@/components/auth/social-buttons"
 import { isSafeInternalPath } from "@/lib/safe-path"
 
 function RegisterContent() {
-    const next = isSafeInternalPath(useSearchParams().get("next"), "/dashboard")
-    const loginHref = `/login?next=${encodeURIComponent(next)}`
+    const next = isSafeInternalPath(useSearchParams().get("next"), "/panel")
+    const loginHref = `/ingresar?next=${encodeURIComponent(next)}`
 
     return (
         <AuthShell title="Crea tu cuenta" subtitle="Gratis y en un minuto. Tu teléfono y zona te los pedimos recién al reportar.">

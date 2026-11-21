@@ -51,7 +51,7 @@ export default function SightingReportPage() {
         const init = async () => {
             const { data: { session } } = await supabase.auth.getSession()
             if (!session) {
-                router.push(`/login?next=/mascotas/${petId}/avistamiento`)
+                router.push(`/ingresar?next=/mascotas/${petId}/avistamiento`)
                 return
             }
             setUserId(session.user.id)

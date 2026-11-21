@@ -6,7 +6,7 @@ const RUNTIME_CACHE = 'busco-mascota-runtime-v2';
 const STATIC_ASSETS = [
     '/',
     '/manifest.json',
-    '/offline',
+    '/sin-conexion',
     '/icons/icon-192x192.png',
     '/icons/icon-512x512.png',
 ];
@@ -58,13 +58,13 @@ self.addEventListener('fetch', (event) => {
         url.pathname.startsWith('/api/') ||
         url.pathname.startsWith('/_next/data/') ||
         url.pathname.startsWith('/auth/') ||
-        url.pathname.startsWith('/dashboard') ||
+        url.pathname.startsWith('/panel') ||
         url.pathname.startsWith('/admin') ||
         url.pathname.startsWith('/reportar') ||
-        url.pathname.startsWith('/login') ||
-        url.pathname.startsWith('/register') ||
-        url.pathname.startsWith('/forgot-password') ||
-        url.pathname.startsWith('/update-password') ||
+        url.pathname.startsWith('/ingresar') ||
+        url.pathname.startsWith('/registro') ||
+        url.pathname.startsWith('/recuperar-contrasena') ||
+        url.pathname.startsWith('/nueva-contrasena') ||
         request.method !== 'GET'
     ) {
         return;
@@ -72,7 +72,7 @@ self.addEventListener('fetch', (event) => {
 
     // Only cache the public landing page and the offline fallback.
     if (request.mode === 'navigate') {
-        const isPublicNavigation = url.pathname === '/' || url.pathname === '/offline';
+        const isPublicNavigation = url.pathname === '/' || url.pathname === '/sin-conexion';
         if (!isPublicNavigation) {
             return;
         }
@@ -91,7 +91,7 @@ self.addEventListener('fetch', (event) => {
                         if (cachedResponse) {
                             return cachedResponse;
                         }
-                        return caches.match('/offline');
+                        return caches.match('/sin-conexion');
                     });
                 })
         );

@@ -34,8 +34,8 @@ export function PromoRequestForm({ loggedIn, kinds, defaultKind, defaultPlan }: 
                 <h3 className="text-xl font-semibold">Inicia sesión para enviar tu solicitud</h3>
                 <p className="mx-auto mt-1 max-w-md text-muted-foreground">Así evitamos el spam y puedes ver el estado de tus solicitudes. Es gratis.</p>
                 <div className="mt-5 flex justify-center gap-3">
-                    <Button asChild variant="cta"><Link href="/login?next=/promocionar">Iniciar sesión</Link></Button>
-                    <Button asChild variant="outline"><Link href="/register">Crear cuenta</Link></Button>
+                    <Button asChild variant="cta"><Link href="/ingresar?next=/promocionar">Iniciar sesión</Link></Button>
+                    <Button asChild variant="outline"><Link href="/registro">Crear cuenta</Link></Button>
                 </div>
             </div>
         )

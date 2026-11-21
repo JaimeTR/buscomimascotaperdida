@@ -7,6 +7,16 @@ const nextConfig: NextConfig = {
   images: { qualities: [75, 85, 90] },
   async redirects() {
     return [
+      { source: '/login', destination: '/ingresar', permanent: true },
+      { source: '/register', destination: '/registro', permanent: true },
+      { source: '/forgot-password', destination: '/recuperar-contrasena', permanent: true },
+      { source: '/update-password', destination: '/nueva-contrasena', permanent: true },
+      { source: '/offline', destination: '/sin-conexion', permanent: true },
+      { source: '/dashboard', destination: '/panel', permanent: true },
+      { source: '/dashboard/reports', destination: '/panel/reportes', permanent: true },
+      { source: '/dashboard/reports/:id/edit', destination: '/panel/reportes/:id/editar', permanent: true },
+      { source: '/dashboard/messages', destination: '/panel/mensajes', permanent: true },
+      { source: '/dashboard/settings', destination: '/panel/ajustes', permanent: true },
       {
         source: '/reporte',
         destination: '/reportar',

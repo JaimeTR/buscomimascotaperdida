@@ -12,7 +12,7 @@ const redirectLocation = (response) => response.headers.get("location")
         async () => success,
     )
     assert.equal(response.status, 307)
-    assert.equal(redirectLocation(response), "https://app.example/dashboard")
+    assert.equal(redirectLocation(response), "https://app.example/panel")
 }
 
 {
@@ -29,7 +29,7 @@ for (const query of ["", "?next=%2Freportar"]) {
         async () => success,
     )
     assert.equal(response.status, 307)
-    assert.equal(redirectLocation(response), "https://app.example/login?error=auth-callback-failed")
+    assert.equal(redirectLocation(response), "https://app.example/ingresar?error=auth-callback-failed")
 }
 
 for (const query of ["?code=valid&next=https%3A%2F%2Fexample.com", "?code=valid&next=%2F%2Fexample.com"]) {
@@ -37,7 +37,7 @@ for (const query of ["?code=valid&next=https%3A%2F%2Fexample.com", "?code=valid&
         request(query),
         async () => success,
     )
-    assert.equal(redirectLocation(response), "https://app.example/dashboard")
+    assert.equal(redirectLocation(response), "https://app.example/panel")
 }
 
 {
@@ -46,7 +46,7 @@ for (const query of ["?code=valid&next=https%3A%2F%2Fexample.com", "?code=valid&
         async () => ({ data: { session: null }, error: new Error("provider secret details") }),
     )
     const location = redirectLocation(response)
-    assert.equal(location, "https://app.example/login?error=auth-callback-failed")
+    assert.equal(location, "https://app.example/ingresar?error=auth-callback-failed")
     assert.equal(location.includes("provider secret details"), false)
 }
 

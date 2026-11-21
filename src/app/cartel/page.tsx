@@ -40,7 +40,7 @@ export default async function PosterHubPage({ searchParams }: { searchParams: Pr
                     <h2 className="mt-3 text-xl font-semibold">Inicia sesión para ver los carteles de tus reportes</h2>
                     <p className="mt-1 text-muted-foreground">¿Quieres ayudar a otra familia? Abre su reporte y pulsa «Generar cartel».</p>
                     <div className="mt-4 flex flex-wrap justify-center gap-3">
-                        <Button asChild variant="cta"><Link href="/login?next=/cartel">Iniciar sesión</Link></Button>
+                        <Button asChild variant="cta"><Link href="/ingresar?next=/cartel">Iniciar sesión</Link></Button>
                         <Button asChild variant="outline"><Link href="/mascotas">Ver mascotas reportadas</Link></Button>
                     </div>
                 </section>

@@ -37,7 +37,7 @@ export function SocialButtons({ next }: { next: string }) {
     const go = async (provider: (typeof PROVIDERS)[number]["id"]) => {
         setLoading(provider)
         try {
-            const safeNext = isSafeInternalPath(next, "/dashboard")
+            const safeNext = isSafeInternalPath(next, "/panel")
             const { error } = await createClient().auth.signInWithOAuth({
                 provider,
                 options: { redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(safeNext)}` },

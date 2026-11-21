@@ -37,7 +37,7 @@ export function Navbar() {
     const pathname = usePathname()
 
     // El dashboard y el admin traen su propia navegación.
-    if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) return null
+    if (pathname.startsWith("/panel") || pathname.startsWith("/admin")) return null
 
     return (
         <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
