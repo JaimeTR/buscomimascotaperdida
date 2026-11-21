@@ -4,7 +4,7 @@ import Image from "next/image"
 const COLUMNS = [
     { title: "Plataforma", links: [["/mascotas", "Buscar mascotas"], ["/reportar", "Reportar una mascota"], ["/cartel", "Crear cartel"]] },
     { title: "Comunidad", links: [["/aliados", "Aliados y voluntarios"], ["/anuncios", "Anuncios"], ["/promocionar", "Promociona tu negocio"]] },
-    { title: "Ayuda", links: [["/contacto", "Contacto"], ["/privacidad", "Privacidad"], ["/terminos", "Términos"]] },
+    { title: "Ayuda", links: [["/contacto", "Contacto"], ["/privacidad", "Privacidad"], ["/terminos", "Términos"], ["/cookies", "Cookies"], ["/libro-de-reclamaciones", "Libro de reclamaciones"]] },
 ]
 
 export function Footer() {

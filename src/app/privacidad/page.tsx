@@ -1,88 +1,57 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-react";
+import Link from "next/link"
+import { LegalPage, LEGAL_EMAIL } from "@/components/legal-page"
 
 export const metadata = { title: "Política de privacidad | Busco mi mascota", description: "Cómo tratamos tus datos personales según la Ley N° 29733 de Perú.", alternates: { canonical: "/privacidad" } }
 
 export default function PrivacyPage() {
     return (
-        <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto bg-card rounded-2xl shadow-sm border border-border overflow-hidden">
-                <div className="p-8 sm:p-12">
-                    <div className="mb-8">
-                        <Link href="/">
-                            <Button variant="ghost" className="pl-0 hover:bg-transparent hover:text-primary">
-                                <ChevronLeft className="mr-2 h-4 w-4" />
-                                Volver al inicio
-                            </Button>
-                        </Link>
-                    </div>
-
-                    <h1 className="text-3xl font-bold text-foreground mb-6">Política de Privacidad</h1>
-                    <p className="text-muted-foreground mb-8">Última actualización: 11 de Febrero, 2026</p>
-
-                    <div className="prose prose-slate max-w-none text-foreground space-y-6">
-                        <section>
-                            <h2 className="text-xl font-bold text-foreground mb-3">1. Introducción</h2>
-                            <p>
-                                En BuscoMiMascotaPerdida.com respetamos su privacidad y estamos comprometidos con proteger sus datos personales, en cumplimiento con la
-                                <strong> Ley N° 29733, Ley de Protección de Datos Personales de Perú</strong>, y su Reglamento.
-                            </p>
-                        </section>
-
-                        <section>
-                            <h2 className="text-xl font-bold text-foreground mb-3">2. Información que Recopilamos</h2>
-                            <p>Podemos recopilar la siguiente información personal:</p>
-                            <ul className="list-disc pl-5 mt-2 space-y-1">
-                                <li>Datos de contacto: Nombre, correo electrónico, número de teléfono.</li>
-                                <li>Datos de ubicación: Departamento, Distrito (para reportes y alertas).</li>
-                                <li>Información de mascotas: Fotos, descripciones y ubicación de avistamientos.</li>
-                            </ul>
-                        </section>
-
-                        <section>
-                            <h2 className="text-xl font-bold text-foreground mb-3">3. Finalidad del Tratamiento de Datos</h2>
-                            <p>Sus datos personales se utilizan para:</p>
-                            <ul className="list-disc pl-5 mt-2 space-y-1">
-                                <li>Gestionar su cuenta de usuario y permitirle publicar reportes.</li>
-                                <li>Facilitar el contacto entre usuarios para la recuperación de mascotas (solo si usted lo autoriza).</li>
-                                <li>Enviar notificaciones sobre mascotas perdidas en su zona (si está suscrito).</li>
-                                <li>Mejorar nuestros servicios y prevenir fraudes.</li>
-                            </ul>
-                        </section>
-
-                        <section>
-                            <h2 className="text-xl font-bold text-foreground mb-3">4. Compartir Información</h2>
-                            <p>
-                                No vendemos ni alquilamos sus datos a terceros. Podemos compartir información pública de reportes (fotos de la mascota, zona aproximada) en redes sociales para ayudar en la búsqueda.
-                                Sus datos de contacto directo (teléfono/email) solo serán visibles si usted marca esa opción al crear un reporte.
-                            </p>
-                        </section>
-
-                        <section>
-                            <h2 className="text-xl font-bold text-foreground mb-3">5. Seguridad de los Datos</h2>
-                            <p>
-                                Implementamos medidas técnicas y organizativas razonables para proteger su información contra acceso no autorizado, pérdida o alteración.
-                            </p>
-                        </section>
-
-                        <section>
-                            <h2 className="text-xl font-bold text-foreground mb-3">6. Sus Derechos ARCO</h2>
-                            <p>
-                                Como titular de datos personales, usted tiene derecho de Acceso, Rectificación, Cancelación y Oposición (Derechos ARCO).
-                                Puede ejercer estos derechos escribiéndonos a <strong>contacto@buscomimascotaperdida.com</strong> o a través de la configuración de su cuenta.
-                            </p>
-                        </section>
-
-                        <section>
-                            <h2 className="text-xl font-bold text-foreground mb-3">7. Cambios en la Política</h2>
-                            <p>
-                                Podemos actualizar esta política periódicamente. Le notificaremos cualquier cambio significativo a través de la Plataforma o por correo electrónico.
-                            </p>
-                        </section>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+        <LegalPage
+            title="Política de privacidad"
+            intro={<p>Respetamos tu privacidad y tratamos tus datos conforme a la Ley N° 29733, Ley de Protección de Datos Personales, y su Reglamento (D.S. N° 003-2013-JUS). Aquí te explicamos qué datos usamos, para qué y qué control tienes.</p>}
+            sections={[
+                { title: "Responsable del tratamiento", body: <p>El responsable es el titular de BuscoMiMascotaPerdida.com. Puedes contactarlo en <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a> para cualquier tema de privacidad.</p> },
+                { title: "Datos que recopilamos", body: (<ul>
+                    <li><strong>Cuenta:</strong> nombre, correo y contraseña (almacenada cifrada por nuestro proveedor de autenticación). Si entras con Google o Facebook, recibimos tu nombre, correo y foto de perfil; nunca tu contraseña de esos servicios.</li>
+                    <li><strong>Perfil (opcional o al reportar):</strong> teléfono/WhatsApp, redes sociales, departamento y distrito.</li>
+                    <li><strong>Reportes:</strong> fotos y descripción de la mascota, fecha y ubicación aproximada del hecho, y los avistamientos que registres.</li>
+                    <li><strong>Notificaciones:</strong> si activas las alertas push, la suscripción de tu navegador.</li>
+                    <li><strong>Datos técnicos:</strong> dirección IP, navegador y errores de la aplicación, para seguridad y diagnóstico.</li>
+                    <li><strong>Ubicación del dispositivo:</strong> solo si tú la autorizas en el navegador, para centrar mapas o marcar un punto; no se guarda de forma continua.</li>
+                    <li><strong>Mensajes al asistente virtual y a contacto:</strong> el contenido que escribas.</li>
+                </ul>) },
+                { title: "Para qué los usamos", body: (<ul>
+                    <li>Crear y mantener tu cuenta y permitirte publicar reportes y avistamientos.</li>
+                    <li>Mostrar tus reportes públicamente y, solo si lo decides, tus datos de contacto.</li>
+                    <li>Avisarte de mascotas perdidas o encontradas cerca de tu zona o que coincidan con tu caso.</li>
+                    <li>Enviar correos del servicio (confirmación de cuenta, recuperación de contraseña, alertas).</li>
+                    <li>Prevenir fraude y abuso, moderar contenido y mejorar el servicio.</li>
+                </ul>) },
+                { title: "Base legal", body: <p>Tratamos tus datos con tu consentimiento (al registrarte y aceptar esta política) y para ejecutar el servicio que solicitas. Puedes retirar tu consentimiento en cualquier momento, sin efecto retroactivo.</p> },
+                { title: "Con quién los compartimos", body: (<>
+                    <p>No vendemos tus datos. Usamos proveedores que los tratan solo por encargo nuestro:</p>
+                    <ul>
+                        <li><strong>Supabase:</strong> base de datos, autenticación y almacenamiento de imágenes.</li>
+                        <li><strong>Hostinger:</strong> alojamiento del sitio.</li>
+                        <li><strong>Resend:</strong> envío de correos.</li>
+                        <li><strong>Google y Facebook (Meta):</strong> solo si eliges iniciar sesión con ellos.</li>
+                        <li><strong>Sentry:</strong> registro de errores técnicos.</li>
+                        <li><strong>OpenStreetMap:</strong> mapas (tu navegador consulta sus servidores de mosaicos).</li>
+                        <li><strong>Servicios de IA (Google Gemini / Hugging Face):</strong> procesan los mensajes que escribes al asistente virtual. No escribas datos sensibles en él.</li>
+                    </ul>
+                    <p>También podemos revelar datos si una autoridad competente lo exige conforme a ley.</p>
+                </>) },
+                { title: "Qué es público", body: <p>Las fotos, descripción, zona aproximada y estado de un reporte son visibles para cualquier visitante, y pueden compartirse en redes y carteles. Tu teléfono o WhatsApp solo se muestran si marcas esa opción. Tu correo nunca se publica.</p> },
+                { title: "Transferencia al extranjero", body: <p>Algunos proveedores almacenan o procesan datos fuera del Perú (por ejemplo en Brasil y Estados Unidos). Exigimos medidas de seguridad adecuadas y usamos solo proveedores que las ofrecen.</p> },
+                { title: "Cuánto tiempo los conservamos", body: <p>Mientras tu cuenta esté activa. Cuando elimines un reporte o pidas cerrar tu cuenta, borramos o anonimizamos los datos asociados, salvo los que debamos conservar por obligación legal o para resolver disputas.</p> },
+                { title: "Seguridad", body: <p>Usamos conexión cifrada (HTTPS), control de acceso por usuario en la base de datos y contraseñas cifradas. Ningún sistema es infalible: si ocurre una brecha que te afecte, te lo comunicaremos conforme a la ley.</p> },
+                { title: "Tus derechos (ARCO)", body: (<>
+                    <p>Tienes derecho a acceder, rectificar, cancelar y oponerte al tratamiento de tus datos, así como a revocar tu consentimiento. Puedes editar tus datos en <Link href="/dashboard/settings">Mi perfil</Link> o escribir a <a href={`mailto:${LEGAL_EMAIL}`}>{LEGAL_EMAIL}</a> con el asunto «Derechos ARCO» y una copia de tu documento de identidad. Respondemos en los plazos de ley.</p>
+                    <p>Si crees que no atendimos tu solicitud, puedes acudir a la Autoridad Nacional de Protección de Datos Personales (Ministerio de Justicia y Derechos Humanos).</p>
+                </>) },
+                { title: "Menores de edad", body: <p>La Plataforma no está dirigida a menores de 18 años. Si detectamos una cuenta de un menor sin autorización de sus padres o tutores, la eliminaremos.</p> },
+                { title: "Cookies", body: <p>Usamos cookies y almacenamiento local necesarios para mantener tu sesión y recordar tus preferencias. Detalle en la <Link href="/cookies">Política de cookies</Link>.</p> },
+                { title: "Cambios", body: <p>Si cambiamos esta política publicaremos la nueva versión con su fecha y, si el cambio es relevante, te avisaremos por la Plataforma o por correo.</p> },
+            ]}
+        />
+    )
 }

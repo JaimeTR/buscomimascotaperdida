@@ -12,4 +12,6 @@ Fotos de [Pexels](https://www.pexels.com), con la licencia de Pexels (uso gratui
 | `voluntaria-con-perro.webp` | https://www.pexels.com/photo/crop-volunteer-caressing-adorable-dog-with-tongue-out-6568946/ |
 | `veterinarios-voluntarios.webp` | https://www.pexels.com/photo/a-veterinarian-and-two-volunteers-helping-a-sick-dog-7469274/ |
 
+Resolución: hero = `reencuentro-atardecer.webp` (2400px), login/registro = `paseo-en-el-parque.webp` (2000px), ambas exportadas de la foto original a calidad 88.
+
 Reglas: usarlas solo como ilustración (nunca como si fueran casos reales de la plataforma), con `alt` descriptivo y sin insinuar que las personas o animales de las fotos son usuarios del sitio.
