@@ -38,6 +38,10 @@ const CAT_IMAGES: Record<string, string> = {
     "Mestizo": "https://images.unsplash.com/photo-1511044568932-338cba0ad803?q=80&w=200&auto=format&fit=crop"
 }
 
+const nonMestizo = (m: Record<string, string>) => Object.keys(m).filter((b) => b !== "Mestizo").sort()
+export const DOG_BREEDS = nonMestizo(DOG_IMAGES)
+export const CAT_BREEDS = nonMestizo(CAT_IMAGES)
+
 interface BreedPopoverProps {
     onBreedChange: (breed: string) => void
     initialBreed?: string

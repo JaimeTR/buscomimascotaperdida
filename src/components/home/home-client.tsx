@@ -36,6 +36,7 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
     featured: false,
     searchQuery: filters.q,
     type: filters.petType,
+    status: filters.status,
     department: filters.location.department,
     province: filters.location.province,
     district: filters.location.district,
