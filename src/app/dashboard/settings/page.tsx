@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Switch } from "@/components/ui/switch"
+import { PushToggle } from "@/components/push-toggle"
 import { LogOut, Camera, Loader2 } from "lucide-react"
 import { useToast } from "@/components/ui/toast-modern"
 import { useState, useEffect } from "react"
@@ -354,6 +355,8 @@ export default function SettingsPage() {
                             <CardDescription>Controla cuándo y cómo te contactamos.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
+
+                            <PushToggle />
 
                             <div className="flex items-center justify-between space-x-4">
                                 <div className="space-y-1">

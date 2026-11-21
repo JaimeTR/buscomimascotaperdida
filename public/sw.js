@@ -151,3 +151,28 @@ self.addEventListener('message', (event) => {
         );
     }
 });
+
+// Web Push: muestra la alerta y abre el reporte al tocarla.
+self.addEventListener('push', (event) => {
+    let data = {};
+    try { data = event.data ? event.data.json() : {}; } catch { /* payload inválido: se ignora */ }
+    event.waitUntil(
+        self.registration.showNotification(data.title || 'Busco mi mascota', {
+            body: data.body || '',
+            icon: '/icons/icon-192x192.png',
+            badge: '/icons/icon-192x192.png',
+            data: { url: data.url || '/' },
+        })
+    );
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const url = new URL(event.notification.data?.url || '/', location.origin).href;
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then((wins) => {
+            const open = wins.find((w) => w.url === url);
+            return open ? open.focus() : clients.openWindow(url);
+        })
+    );
+});

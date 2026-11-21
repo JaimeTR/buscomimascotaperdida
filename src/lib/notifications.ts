@@ -5,6 +5,7 @@ import { assertServerEnv } from '@/lib/env'
 import { getSafeErrorCode } from '@/lib/safe-error'
 import { createAdminClient } from '@/utils/supabase/admin'
 import { matchScore } from '@/lib/matches'
+import { sendPushToUsers } from '@/lib/push'
 
 export type NotifiablePet = {
     id: string
@@ -136,6 +137,12 @@ export async function notifyNearbyUsers(pet: NotifiablePet) {
                 console.error('notification delivery failed', { code: getSafeErrorCode(e) })
             }
         }
+        const where = pet.last_seen_district ? ` en ${pet.last_seen_district}` : ' cerca de ti'
+        await sendPushToUsers(targets.map((t) => t.id), {
+            title: pet.status === 'found' ? 'Mascota encontrada cerca' : 'Mascota perdida cerca',
+            body: `${pet.name || 'Una mascota'}${where}. Toca para ver el reporte.`,
+            url: `/mascotas/${pet.id}`,
+        })
         return { success: true, notified, matched }
     } catch (error: unknown) {
         console.error('notifyNearbyUsers failed', { code: getSafeErrorCode(error) })
