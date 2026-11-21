@@ -46,7 +46,7 @@ export function SocialShare({ petName, variant = "inline" }: SocialShareProps) {
         return (
             <Popover open={isOpen} onOpenChange={setIsOpen}>
                 <PopoverTrigger asChild>
-                    <button className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-primary hover:bg-primary text-white shadow-2xl shadow-teal-700/40 flex items-center justify-center transition-all hover:scale-110 group">
+                    <button aria-label="Compartir reporte" className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-primary hover:bg-primary text-white shadow-2xl shadow-teal-700/40 flex items-center justify-center transition-all hover:scale-110 group">
                         <Share2 className="h-6 w-6 group-hover:rotate-12 transition-transform" />
                     </button>
                 </PopoverTrigger>

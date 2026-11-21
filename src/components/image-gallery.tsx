@@ -28,7 +28,7 @@ export function ImageGallery({ images, petName, status }: ImageGalleryProps) {
             {/* Main Image */}
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] shadow-xl border-4 border-white bg-card group">
                 <Badge
-                    className={`absolute top-6 left-6 z-10 px-6 py-2 text-xs uppercase tracking-widest font-bold shadow-lg border-0 ${status === 'lost' ? 'bg-red-500 text-white' : 'bg-emerald-500 text-white'
+                    className={`absolute top-6 left-6 z-10 px-6 py-2 text-xs uppercase tracking-widest font-bold shadow-lg border-0 ${status === 'lost' ? 'bg-red-600 text-white' : 'bg-emerald-700 text-white'
                         }`}
                 >
                     {status === 'lost' ? 'PERDIDO' : 'ENCONTRADO'}

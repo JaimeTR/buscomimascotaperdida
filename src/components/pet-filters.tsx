@@ -24,9 +24,10 @@ const TYPES = [
 ]
 
 // Chip de filtro: se rellena de teal suave cuando está activo.
-function Chip({ active, icon: Icon, children }: { active: boolean; icon: React.ElementType; children: React.ReactNode }) {
+function Chip({ active, icon: Icon, children, ...props }: { active: boolean; icon: React.ElementType; children: React.ReactNode } & React.ComponentProps<typeof Button>) {
     return (
         <Button
+            {...props}
             variant="outline"
             size="sm"
             className={cn(
@@ -68,9 +69,9 @@ export function PetFilters({ value, onChange, onSubmit }: { value: Filters; onCh
             <div className="flex flex-wrap items-center gap-2">
                 <Popover>
                     <PopoverTrigger asChild>
-                        <span><Chip active={Boolean(value.location.department)} icon={MapPin}>
+                        <Chip active={Boolean(value.location.department)} icon={MapPin}>
                             {value.location.district || value.location.province || value.location.department || "Lugar"}
-                        </Chip></span>
+                        </Chip>
                     </PopoverTrigger>
                     <PopoverContent className="max-h-[80vh] w-80 overflow-y-auto">
                         <LocationPopover
@@ -82,7 +83,7 @@ export function PetFilters({ value, onChange, onSubmit }: { value: Filters; onCh
 
                 <Popover>
                     <PopoverTrigger asChild>
-                        <span><Chip active={value.petType !== "all"} icon={TypeIcon}>{value.petType === "all" ? "Mascota" : type.label}</Chip></span>
+                        <Chip active={value.petType !== "all"} icon={TypeIcon}>{value.petType === "all" ? "Mascota" : type.label}</Chip>
                     </PopoverTrigger>
                     <PopoverContent className="w-52 p-2">
                         <p className="p-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tipo de mascota</p>
@@ -104,7 +105,7 @@ export function PetFilters({ value, onChange, onSubmit }: { value: Filters; onCh
 
                 <Popover>
                     <PopoverTrigger asChild>
-                        <span><Chip active={Boolean(value.breed)} icon={PawPrint}>{value.breed || "Raza"}</Chip></span>
+                        <Chip active={Boolean(value.breed)} icon={PawPrint}>{value.breed || "Raza"}</Chip>
                     </PopoverTrigger>
                     <PopoverContent className="w-80 overflow-hidden p-0">
                         <BreedPopover petType={value.petType} initialBreed={value.breed} onBreedChange={(b) => set({ breed: b })} />
@@ -113,7 +114,7 @@ export function PetFilters({ value, onChange, onSubmit }: { value: Filters; onCh
 
                 <Popover>
                     <PopoverTrigger asChild>
-                        <span><Chip active={Boolean(value.color)} icon={Palette}>{value.color || "Color"}</Chip></span>
+                        <Chip active={Boolean(value.color)} icon={Palette}>{value.color || "Color"}</Chip>
                     </PopoverTrigger>
                     <PopoverContent className="w-64 p-0">
                         <ColorPopover petType={value.petType} initialColor={value.color} onColorChange={(c) => set({ color: c })} />
@@ -122,7 +123,7 @@ export function PetFilters({ value, onChange, onSubmit }: { value: Filters; onCh
 
                 <Popover>
                     <PopoverTrigger asChild>
-                        <span><Chip active={Boolean(value.dateFrom)} icon={Calendar}>{value.dateFrom || "Fecha"}</Chip></span>
+                        <Chip active={Boolean(value.dateFrom)} icon={Calendar}>{value.dateFrom || "Fecha"}</Chip>
                     </PopoverTrigger>
                     <PopoverContent className="w-64">
                         <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-muted-foreground" htmlFor="desde-fecha">Desde la fecha</label>

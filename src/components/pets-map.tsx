@@ -33,7 +33,7 @@ export function PetsMap({ pets }: { pets: Pet[] }) {
                     <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <FitBounds points={points} />
                     {located.map((p) => (
-                        <Marker key={p.id} position={[p.last_seen_lat!, p.last_seen_lng!]} icon={p.status === "found" ? ICONS.found : ICONS.lost}>
+                        <Marker key={p.id} position={[p.last_seen_lat!, p.last_seen_lng!]} icon={p.status === "found" ? ICONS.found : ICONS.lost} title={`${p.status === "found" ? "Encontrado" : "Perdido"}: ${p.name || "Sin nombre"}`}>
                             <Popup>
                                 <p className="font-bold">{p.status === "found" ? "Encontrado" : "Perdido"}: {p.name || "Sin nombre"}</p>
                                 <p className="text-xs">{p.breed || "Raza desconocida"} · {p.last_seen_district}</p>

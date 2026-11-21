@@ -24,7 +24,7 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
     const getStatusColor = (s: string) => {
         switch (s) {
             case 'lost': return 'bg-orange-500 text-white'
-            case 'found': return 'bg-emerald-500 text-white'
+            case 'found': return 'bg-emerald-700 text-white'
             case 'in_contact': return 'bg-primary text-white'
             default: return 'bg-background0 text-white'
         }

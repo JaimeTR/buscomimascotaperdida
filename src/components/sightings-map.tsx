@@ -67,7 +67,7 @@ export function SightingsMap({ initialLat, initialLng, sightings, className }: S
             />
 
             {/* Initial Loss Marker */}
-            <Marker position={[initialLat, initialLng]} icon={INITIAL_ICON}>
+            <Marker position={[initialLat, initialLng]} icon={INITIAL_ICON} title="Punto inicial">
                 <Popup className="rounded-2xl overflow-hidden">
                     <div className="p-1">
                         <p className="font-bold text-foreground border-b pb-1 mb-1">📍 Punto Inicial</p>
@@ -82,6 +82,7 @@ export function SightingsMap({ initialLat, initialLng, sightings, className }: S
                     key={sighting.id}
                     position={[sighting.lat, sighting.lng]}
                     icon={SIGHTING_ICON}
+                    title="Avistamiento"
                 >
                     <Popup>
                         <div className="p-1 space-y-1">

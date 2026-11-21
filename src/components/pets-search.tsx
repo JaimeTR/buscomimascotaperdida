@@ -1,8 +1,7 @@
 "use client"
 
-import { useState, useEffect, Suspense } from "react"
-import { useSearchParams } from "next/navigation"
-import { Search, MapPin, Filter, FileText, UserPlus, Loader2, Calendar, Palette, X, List, Map as MapIcon } from "lucide-react"
+import { useState } from "react"
+import { Search, MapPin, Filter, FileText, UserPlus, Calendar, Palette, X, List, Map as MapIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,11 +13,10 @@ import Image from "next/image"
 import { Reveal } from "@/components/ui/reveal"
 import { STOCK } from "@/lib/stock-images"
 
-function SearchContent({ ad }: { ad?: React.ReactNode }) {
-    const searchParams = useSearchParams()
+function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuery: string }) {
 
     // Search State
-    const [query, setQuery] = useState(searchParams.get('q') || "")
+    const [query, setQuery] = useState(initialQuery)
     const [district, setDistrict] = useState("")
     const [type, setType] = useState<string>("all")
     const [breed, setBreed] = useState("")
@@ -28,13 +26,6 @@ function SearchContent({ ad }: { ad?: React.ReactNode }) {
 
     const [showAdvanced, setShowAdvanced] = useState(false)
     const [view, setView] = useState<"list" | "map">("list")
-
-    // Sync query from URL if changed elsewhere
-    useEffect(() => {
-        const q = searchParams.get('q')
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        if (q) setQuery(q)
-    }, [searchParams])
 
     // Data Fetching
     const { pets, isLoading } = usePets({
@@ -111,6 +102,7 @@ function SearchContent({ ad }: { ad?: React.ReactNode }) {
 
                                 {/* Type Filter */}
                                 <select
+                                    aria-label="Tipo de mascota"
                                     className="h-12 w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-teal-100 outline-none"
                                     value={type}
                                     onChange={(e) => setType(e.target.value)}
@@ -154,6 +146,7 @@ function SearchContent({ ad }: { ad?: React.ReactNode }) {
                                     />
                                 </div>
                                 <select
+                                    aria-label="Tamaño"
                                     className="h-10 w-full rounded-md border border-border px-3 text-sm focus:ring-2 focus:ring-teal-100 outline-none"
                                     value={size}
                                     onChange={(e) => setSize(e.target.value)}
@@ -283,7 +276,7 @@ function SearchContent({ ad }: { ad?: React.ReactNode }) {
                             <ReportActionButton
                                 nextUrl="/reportar"
                                 label="Reportar Mascota"
-                                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/20 font-bold h-11"
+                                className="w-full bg-emerald-700 hover:bg-emerald-800 text-white shadow-lg shadow-emerald-700/20 font-bold h-11"
                             />
                         </div>
 
@@ -297,10 +290,6 @@ function SearchContent({ ad }: { ad?: React.ReactNode }) {
     )
 }
 
-export function PetsSearch({ ad }: { ad?: React.ReactNode }) {
-    return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
-            <SearchContent ad={ad} />
-        </Suspense>
-    )
+export function PetsSearch({ ad, initialQuery = "" }: { ad?: React.ReactNode; initialQuery?: string }) {
+    return <SearchContent ad={ad} initialQuery={initialQuery} />
 }
