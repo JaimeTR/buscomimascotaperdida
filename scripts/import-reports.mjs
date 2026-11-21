@@ -25,8 +25,8 @@ const entry = z.object({
   description: text(500).optional(),
   status: z.enum(["lost", "found"]).default("lost"),
   district: text(60),
-  province: z.literal("Lima").default("Lima"),
-  department: z.literal("Lima").default("Lima"),
+  province: z.enum(["Lima", "Callao"]).default("Lima"), // Lima Metropolitana incluye el Callao
+  department: z.enum(["Lima", "Callao"]).default("Lima"),
   address: text(120).optional(), // referencia pública (cruce de calles), nunca una dirección de domicilio
   lat: z.number().min(-12.5).max(-11.5).optional(), // caja aproximada de Lima Metropolitana
   lng: z.number().min(-77.3).max(-76.7).optional(),

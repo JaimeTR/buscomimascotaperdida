@@ -27,6 +27,8 @@ export type Pet = {
     personality?: string[]
     markings?: string
     sightings?: Sighting[]
+    source_name?: string | null
+    source_url?: string | null
 }
 
 export type Sighting = {

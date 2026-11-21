@@ -2,7 +2,10 @@
   {
     "name": "Oso",
     "type": "dog",
-    "colors": ["negro", "marrón"],
+    "colors": [
+      "negro",
+      "marrón"
+    ],
     "description": "Se escapó junto a otro perrito (Chencho) el 5 de noviembre tras romper la malla de seguridad de la reja de su vivienda. Desaparecieron en minutos. Familia pide ayuda a los vecinos. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "Ate",
@@ -14,7 +17,10 @@
   {
     "name": "Chencho",
     "type": "dog",
-    "colors": ["blanco", "negro"],
+    "colors": [
+      "blanco",
+      "negro"
+    ],
     "description": "Se escapó junto a otro perrito (Oso) el 5 de noviembre. Una cámara de seguridad de la urbanización lo captó cruzando la Carretera Central rumbo al sector de las fábricas. Ya se buscó a pie y en auto sin éxito. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "Ate",
@@ -27,7 +33,10 @@
     "name": "Lula",
     "type": "dog",
     "breed": "Cocker Spaniel",
-    "colors": ["beige", "blanco"],
+    "colors": [
+      "beige",
+      "blanco"
+    ],
     "description": "Hembra de 10 años, pelaje mediano. Se asustó por los fuegos artificiales cerca de su casa el 11 de octubre y salió corriendo. Es nerviosa. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "Villa María del Triunfo",
@@ -39,7 +48,9 @@
   {
     "name": "Tommy",
     "type": "dog",
-    "colors": ["beige"],
+    "colors": [
+      "beige"
+    ],
     "description": "Macho de 6 años, tamaño pequeño, pelaje mediano. Huyó de los fuegos artificiales el 20 de setiembre. Es tímido, se asusta con ruidos fuertes y tiene problemas digestivos. No llevaba collar ni placa. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "Puente Piedra",
@@ -51,7 +62,10 @@
   {
     "name": "Leonarda",
     "type": "cat",
-    "colors": ["blanco", "negro"],
+    "colors": [
+      "blanco",
+      "negro"
+    ],
     "description": "Gata hembra de 10 años, esterilizada, contextura gruesa, dócil y cariñosa. Se escapó de madrugada del 13 de octubre por una ventana. No está acostumbrada a salir de casa. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "Magdalena del Mar",
@@ -63,7 +77,10 @@
     "name": "Runruna",
     "type": "dog",
     "breed": "Mestizo",
-    "colors": ["marrón", "blanco"],
+    "colors": [
+      "marrón",
+      "blanco"
+    ],
     "description": "Hembra mediana. Salió de casa la noche del 31 de octubre por una puerta mal cerrada y no volvió. No acostumbra salir sola. Se piden videos de cámaras de vigilancia de la zona. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "Los Olivos",
@@ -76,7 +93,10 @@
     "name": "Dobby",
     "type": "dog",
     "breed": "Mestizo",
-    "colors": ["blanco", "marrón"],
+    "colors": [
+      "blanco",
+      "marrón"
+    ],
     "description": "Macho de 5 años, castrado, mediano, con marrón en orejas y alrededor de los ojos. Rescatado; se escapó de un hogar temporal el 23 de setiembre. Fue visto cerca del mercado Mar Pacífico Sur. Cariñoso pero asustadizo. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "San Bartolo",
@@ -88,7 +108,9 @@
   {
     "name": "Mota",
     "type": "dog",
-    "colors": ["blanco"],
+    "colors": [
+      "blanco"
+    ],
     "description": "Macho de raza pequeña, 1 año, pelaje blanco recién rapado, un bigote largo de un lado, ojos y nariz negros, lazo azul. Salió el 9 de octubre por una puerta abierta. Temeroso, no se deja agarrar. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "La Victoria",
@@ -101,7 +123,9 @@
     "name": "King",
     "type": "dog",
     "breed": "Shih Tzu",
-    "colors": ["blanco"],
+    "colors": [
+      "blanco"
+    ],
     "description": "Macho de 1 año, pequeño, pelaje blanco y largo, dócil y juguetón. Salió de casa a mediodía del 1 de octubre por una puerta semiabierta. No está acostumbrado a la calle. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "Villa María del Triunfo",
@@ -112,7 +136,10 @@
   {
     "name": "Canela",
     "type": "dog",
-    "colors": ["marrón", "blanco"],
+    "colors": [
+      "marrón",
+      "blanco"
+    ],
     "description": "Hembra de 10 años, tamaño grande, pelaje marrón con manchas blancas en el pecho. Perrita de apoyo emocional de la familia. Se escapó el 4 de octubre por una reja abierta. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "San Juan de Miraflores",
@@ -124,7 +151,10 @@
     "name": "Milo",
     "type": "dog",
     "breed": "Mestizo",
-    "colors": ["blanco", "marrón"],
+    "colors": [
+      "blanco",
+      "marrón"
+    ],
     "description": "Macho de 1 año, pelaje blanco con manchas marrones. Llevaba puesta una prenda marrón. Se perdió el 19 de setiembre. La familia ofrece S/100 de recompensa. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "San Martín de Porres",
@@ -136,12 +166,801 @@
   {
     "name": "Mayla",
     "type": "dog",
-    "colors": ["blanco", "beige"],
+    "colors": [
+      "blanco",
+      "beige"
+    ],
     "description": "Hembra de 2 años y medio, delgada, pelo corto blanco con la punta de la cola beige. Salió de su quinta el 16 de setiembre; una cámara la captó cruzando hacia Breña. Asustadiza, sin collar ni placa. Contacto solo a través de la nota original.",
     "status": "lost",
     "district": "La Victoria",
     "last_seen_date": "2026-09-16",
     "source_url": "https://rpp.pe/rotafono/mascotas/la-victoria-familia-busca-a-perrita-que-desaparecio-hace-tres-semanas-noticia-1711276",
     "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Balín",
+    "type": "dog",
+    "colors": [
+      "blanco"
+    ],
+    "description": "Macho cachorro de 9 meses, pequeño, delgado, pelaje recién cortado y lagrimeo en el ojo izquierdo. Se escapó por una puerta abierta. No acostumbra andar solo. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Lince",
+    "address": "Jirón Alberto Alexander, cuadra 26",
+    "last_seen_date": "2026-09-28",
+    "source_url": "https://rpp.pe/rotafono/mascotas/lince-familia-busca-a-perrito-balin-que-se-perdio-hace-24-horas-noticia-1709881",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Coco",
+    "type": "dog",
+    "breed": "Schnauzer",
+    "colors": [
+      "marrón claro"
+    ],
+    "description": "Macho de 4 años, mediano, pelaje corto. Acompañaba a su dueña en su puesto del mercado y desapareció sin que las cámaras lo captaran. Todos en el mercado lo conocen. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Villa El Salvador",
+    "address": "Mercado Unicachi",
+    "last_seen_date": "2026-09-14",
+    "source_url": "https://rpp.pe/rotafono/mascotas/villa-el-salvador-perrito-llamado-coco-desaparece-en-el-mercado-unicachi-hace-dos-semanas-mascota-perdida-animales-video-noticia-1709804",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Bastian",
+    "type": "dog",
+    "colors": [
+      "beige",
+      "blanco",
+      "negro"
+    ],
+    "description": "Macho de 5 años, pequeño, pelaje mediano, orejas negras. Corrió por la calle junto a un campo deportivo; la familia cree que pudo seguir a otras personas. Sin collar ni placa. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Los Olivos",
+    "address": "Cerca de la av. 2 de Octubre",
+    "last_seen_date": "2026-09-24",
+    "source_url": "https://rpp.pe/rotafono/mascotas/los-olivos-buscan-a-perrito-bastian-que-se-perdio-tras-acompanar-a-sus-duenos-a-un-campo-deportivo-noticia-1709742",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "París",
+    "type": "dog",
+    "colors": [
+      "blanco"
+    ],
+    "description": "Hembra de 9 años, pequeña, pelaje blanco ensortijado, esterilizada. Perrita de apoyo emocional. Salió asustada de la casa de su cuidador; llevaba chaleco rosado de bordes celestes, sin collar. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Villa María del Triunfo",
+    "last_seen_date": "2026-09-17",
+    "source_url": "https://rpp.pe/rotafono/mascotas/villa-maria-del-triunfo-buscan-a-perrita-de-soporte-emocional-que-se-perdio-hace-cinco-dias-noticia-1709027",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Chiquitita",
+    "type": "dog",
+    "colors": [
+      "blanco",
+      "marrón"
+    ],
+    "description": "Hembra de 7 años, pequeña, blanca con manchas marrones, muy tímida. Salió por una puerta semiabierta a media mañana. Sin collar. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "San Martín de Porres",
+    "address": "Av. Pacasmayo",
+    "last_seen_date": "2026-09-15",
+    "source_url": "https://rpp.pe/rotafono/mascotas/san-martin-de-porres-familia-busca-a-perrita-extraviada-hace-48-horas-noticia-1708045",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Mike",
+    "type": "dog",
+    "colors": [
+      "blanco",
+      "beige"
+    ],
+    "description": "Macho de 7 años, pequeño, pelaje corto blanco con manchas beige. Salió por una puerta abierta a jugar con otros perros. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Pachacámac",
+    "address": "Av. Huancavelica",
+    "last_seen_date": "2026-09-07",
+    "source_url": "https://rpp.pe/rotafono/mascotas/pachacamac-abuelita-busca-a-su-mascota-mike-que-desaparecio-hace-mas-de-una-semana-noticia-1707460",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Nicolasa",
+    "type": "dog",
+    "colors": [
+      "caramelo"
+    ],
+    "description": "Hembra de 10 años, color caramelo, sin muelas y con alergia en la piel cerca de la cola. Solía ir sola entre dos casas de la familia y regresar; esta vez no volvió. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Los Olivos",
+    "last_seen_date": "2026-09-05",
+    "source_url": "https://rpp.pe/rotafono/mascotas/los-olivos-buscan-a-perrita-nicolasa-que-se-perdio-hace-cuatro-dias-noticia-1706771",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Gabriel",
+    "type": "cat",
+    "breed": "Azul ruso",
+    "colors": [
+      "plomo"
+    ],
+    "description": "Macho castrado de 2 años y medio, mediano a largo, pelaje corto plomo y ojos amarillos. Gato de casa, dócil con su familia. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Santiago de Surco",
+    "address": "Urbanización La Libertad, cruce de los jirones Volcano y Viña Tacama",
+    "last_seen_date": "2026-08-08",
+    "source_url": "https://rpp.pe/rotafono/mascotas/surco-buscan-a-gabriel-un-gato-azul-ruso-desaparecido-hace-20-dias-noticia-1704238",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Akira",
+    "type": "dog",
+    "breed": "American Bully",
+    "colors": [
+      "gris atigrado",
+      "blanco"
+    ],
+    "description": "Hembra de 1 año y 9 meses, mediana, gris atigrada con manchas blancas. Salió de su casa por la tarde y fue vista jugando con trabajadores de alumbrado público. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Rímac",
+    "address": "Zona San Juan de Amancaes",
+    "last_seen_date": "2026-06-18",
+    "source_url": "https://rpp.pe/rotafono/mascotas/rimac-buscan-a-perrita-que-desaparecio-hace-12-dias-noticia-1695326",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Martha",
+    "type": "dog",
+    "breed": "Poodle",
+    "description": "Hembra de unos 9 años, esterilizada, muy nerviosa y temerosa. Rescatada de maltrato. Desapareció a las 5 p. m. al salir un momento a la calle; la familia teme que se la hayan llevado. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "San Martín de Porres",
+    "address": "Av. Universitaria, cuadra 4",
+    "last_seen_date": "2026-06-26",
+    "source_url": "https://rpp.pe/rotafono/mascotas/san-martin-de-porres-perrita-rescatada-llamada-martha-desaparecio-en-la-avenida-universitaria-noticia-1695208",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Susy",
+    "type": "dog",
+    "breed": "Shih Tzu x perro chino",
+    "colors": [
+      "gris",
+      "marrón claro"
+    ],
+    "description": "Hembra de unos 6 kg, con dermatitis severa que requiere medicación diaria, muy poco pelaje. Vestía chompa verde con huesitos, arnés rosado y collar rojo con placa. Pudo ser golpeada por un auto. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "La Molina",
+    "address": "Parque Génesis, residencial Monterrico",
+    "last_seen_date": "2026-06-22",
+    "source_url": "https://rpp.pe/rotafono/mascotas/la-molina-familia-busca-a-perrita-susy-con-dermatitis-severa-noticia-1694877",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Ñaña",
+    "type": "dog",
+    "breed": "Mestizo",
+    "colors": [
+      "negro",
+      "blanco",
+      "beige"
+    ],
+    "description": "Hembra esterilizada, lleva placa con su nombre en el pecho. Se escapó de su cuidador durante un paseo y fue vista jugando con otros perros. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Surquillo",
+    "address": "Parque Aramburú",
+    "last_seen_date": "2026-06-20",
+    "source_url": "https://rpp.pe/rotafono/mascotas/surquillo-buscan-a-perrita-nana-que-se-perdio-hace-cuatro-dias-noticia-1694470",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Chato",
+    "type": "dog",
+    "breed": "Pastor chiribaya",
+    "colors": [
+      "caramelo"
+    ],
+    "description": "Macho de 6 años, adoptado, muy conocido en el barrio y sabe cruzar calles. La familia sospecha que se lo llevaron. Raza declarada patrimonio cultural de la Nación. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "San Juan de Miraflores",
+    "address": "Asentamiento humano Las Torres de Alemana",
+    "last_seen_date": "2026-05-20",
+    "source_url": "https://rpp.pe/rotafono/mascotas/san-juan-de-miraflores-pastor-chiribaya-llamado-chato-se-perdio-hace-10-dias-en-las-torres-de-alemana-mascotas-perro-perdido-video-noticia-1691260",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Emile",
+    "type": "dog",
+    "description": "Hembra de 6 años, esterilizada, pequeña, pelaje corto y cola larga. Se soltó de la correa al llegar a un servicio de baño. Sin placa ni collar. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Chorrillos",
+    "address": "Av. San Marcos",
+    "last_seen_date": "2026-05-28",
+    "source_url": "https://rpp.pe/rotafono/mascotas/chorrillos-familia-busca-a-perrita-que-se-perdio-tras-acudir-a-un-servicio-de-bano-noticia-1690613",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Pecas",
+    "type": "dog",
+    "colors": [
+      "blanco",
+      "beige"
+    ],
+    "description": "Hembra de 12 años, esterilizada, pelaje corto. Sufre epilepsia y necesita medicación diaria. Sin collar ni placa. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "San Borja",
+    "last_seen_date": "2026-05-17",
+    "source_url": "https://rpp.pe/rotafono/mascotas/san-borja-familia-busca-a-perrita-pecas-que-desaparecio-hace-tres-dias-noticia-1689312",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Pelusa",
+    "type": "cat",
+    "breed": "Parecida a Persa",
+    "colors": [
+      "blanco"
+    ],
+    "description": "Gata de 3 años, mediana, pelaje blanco y abundante, esterilizada. Sin collar ni placa al perderse. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Callao",
+    "province": "Callao",
+    "department": "Callao",
+    "last_seen_date": "2026-04-25",
+    "source_url": "https://rpp.pe/rotafono/mascotas/callao-familia-busca-a-gatita-pelusa-que-se-perdio-hace-casi-un-mes-noticia-1688922",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Negrita",
+    "type": "dog",
+    "breed": "Criolla (rasgos de Schnauzer)",
+    "description": "Hembra de 6 años, pequeña, pelaje corto, muy amigable, con cicatriz en el vientre. Huyó por los fuegos artificiales. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "San Martín de Porres",
+    "last_seen_date": "2026-04-30",
+    "source_url": "https://rpp.pe/rotafono/mascotas/san-martin-de-porres-familia-busca-a-perrita-negrita-que-desaparecio-tras-huir-de-fuegos-artificiales-noticia-1688141",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Lucas",
+    "type": "dog",
+    "breed": "Criollo",
+    "colors": [
+      "negro"
+    ],
+    "description": "Pequeño, pelaje negro sin manchas, sin ropa ni collar. Se perdió el sábado a las 4 p. m. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Santiago de Surco",
+    "address": "Urbanización Higuereta",
+    "last_seen_date": "2026-05-02",
+    "source_url": "https://rpp.pe/rotafono/mascotas/surco-familia-pide-ayuda-para-encontrar-a-su-perrito-lucas-noticia-1687564",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Lobo",
+    "type": "dog",
+    "colors": [
+      "negro",
+      "crema"
+    ],
+    "description": "De 2 años, dócil y propenso a la ansiedad. Necesita una operación urgente. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "San Borja",
+    "last_seen_date": "2026-05-03",
+    "source_url": "https://rpp.pe/rotafono/mascotas/san-borja-buscan-a-perrito-lobo-que-necesita-urgente-operacion-noticia-1687284",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Tuco",
+    "type": "dog",
+    "breed": "Poodle",
+    "description": "Macho castrado de 12 años, pequeño, pelo ensortijado, con problemas respiratorios por adelgazamiento de tráquea. Escapó de su casa; fecha aproximada según la fecha de la nota. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Cercado de Lima",
+    "last_seen_date": "2026-05-05",
+    "source_url": "https://rpp.pe/rotafono/mascotas/cercado-de-lima-buscan-a-perrito-tuco-de-12-anos-que-desaparecio-tras-escapar-de-su-casa-noticia-1687051",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Toby",
+    "type": "dog",
+    "colors": [
+      "beige"
+    ],
+    "description": "De 14 años, mediano, con canas; ha perdido audición y vista. Salió por una puerta entreabierta de medianoche. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Chorrillos",
+    "address": "Zona Buenos Aires",
+    "last_seen_date": "2026-04-29",
+    "source_url": "https://rpp.pe/rotafono/mascotas/chorrillos-piden-ayuda-para-encontrar-a-perrito-toby-que-desaparecio-hace-mas-de-cuatro-dias-noticia-1686918",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Silvestre",
+    "type": "cat",
+    "description": "Gato que se perdió en Jueves Santo al salir de un condominio. Se piden videos de cámaras de vigilancia de la zona. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Santiago de Surco",
+    "address": "Condominio Dinastía II",
+    "last_seen_date": "2026-04-02",
+    "source_url": "https://rpp.pe/rotafono/mascotas/surco-mujer-reporta-que-su-gato-llamado-silvestre-desaparecio-en-jueves-santo-noticia-1685937",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Milkito",
+    "type": "cat",
+    "colors": [
+      "blanco",
+      "gris oscuro"
+    ],
+    "description": "Macho adulto, castrado, blanco con manchas gris oscuro, cicatriz grande en la nariz y patitas y pancita rapadas por una operación. Escapó de un departamento de sus cuidadores. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Surquillo",
+    "last_seen_date": "2026-04-22",
+    "source_url": "https://rpp.pe/rotafono/mascotas/surquillo-buscan-a-gato-milkito-que-escapo-de-departamento-de-sus-cuidadores-noticia-1685724",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Chocolate",
+    "type": "dog",
+    "colors": [
+      "blanco",
+      "marrón"
+    ],
+    "description": "Raza pequeña, pelaje blanco y marrón, ojos color chocolate. Perdido hace aproximadamente un mes al salir un familiar a comprar; fecha aproximada. Su dueño es una persona mayor con discapacidad visual. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Santiago de Surco",
+    "address": "Mercado El Pino, urbanización Los Viñedos",
+    "last_seen_date": "2026-03-23",
+    "source_url": "https://rpp.pe/rotafono/mascotas/surco-abuelito-con-discapacidad-visual-pide-ayuda-para-encontrar-a-su-perrito-chocolate-noticia-1685447",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Bonnie",
+    "type": "dog",
+    "colors": [
+      "blanco"
+    ],
+    "description": "Hembra de 5 años, mediana, blanca con una rayita negra en la oreja izquierda, patas largas y pelaje enroscado. Se perdió camino a una veterinaria. Sin ropa ni correa. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Comas",
+    "address": "Cruce de las av. Maestro Peruano y Carabayllo",
+    "last_seen_date": "2026-04-10",
+    "source_url": "https://rpp.pe/rotafono/mascotas/comas-familia-busca-a-perrita-que-se-perdio-cuando-era-llevada-a-recibir-un-bano-medicado-en-una-veterinaria-noticia-1683945",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Cutin",
+    "type": "dog",
+    "breed": "Mestizo",
+    "colors": [
+      "negro",
+      "marrón"
+    ],
+    "description": "Pelaje negro con manchas marrones y cuerpo alargado, parecido a un salchicha. Se fue siguiendo a un niño camino al colegio. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Lurín",
+    "address": "Calle Fundo Quintanilla",
+    "last_seen_date": "2026-03-16",
+    "source_url": "https://rpp.pe/rotafono/mascotas/lurin-familia-pide-ayuda-para-buscar-a-perrito-desaparecido-hace-25-dias-noticia-1683652",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Wayna",
+    "type": "dog",
+    "colors": [
+      "beige",
+      "blanco"
+    ],
+    "description": "Hembra mediana, beige con manchitas blancas en una patita. Salió por el estruendo de fuegos artificiales. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Villa María del Triunfo",
+    "address": "Zona Machu Picchu",
+    "last_seen_date": "2026-03-31",
+    "source_url": "https://rpp.pe/rotafono/mascotas/villa-maria-del-triunfo-familia-busca-a-perrita-wayna-que-desaparecio-tras-huir-del-ruido-de-los-fuegos-artificiales-noticia-1683072",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Dorito",
+    "type": "cat",
+    "colors": [
+      "marrón caramelo"
+    ],
+    "description": "Gato de 1 año y medio, castrado, pequeño, marrón caramelo con rayas oscuras. No suele salir de casa. Se asustó con una detonación de pirotecnia. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Callao",
+    "province": "Callao",
+    "department": "Callao",
+    "last_seen_date": "2026-03-28",
+    "source_url": "https://rpp.pe/rotafono/mascotas/callao-gatito-llamado-a-dorito-se-perdio-hace-una-semana-tras-detonacion-de-pirotecnia-mascota-desaparecida-animales-noticia-1682807",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Yepeto",
+    "type": "dog",
+    "colors": [
+      "marrón",
+      "blanco",
+      "negro"
+    ],
+    "description": "Macho de 9 años, mediano, marrón con pechera blanca y orejas negras, sin esterilizar. Se escapó por una ventana a las 8 de la mañana. Sin collar ni pechera. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Jesús María",
+    "address": "Jirón Hermilio Valdizán",
+    "last_seen_date": "2026-03-29",
+    "source_url": "https://rpp.pe/rotafono/mascotas/jesus-maria-familia-busca-a-perrito-yepeto-que-desaparecio-hace-dos-dias-noticia-1682228",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Kira",
+    "type": "dog",
+    "breed": "Pitbull",
+    "colors": [
+      "marrón atigrado",
+      "blanco"
+    ],
+    "description": "Hembra de 6 años, mediana, esterilizada, atigrada marrón con cuello, hocico y patas blancas. Rescatada de la calle; se perdió durante un paseo con un especialista. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "La Molina",
+    "address": "Urbanización Los Huertos",
+    "last_seen_date": "2026-03-14",
+    "source_url": "https://rpp.pe/rotafono/mascotas/la-molina-kira-perrita-pitbull-que-fue-rescatada-de-la-calle-desaparecio-en-la-urbanizacion-los-huertos-mascota-perros-video-noticia-1681689",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Chato",
+    "type": "dog",
+    "breed": "Mestizo",
+    "colors": [
+      "caramelo"
+    ],
+    "description": "De 2 años. Saltó el muro del jardín durante un paseo. La familia revisó cámaras municipales y buscó en distritos cercanos. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Magdalena del Mar",
+    "address": "Jirón Echenique, cuadra 4",
+    "last_seen_date": "2026-03-23",
+    "source_url": "https://rpp.pe/rotafono/mascotas/magdalena-del-mar-familia-pide-ayuda-para-buscar-a-perrito-chato-noticia-1681517",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Lulú",
+    "type": "cat",
+    "description": "Gata de 6 años, esterilizada. Llevaba cadena dorada con placa en forma de huella y cascabel verde. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Breña",
+    "address": "Óvalo Pedro Ruiz Gallo",
+    "last_seen_date": "2026-01-16",
+    "source_url": "https://rpp.pe/rotafono/mascotas/brena-gatita-llamada-lulu-se-perdio-hace-dos-meses-cerca-al-ovalo-pedro-ruiz-gallo-mascota-animales-noticia-1679969",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Peluza",
+    "type": "dog",
+    "breed": "Pequinés",
+    "colors": [
+      "caramelo",
+      "blanco"
+    ],
+    "description": "De 10 años, pequeña, esterilizada, caramelo con pecho y patas blancas. Se pide a vecinos y negocios revisar videos de cámaras. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Cieneguilla",
+    "last_seen_date": "2026-02-14",
+    "source_url": "https://rpp.pe/rotafono/mascotas/cieneguilla-familia-busca-a-su-perrita-llamada-peluza-que-se-perdio-hace-tres-dias-noticia-1676118",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Osito",
+    "type": "dog",
+    "description": "Se escapó de una veterinaria. Los vecinos no tienen datos. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "San Luis",
+    "address": "Av. San Luis, cerca de la av. Javier Prado",
+    "last_seen_date": "2026-01-23",
+    "source_url": "https://rpp.pe/rotafono/mascotas/san-luis-perro-llamado-osito-se-perdio-hace-20-dias-cerca-de-la-avenida-javier-prado-mascota-desaparecida-noticia-1675492",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Benjamín",
+    "type": "dog",
+    "breed": "Shih Tzu",
+    "colors": [
+      "blanco",
+      "beige"
+    ],
+    "description": "Macho castrado de 3 años, mediano, de carácter muy bueno. Salió por la cochera a las 8 de la mañana. Sin correa ni ropa. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Cieneguilla",
+    "last_seen_date": "2026-01-12",
+    "source_url": "https://rpp.pe/rotafono/mascotas/cieneguilla-familia-busca-a-perrito-benjamin-que-desaparecio-tras-salir-por-la-cochera-de-la-casa-noticia-1671542",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Kira",
+    "type": "cat",
+    "breed": "Siamés",
+    "colors": [
+      "blanco",
+      "marrón"
+    ],
+    "description": "Gata de 6 años, mediana, blanca con manchas marrones en cola, orejas y nariz, ojos celestes. Salió de madrugada; está acostumbrada a salir. Sin collar. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "San Juan de Lurigancho",
+    "address": "Urbanización San Gabriel",
+    "last_seen_date": "2026-10-04",
+    "source_url": "https://rpp.pe/rotafono/mascotas/san-juan-de-lurigancho-piden-ayuda-para-encontrar-a-gatita-kira-que-desaparecio-hace-dos-dias-noticia-1711088",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Blanca",
+    "type": "dog",
+    "colors": [
+      "blanco"
+    ],
+    "description": "Hembra de 4 años, raza pequeña, esterilizada, pelaje blanco y contorno de los ojos rosado. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Villa María del Triunfo",
+    "last_seen_date": "2026-09-20",
+    "source_url": "https://rpp.pe/rotafono/mascotas/villa-maria-del-triunfo-piden-ayuda-para-hallar-a-perrita-blanca-que-se-perdio-hace-10-dias-noticia-1710176",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Mini",
+    "type": "dog",
+    "breed": "Shih Tzu",
+    "colors": [
+      "negro",
+      "blanco"
+    ],
+    "description": "Hembra de 6 años. La familia buscó en la zona y distritos cercanos; fecha aproximada según la nota. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Cieneguilla",
+    "last_seen_date": "2026-07-29",
+    "source_url": "https://rpp.pe/rotafono/mascotas/cieneguilla-familia-busca-a-perrita-mini-que-se-perdio-hace-10-dias-noticia-1700706",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Bok",
+    "type": "dog",
+    "colors": [
+      "crema",
+      "negro",
+      "blanco"
+    ],
+    "description": "Mediano, pelaje mediano y ensortijado. Se soltó de la correa mientras jugaban niños. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Chorrillos",
+    "address": "Calle Cahuide, cerca de la posta Mateo Pumacahua",
+    "last_seen_date": "2026-04-26",
+    "source_url": "https://rpp.pe/rotafono/mascotas/chorrillos-familia-busca-a-perrito-que-desaparecio-hace-casi-tres-meses-noticia-1698404",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Doki",
+    "type": "dog",
+    "colors": [
+      "blanco",
+      "marrón claro"
+    ],
+    "description": "De 4 a 5 años, pequeño, blanco con manchas marrón claro. Sin collar ni accesorios. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Villa El Salvador",
+    "address": "Cerca del mercado Unicachi",
+    "last_seen_date": "2026-06-18",
+    "source_url": "https://rpp.pe/rotafono/mascotas/villa-el-salvador-familia-busca-a-perrito-extraviado-hace-cuatro-dias-en-inmediaciones-de-mercado-unicachi-noticia-1694147",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Sheyla",
+    "type": "dog",
+    "colors": [
+      "beige"
+    ],
+    "description": "Hembra de 4 años, pequeña, pelaje corto, hernia umbilical y en tratamiento médico. Perrita de apoyo emocional de una adulta mayor. Huyó por los fuegos artificiales. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Chorrillos",
+    "address": "Asentamiento humano Villa Venturo",
+    "last_seen_date": "2026-05-31",
+    "source_url": "https://rpp.pe/rotafono/mascotas/chorrillos-buscan-a-perrita-de-soporte-emocional-que-se-perdio-tras-huir-del-ruido-de-fuegos-artificiales-noticia-1691379",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Toffy",
+    "type": "dog",
+    "colors": [
+      "blanco",
+      "plomo"
+    ],
+    "description": "Macho pequeño, pelaje ensortijado blanco con las orejas manchadas de plomo. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Los Olivos",
+    "last_seen_date": "2026-05-08",
+    "source_url": "https://rpp.pe/rotafono/mascotas/los-olivos-familia-busca-a-perrito-toffy-que-se-perdio-hace-dos-semanas-noticia-1690186",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Octavio",
+    "type": "dog",
+    "breed": "Mestizo",
+    "colors": [
+      "negro",
+      "marrón"
+    ],
+    "description": "De 6 años, una pata más pequeña por un accidente antiguo, con otitis y estreñimiento crónicos. Suele deambular por la zona y no regresó. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Chorrillos",
+    "address": "Av. Santa Anita, urbanización Villa Marina",
+    "last_seen_date": "2026-05-24",
+    "source_url": "https://rpp.pe/rotafono/mascotas/chorrillos-familia-pide-ayuda-para-encontrar-a-su-perrito-octavio-que-sufre-otitis-noticia-1690069",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Thomas",
+    "type": "dog",
+    "breed": "Labrador",
+    "colors": [
+      "beige"
+    ],
+    "description": "Macho de 6 años, pelaje corto, cicatriz en la ingle izquierda. Salió por la puerta abierta de noche. Sin collar ni correa. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "San Martín de Porres",
+    "address": "Av. 12 de Octubre",
+    "last_seen_date": "2026-05-06",
+    "source_url": "https://rpp.pe/rotafono/mascotas/san-martin-de-porres-familia-busca-a-perrito-thomas-que-desaparecio-hace-seis-dias-noticia-1688035",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Chapo",
+    "type": "dog",
+    "breed": "Cruce con dogo argentino",
+    "colors": [
+      "blanco"
+    ],
+    "description": "De 4 años, el más grande de dos perritos que se perdieron juntos (con Blanco). Blanco con manchas en el abdomen y delineado negro en los ojos. Solían salir solos. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Carabayllo",
+    "last_seen_date": "2026-05-04",
+    "source_url": "https://rpp.pe/rotafono/mascotas/carabayllo-familia-pide-apoyo-para-buscar-a-dos-mascotas-perdidas-noticia-1687119#chapo",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Blanco",
+    "type": "dog",
+    "colors": [
+      "blanco"
+    ],
+    "description": "De 3 años, sin ropa. Se perdió junto a Chapo. Blanco con manchas en el abdomen y delineado negro en los ojos. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Carabayllo",
+    "last_seen_date": "2026-05-04",
+    "source_url": "https://rpp.pe/rotafono/mascotas/carabayllo-familia-pide-apoyo-para-buscar-a-dos-mascotas-perdidas-noticia-1687119#blanco",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Doki",
+    "type": "dog",
+    "colors": [
+      "blanco",
+      "negro",
+      "marrón"
+    ],
+    "description": "Macho de 1 año, pequeño, patas gruesas, sin cola, blanco con manchas negras en la espalda y cabeza marrón. Salió siguiendo a otro perrito. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "San Martín de Porres",
+    "address": "Cerca del parque Senati",
+    "last_seen_date": "2026-04-07",
+    "source_url": "https://rpp.pe/rotafono/mascotas/san-martin-de-porres-familia-pide-ayuda-para-encontrar-a-perrito-doki-noticia-1683320",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Tommy",
+    "type": "dog",
+    "colors": [
+      "blanco"
+    ],
+    "description": "Macho de 2 años, pequeño, pelaje corto, muy dócil. Llevaba collar negro. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Rímac",
+    "last_seen_date": "2026-03-17",
+    "source_url": "https://rpp.pe/rotafono/mascotas/rimac-familia-busca-a-perrito-que-desaparecio-tras-salir-de-su-casa-noticia-1681564",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Chelsea",
+    "type": "dog",
+    "colors": [
+      "blanco",
+      "marrón"
+    ],
+    "description": "Hembra dócil, blanca y marrón con nariz rosada, sin esterilizar. Llevaba pechera roja con negro y collar negro con bolas plateadas. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Los Olivos",
+    "last_seen_date": "2026-03-11",
+    "source_url": "https://rpp.pe/rotafono/mascotas/olivos-familia-busca-a-perrita-chelsea-que-desaparecio-hace-cinco-dias-noticia-1680244",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Blanca",
+    "type": "dog",
+    "description": "Hembra de 7 años, pequeña, esterilizada, con dos collares rojos (uno con cascabel). Escapó por una ventana; fecha aproximada según la nota. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Breña",
+    "address": "Jirón Chamaya",
+    "last_seen_date": "2026-03-10",
+    "source_url": "https://rpp.pe/rotafono/mascotas/brena-familia-busca-a-perrita-que-escapo-por-ventana-de-vivienda-noticia-1679583",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Cody",
+    "type": "dog",
+    "breed": "Schnauzer",
+    "colors": [
+      "gris",
+      "blanco"
+    ],
+    "description": "Macho de 4 años, sin cola, no se deja agarrar. Se perdió junto a otro perrito (Paco) al dejar una puerta entreabierta. Sin collar. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Independencia",
+    "last_seen_date": "2026-02-04",
+    "source_url": "https://rpp.pe/rotafono/mascotas/independencia-buscan-a-perritos-cody-y-paco-que-desaparecieron-hace-siete-dias-noticia-1675425#cody",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Paco",
+    "type": "dog",
+    "breed": "Shih Tzu",
+    "colors": [
+      "negro"
+    ],
+    "description": "Macho de 2 años, negro con manchas en el pecho y la barbilla, algunas canas en el lomo. Se perdió junto a Cody. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Independencia",
+    "last_seen_date": "2026-02-04",
+    "source_url": "https://rpp.pe/rotafono/mascotas/independencia-buscan-a-perritos-cody-y-paco-que-desaparecieron-hace-siete-dias-noticia-1675425#paco",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Molly",
+    "type": "dog",
+    "breed": "Yorkie",
+    "colors": [
+      "negro",
+      "caramelo"
+    ],
+    "description": "Hembra de 3 años, pelo lacio, negra en patitas y orejitas con copete y barbilla caramelo. Cola completa. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Cercado de Lima",
+    "last_seen_date": "2026-01-02",
+    "source_url": "https://rpp.pe/rotafono/mascotas/cercado-de-lima-familia-busca-a-perrita-moly-que-desaparecio-hace-tres-dias-noticia-1670318",
+    "source_name": "RPP Rotafono"
+  },
+  {
+    "name": "Huesitos",
+    "type": "dog",
+    "colors": [
+      "gris",
+      "negro"
+    ],
+    "description": "Hembra de 8 años, tamaño pequeño, pelaje gris y negro. Llevaba collar rosado. La familia ofrece recompensa y la busca intensamente por la zona. Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Cercado de Lima",
+    "address": "Cruce de la av. Argentina con el jirón Ricardo Herrera",
+    "last_seen_date": "2026-04-26",
+    "source_url": "https://peru21.pe/lima/familia-busca-perrita-que-se-perdio-en-el-cercado-de-lima/",
+    "source_name": "Perú21"
+  },
+  {
+    "name": "Princesa",
+    "type": "dog",
+    "colors": [
+      "blanco",
+      "marrón"
+    ],
+    "description": "Hembra de tamaño pequeño, blanca con marrón. Se escapó de su adoptante un día después de ser adoptada, el 22 de marzo, en la zona de Plaza Norte (límite entre San Martín de Porres, Independencia y Los Olivos). Contacto solo a través de la nota original.",
+    "status": "lost",
+    "district": "Independencia",
+    "address": "Zona Plaza Norte",
+    "last_seen_date": "2026-03-22",
+    "source_url": "https://peru21.pe/lima/perrita-se-encuentra-desaparecida-tras-su-reciente-adopcion-en-independencia/",
+    "source_name": "Perú21"
   }
 ]

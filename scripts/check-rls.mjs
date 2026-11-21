@@ -34,6 +34,8 @@ const admin = await db.rpc('is_admin')
 check('is_admin() es false para anon', admin.data === false, String(admin.data))
 const targets = await db.rpc('notification_targets', { p_lat: -12, p_lng: -77, p_exclude: '00000000-0000-0000-0000-000000000000' })
 check('notification_targets no es accesible', targets.error != null, targets.error?.code)
+const rate = await db.rpc('chat_rate_hit', { p_key: 'rls-probe', p_max: 1, p_window_seconds: 60 })
+check('chat_rate_hit no es accesible', rate.error != null, rate.error?.code)
 const pet = pets.data?.[0]?.id
 if (pet) {
   const c = await db.rpc('pet_contact_info', { p_pet: pet })

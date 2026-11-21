@@ -99,6 +99,7 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
                                         province={pet.last_seen_province}
                                         colors={pet.colors}
                                         imageUrl={pet.image_urls?.[0] || "/img/sin-foto.svg"}
+                                        sourceName={pet.source_name}
                                         status={pet.status === 'reunited' ? 'found' : pet.status as 'lost' | 'found' | 'reunited'}
                                         timeLeft="Hace poco"
                                         lostDate={pet.last_seen_date}

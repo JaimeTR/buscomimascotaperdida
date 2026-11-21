@@ -18,7 +18,7 @@
 El trigger `handle_new_user` (migración `20261121130000`) toma `full_name`/`name` y `avatar_url`/`picture`.
 
 ## Configuración en Supabase (manual)
-Authentication → URL Configuration: Site URL y `https://<dominio>/auth/callback` (más localhost). Providers: Google y Facebook (Facebook requiere una app en Meta con los redirect URIs que da Supabase).
+Authentication → URL Configuration: Site URL y `https://<dominio>/auth/callback` (y la URL de desarrollo). Providers: Google y Facebook (Facebook requiere una app en Meta con los redirect URIs que da Supabase).
 
 ## Seguridad
 `next` siempre pasa por `isSafeInternalPath`; RLS es la barrera real de datos; no se guarda la contraseña en el navegador; no se usan servicios externos de avatar.

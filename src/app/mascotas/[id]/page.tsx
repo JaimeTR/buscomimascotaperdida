@@ -162,7 +162,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                         {/* Recent Sightings Section */}
                         <div className="bg-card rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-border space-y-8">
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
                                 <h2 className="text-2xl font-bold text-foreground">Historial de avistamientos</h2>
                                 <ReportActionButton
                                     nextUrl={`/mascotas/${pet.id}/avistamiento`}
@@ -369,13 +369,18 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                 />
                                 {pet.source_url ? (
                                     <div className="rounded-2xl border bg-card p-4 text-sm">
-                                        <p className="font-semibold">Caso publicado desde una fuente externa</p>
+                                        <p className="font-semibold">Información tomada de {pet.source_name || "una fuente externa"}</p>
                                         <p className="mt-1 text-muted-foreground">
-                                            La información de contacto está en la publicación original.
+                                            Este caso lo publicamos nosotros a partir de esa fuente. Los datos de contacto están en la publicación original.
                                         </p>
                                         <a href={pet.source_url} target="_blank" rel="noopener noreferrer nofollow" className="mt-2 inline-block font-bold text-primary hover:underline">
                                             Ver fuente: {pet.source_name || "enlace original"}
                                         </a>
+                                        <div className="mt-3 rounded-xl bg-accent p-3 text-accent-foreground">
+                                            <p className="font-semibold">¿Es tu mascota?</p>
+                                            <p className="mt-0.5">Crea tu cuenta y dale seguimiento a la búsqueda: sube fotos, recibe avisos de avistamientos y actualiza el caso.</p>
+                                            <Link href="/register" className="mt-2 inline-block font-bold underline">Crear mi cuenta</Link>
+                                        </div>
                                     </div>
                                 ) : (
                                                                     <OwnerContactModal

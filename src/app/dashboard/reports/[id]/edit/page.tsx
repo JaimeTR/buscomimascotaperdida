@@ -14,7 +14,7 @@ import { useToast } from "@/components/ui/toast-modern"
 import { LocationPopover } from "@/components/location-popover"
 import { BreedPopover } from "@/components/breed-popover"
 import { ColorPopover } from "@/components/color-popover"
-import { getImageUploadError } from "@/lib/image-upload"
+import { getImageUploadError, prepareImageForUpload } from "@/lib/image-upload"
 
 export default function EditReportPage() {
     const params = useParams()
@@ -159,13 +159,14 @@ export default function EditReportPage() {
                     const imageError = getImageUploadError(img.file)
                     if (imageError) throw new Error(imageError)
                     // It's a new image, upload it
-                    const fileExt = img.file.name.split('.').pop()
-                    const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
-                    
+                    const prepared = await prepareImageForUpload(img.file)
+                    const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${prepared.ext}`
+
                     const { data: uploadData, error: uploadError } = await supabase.storage
                         .from('pet-images')
-                        .upload(fileName, img.file, {
-                            cacheControl: '3600',
+                        .upload(fileName, prepared.blob, {
+                            cacheControl: '31536000',
+                            contentType: prepared.type,
                             upsert: false
                         })
                     

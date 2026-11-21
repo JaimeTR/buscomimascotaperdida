@@ -30,6 +30,7 @@ interface Message {
     content: string
     chips?: Chip[]
     pets?: ChatPet[]
+    otherZones?: boolean
 }
 
 const STORAGE_KEY = "huellita.session.v1"
@@ -184,7 +185,7 @@ export function ChatbotWidget() {
             }
             if (pets.length) chips.push({ label: "Ver todos en el mapa", href: "/mascotas" })
             else if (a.isPetSearch) chips.push({ label: "Reportar mascota", href: "/reportar" })
-            push({ role: "bot", content: a.response, pets, chips: chips.slice(0, 4) })
+            push({ role: "bot", content: a.response, pets, otherZones: Boolean(data.relaxed), chips: chips.slice(0, 4) })
         } catch {
             push({ role: "bot", content: "No pude conectarme ahora mismo. Puedes buscar directamente en Mascotas o intentarlo en un momento.", chips: [{ label: "Ir a Mascotas", href: "/mascotas" }, { label: "Reportar mascota", href: "/reportar" }] })
         } finally {
@@ -284,6 +285,7 @@ export function ChatbotWidget() {
 
                                             {msg.pets && msg.pets.length > 0 && (
                                                 <div className="grid gap-2.5">
+                                                    {msg.otherZones && <p className="text-[11px] font-semibold text-muted-foreground">Estos son de otras zonas:</p>}
                                                     {msg.pets.map(pet => <PetCard key={pet.id} pet={pet} onOpen={go} />)}
                                                 </div>
                                             )}
