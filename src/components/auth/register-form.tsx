@@ -86,28 +86,28 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="space-y-2 animate-in fade-in slide-in-from-left-2 duration-300">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Nombre Completo</label>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            <div className="space-y-1.5 animate-in fade-in slide-in-from-left-2 duration-300">
+                <label htmlFor="reg-fullName" className="text-sm font-semibold text-foreground">Nombre Completo</label>
                 <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         placeholder="Juan Pérez"
-                        className={`pl-10 h-12 bg-background border-border ${errors.fullName ? 'border-red-500' : ''}`}
-                        {...register("fullName")}
+                        className={`pl-10 h-12 rounded-xl bg-card border-input text-base ${errors.fullName ? 'border-red-500' : ''}`}
+                        id="reg-fullName" {...register("fullName")}
                     />
                 </div>
                 {errors.fullName && <p className="text-xs text-red-500">{errors.fullName.message}</p>}
             </div>
 
             <div className="space-y-2 animate-in fade-in slide-in-from-left-2 duration-300 delay-75">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Teléfono / WhatsApp</label>
+                <label htmlFor="reg-phone" className="text-sm font-semibold text-foreground">Teléfono / WhatsApp</label>
                 <div className="relative">
                     <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         placeholder="987 654 321"
-                        className={`pl-10 h-12 bg-background border-border ${errors.phone ? 'border-red-500' : ''}`}
-                        {...register("phone")}
+                        className={`pl-10 h-12 rounded-xl bg-card border-input text-base ${errors.phone ? 'border-red-500' : ''}`}
+                        id="reg-phone" {...register("phone")}
                     />
                 </div>
                 {errors.phone && <p className="text-xs text-red-500">{errors.phone.message}</p>}
@@ -129,28 +129,28 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             </div>
 
             <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Correo Electrónico</label>
+                <label htmlFor="reg-email" className="text-sm font-semibold text-foreground">Correo Electrónico</label>
                 <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         type="email"
                         placeholder="hola@ejemplo.com"
-                        className={`pl-10 h-12 bg-background border-border ${errors.email ? 'border-red-500' : ''}`}
-                        {...register("email")}
+                        className={`pl-10 h-12 rounded-xl bg-card border-input text-base ${errors.email ? 'border-red-500' : ''}`}
+                        id="reg-email" {...register("email")}
                     />
                 </div>
                 {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-2">
-                <label className="text-xs font-bold text-muted-foreground uppercase">Contraseña</label>
+                <label htmlFor="reg-password" className="text-sm font-semibold text-foreground">Contraseña</label>
                 <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         type={showPassword ? "text" : "password"}
                         placeholder="••••••••"
-                        className={`pl-10 pr-12 h-12 bg-background border-border ${errors.password ? 'border-red-500' : ''}`}
-                        {...register("password")}
+                        className={`pl-10 pr-12 h-12 rounded-xl bg-card border-input text-base ${errors.password ? 'border-red-500' : ''}`}
+                        id="reg-password" {...register("password")}
                     />
                     <button
                         type="button"
@@ -165,10 +165,12 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
 
             <Button
                 type="submit"
-                className="w-full h-12 bg-emerald-500 hover:bg-emerald-600 text-lg font-bold shadow-lg shadow-emerald-500/20"
+                variant="cta"
+                className="h-12 w-full rounded-xl text-base font-bold"
                 disabled={isLoading}
+                aria-busy={isLoading}
             >
-                {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Crear Cuenta"}
+                {isLoading ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> Creando cuenta…</> : "Crear cuenta"}
             </Button>
         </form>
     )

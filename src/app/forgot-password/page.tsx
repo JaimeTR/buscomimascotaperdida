@@ -7,7 +7,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import Link from "next/link"
-import { Mail, ArrowLeft, Loader2, CheckCircle2 } from "lucide-react"
+import { ArrowLeft, Loader2, CheckCircle2 } from "lucide-react"
+import { AuthShell } from "@/components/auth/auth-shell"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useToast } from "@/components/ui/toast-modern"
@@ -55,78 +56,46 @@ function ForgotPasswordContent() {
     }
 
     return (
-        <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-            <div className="bg-card w-full max-w-sm rounded-[2rem] shadow-xl shadow-stone-200/50 border border-border overflow-hidden relative">
-
-                {/* Header Decoration */}
-                <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-teal-700 to-teal-800" />
-
-                <div className="p-8 pt-10">
-
-                    <div className="text-center mb-8">
-                        <div className="bg-accent w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary rotate-3">
-                            <Mail className="h-8 w-8" />
-                        </div>
-                        <h1 className="text-xl font-bold text-foreground tracking-tight">Recuperar Contraseña</h1>
-                        <p className="text-sm text-muted-foreground mt-2 px-2">
-                            Ingresa tu correo y te enviaremos un enlace para restablecer tu acceso.
-                        </p>
+        <AuthShell title="Recupera tu acceso" subtitle="Te enviaremos un enlace para crear una contraseña nueva.">
+            {!isSuccess ? (
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+                    <div className="space-y-1.5">
+                        <label htmlFor="email" className="text-sm font-semibold text-foreground">Correo</label>
+                        <Input
+                            id="email"
+                            type="email"
+                            autoComplete="email"
+                            inputMode="email"
+                            aria-invalid={!!errors.email}
+                            aria-describedby={errors.email ? "email-error" : undefined}
+                            {...register("email")}
+                            className="h-12 rounded-xl border-input bg-card px-4 text-base"
+                        />
+                        {errors.email && <p id="email-error" className="text-sm text-destructive">{errors.email.message}</p>}
                     </div>
-
-                    {!isSuccess ? (
-                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                            <div className="space-y-2">
-                                <label className="text-xs font-bold text-muted-foreground uppercase ml-1">Correo Electrónico</label>
-                                <div className="relative">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                                    <Input
-                                        {...register("email")}
-                                        placeholder="ejemplo@correo.com"
-                                        className={`pl-11 h-12 bg-background border-border rounded-xl focus-visible:ring-teal-700 ${errors.email ? 'border-red-500' : ''}`}
-                                    />
-                                </div>
-                                {errors.email && <p className="text-xs text-red-500 font-medium ml-1">{errors.email.message}</p>}
-                            </div>
-
-                            <Button
-                                type="submit"
-                                className="w-full h-12 rounded-xl bg-primary hover:bg-primary text-white font-bold shadow-lg shadow-teal-700/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
-                                disabled={isLoading}
-                            >
-                                {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Enviar Enlace"}
-                            </Button>
-                        </form>
-                    ) : (
-                        <div className="text-center space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <div className="bg-green-50 text-green-600 p-4 rounded-2xl border border-green-100 flex items-center gap-3 text-left">
-                                <CheckCircle2 className="h-8 w-8 shrink-0" />
-                                <div className="space-y-1">
-                                    <p className="font-bold text-sm">¡Correo Enviado!</p>
-                                    <p className="text-xs leading-relaxed opacity-90">Revisa tu bandeja de entrada (y spam) para continuar con el proceso.</p>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="mt-8 pt-6 border-t border-border text-center">
-                        <Link
-                            href="/login"
-                            className="inline-flex items-center text-sm font-bold text-muted-foreground hover:text-foreground transition-colors group"
-                        >
-                            <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
-                            Volver al Login
-                        </Link>
-                    </div>
-
+                    <Button type="submit" variant="cta" className="h-12 w-full rounded-xl text-base font-bold" disabled={isLoading} aria-busy={isLoading}>
+                        {isLoading ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> Enviando…</> : "Enviar enlace"}
+                    </Button>
+                </form>
+            ) : (
+                <div role="status" className="flex items-start gap-3 rounded-xl border border-success/40 bg-success/10 p-4 text-foreground">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-success" aria-hidden />
+                    <p className="text-sm"><span className="font-semibold">Correo enviado.</span> Revisa tu bandeja de entrada y la carpeta de spam.</p>
                 </div>
-            </div>
-        </div>
+            )}
+
+            <p className="mt-8 text-center">
+                <Link href="/login" className="inline-flex min-h-11 items-center gap-2 font-semibold text-primary underline-offset-4 hover:underline">
+                    <ArrowLeft className="h-4 w-4" aria-hidden /> Volver a iniciar sesión
+                </Link>
+            </p>
+        </AuthShell>
     )
 }
 
 export default function ForgotPasswordPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground">Cargando...</div>}>
+        <Suspense fallback={<div className="min-h-screen bg-background" />}>
             <ForgotPasswordContent />
         </Suspense>
     )

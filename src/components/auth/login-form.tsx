@@ -1,6 +1,5 @@
 
-import { useState } from "react"
-import { useActionState } from "react"
+import { useState, useRef, useEffect, useActionState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { loginAction, resendConfirmationAction } from "@/app/auth/actions"
@@ -25,6 +24,8 @@ export function LoginForm({ next, forgotHref }: { next: string; forgotHref: stri
     const { toast } = useToast()
     const [isResending, setIsResending] = useState(false)
     const [show, setShow] = useState(false)
+    const alertRef = useRef<HTMLDivElement>(null)
+    useEffect(() => { if (state?.error) alertRef.current?.focus() }, [state])
 
     const handleResend = async () => {
         if (!state.email) return
@@ -46,33 +47,33 @@ export function LoginForm({ next, forgotHref }: { next: string; forgotHref: stri
 
             <div className="space-y-1.5">
                 <label htmlFor="email" className={label}>Correo</label>
-                <Input id="email" name="email" type="email" autoComplete="email" inputMode="email" required className={field} defaultValue={state.email || ""} aria-invalid={!!state?.validationErrors?.email} />
-                {state?.validationErrors?.email && <p className="text-sm text-destructive">{state.validationErrors.email[0]}</p>}
+                <Input id="email" name="email" type="email" enterKeyHint="next" autoComplete="email" inputMode="email" required className={field} defaultValue={state.email || ""} aria-invalid={!!state?.validationErrors?.email} aria-describedby={state?.validationErrors?.email ? "email-error" : undefined} />
+                {state?.validationErrors?.email && <p id="email-error" className="text-sm text-destructive">{state.validationErrors.email[0]}</p>}
             </div>
 
             <div className="space-y-1.5">
                 <div className="flex items-baseline justify-between">
                     <label htmlFor="password" className={label}>Contraseña</label>
-                    <Link href={forgotHref} className="text-sm font-medium text-primary underline-offset-4 hover:underline">¿La olvidaste?</Link>
+                    <Link href={forgotHref} className="-my-3 inline-flex min-h-11 items-center text-sm font-medium text-primary underline-offset-4 hover:underline">¿La olvidaste?</Link>
                 </div>
                 <div className="relative">
-                    <Input id="password" name="password" type={show ? "text" : "password"} autoComplete="current-password" required className={`${field} pr-12`} aria-invalid={!!state?.validationErrors?.password} />
+                    <Input id="password" name="password" enterKeyHint="go" type={show ? "text" : "password"} autoComplete="current-password" required className={`${field} pr-12`} aria-invalid={!!state?.validationErrors?.password} aria-describedby={state?.validationErrors?.password ? "password-error" : undefined} />
                     <button
                         type="button"
                         onClick={() => setShow((v) => !v)}
                         aria-label={show ? "Ocultar contraseña" : "Mostrar contraseña"}
                         aria-pressed={show}
-                        className="absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        className="absolute right-0.5 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                     >
                         {show ? <EyeOff className="h-5 w-5" aria-hidden /> : <Eye className="h-5 w-5" aria-hidden />}
                     </button>
                 </div>
-                {state?.validationErrors?.password && <p className="text-sm text-destructive">{state.validationErrors.password[0]}</p>}
+                {state?.validationErrors?.password && <p id="password-error" className="text-sm text-destructive">{state.validationErrors.password[0]}</p>}
             </div>
 
             {state?.error && (
-                <div role="alert" className={`flex items-start gap-3 rounded-xl border p-4 text-sm animate-in fade-in slide-in-from-top-1 ${state.needsConfirmation ? "border-warning/30 bg-warning/10 text-warning" : "border-destructive/30 bg-destructive/10 text-destructive"}`}>
-                    <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" aria-hidden />
+                <div ref={alertRef} tabIndex={-1} role="alert" className={`flex items-start gap-3 rounded-xl border p-4 text-sm text-foreground outline-none animate-in fade-in slide-in-from-top-1 ${state.needsConfirmation ? "border-warning/40 bg-warning/10" : "border-destructive/40 bg-destructive/10"}`}>
+                    <AlertTriangle className={`mt-0.5 h-5 w-5 shrink-0 ${state.needsConfirmation ? "text-warning" : "text-destructive"}`} aria-hidden />
                     <div className="flex-1 space-y-2">
                         <p className="font-medium">{state.error}</p>
                         {state.needsConfirmation && (
@@ -86,7 +87,7 @@ export function LoginForm({ next, forgotHref }: { next: string; forgotHref: stri
             )}
 
             <Button type="submit" variant="cta" className="h-12 w-full rounded-xl text-base font-bold" disabled={isPending} aria-busy={isPending}>
-                {isPending ? <Loader2 className="h-5 w-5 animate-spin" aria-label="Ingresando" /> : "Ingresar"}
+                {isPending ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> Ingresando…</> : "Ingresar"}
             </Button>
         </form>
     )

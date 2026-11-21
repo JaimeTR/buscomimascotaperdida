@@ -27,18 +27,18 @@ function LoginContent() {
     }, [router, nextUrl, supabase])
 
     return (
-        <AuthShell title="Inicia sesión">
-            <LoginForm next={nextUrl} forgotHref={getForgotPasswordPath(nextUrl)} />
-
-            <div className="my-6 flex items-center gap-3 text-sm text-muted-foreground" role="separator">
-                <span className="h-px flex-1 bg-border" /> o <span className="h-px flex-1 bg-border" />
-            </div>
-
+        <AuthShell title="Inicia sesión" subtitle="Entra para publicar tu caso o seguir tus pistas.">
             <GoogleLoginButton next={nextUrl} />
 
-            <p className="mt-8 text-center text-sm text-muted-foreground">
+            <div className="my-6 flex items-center gap-3 text-sm text-muted-foreground">
+                <span className="h-px flex-1 bg-border" aria-hidden /> o con tu correo <span className="h-px flex-1 bg-border" aria-hidden />
+            </div>
+
+            <LoginForm next={nextUrl} forgotHref={getForgotPasswordPath(nextUrl)} />
+
+            <p className="mt-8 text-center text-muted-foreground">
                 ¿No tienes cuenta?{" "}
-                <Link href="/register" className="font-semibold text-primary underline-offset-4 hover:underline">Crear cuenta</Link>
+                <Link href="/register" className="inline-flex min-h-11 items-center font-semibold text-primary underline-offset-4 hover:underline">Crear cuenta</Link>
             </p>
         </AuthShell>
     )
