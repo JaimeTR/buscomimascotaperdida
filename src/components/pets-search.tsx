@@ -216,7 +216,7 @@ function SearchContent({ ad }: { ad?: React.ReactNode }) {
                                         district={pet.last_seen_district || "Ubicación no especificada"}
                                         province={pet.last_seen_province}
                                         colors={pet.colors}
-                                        imageUrl={pet.image_urls?.[0] || "/img/stock/perrito-y-duena.webp"}
+                                        imageUrl={pet.image_urls?.[0] || "/img/sin-foto.svg"}
                                         status={pet.status === 'reunited' ? 'found' : pet.status as 'lost' | 'found' | 'reunited'}
                                         timeLeft="Hace poco"
                                         lostDate={pet.last_seen_date}

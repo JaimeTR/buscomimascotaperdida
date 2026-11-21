@@ -142,7 +142,7 @@ export default function MyReportsPage() {
                         const isActive = ACTIVE.includes(r.status)
                         return (
                             <li key={r.id} className="flex flex-col gap-4 rounded-3xl border bg-card p-4 shadow-[var(--shadow-soft)] sm:flex-row">
-                                <img src={r.image_urls?.[0] || "/img/stock/perrito-y-duena.webp"} alt={`Foto de ${r.name || "la mascota"}`} className="h-40 w-full rounded-2xl object-cover sm:h-28 sm:w-28" loading="lazy" />
+                                <img src={r.image_urls?.[0] || "/img/sin-foto.svg"} alt={`Foto de ${r.name || "la mascota"}`} className="h-40 w-full rounded-2xl object-cover sm:h-28 sm:w-28" loading="lazy" />
                                 <div className="min-w-0 flex-1 space-y-3">
                                     <div className="flex flex-wrap items-start justify-between gap-2">
                                         <div className="min-w-0">
