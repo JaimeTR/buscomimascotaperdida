@@ -10,7 +10,7 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
     return (
         <div className="grid min-h-screen lg:grid-cols-[1.05fr_1fr]">
             <aside className="relative hidden overflow-hidden lg:block" aria-hidden>
-                <Image src={STOCK.reencuentro.src} alt="" fill priority sizes="55vw" className="object-cover" />
+                <Image src={STOCK.paseo.src} alt="" fill priority quality={90} sizes="55vw" className="object-cover object-[35%_50%]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary-deep/90 via-primary-deep/25 to-primary-deep/10" />
                 <p className="absolute inset-x-0 bottom-0 p-12 font-display text-5xl leading-[1.05] text-white xl:p-16 xl:text-6xl">{SLOGAN}</p>
             </aside>
@@ -26,7 +26,7 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
                 </div>
 
                 <div className="relative mt-6 h-32 overflow-hidden rounded-2xl lg:hidden" aria-hidden>
-                    <Image src={STOCK.reencuentro.src} alt="" fill sizes="(max-width: 1024px) 100vw, 0px" className="object-cover object-[50%_40%]" />
+                    <Image src={STOCK.paseo.src} alt="" fill quality={85} sizes="(max-width: 1024px) 100vw, 0px" className="object-cover object-[50%_40%]" />
                     <div className="absolute inset-0 bg-gradient-to-t from-primary-deep/85 to-transparent" />
                     <p className="absolute bottom-3 left-4 font-display text-xl text-white">{SLOGAN}</p>
                 </div>

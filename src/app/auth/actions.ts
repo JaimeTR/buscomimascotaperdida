@@ -79,9 +79,10 @@ export async function resendConfirmationAction(email: unknown) {
     return { success: true }
 }
 
-export async function registerAction(data: unknown) {
+export async function registerAction(data: unknown, nextValue?: unknown) {
     const supabase = await createClient()
     const origin = assertServerEnv().appUrl || "http://localhost:3000"
+    const next = isSafeInternalPath(typeof nextValue === "string" ? nextValue : null, "/dashboard")
 
     const result = registerSchema.safeParse(data)
 
@@ -92,46 +93,37 @@ export async function registerAction(data: unknown) {
         }
     }
 
-    const { email, password, fullName, phone, department, district } = result.data
+    const { email, password, fullName } = result.data
 
     const { error, data: authData } = await supabase.auth.signUp({
         email,
         password,
         options: {
-            emailRedirectTo: `${origin}/auth/callback`,
-            data: {
-                full_name: fullName,
-                phone: phone,
-                department: department,
-                district: district,
-            }
+            emailRedirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,
+            data: { full_name: fullName },
         },
     })
 
+    const alreadyExists = error?.code === "user_already_exists" || error?.message.includes("User already registered")
+        // Con confirmación de correo activa, Supabase no da error: devuelve un usuario sin identidades.
+        || (!error && authData.user?.identities?.length === 0)
+    if (alreadyExists) {
+        return { error: "Este correo ya está registrado. Inicia sesión.", code: "user_already_exists" }
+    }
     if (error) {
-        // Handle "User already registered"
-        if (error.message.includes("User already registered") || error.code === "user_already_exists") {
-            return {
-                error: "Este correo ya está registrado. Por favor inicia sesión.",
-                code: "user_already_exists"
-            }
-        }
         return { error: translateSupabaseError(error.message) }
     }
 
-    // Send welcome email if user was created successfully
-    if (authData.user && authData.user.email) {
-        // We don't await this to keep the response fast, or we await if we want to ensure it sent
-        // For server actions, awaiting is usually safer to avoid execution context issues
+    if (authData.user?.email) {
         try {
             await sendWelcomeEmail(authData.user.email, fullName)
         } catch {
-            console.error("welcome email delivery failed")
-            // We don't fail the registration if email fails, but we log it
+            console.error("welcome email delivery failed") // el registro no falla por esto
         }
     }
 
-    return { success: true }
+    // Sin sesión = falta confirmar el correo; con sesión ya está dentro.
+    return { success: true, needsConfirmation: !authData.session, email }
 }
 
 export async function resetPasswordAction(email: unknown, next: unknown = "/dashboard") {

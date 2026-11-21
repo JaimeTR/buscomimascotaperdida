@@ -24,6 +24,24 @@ export function LoginForm({ next, forgotHref }: { next: string; forgotHref: stri
     const { toast } = useToast()
     const [isResending, setIsResending] = useState(false)
     const [show, setShow] = useState(false)
+    const emailRef = useRef<HTMLInputElement>(null)
+    const rememberRef = useRef<HTMLInputElement>(null)
+    // Recordar solo el correo (nunca la contraseña); la sesión ya persiste en cookie segura.
+    useEffect(() => {
+        try {
+            const saved = localStorage.getItem("bmm.email")
+            if (saved && emailRef.current && !emailRef.current.value) emailRef.current.value = saved
+            if (!saved && localStorage.getItem("bmm.email.off") && rememberRef.current) rememberRef.current.checked = false
+        } catch { /* sin storage: no pasa nada */ }
+    }, [])
+    const saveEmail = (e: React.FormEvent<HTMLFormElement>) => {
+        try {
+            const fd = new FormData(e.currentTarget)
+            const email = String(fd.get("email") ?? "").trim()
+            if (fd.get("remember") && email) { localStorage.setItem("bmm.email", email); localStorage.removeItem("bmm.email.off") }
+            else { localStorage.removeItem("bmm.email"); localStorage.setItem("bmm.email.off", "1") }
+        } catch { /* idem */ }
+    }
     const alertRef = useRef<HTMLDivElement>(null)
     useEffect(() => { if (state?.error) alertRef.current?.focus() }, [state])
 
@@ -42,12 +60,12 @@ export function LoginForm({ next, forgotHref }: { next: string; forgotHref: stri
     }
 
     return (
-        <form action={formAction} className="space-y-5">
+        <form action={formAction} onSubmit={saveEmail} className="space-y-5">
             <input type="hidden" name="next" value={next} />
 
             <div className="space-y-1.5">
                 <label htmlFor="email" className={label}>Correo</label>
-                <Input id="email" name="email" type="email" enterKeyHint="next" autoComplete="email" inputMode="email" required className={field} defaultValue={state.email || ""} aria-invalid={!!state?.validationErrors?.email} aria-describedby={state?.validationErrors?.email ? "email-error" : undefined} />
+                <Input ref={emailRef} id="email" name="email" type="email" enterKeyHint="next" autoComplete="email" inputMode="email" required className={field} defaultValue={state.email || ""} aria-invalid={!!state?.validationErrors?.email} aria-describedby={state?.validationErrors?.email ? "email-error" : undefined} />
                 {state?.validationErrors?.email && <p id="email-error" className="text-sm text-destructive">{state.validationErrors.email[0]}</p>}
             </div>
 
@@ -70,6 +88,11 @@ export function LoginForm({ next, forgotHref }: { next: string; forgotHref: stri
                 </div>
                 {state?.validationErrors?.password && <p id="password-error" className="text-sm text-destructive">{state.validationErrors.password[0]}</p>}
             </div>
+
+            <label className="flex min-h-11 cursor-pointer items-center gap-3 text-sm text-foreground">
+                <input ref={rememberRef} type="checkbox" name="remember" defaultChecked className="h-5 w-5 rounded border-input accent-[var(--primary)]" />
+                Recordar mi correo en este equipo
+            </label>
 
             {state?.error && (
                 <div ref={alertRef} tabIndex={-1} role="alert" className={`flex items-start gap-3 rounded-xl border p-4 text-sm text-foreground outline-none animate-in fade-in slide-in-from-top-1 ${state.needsConfirmation ? "border-warning/40 bg-warning/10" : "border-destructive/40 bg-destructive/10"}`}>

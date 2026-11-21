@@ -1,176 +1,97 @@
-
 "use client"
 
 import { useState } from "react"
-import { useForm, useWatch } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { registerSchema, RegisterSchema } from "@/lib/schemas/auth"
-import { registerAction } from "@/app/auth/actions"
+import { registerAction, resendConfirmationAction } from "@/app/auth/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Loader2, User, Phone, Mail, Lock, Eye, EyeOff } from "lucide-react"
+import { Loader2, Eye, EyeOff, MailCheck } from "lucide-react"
 import { useToast } from "@/components/ui/toast-modern"
 import { useRouter } from "next/navigation"
-import { ProfileLocationFields } from "@/components/auth/profile-location-fields"
+import Link from "next/link"
 
-interface RegisterFormProps {
-    onSuccess?: () => void
-}
+const label = "text-sm font-semibold text-foreground"
+const field = "h-12 rounded-xl border-input bg-card px-4 text-base"
 
-export function RegisterForm({ onSuccess }: RegisterFormProps) {
+export function RegisterForm({ next, loginHref }: { next: string; loginHref: string }) {
     const { toast } = useToast()
     const router = useRouter()
-    const [showPassword, setShowPassword] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-
-    // React Hook Form
-    const {
-        register,
-        handleSubmit,
-        setValue,
-        control,
-        formState: { errors },
-    } = useForm<RegisterSchema>({
-        resolver: zodResolver(registerSchema),
-        defaultValues: {
-            department: "",
-            district: ""
-        }
-    })
-
-    const department = useWatch({ control, name: "department" })
-    const district = useWatch({ control, name: "district" })
+    const [show, setShow] = useState(false)
+    const [pendingEmail, setPendingEmail] = useState<string | null>(null)
+    const [resending, setResending] = useState(false)
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterSchema>({ resolver: zodResolver(registerSchema) })
 
     const onSubmit = async (data: RegisterSchema) => {
-        setIsLoading(true)
         try {
-            const result = await registerAction(data)
-
-            if (result?.error) {
-                if (result.code === "user_already_exists") {
-                    toast(result.error, {
-                        type: 'warning',
-                        title: "Cuenta Existente",
-
-                    })
-                    if (onSuccess) {
-                        onSuccess() // Redirect to login tab
-                    }
-                } else {
-                    toast(result.error, { type: 'error' })
-                }
-            } else if (result?.validationErrors) {
-                // Handle field errors from server
-                Object.values(result.validationErrors).flat().forEach(err => {
-                    toast(err, { type: 'error' })
-                })
+            const result = await registerAction(data, next)
+            if (result?.code === "user_already_exists") {
+                toast(result.error!, { type: "warning", title: "Ya tienes cuenta" })
+                router.push(loginHref)
+            } else if (result?.error) {
+                toast(result.error, { type: "error" })
+            } else if (result?.needsConfirmation) {
+                setPendingEmail(data.email)
             } else if (result?.success) {
-                toast("Registro exitoso. Inicia sesión para continuar.", { type: 'success', title: "¡Cuenta Creada!" })
-
-                // Small delay to ensure toast is seen, then redirect
-                setTimeout(() => {
-                    if (onSuccess) {
-                        onSuccess()
-                    } else {
-                        router.push('/login') // Fallback redirect
-                    }
-                }, 1000)
+                router.push(next)
+                router.refresh()
             }
         } catch {
-            console.error("register action failed")
-            // Ignore standard Next.js redirect errors if they happen
-            toast("Ocurrió un error inesperado al procesar el registro.", { type: 'error' })
-        } finally {
-            setIsLoading(false)
+            toast("Ocurrió un error inesperado. Inténtalo de nuevo.", { type: "error" })
         }
     }
 
+    const resend = async () => {
+        if (!pendingEmail) return
+        setResending(true)
+        const r = await resendConfirmationAction(pendingEmail)
+        toast(r.error ?? "Te enviamos otro correo.", { type: r.error ? "error" : "success" })
+        setResending(false)
+    }
+
+    if (pendingEmail) {
+        return (
+            <div role="status" className="space-y-4 rounded-2xl border bg-card p-6 text-center">
+                <MailCheck className="mx-auto h-10 w-10 text-primary" aria-hidden />
+                <h2 className="font-display text-2xl text-primary">Revisa tu correo</h2>
+                <p className="text-muted-foreground">Enviamos un enlace a <strong className="text-foreground">{pendingEmail}</strong>. Tócalo para activar tu cuenta; si no lo ves, mira en spam.</p>
+                <Button type="button" variant="outline" onClick={resend} disabled={resending} className="h-11 rounded-xl">
+                    {resending && <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden />} Reenviar correo
+                </Button>
+                <p className="text-sm"><button type="button" onClick={() => setPendingEmail(null)} className="font-medium text-primary underline-offset-4 hover:underline">Corregir mi correo</button> · <Link href={loginHref} className="font-medium text-primary underline-offset-4 hover:underline">Ya confirmé</Link></p>
+            </div>
+        )
+    }
+
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div className="space-y-1.5 animate-in fade-in slide-in-from-left-2 duration-300">
-                <label htmlFor="reg-fullName" className="text-sm font-semibold text-foreground">Nombre Completo</label>
-                <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                        placeholder="Juan Pérez"
-                        className={`pl-10 h-12 rounded-xl bg-card border-input text-base ${errors.fullName ? 'border-red-500' : ''}`}
-                        id="reg-fullName" {...register("fullName")}
-                    />
-                </div>
-                {errors.fullName && <p className="text-xs text-red-500">{errors.fullName.message}</p>}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+            <div className="space-y-1.5">
+                <label htmlFor="reg-fullName" className={label}>Nombre</label>
+                <Input id="reg-fullName" autoComplete="name" enterKeyHint="next" className={field} aria-invalid={!!errors.fullName} {...register("fullName")} />
+                {errors.fullName && <p className="text-sm text-destructive">{errors.fullName.message}</p>}
             </div>
 
-            <div className="space-y-2 animate-in fade-in slide-in-from-left-2 duration-300 delay-75">
-                <label htmlFor="reg-phone" className="text-sm font-semibold text-foreground">Teléfono / WhatsApp</label>
-                <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                        placeholder="987 654 321"
-                        className={`pl-10 h-12 rounded-xl bg-card border-input text-base ${errors.phone ? 'border-red-500' : ''}`}
-                        id="reg-phone" {...register("phone")}
-                    />
-                </div>
-                {errors.phone && <p className="text-xs text-red-500">{errors.phone.message}</p>}
+            <div className="space-y-1.5">
+                <label htmlFor="reg-email" className={label}>Correo</label>
+                <Input id="reg-email" type="email" inputMode="email" autoComplete="email" enterKeyHint="next" className={field} aria-invalid={!!errors.email} {...register("email")} />
+                {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
             </div>
 
-            <div className="animate-in fade-in slide-in-from-left-2 duration-300 delay-100">
-                <ProfileLocationFields
-                    department={department}
-                    district={district}
-                    onDepartmentChange={(value) => {
-                        setValue("department", value, { shouldValidate: true })
-                        setValue("district", "", { shouldValidate: true })
-                    }}
-                    onDistrictChange={(value) => setValue("district", value, { shouldValidate: true })}
-                    departmentError={errors.department?.message}
-                    districtError={errors.district?.message}
-                    compact
-                />
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="reg-email" className="text-sm font-semibold text-foreground">Correo Electrónico</label>
+            <div className="space-y-1.5">
+                <label htmlFor="reg-password" className={label}>Contraseña</label>
                 <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                        type="email"
-                        placeholder="hola@ejemplo.com"
-                        className={`pl-10 h-12 rounded-xl bg-card border-input text-base ${errors.email ? 'border-red-500' : ''}`}
-                        id="reg-email" {...register("email")}
-                    />
-                </div>
-                {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
-            </div>
-
-            <div className="space-y-2">
-                <label htmlFor="reg-password" className="text-sm font-semibold text-foreground">Contraseña</label>
-                <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                    <Input
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        className={`pl-10 pr-12 h-12 rounded-xl bg-card border-input text-base ${errors.password ? 'border-red-500' : ''}`}
-                        id="reg-password" {...register("password")}
-                    />
-                    <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground transition-colors"
-                    >
-                        {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    <Input id="reg-password" type={show ? "text" : "password"} autoComplete="new-password" enterKeyHint="go" className={`${field} pr-12`} aria-invalid={!!errors.password} aria-describedby="reg-password-hint" {...register("password")} />
+                    <button type="button" onClick={() => setShow((v) => !v)} aria-label={show ? "Ocultar contraseña" : "Mostrar contraseña"} aria-pressed={show}
+                        className="absolute right-0.5 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                        {show ? <EyeOff className="h-5 w-5" aria-hidden /> : <Eye className="h-5 w-5" aria-hidden />}
                     </button>
                 </div>
-                {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
+                <p id="reg-password-hint" className={errors.password ? "text-sm text-destructive" : "text-sm text-muted-foreground"}>{errors.password?.message ?? "Mínimo 8 caracteres."}</p>
             </div>
 
-            <Button
-                type="submit"
-                variant="cta"
-                className="h-12 w-full rounded-xl text-base font-bold"
-                disabled={isLoading}
-                aria-busy={isLoading}
-            >
-                {isLoading ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> Creando cuenta…</> : "Crear cuenta"}
+            <Button type="submit" variant="cta" className="h-12 w-full rounded-xl text-base font-bold" disabled={isSubmitting} aria-busy={isSubmitting}>
+                {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> Creando cuenta…</> : "Crear cuenta"}
             </Button>
         </form>
     )

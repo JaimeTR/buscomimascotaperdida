@@ -8,22 +8,11 @@ export const loginSchema = z.object({
 
 export type LoginSchema = z.infer<typeof loginSchema>
 
+// Registro mínimo: teléfono y ubicación se piden después, al primer reporte (CompleteProfileDialog).
 export const registerSchema = z.object({
-    fullName: z.string().min(2, { message: "El nombre debe tener al menos 2 caracteres." }),
-    phone: z.string().regex(/^\d{9}$/, { message: "El teléfono debe tener exactamente 9 dígitos numéricos." }),
-    department: z.string().min(1, { message: "Debes seleccionar un departamento." }),
-    district: z.string().min(1, { message: "Debes seleccionar un distrito." }),
-    email: z.string().email({ message: "Ingresa un correo electrónico válido." }),
-    password: z.string().min(6, { message: "La contraseña debe tener al menos 6 caracteres." }),
-    confirmPassword: z.string().optional(),
-}).refine((data) => {
-    if (data.confirmPassword && data.password !== data.confirmPassword) {
-        return false
-    }
-    return true
-}, {
-    message: "Las contraseñas no coinciden",
-    path: ["confirmPassword"],
+    fullName: z.string().trim().min(2, { message: "Escribe tu nombre." }),
+    email: z.string().trim().email({ message: "Ingresa un correo electrónico válido." }),
+    password: z.string().min(8, { message: "La contraseña debe tener al menos 8 caracteres." }),
 })
 
 export type RegisterSchema = z.infer<typeof registerSchema>

@@ -1,30 +1,26 @@
-
 "use client"
 
-import { useRouter } from "next/navigation"
+import { Suspense } from "react"
 import Link from "next/link"
-import { useEffect } from "react"
+import { useSearchParams } from "next/navigation"
 import { AuthShell } from "@/components/auth/auth-shell"
 import { RegisterForm } from "@/components/auth/register-form"
-import { createClient } from "@/utils/supabase/client"
+import { SocialButtons } from "@/components/auth/social-buttons"
+import { isSafeInternalPath } from "@/lib/safe-path"
 
-export default function RegisterPage() {
-    const router = useRouter()
-    const supabase = createClient()
-
-    useEffect(() => {
-        const checkUser = async () => {
-            const { data: { session } } = await supabase.auth.getSession()
-            if (session) {
-                router.replace('/dashboard')
-            }
-        }
-        checkUser()
-    }, [router, supabase])
+function RegisterContent() {
+    const next = isSafeInternalPath(useSearchParams().get("next"), "/dashboard")
+    const loginHref = `/login?next=${encodeURIComponent(next)}`
 
     return (
-        <AuthShell title="Crea tu cuenta" subtitle="Es gratis. Publica tu caso y activa la red de tu zona.">
-            <RegisterForm onSuccess={() => router.push('/login')} />
+        <AuthShell title="Crea tu cuenta" subtitle="Gratis y en un minuto. Tu teléfono y zona te los pedimos recién al reportar.">
+            <SocialButtons next={next} />
+
+            <div className="my-6 flex items-center gap-3 text-sm text-muted-foreground">
+                <span className="h-px flex-1 bg-border" aria-hidden /> o con tu correo <span className="h-px flex-1 bg-border" aria-hidden />
+            </div>
+
+            <RegisterForm next={next} loginHref={loginHref} />
 
             <p className="mt-6 text-center text-xs leading-relaxed text-muted-foreground">
                 Al registrarte aceptas los <Link href="/terminos" className="text-primary underline-offset-4 hover:underline">Términos</Link> y la <Link href="/privacidad" className="text-primary underline-offset-4 hover:underline">Política de Privacidad</Link>.
@@ -32,8 +28,16 @@ export default function RegisterPage() {
 
             <p className="mt-6 text-center text-muted-foreground">
                 ¿Ya tienes cuenta?{" "}
-                <Link href="/login" className="inline-flex min-h-11 items-center font-semibold text-primary underline-offset-4 hover:underline">Inicia sesión</Link>
+                <Link href={loginHref} className="inline-flex min-h-11 items-center font-semibold text-primary underline-offset-4 hover:underline">Inicia sesión</Link>
             </p>
         </AuthShell>
+    )
+}
+
+export default function RegisterPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen bg-background" />}>
+            <RegisterContent />
+        </Suspense>
     )
 }

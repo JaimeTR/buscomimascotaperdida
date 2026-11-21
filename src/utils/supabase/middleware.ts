@@ -1,5 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
+import { isGuestOnlyPath, isProtectedPath, loginReason } from '@/lib/auth-guard'
+import { isSafeInternalPath } from '@/lib/safe-path'
 
 export async function updateSession(request: NextRequest) {
     const response = NextResponse.next({
@@ -28,12 +30,23 @@ export async function updateSession(request: NextRequest) {
 
     const { data: { user } } = await supabase.auth.getUser()
 
-    // Guard de servidor: el dashboard nunca se sirve sin sesión (RLS sigue siendo la barrera de datos).
-    const { pathname } = request.nextUrl
-    if (!user && (pathname === '/dashboard' || pathname.startsWith('/dashboard/'))) {
+    // Guard de servidor: sin sesión nunca se sirven las rutas protegidas (RLS sigue siendo la barrera de datos);
+    // con sesión, login/registro mandan directo a donde ibas.
+    const { pathname, search } = request.nextUrl
+    if (!user && isProtectedPath(pathname)) {
         const url = request.nextUrl.clone()
         url.pathname = '/login'
-        url.search = `?next=${encodeURIComponent(pathname)}`
+        const params = new URLSearchParams({ next: pathname + search })
+        const reason = loginReason(pathname)
+        if (reason) params.set('reason', reason)
+        url.search = `?${params}`
+        return NextResponse.redirect(url)
+    }
+    if (user && isGuestOnlyPath(pathname)) {
+        const url = request.nextUrl.clone()
+        const next = isSafeInternalPath(request.nextUrl.searchParams.get('next'), '/dashboard')
+        url.pathname = next.split('?')[0]
+        url.search = next.includes('?') ? `?${next.split('?')[1]}` : ''
         return NextResponse.redirect(url)
     }
 
