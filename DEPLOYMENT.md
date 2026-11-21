@@ -303,3 +303,22 @@ pm2 restart buscomimascotaperdida
 - Ya tienes un plan de Hostinger
 - Necesitas alojar múltiples proyectos
 - Quieres más control del servidor
+
+## Checklist de salida a producción (nuevas funciones)
+
+Variables en el hosting (además de las de Supabase y `NEXT_PUBLIC_APP_URL`):
+
+| Variable | Para qué | Cómo obtenerla |
+|---|---|---|
+| `SUPABASE_SERVICE_ROLE_KEY` | Avisos por cercanía y coincidencias (correo y push) | Supabase → Project Settings → API |
+| `RESEND_API_KEY` | Correos | Resend, con el dominio verificado |
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` | Alertas push web | `npx web-push generate-vapid-keys`; el subject es `mailto:tu-correo` |
+| `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN` | Monitoreo de errores (opcional) | Proyecto Next.js en Sentry |
+
+Pasos únicos:
+
+1. Supabase → Authentication → URL Configuration: Site URL y Redirect URLs de producción. Activar Google OAuth.
+2. Resend: verificar el dominio y usar el remitente `notificaciones@tu-dominio`.
+3. Darte permisos de admin: `insert into public.admin_users (user_id) values ('<tu user id>');`.
+4. Reemplazar los casos de ejemplo (`source_name = 'Ejemplo (demo)'`) cuando haya reportes reales: `delete from public.pets where source_name = 'Ejemplo (demo)';`
+5. Publicar y apuntar el dominio; probar el interruptor de notificaciones en Ajustes con una cuenta real.
