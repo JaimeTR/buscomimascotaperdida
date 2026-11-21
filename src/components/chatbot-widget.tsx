@@ -71,7 +71,7 @@ function PetCard({ pet, onOpen }: { pet: ChatPet; onOpen: (href: string) => void
         <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
             <button onClick={() => onOpen(`/mascotas/${pet.id}`)} className="group block w-full text-left" aria-label={`Ver reporte de ${pet.name ?? "mascota sin nombre"}`}>
                 <div className="relative aspect-[16/10] bg-secondary">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    { }
                     <img src={pet.image ?? "/img/sin-foto.svg"} alt={pet.name ? `Foto de ${pet.name}` : "Mascota sin foto"} loading="lazy" referrerPolicy="no-referrer" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
                     <span className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[11px] font-bold ${STATUS_STYLE[pet.status] ?? "bg-secondary text-foreground"}`}>
                         {STATUS_LABEL[pet.status] ?? pet.status}
