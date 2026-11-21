@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 import "./leaflet-custom.css";
+import { ChromeGate } from "@/components/chrome-gate";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { MobileTabbar } from "@/components/mobile-tabbar";
@@ -79,14 +80,14 @@ export default function RootLayout({
         <PWARegister />
         <ToastProvider>
           <ConfirmProvider>
-            <Navbar />
+            <ChromeGate><Navbar /></ChromeGate>
             <main className="flex-1">
               {children}
             </main>
-            <Footer />
-            <MobileTabbar />
-            <ChatbotWidget />
-            <PWAInstallPrompt />
+            <ChromeGate><Footer /></ChromeGate>
+            <ChromeGate><MobileTabbar /></ChromeGate>
+            <ChromeGate><ChatbotWidget /></ChromeGate>
+            <ChromeGate><PWAInstallPrompt /></ChromeGate>
           </ConfirmProvider>
         </ToastProvider>
       </body>
