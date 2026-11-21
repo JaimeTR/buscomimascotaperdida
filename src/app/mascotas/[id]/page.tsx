@@ -18,6 +18,21 @@ import { OwnerContactModal } from "@/components/owner-contact-modal"
 import { Reveal } from "@/components/ui/reveal"
 import { AdSlot } from "@/components/ads/ad-slot"
 
+import type { Metadata } from "next"
+import { createPublicClient } from "@/utils/supabase/public"
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+    const { id } = await params
+    const { data: pet } = await createPublicClient().from('pets')
+        .select('name, type, breed, status, last_seen_district, image_urls').eq('id', id).eq('is_hidden', false).maybeSingle()
+    if (!pet) return {}
+    const kind = pet.type === 'cat' ? 'Gato' : pet.type === 'dog' ? 'Perro' : 'Mascota'
+    const title = `${pet.status === 'found' ? 'Encontrado' : 'Perdido'}: ${pet.name ?? kind}${pet.last_seen_district ? ` en ${pet.last_seen_district}` : ''}`
+    const description = `${kind}${pet.breed ? ` ${pet.breed}` : ''}. Ayúdanos a ${pet.status === 'found' ? 'encontrar a su dueño' : 'traerlo de vuelta a casa'}.`
+    const images = pet.image_urls?.[0] ? [pet.image_urls[0]] : undefined
+    return { title, description, openGraph: { title, description, images }, twitter: { card: 'summary_large_image', title, description, images } }
+}
+
 export default async function PetPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const supabase = await createClient()

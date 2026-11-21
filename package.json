@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --test scripts/import-reports.test.mjs",
     "check:production-config": "node scripts/check-production-config.mjs"
   },
   "dependencies": {
