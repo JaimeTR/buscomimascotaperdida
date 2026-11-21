@@ -18,6 +18,7 @@ import { OwnerContactModal } from "@/components/owner-contact-modal"
 import { Reveal } from "@/components/ui/reveal"
 import { AdSlot } from "@/components/ads/ad-slot"
 import { matchScore } from "@/lib/matches"
+import { whatsappLink } from "@/lib/whatsapp"
 
 import type { Metadata } from "next"
 import { createPublicClient } from "@/utils/supabase/public"
@@ -167,14 +168,14 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                                                     {/* Contact Options - Show based on sighting sharing preferences */}
                                                     <div className="flex gap-2">
-                                                        {sighting.share_whatsapp && sighting.reporter?.whatsapp && (
+                                                        {sighting.share_whatsapp && whatsappLink(sighting.reporter?.whatsapp) && (
                                                             <Button
                                                                 size="icon"
                                                                 variant="outline"
                                                                 className="h-9 w-9 rounded-xl text-emerald-500 border-emerald-100 hover:bg-emerald-50"
                                                                 asChild
                                                             >
-                                                                <a href={`https://wa.me/${sighting.reporter.whatsapp}?text=Hola, te contacto por el avistamiento de ${pet.name}`} target="_blank" rel="noopener noreferrer">
+                                                                <a href={whatsappLink(sighting.reporter?.whatsapp, `Hola, te contacto por el avistamiento de ${pet.name}`)!} target="_blank" rel="noopener noreferrer">
                                                                     <MessageCircle className="h-4 w-4 fill-current" />
                                                                 </a>
                                                             </Button>
@@ -348,6 +349,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                 ) : (
                                                                     <OwnerContactModal
                                         ownerName={owner.full_name}
+                                        petName={pet.name}
                                         phone={owner.phone}
                                         whatsapp={owner.whatsapp}
                                         email={owner.email}

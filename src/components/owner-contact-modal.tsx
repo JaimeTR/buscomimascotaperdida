@@ -11,9 +11,11 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/toast-modern"
+import { whatsappLink } from "@/lib/whatsapp"
 
 interface OwnerContactModalProps {
     ownerName?: string
+    petName?: string
     phone?: string
     whatsapp?: string
     email?: string
@@ -21,6 +23,7 @@ interface OwnerContactModalProps {
 
 export function OwnerContactModal({
     ownerName = "Dueño",
+    petName,
     phone,
     whatsapp,
     email
@@ -37,12 +40,9 @@ export function OwnerContactModal({
     }
 
     const handleWhatsApp = () => {
-        if (whatsapp) {
-            // Formatear número para WhatsApp
-            const cleanNumber = whatsapp.replace(/\D/g, '')
-            const whatsappUrl = `https://wa.me/${cleanNumber}`
-            window.open(whatsappUrl, '_blank')
-        }
+        const url = whatsappLink(whatsapp, `Hola, te escribo por tu reporte${petName ? ` de ${petName}` : ''} en Busco mi mascota.`)
+        if (url) window.open(url, '_blank', 'noopener,noreferrer')
+        else toast('El número de WhatsApp no es válido', { type: 'error' })
     }
 
     const handleCall = () => {
