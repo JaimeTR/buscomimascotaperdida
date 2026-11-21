@@ -17,6 +17,7 @@ import { ImageGallery } from "@/components/image-gallery"
 import { OwnerContactModal } from "@/components/owner-contact-modal"
 import { Reveal } from "@/components/ui/reveal"
 import { AdSlot } from "@/components/ads/ad-slot"
+import { matchScore } from "@/lib/matches"
 
 import type { Metadata } from "next"
 import { createPublicClient } from "@/utils/supabase/public"
@@ -82,6 +83,21 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
         .eq('last_seen_district', pet.last_seen_district)
         .neq('id', id)
         .limit(4)
+
+    // Posibles coincidencias: perdidos <-> encontrados de la misma especie, cercanos en fecha y zona.
+    const { data: candidates } = await supabase
+        .from('pets')
+        .select('*')
+        .eq('type', pet.type)
+        .eq('status', pet.status === 'found' ? 'lost' : 'found')
+        .eq('is_hidden', false)
+        .order('last_seen_date', { ascending: false })
+        .limit(100)
+    const matches = (candidates ?? [])
+        .map((c) => ({ pet: c, score: matchScore(pet, c) }))
+        .filter((m) => m.score >= 50)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4)
 
     // Format date: "12 de Octubre"
     const dateObj = new Date(pet.last_seen_date)
@@ -347,6 +363,33 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                         </div>
                     </div>
                 </div>
+
+                {matches.length > 0 && (
+                    <div className="space-y-8 pt-12 border-t border-border">
+                        <h2 className="text-3xl font-bold text-foreground tracking-tight">
+                            Posibles coincidencias con {pet.status === 'found' ? 'mascotas perdidas' : 'mascotas encontradas'}
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {matches.map(({ pet: m }, i) => (
+                                <Reveal key={m.id} delay={i * 0.05}>
+                                <PetCard
+                                    id={m.id}
+                                    name={m.name}
+                                    type={m.type}
+                                    breed={m.breed}
+                                    district={m.last_seen_district}
+                                    province={m.last_seen_province}
+                                    colors={m.colors}
+                                    imageUrl={m.image_urls?.[0]}
+                                    status={m.status}
+                                    lostDate={m.last_seen_date}
+                                    timeLeft="Reciente"
+                                />
+                                </Reveal>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {/* Similar Pets Section */}
                 {similarPets && similarPets.length > 0 && (
