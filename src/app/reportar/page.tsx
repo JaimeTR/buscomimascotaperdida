@@ -287,7 +287,7 @@ export default function ReportPage() {
                     </div>
 
                     <div className="text-center space-y-2 pt-4">
-                        <h1 className="font-display text-3xl md:text-4xl uppercase tracking-wide text-primary">Reportar Mascota Perdida</h1>
+                        <h1 className="font-display text-3xl md:text-4xl text-primary">Reportar Mascota Perdida</h1>
                         <p className="text-muted-foreground">Mientras más detalles nos des, más rápido podrá ayudar nuestra comunidad.</p>
                     </div>
 

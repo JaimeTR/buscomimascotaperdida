@@ -122,7 +122,7 @@ function UpdatePasswordContent() {
                     />
                 </Link>
                 <div className="space-y-1">
-                    <h1 className="font-display text-3xl uppercase tracking-wide text-primary">Actualizar Contraseña</h1>
+                    <h1 className="font-display text-3xl text-primary">Actualizar Contraseña</h1>
                     <p className="text-primary font-bold text-[10px] uppercase tracking-[0.2em] px-4 opacity-80">
                         Crea una nueva clave segura para tu cuenta
                     </p>

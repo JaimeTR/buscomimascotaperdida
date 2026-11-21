@@ -38,7 +38,7 @@
   --color-warning: hsl(var(--warning));
 
   --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-braze), var(--font-poppins), ui-sans-serif, sans-serif;
+  --font-display: var(--font-outfit), var(--font-poppins), ui-sans-serif, sans-serif;
 
   --shadow-soft: 0 6px 24px -8px rgb(11 43 42 / 0.16);
   --shadow-lift: 0 14px 34px -12px rgb(11 43 42 / 0.22);
@@ -114,6 +114,11 @@
 @layer base {
   * {
     @apply border-border;
+  }
+
+  .font-display {
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 
   body {

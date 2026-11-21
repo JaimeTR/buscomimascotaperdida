@@ -54,15 +54,15 @@ Fuente de verdad para rediseñar la web. La identidad (logo, versiones, reglas) 
 ## 3. Tipografía
 | Rol | Fuente | Estilo |
 |---|---|---|
-| **Display y títulos cortos** | **Braze** | Solo MAYÚSCULAS, hasta ~4 palabras, desde 24 px, espaciado +0.01em. Nunca en párrafos ni botones. |
+| **Display y títulos** | **Outfit** 600 | Sentence case (nunca todo en mayúsculas), interletraje -0.01em, como las referencias. Nunca en párrafos ni botones. |
 | **Interfaz y texto** | **Poppins** | 400 texto, 500 etiquetas y navegación, 600 títulos y botones, 700 énfasis. |
 | Reserva | `system-ui, sans-serif` | Mientras carga la fuente |
 
 ### Escala
 | Nivel | Fuente | Tamaño (móvil → escritorio) | Interlínea |
 |---|---|---|---|
-| Display (hero) | Braze | 36 → 64 px | 1.05 |
-| H1 de página | Braze | 28 → 44 px | 1.1 |
+| Display (hero) | Outfit | 36 → 64 px | 1.05 |
+| H1 de página | Outfit | 28 → 44 px | 1.1 |
 | H2 de sección | Poppins 600 | 24 → 32 px | 1.2 |
 | H3 | Poppins 600 | 18 → 22 px | 1.3 |
 | Texto | Poppins 400 | 16 px | 1.6 |

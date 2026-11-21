@@ -28,7 +28,7 @@ export default async function AliadosPage() {
                 <div className="grid overflow-hidden rounded-[2rem] bg-accent md:grid-cols-2">
                     <div className="flex flex-col justify-center gap-5 p-8 md:p-14">
                         <p className="inline-flex w-fit items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]"><Handshake className="h-4 w-4" aria-hidden /> Aliados</p>
-                        <h1 className="font-display text-4xl uppercase leading-[1.05] tracking-wide text-primary md:text-5xl">Juntos llegamos <span className="text-cta">más lejos</span></h1>
+                        <h1 className="font-display text-4xl leading-[1.05] text-primary md:text-5xl">Juntos llegamos <span className="text-cta">más lejos</span></h1>
                         <p className="text-lg text-muted-foreground">Cada empresa, veterinaria y persona que colabora ayuda a que más mascotas vuelvan a casa.</p>
                         <div className="flex flex-wrap gap-3">
                             <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#colaborar">Quiero colaborar</a></Button>
@@ -42,7 +42,7 @@ export default async function AliadosPage() {
             </section>
 
             <section aria-labelledby="h-formas" className="container mx-auto px-4 py-14">
-                <h2 id="h-formas" className="mb-8 text-center font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">Formas de colaborar</h2>
+                <h2 id="h-formas" className="mb-8 text-center font-display text-3xl text-primary md:text-4xl">Formas de colaborar</h2>
                 <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {WAYS.map((w, i) => (
                         <Reveal as="li" key={w.title} delay={i * 0.06}>
@@ -57,7 +57,7 @@ export default async function AliadosPage() {
             </section>
 
             <section aria-labelledby="h-aliados" className="container mx-auto px-4 pb-14">
-                <h2 id="h-aliados" className="mb-8 font-display text-3xl uppercase tracking-wide text-primary">Nuestros aliados</h2>
+                <h2 id="h-aliados" className="mb-8 font-display text-3xl text-primary">Nuestros aliados</h2>
                 {partners.length === 0 ? (
                     <EmptyState icon={Handshake} title="Aún no hay aliados publicados" text="Sé la primera empresa o persona en aparecer aquí y ayuda a que la red crezca.">
                         <Button asChild variant="cta"><a href="#colaborar">Quiero ser aliado</a></Button>
@@ -96,7 +96,7 @@ export default async function AliadosPage() {
             <section id="colaborar" className="container mx-auto scroll-mt-20 px-4 pb-6">
                 <div className="mx-auto max-w-3xl space-y-6">
                     <div className="text-center">
-                        <h2 className="font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">Quiero colaborar</h2>
+                        <h2 className="font-display text-3xl text-primary md:text-4xl">Quiero colaborar</h2>
                         <p className="mt-2 text-muted-foreground">Cuéntanos cómo quieres ayudar y te escribimos.</p>
                     </div>
                     <PromoRequestForm

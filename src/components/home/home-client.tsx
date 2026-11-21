@@ -52,7 +52,7 @@ export function HomeClient({ adSlot }: { adSlot: React.ReactNode }) {
             <p className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]">
               <PawPrint className="h-4 w-4" aria-hidden /> Red comunitaria de ayuda
             </p>
-            <h1 className="font-display text-4xl uppercase leading-[1.05] tracking-wide text-primary md:text-6xl">
+            <h1 className="font-display text-4xl leading-[1.05] text-primary md:text-6xl">
               Ayúdanos a traerlos de <span className="text-cta">vuelta a casa</span>
             </h1>
             <p className="max-w-xl text-lg text-muted-foreground">
@@ -135,7 +135,7 @@ export function HomeClient({ adSlot }: { adSlot: React.ReactNode }) {
 
       {/* Cómo funciona */}
       <section className="container mx-auto px-4 py-14">
-        <h2 className="mb-8 text-center font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">Cómo funciona</h2>
+        <h2 className="mb-8 text-center font-display text-3xl text-primary md:text-4xl">Cómo funciona</h2>
         <ol className="grid gap-4 md:grid-cols-3">
           {STEPS.map((s, i) => (
             <Reveal as="li" key={s.t} delay={i * 0.06} className="rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
@@ -154,7 +154,7 @@ export function HomeClient({ adSlot }: { adSlot: React.ReactNode }) {
             <Image src={STOCK.veterinarios.src} alt={STOCK.veterinarios.alt} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
           </div>
           <div className="flex flex-col justify-center gap-4 p-8 md:p-12">
-            <h2 className="font-display text-3xl uppercase leading-tight tracking-wide text-primary">Empresas y voluntarios que suman</h2>
+            <h2 className="font-display text-3xl leading-tight text-primary">Empresas y voluntarios que suman</h2>
             <p className="text-muted-foreground">Veterinarias, refugios, negocios y personas que ayudan a que más mascotas vuelvan a casa. Súmate o promociona tu negocio.</p>
             <div className="flex flex-wrap gap-3">
               <Button asChild className="rounded-full"><Link href="/aliados">Ser aliado</Link></Button>
@@ -167,7 +167,7 @@ export function HomeClient({ adSlot }: { adSlot: React.ReactNode }) {
       {/* Cierre */}
       <section className="container mx-auto px-4 pb-6">
         <div className="rounded-[2rem] bg-primary px-6 py-12 text-center text-primary-foreground md:py-16">
-          <h2 className="mx-auto max-w-2xl font-display text-3xl uppercase leading-tight tracking-wide md:text-4xl">¿Perdiste a tu mascota o encontraste una?</h2>
+          <h2 className="mx-auto max-w-2xl font-display text-3xl leading-tight md:text-4xl">¿Perdiste a tu mascota o encontraste una?</h2>
           <p className="mx-auto mt-3 max-w-xl text-primary-foreground/90">Cada minuto cuenta. Publica ahora y activa la red de tu zona.</p>
           <Button asChild variant="cta" size="lg" className="mt-6 rounded-full">
             <Link href="/reportar">Reportar una mascota</Link>

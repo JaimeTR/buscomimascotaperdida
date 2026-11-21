@@ -12,7 +12,7 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
             <aside className="relative hidden overflow-hidden lg:block" aria-hidden>
                 <Image src={STOCK.reencuentro.src} alt="" fill priority sizes="55vw" className="object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary-deep/90 via-primary-deep/25 to-primary-deep/10" />
-                <p className="absolute inset-x-0 bottom-0 p-12 font-display text-5xl uppercase leading-[1.05] tracking-wide text-white xl:p-16 xl:text-6xl">{SLOGAN}</p>
+                <p className="absolute inset-x-0 bottom-0 p-12 font-display text-5xl leading-[1.05] text-white xl:p-16 xl:text-6xl">{SLOGAN}</p>
             </aside>
 
             <div className="flex flex-col bg-background px-6 py-6 sm:px-12 lg:py-8">
@@ -28,11 +28,11 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
                 <div className="relative mt-6 h-32 overflow-hidden rounded-2xl lg:hidden" aria-hidden>
                     <Image src={STOCK.reencuentro.src} alt="" fill sizes="(max-width: 1024px) 100vw, 0px" className="object-cover object-[50%_40%]" />
                     <div className="absolute inset-0 bg-gradient-to-t from-primary-deep/85 to-transparent" />
-                    <p className="absolute bottom-3 left-4 font-display text-xl uppercase tracking-wide text-white">{SLOGAN}</p>
+                    <p className="absolute bottom-3 left-4 font-display text-xl text-white">{SLOGAN}</p>
                 </div>
 
                 <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-8 lg:py-10">
-                    <h1 className="font-display text-4xl uppercase leading-none tracking-wide text-primary">{title}</h1>
+                    <h1 className="font-display text-4xl leading-none text-primary">{title}</h1>
                     {subtitle && <p className="mt-3 text-muted-foreground">{subtitle}</p>}
                     <div className="mt-8">{children}</div>
                 </div>

@@ -19,7 +19,7 @@ export function AdCard({ ad, variant = "card" }: { ad: Ad; variant?: "card" | "b
                 )}
                 <div className="flex flex-1 flex-col justify-center gap-3 p-6 md:p-10">
                     <span className="w-fit rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-muted-foreground">Anuncio · {ad.advertiser}</span>
-                    <h2 className="font-display text-2xl uppercase leading-tight tracking-wide text-primary md:text-3xl">{ad.title}</h2>
+                    <h2 className="font-display text-2xl leading-tight text-primary md:text-3xl">{ad.title}</h2>
                     {ad.body && <p className="max-w-xl text-muted-foreground">{ad.body}</p>}
                     <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-cta-foreground transition-colors group-hover:bg-cta/90">
                         {ad.cta_label} <ArrowUpRight className="h-4 w-4" aria-hidden />

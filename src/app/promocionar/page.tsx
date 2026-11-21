@@ -31,7 +31,7 @@ export default async function PromocionarPage() {
                 <div className="grid overflow-hidden rounded-[2rem] bg-primary text-primary-foreground md:grid-cols-[1.1fr_1fr]">
                     <div className="flex flex-col justify-center gap-5 p-8 md:p-14">
                         <p className="inline-flex w-fit items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-medium"><Megaphone className="h-4 w-4" aria-hidden /> Promociones</p>
-                        <h1 className="font-display text-4xl uppercase leading-[1.05] tracking-wide md:text-5xl">Tu marca, junto a quienes <span className="text-orange-300">aman a sus mascotas</span></h1>
+                        <h1 className="font-display text-4xl leading-[1.05] md:text-5xl">Tu marca, junto a quienes <span className="text-orange-300">aman a sus mascotas</span></h1>
                         <p className="text-lg text-primary-foreground/90">Muestra tu negocio en la portada, en los casos y en la página de anuncios. Y ayudas a sostener la red.</p>
                         <div className="flex flex-wrap gap-3">
                             <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#planes">Ver planes</a></Button>
@@ -57,14 +57,14 @@ export default async function PromocionarPage() {
             </section>
 
             <section id="planes" className="container mx-auto scroll-mt-20 px-4 py-6">
-                <h2 className="mb-2 text-center font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">Planes</h2>
+                <h2 className="mb-2 text-center font-display text-3xl text-primary md:text-4xl">Planes</h2>
                 <p className="mb-8 text-center text-sm text-muted-foreground">Precios referenciales por 30 días; el equipo confirma el monto al coordinar contigo.</p>
                 <ul className="grid gap-5 lg:grid-cols-3">
                     {PLANS.map((p, i) => (
                         <Reveal as="li" key={p.key} delay={i * 0.07}>
                             <div className={cn("relative flex h-full flex-col rounded-3xl border p-7 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]", p.tone, "highlight" in p && p.highlight && "ring-2 ring-primary")}>
                                 {"highlight" in p && p.highlight && <span className="absolute -top-3 left-6 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">Más elegido</span>}
-                                <h3 className="font-display text-2xl uppercase tracking-wide text-primary">{p.name}</h3>
+                                <h3 className="font-display text-2xl text-primary">{p.name}</h3>
                                 <p className="mt-2"><span className="text-4xl font-bold">{p.price}</span> <span className="text-sm text-muted-foreground">/ {p.period}</span></p>
                                 <ul className="mt-5 flex-1 space-y-3 text-sm">
                                     {p.perks.map((perk) => <li key={perk} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> {perk}</li>)}
@@ -77,7 +77,7 @@ export default async function PromocionarPage() {
             </section>
 
             <section aria-labelledby="h-pasos" className="container mx-auto px-4 py-14">
-                <h2 id="h-pasos" className="mb-8 text-center font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">Cómo funciona</h2>
+                <h2 id="h-pasos" className="mb-8 text-center font-display text-3xl text-primary md:text-4xl">Cómo funciona</h2>
                 <ol className="grid gap-4 md:grid-cols-3">
                     {STEPS.map((s, i) => (
                         <Reveal as="li" key={s.t} delay={i * 0.06}>
@@ -94,7 +94,7 @@ export default async function PromocionarPage() {
             <section id="solicitud" className="container mx-auto scroll-mt-20 px-4 pb-6">
                 <div className="mx-auto max-w-3xl space-y-6">
                     <div className="text-center">
-                        <h2 className="font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">Solicita tu anuncio</h2>
+                        <h2 className="font-display text-3xl text-primary md:text-4xl">Solicita tu anuncio</h2>
                         <p className="mt-2 text-muted-foreground">Completa el formulario y te contactamos.</p>
                     </div>
                     <PromoRequestForm loggedIn={Boolean(user)} kinds={[{ value: "anuncio", label: "Quiero anunciar mi negocio" }]} defaultKind="anuncio" />

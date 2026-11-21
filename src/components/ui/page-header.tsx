@@ -3,7 +3,7 @@ export function PageHeader({ title, text, children }: { title: string; text?: st
     return (
         <header className="flex flex-wrap items-end justify-between gap-4">
             <div>
-                <h1 className="font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">{title}</h1>
+                <h1 className="font-display text-3xl text-primary md:text-4xl">{title}</h1>
                 {text && <p className="mt-1 text-muted-foreground">{text}</p>}
             </div>
             {children && <div className="flex flex-wrap items-center gap-3">{children}</div>}

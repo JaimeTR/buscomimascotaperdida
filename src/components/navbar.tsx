@@ -23,7 +23,7 @@ export function BrandMark({ className }: { className?: string }) {
     return (
         <span className={cn("flex shrink-0 items-center gap-2.5 whitespace-nowrap", className)}>
             <Image src="/logo_symbol.svg" alt="" width={36} height={44} className="h-10 w-auto" priority unoptimized />
-            <span className="font-display text-[15px] uppercase leading-[1.05] tracking-wide">
+            <span className="font-display text-[15px] leading-[1.05]">
                 <span className="block text-primary">Busco mi</span>
                 <span className="block text-cta">mascota</span>
             </span>

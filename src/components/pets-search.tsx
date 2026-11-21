@@ -66,7 +66,7 @@ function SearchContent({ ad }: { ad?: React.ReactNode }) {
             <div className="bg-accent/50 pb-24 pt-12 md:pt-16 px-4 relative overflow-hidden">
                 <div className="container max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                     <div className="max-w-xl space-y-4">
-                        <h1 className="font-display text-4xl md:text-5xl uppercase tracking-wide text-primary leading-[1.1]">
+                        <h1 className="font-display text-4xl md:text-5xl text-primary leading-[1.1]">
                             Encuentra o reporta mascotas perdidas cerca de ti
                         </h1>
                         <p className="text-lg text-muted-foreground">

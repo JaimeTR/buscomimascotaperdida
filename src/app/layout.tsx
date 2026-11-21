@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Poppins } from "next/font/google";
-import localFont from "next/font/local";
+import { Poppins, Outfit } from "next/font/google";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 import "./leaflet-custom.css";
@@ -14,18 +13,14 @@ import { ConfirmProvider } from "@/components/ui/confirm-modern";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { PWARegister } from "@/components/pwa-register";
 
-// Poppins: interfaz y texto. Braze: tipografía de marca (solo MAYÚSCULAS, títulos cortos). Ver DESIGN.md.
+// Poppins: interfaz y texto. Outfit: títulos (sentence case, peso 600). Ver DESIGN.md.
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
   display: "swap",
 });
-const braze = localFont({
-  src: "../fonts/Braze.otf",
-  variable: "--font-braze",
-  display: "swap",
-});
+const outfit = Outfit({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-outfit", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://buscomimascotaperdida.com"),
@@ -73,7 +68,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning className={`${poppins.variable} ${braze.variable}`}>
+    <html lang="es" suppressHydrationWarning className={`${poppins.variable} ${outfit.variable}`}>
       <body
         className={`font-sans antialiased min-h-screen flex flex-col bg-background`}
       >

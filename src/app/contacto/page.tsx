@@ -54,7 +54,7 @@ export default function ContactPage() {
             </ul>
 
             <section id="faq" aria-labelledby="h-faq" className="mx-auto max-w-3xl scroll-mt-20 space-y-4">
-                <h2 id="h-faq" className="text-center font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">Preguntas frecuentes</h2>
+                <h2 id="h-faq" className="text-center font-display text-3xl text-primary md:text-4xl">Preguntas frecuentes</h2>
                 {FAQ.map((f) => (
                     <details key={f.q} className="group rounded-2xl border bg-card p-5 shadow-[var(--shadow-soft)] open:shadow-[var(--shadow-lift)]">
                         <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">

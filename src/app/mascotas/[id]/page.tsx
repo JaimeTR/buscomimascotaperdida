@@ -244,7 +244,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                         {/* Qué hacer si lo ves */}
                         <div className="rounded-[2.5rem] border bg-accent p-8 md:p-10 space-y-4">
-                            <h2 className="font-display text-2xl uppercase tracking-wide text-primary">Si ves a {pet.name}</h2>
+                            <h2 className="font-display text-2xl text-primary">Si ves a {pet.name}</h2>
                             <ul className="space-y-2 text-sm text-accent-foreground">
                                 <li>1. No lo persigas: acércate despacio y háblale con calma.</li>
                                 <li>2. Toma una foto o video desde lejos si puedes.</li>
@@ -267,7 +267,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                             </div>
 
                             <div className="space-y-2">
-                                <h1 className="font-display text-4xl md:text-5xl uppercase tracking-wide text-primary">{pet.name}</h1>
+                                <h1 className="font-display text-4xl md:text-5xl text-primary">{pet.name}</h1>
                                 <div className="flex items-center text-muted-foreground gap-2 font-semibold">
                                     <MapPin className="h-5 w-5 text-red-400" />
                                     <span>{pet.last_seen_district}, {pet.last_seen_province}</span>

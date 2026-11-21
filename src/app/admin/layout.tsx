@@ -16,7 +16,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 <Link href="/" aria-label="Ir al inicio">
                     <Image src="/brand/isologo-horizontal-blanco.svg" alt="Busco mi mascota" width={300} height={85} className="h-16 w-auto" unoptimized />
                 </Link>
-                <p className="mt-6 mb-2 flex items-center gap-2 px-4 font-display text-xs uppercase tracking-widest text-orange-300">
+                <p className="mt-6 mb-2 flex items-center gap-2 px-4 font-display text-xs text-orange-300">
                     <ShieldCheck className="h-4 w-4" aria-hidden /> Administración
                 </p>
                 <div className="flex-1"><AdminNav variant="side" /></div>

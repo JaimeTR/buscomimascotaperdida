@@ -19,7 +19,7 @@ export function Footer() {
                 </div>
                 {COLUMNS.map((c) => (
                     <nav key={c.title} aria-label={c.title} className="space-y-3">
-                        <h2 className="font-display text-sm uppercase tracking-widest text-orange-300">{c.title}</h2>
+                        <h2 className="font-display text-sm text-orange-300">{c.title}</h2>
                         <ul className="space-y-2 text-sm">
                             {c.links.map(([href, label]) => (
                                 <li key={href}><Link href={href} className="text-primary-foreground/90 hover:underline">{label}</Link></li>
