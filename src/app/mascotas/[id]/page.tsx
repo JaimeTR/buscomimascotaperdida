@@ -387,8 +387,8 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                     />
                                 )}
                                 <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-border text-muted-foreground hover:bg-background" size="lg" asChild>
-                                    <Link href={`/cartel?id=${pet.id}`}>
-                                        <Download className="mr-3 h-5 w-5" /> Generar Cartel PDF
+                                    <Link href={`/cartel/${pet.id}`}>
+                                        <Download className="mr-3 h-5 w-5" /> Generar cartel
                                     </Link>
                                 </Button>
                                 <AdSlot placement="detail_sidebar" variant="side" />

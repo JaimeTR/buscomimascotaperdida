@@ -115,8 +115,8 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
                 <MessageCircle className="mr-3 h-6 w-6 text-primary" /> Contactar Dueño
             </Button>
             <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-border text-muted-foreground hover:bg-background" size="lg" asChild>
-                <Link href={`/cartel?id=${petId}`}>
-                    <Download className="mr-3 h-5 w-5" /> Generar Cartel PDF
+                <Link href={`/cartel/${petId}`}>
+                    <Download className="mr-3 h-5 w-5" /> Generar cartel
                 </Link>
             </Button>
         </div>

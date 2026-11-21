@@ -237,7 +237,7 @@ export default function ReportPage() {
             }
 
             toast("Reporte creado con éxito", { type: "success", title: "¡Excelente!" })
-            router.push('/dashboard')
+            router.push(insertedPet ? `/cartel/${insertedPet.id}?nuevo=1` : '/dashboard')
 
         } catch (error) {
             console.error('Error reporting pet:', error)

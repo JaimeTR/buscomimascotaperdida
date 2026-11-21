@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { Check, Copy, Eye, FileText, Lightbulb, Loader2, MapPin, Pause, PenLine, Play, Plus, Search, Trash2 } from "lucide-react"
+import { Check, Copy, Eye, FileText, Lightbulb, Loader2, Megaphone, MapPin, Pause, PenLine, Play, Plus, Search, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -158,6 +158,7 @@ export default function MyReportsPage() {
 
                                     <div className="flex flex-wrap gap-2">
                                         <Button asChild size="sm" variant="outline"><Link href={`/mascotas/${r.id}`}><Eye className="mr-1.5 h-4 w-4" aria-hidden /> Ver</Link></Button>
+                                        <Button asChild size="sm" variant="cta"><Link href={`/cartel/${r.id}`}><Megaphone className="mr-1.5 h-4 w-4" aria-hidden /> Cartel</Link></Button>
                                         <Button asChild size="sm" variant="outline"><Link href={`/dashboard/reports/${r.id}/edit`}><PenLine className="mr-1.5 h-4 w-4" aria-hidden /> Editar</Link></Button>
                                         <Button size="sm" variant="outline" onClick={() => copyLink(r.id)}>
                                             {copied === r.id ? <Check className="mr-1.5 h-4 w-4" aria-hidden /> : <Copy className="mr-1.5 h-4 w-4" aria-hidden />} Copiar enlace
