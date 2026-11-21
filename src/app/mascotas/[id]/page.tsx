@@ -15,6 +15,7 @@ import { es } from "date-fns/locale"
 import { SightingsMapWrapper } from "@/components/sightings-map-wrapper"
 import { ImageGallery } from "@/components/image-gallery"
 import { OwnerContactModal } from "@/components/owner-contact-modal"
+import { Reveal } from "@/components/ui/reveal"
 import { AdSlot } from "@/components/ads/ad-slot"
 
 export default async function PetPage({ params }: { params: Promise<{ id: string }> }) {
@@ -114,11 +115,11 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                         <div key={sighting.id} className="relative pl-16 group">
                                             {/* Avatar reporter */}
                                             <div className="absolute left-0 top-0 h-14 w-14 rounded-full border-4 border-white shadow-lg overflow-hidden bg-secondary z-10 group-hover:scale-105 transition-transform">
-                                                <img
-                                                    src={sighting.reporter?.avatar_url || "https://api.dicebear.com/7.x/avataaars/svg?seed=" + sighting.reporter_id}
-                                                    alt={sighting.reporter?.full_name}
-                                                    className="h-full w-full object-cover"
-                                                />
+                                                {sighting.reporter?.avatar_url ? (
+                                                    <img src={sighting.reporter.avatar_url} alt={sighting.reporter.full_name} className="h-full w-full object-cover" />
+                                                ) : (
+                                                    <span className="flex h-full w-full items-center justify-center bg-accent text-lg font-bold text-primary" aria-hidden>{(sighting.reporter?.full_name || "?").charAt(0).toUpperCase()}</span>
+                                                )}
                                             </div>
 
                                             <div className="bg-background p-6 rounded-[2rem] space-y-3 group-hover:bg-card group-hover:shadow-md transition-all border border-transparent group-hover:border-border">
@@ -208,6 +209,17 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                     </div>
                                 </div>
                             )}
+                        </div>
+
+                        {/* Qué hacer si lo ves */}
+                        <div className="rounded-[2.5rem] border bg-accent p-8 md:p-10 space-y-4">
+                            <h2 className="font-display text-2xl uppercase tracking-wide text-primary">Si ves a {pet.name}</h2>
+                            <ul className="space-y-2 text-sm text-accent-foreground">
+                                <li>1. No lo persigas: acércate despacio y háblale con calma.</li>
+                                <li>2. Toma una foto o video desde lejos si puedes.</li>
+                                <li>3. Reporta el avistamiento con el lugar exacto y la hora.</li>
+                                <li>4. Si lo logras resguardar, llévalo a una veterinaria para revisar si tiene microchip.</li>
+                            </ul>
                         </div>
                     </div>
 
@@ -332,9 +344,9 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {similarPets.map(similar => (
+                            {similarPets.map((similar, i) => (
+                                <Reveal key={similar.id} delay={i * 0.05}>
                                 <PetCard
-                                    key={similar.id}
                                     id={similar.id}
                                     name={similar.name}
                                     type={similar.type}
@@ -347,6 +359,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                     lostDate={similar.last_seen_date}
                                     timeLeft="Reciente"
                                 />
+                                </Reveal>
                             ))}
                         </div>
                     </div>
