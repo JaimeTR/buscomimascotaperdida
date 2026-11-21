@@ -1,24 +1,27 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback } from "react"
-import { X, Send, Sparkles, PawPrint, RotateCcw, MapPin, ArrowUpRight } from "lucide-react"
+import { X, Send, Sparkles, PawPrint, RotateCcw, MapPin, ArrowUpRight, Clock, Map as MapIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { createClient } from "@/utils/supabase/client"
+import { formatDistanceToNow } from "date-fns"
+import { es } from "date-fns/locale"
 
-type Filters = Partial<Record<"type" | "breed" | "color" | "size" | "district" | "gender", string>>
+type Filters = Partial<Record<"type" | "size" | "district" | "color" | "breed", string>>
 
-interface Pet {
+interface ChatPet {
     id: string
     name: string | null
     type: string
     breed: string | null
-    size: string | null
-    last_seen_district: string | null
-    image_urls: string[] | null
     status: string
+    district: string | null
+    date: string
+    image: string | null
+    lat: number | null
+    lng: number | null
 }
 
-// chip: `filters` busca local sin IA; `href` navega; si no, se envía como mensaje.
+// chip: `href` navega dentro del sitio; `filters` ajusta la búsqueda de la sesión; si no, se envía como mensaje.
 interface Chip { label: string; filters?: Filters; href?: string }
 
 interface Message {
@@ -26,15 +29,17 @@ interface Message {
     role: "bot" | "user"
     content: string
     chips?: Chip[]
-    pets?: Pet[]
+    pets?: ChatPet[]
 }
 
-const TYPE_LABEL: Record<string, string> = { dog: "Perro", cat: "Gato", rabbit: "Otro" }
+const STORAGE_KEY = "huellita.session.v1"
+const TYPE_LABEL: Record<string, string> = { dog: "Perro", cat: "Gato", other: "Otro" }
+const FILTER_LABEL: Record<string, Record<string, string>> = { type: TYPE_LABEL, size: { small: "Pequeño", medium: "Mediano", large: "Grande" } }
 const STATUS_LABEL: Record<string, string> = { lost: "Perdido", found: "Encontrado", in_contact: "En contacto" }
 const STATUS_STYLE: Record<string, string> = {
-    lost: "bg-red-100 text-red-700",
-    found: "bg-emerald-100 text-emerald-700",
-    in_contact: "bg-amber-100 text-amber-700",
+    lost: "bg-red-600 text-white",
+    found: "bg-emerald-700 text-white",
+    in_contact: "bg-amber-600 text-white",
 }
 
 const START_CHIPS: Chip[] = [
@@ -47,30 +52,52 @@ const START_CHIPS: Chip[] = [
 const WELCOME: Message = {
     id: 0,
     role: "bot",
-    content: "¡Hola! Soy Huellita 🐾 Te ayudo a buscar mascotas perdidas o encontradas, o a publicar un reporte. ¿Qué necesitas?",
+    content: "¡Hola! Soy Huellita 🐾 Busco mascotas perdidas o encontradas en nuestros reportes y te guío para publicar el tuyo. ¿Qué necesitas?",
     chips: START_CHIPS,
 }
 
-// Respaldo sin IA: detecta tipo/tamaño/distrito en el texto para no dejar al usuario sin respuesta.
-function parseLocal(text: string): Filters {
-    const t = text.toLowerCase()
-    const f: Filters = {}
-    if (/\b(perr[oa]s?|cachorro|can)\b/.test(t)) f.type = "dog"
-    else if (/\b(gat[oa]s?|minino)\b/.test(t)) f.type = "cat"
-    else if (/\b(conejo|hámster|hamster|cuy|ave|loro)\b/.test(t)) f.type = "rabbit"
-    if (/peque[ñn]o|chico|mini/.test(t)) f.size = "small"
-    else if (/mediano/.test(t)) f.size = "medium"
-    else if (/grande/.test(t)) f.size = "large"
-    const d = t.match(/\ben\s+([a-záéíóúñ ]{4,30})$/)
-    if (d) f.district = d[1].trim()
-    return f
+const filterText = (k: string, v: string) => FILTER_LABEL[k]?.[v] ?? v
+
+function mapUrl(p: ChatPet) {
+    return p.lat != null && p.lng != null
+        ? `https://www.openstreetmap.org/?mlat=${p.lat}&mlon=${p.lng}#map=16/${p.lat}/${p.lng}`
+        : `https://www.openstreetmap.org/search?query=${encodeURIComponent((p.district ?? "Lima") + ", Lima, Perú")}`
+}
+
+function PetCard({ pet, onOpen }: { pet: ChatPet; onOpen: (href: string) => void }) {
+    const when = formatDistanceToNow(new Date(pet.date), { addSuffix: true, locale: es })
+    return (
+        <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+            <button onClick={() => onOpen(`/mascotas/${pet.id}`)} className="group block w-full text-left" aria-label={`Ver reporte de ${pet.name ?? "mascota sin nombre"}`}>
+                <div className="relative aspect-[16/10] bg-secondary">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={pet.image ?? "/img/sin-foto.svg"} alt={pet.name ? `Foto de ${pet.name}` : "Mascota sin foto"} loading="lazy" referrerPolicy="no-referrer" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+                    <span className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[11px] font-bold ${STATUS_STYLE[pet.status] ?? "bg-secondary text-foreground"}`}>
+                        {STATUS_LABEL[pet.status] ?? pet.status}
+                    </span>
+                </div>
+                <div className="space-y-0.5 p-3 text-xs">
+                    <p className="truncate text-sm font-bold text-foreground">{pet.name || "Sin nombre"}</p>
+                    <p className="truncate text-muted-foreground">{[TYPE_LABEL[pet.type], pet.breed].filter(Boolean).join(" · ")}</p>
+                    <p className="flex items-center gap-1 text-muted-foreground"><MapPin className="h-3 w-3 shrink-0" aria-hidden />{pet.district ?? "Zona no indicada"}</p>
+                    <p className="flex items-center gap-1 text-muted-foreground"><Clock className="h-3 w-3 shrink-0" aria-hidden />{when}</p>
+                </div>
+            </button>
+            <div className="flex border-t border-border text-xs font-semibold">
+                <button onClick={() => onOpen(`/mascotas/${pet.id}`)} className="flex flex-1 items-center justify-center gap-1 py-2 text-primary hover:bg-accent">
+                    Ver reporte <ArrowUpRight className="h-3 w-3" aria-hidden />
+                </button>
+                <a href={mapUrl(pet)} target="_blank" rel="noopener noreferrer" className="flex flex-1 items-center justify-center gap-1 border-l border-border py-2 text-muted-foreground hover:bg-accent hover:text-primary">
+                    <MapIcon className="h-3 w-3" aria-hidden /> Ver zona
+                </a>
+            </div>
+        </div>
+    )
 }
 
 export function ChatbotWidget() {
-    const supabase = createClient()
     const router = useRouter()
     const idRef = useRef(1)
-    const filtersRef = useRef<Filters>({})
     const scrollRef = useRef<HTMLDivElement>(null)
     const inputRef = useRef<HTMLInputElement>(null)
     const [isOpen, setIsOpen] = useState(false)
@@ -78,15 +105,35 @@ export function ChatbotWidget() {
     const [isTyping, setIsTyping] = useState(false)
     const [showPrompt, setShowPrompt] = useState(false)
     const [messages, setMessages] = useState<Message[]>([WELCOME])
+    const [filters, setFilters] = useState<Filters>({})
+    const [restored, setRestored] = useState(false)
+
+    // Memoria de la sesión: la conversación y la búsqueda sobreviven a navegar y recargar (solo en esta pestaña).
+    useEffect(() => {
+        try {
+            const saved = JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? "null")
+            if (saved?.messages?.length) {
+                setMessages(saved.messages)
+                setFilters(saved.filters ?? {})
+                idRef.current = Math.max(...saved.messages.map((m: Message) => m.id)) + 1
+            }
+            if (!sessionStorage.getItem(STORAGE_KEY + ".teaser")) {
+                const t = setTimeout(() => setShowPrompt(true), 4000)
+                setRestored(true)
+                return () => clearTimeout(t)
+            }
+        } catch { /* sin storage: funciona sin memoria */ }
+        setRestored(true)
+    }, [])
+
+    useEffect(() => {
+        if (!restored) return
+        try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ messages: messages.slice(-30), filters })) } catch { /* cuota o modo privado */ }
+    }, [messages, filters, restored])
 
     useEffect(() => {
         scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" })
     }, [messages, isTyping, isOpen])
-
-    useEffect(() => {
-        const t = setTimeout(() => setShowPrompt(true), 3000)
-        return () => clearTimeout(t)
-    }, [])
 
     useEffect(() => {
         if (!isOpen) return
@@ -100,55 +147,15 @@ export function ChatbotWidget() {
         setMessages(prev => [...prev, { ...m, id: idRef.current++ }])
     }, [])
 
-    const searchPets = useCallback(async (f: Filters): Promise<Pet[]> => {
-        const run = async (x: Filters) => {
-            let q = supabase
-                .from("pets")
-                .select("id, name, type, breed, size, last_seen_district, image_urls, status")
-                .in("status", ["lost", "found", "in_contact"])
-                .order("created_at", { ascending: false })
-            if (x.type) q = q.eq("type", x.type)
-            if (x.breed) q = q.ilike("breed", `%${x.breed}%`)
-            if (x.size) q = q.eq("size", x.size)
-            if (x.gender) q = q.eq("gender", x.gender)
-            if (x.district) q = q.ilike("last_seen_district", `%${x.district}%`)
-            const { data, error } = await q.limit(5)
-            if (error) throw error
-            return (data ?? []) as Pet[]
-        }
-        try {
-            return await run(f)
-        } catch (e) {
-            console.error("Error searching pets:", e)
-            return []
-        }
-    }, [supabase])
+    const go = useCallback((href: string) => {
+        router.push(href)
+        if (window.matchMedia("(max-width: 639px)").matches) setIsOpen(false) // en móvil el chat tapa la página
+    }, [router])
 
-    // Busca con los filtros acumulados; si no hay nada, relaja el distrito y avisa.
-    const searchAndReply = useCallback(async (f: Filters, intro?: string) => {
-        let pets = await searchPets(f)
-        let note = ""
-        if (pets.length === 0 && f.district) {
-            pets = await searchPets({ ...f, district: undefined })
-            if (pets.length) note = ` No hay en ${f.district}, pero estas están cerca de tu búsqueda:`
-        }
-        const found = pets.length
-            ? note || (intro ?? `Encontré ${pets.length} reporte${pets.length > 1 ? "s" : ""} que podría${pets.length > 1 ? "n" : ""} coincidir:`)
-            : "No hay reportes con esas características todavía. Puedes publicar uno y te avisamos si aparece algo."
-        push({
-            role: "bot",
-            content: found,
-            pets,
-            chips: pets.length
-                ? [{ label: "Ver todos", href: "/mascotas" }, { label: "Generar cartel", href: "/cartel" }]
-                : [{ label: "Reportar mascota", href: "/reportar" }, { label: "Nueva búsqueda", filters: {} }],
-        })
-    }, [push, searchPets])
-
-    const send = useCallback(async (raw: string) => {
+    const send = useCallback(async (raw: string, memory: Filters = filters) => {
         const text = raw.trim().slice(0, 500)
         if (!text || isTyping) return
-        const history = [...messages.filter(m => m.id !== 0), { id: -1, role: "user" as const, content: text }]
+        const history = [...messages.filter(m => m.id !== 0), { role: "user" as const, content: text }]
             .map(m => ({ role: m.role === "bot" ? "assistant" : "user", content: m.content }))
         push({ role: "user", content: text })
         setInput("")
@@ -158,138 +165,126 @@ export function ChatbotWidget() {
             const res = await fetch("/api/chatbot", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ messages: history.slice(-8) }),
+                body: JSON.stringify({ messages: history.slice(-8), memory }),
             })
             const data = await res.json().catch(() => ({}))
             if (res.status === 429) {
                 push({ role: "bot", content: "Estás escribiendo muy rápido 😅 Espera un momento e intenta de nuevo." })
                 return
             }
-            if (!res.ok || data.fallback || !data.analysis) throw new Error("ai_unavailable")
+            if (!res.ok || !data.analysis) throw new Error("unavailable")
 
+            if (data.filters) setFilters(data.filters)
             const a = data.analysis
-            if (a.isPetSearch) {
-                const clean = Object.fromEntries(Object.entries(a.filters ?? {}).filter(([, v]) => v)) as Filters
-                filtersRef.current = { ...filtersRef.current, ...clean }
-                await searchAndReply(filtersRef.current, a.response)
-            } else {
-                const chips: Chip[] = (a.suggestions ?? []).map((label: string) => ({ label }))
-                if (a.intent === "report_lost" || a.intent === "report_found") chips.unshift({ label: "Ir a reportar", href: "/reportar" })
-                push({ role: "bot", content: a.response, chips })
+            const pets: ChatPet[] = data.pets ?? []
+            const chips: Chip[] = (a.suggestions ?? []).map((label: string) => ({ label }))
+            if (a.intent === "report_lost" || a.intent === "report_found") chips.unshift({ label: "Ir a reportar", href: "/reportar" })
+            for (const s of (data.sources ?? []) as { title: string; url: string }[]) {
+                if (!chips.some(c => c.href === s.url)) chips.push({ label: s.title, href: s.url })
             }
+            if (pets.length) chips.push({ label: "Ver todos en el mapa", href: "/mascotas" })
+            else if (a.isPetSearch) chips.push({ label: "Reportar mascota", href: "/reportar" })
+            push({ role: "bot", content: a.response, pets, chips: chips.slice(0, 4) })
         } catch {
-            // Respaldo sin IA: interpreta palabras clave o devuelve al flujo guiado.
-            const f = parseLocal(text)
-            if (Object.keys(f).length) {
-                filtersRef.current = { ...filtersRef.current, ...f }
-                await searchAndReply(filtersRef.current)
-            } else {
-                push({ role: "bot", content: "Ahora mismo no puedo analizar mensajes libres, pero sí puedo buscar. ¿Qué tipo de mascota es?", chips: START_CHIPS })
-            }
+            push({ role: "bot", content: "No pude conectarme ahora mismo. Puedes buscar directamente en Mascotas o intentarlo en un momento.", chips: [{ label: "Ir a Mascotas", href: "/mascotas" }, { label: "Reportar mascota", href: "/reportar" }] })
         } finally {
             setIsTyping(false)
         }
-    }, [isTyping, messages, push, searchAndReply])
+    }, [filters, isTyping, messages, push])
 
-    const onChip = async (chip: Chip) => {
-        if (chip.href) { router.push(chip.href); setIsOpen(false); return }
-        if (!chip.filters) { void send(chip.label); return }
-        push({ role: "user", content: chip.label })
-        if (Object.keys(chip.filters).length === 0) {
-            filtersRef.current = {}
-            push({ role: "bot", content: "Empecemos de nuevo. ¿Qué mascota buscas?", chips: START_CHIPS })
+    const onChip = (chip: Chip) => {
+        if (chip.href) { go(chip.href); return }
+        if (chip.filters) {
+            const next = { ...filters, ...chip.filters }
+            setFilters(next)
+            void send(chip.label, next)
             return
         }
-        filtersRef.current = { ...filtersRef.current, ...chip.filters }
-        setIsTyping(true)
-        await searchAndReply(filtersRef.current)
-        setIsTyping(false)
+        void send(chip.label)
     }
+
+    const clearFilter = (k: string) => setFilters(({ [k as keyof Filters]: _drop, ...rest }) => { void _drop; return rest })
 
     const reset = () => {
-        filtersRef.current = {}
+        setFilters({})
         setMessages([WELCOME])
+        idRef.current = 1
+        try { sessionStorage.removeItem(STORAGE_KEY) } catch { /* nada */ }
     }
 
-    const open = () => { setIsOpen(true); setShowPrompt(false) }
+    const open = () => {
+        setIsOpen(true)
+        setShowPrompt(false)
+        try { sessionStorage.setItem(STORAGE_KEY + ".teaser", "1") } catch { /* nada */ }
+    }
+    const dismissPrompt = () => {
+        setShowPrompt(false)
+        try { sessionStorage.setItem(STORAGE_KEY + ".teaser", "1") } catch { /* nada */ }
+    }
+
+    const active = Object.entries(filters)
 
     return (
-        <div className="fixed bottom-24 right-4 md:bottom-6 md:right-6 z-[100] flex flex-col items-end pointer-events-none">
+        <div className="pointer-events-none fixed bottom-24 right-4 z-[100] flex flex-col items-end md:bottom-6 md:right-6">
             {isOpen && (
                 <div
                     role="dialog"
                     aria-label="Asistente Huellita"
-                    className="mb-4 w-[calc(100vw-2rem)] sm:w-[400px] h-[min(600px,calc(100dvh-9rem))] bg-card rounded-3xl shadow-2xl border border-border flex flex-col overflow-hidden pointer-events-auto animate-in slide-in-from-bottom-5 fade-in duration-200"
+                    className="pointer-events-auto mb-4 flex h-[min(640px,calc(100dvh-9rem))] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-2xl duration-200 animate-in fade-in slide-in-from-bottom-5 sm:w-[400px]"
                 >
-                    <div className="px-4 py-3 flex items-center justify-between bg-gradient-to-r from-teal-800 to-teal-600 text-white">
+                    <div className="flex items-center justify-between bg-gradient-to-r from-teal-800 to-teal-600 px-4 py-3 text-white">
                         <div className="flex items-center gap-3">
-                            <div className="bg-white/20 rounded-full p-2"><PawPrint className="h-5 w-5" /></div>
+                            <div className="rounded-full bg-white/20 p-2"><PawPrint className="h-5 w-5" /></div>
                             <div>
-                                <h3 className="font-bold text-sm leading-tight">Huellita</h3>
-                                <p className="text-[11px] text-teal-50/90 flex items-center gap-1.5">
-                                    <span className="w-1.5 h-1.5 bg-emerald-300 rounded-full" /> Asistente con IA
+                                <h3 className="text-sm font-bold leading-tight">Huellita</h3>
+                                <p className="flex items-center gap-1.5 text-[11px] text-teal-50">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" /> Busca en los reportes reales
                                 </p>
                             </div>
                         </div>
                         <div className="flex items-center gap-1">
-                            <button aria-label="Reiniciar conversación" title="Reiniciar" onClick={reset} className="h-8 w-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors">
+                            <button aria-label="Reiniciar conversación" title="Reiniciar" onClick={reset} className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-white/20">
                                 <RotateCcw className="h-4 w-4" />
                             </button>
-                            <button aria-label="Cerrar chat" onClick={() => setIsOpen(false)} className="h-8 w-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors">
+                            <button aria-label="Cerrar chat" onClick={() => setIsOpen(false)} className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-white/20">
                                 <X className="h-4 w-4" />
                             </button>
                         </div>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-background" ref={scrollRef} role="log" aria-live="polite">
+                    {active.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1.5 border-b border-border bg-accent/50 px-3 py-2" aria-label="Tu búsqueda en esta sesión">
+                            <span className="text-[11px] font-semibold text-muted-foreground">Recuerdo:</span>
+                            {active.map(([k, v]) => (
+                                <button key={k} onClick={() => clearFilter(k)} aria-label={`Quitar ${filterText(k, v)}`} className="flex items-center gap-1 rounded-full border border-primary/20 bg-card px-2 py-0.5 text-[11px] font-medium text-primary hover:bg-accent">
+                                    {filterText(k, v)} <X className="h-3 w-3" aria-hidden />
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className="flex-1 space-y-4 overflow-y-auto bg-background p-4" ref={scrollRef} role="log" aria-live="polite">
                         {messages.map((msg, i) => {
                             const isLast = i === messages.length - 1
                             const isUser = msg.role === "user"
                             return (
                                 <div key={msg.id} className={`flex ${isUser ? "justify-end" : "justify-start"}`}>
-                                    <div className={`flex gap-2 max-w-[88%] ${isUser ? "flex-row-reverse" : ""}`}>
+                                    <div className={`flex max-w-[92%] gap-2 ${isUser ? "flex-row-reverse" : ""}`}>
                                         {!isUser && (
-                                            <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center shrink-0 mt-0.5">
+                                            <div className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent">
                                                 <PawPrint className="h-3.5 w-3.5 text-primary" />
                                             </div>
                                         )}
-                                        <div className="space-y-2 min-w-0">
-                                            <div className={`px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap break-words ${isUser
-                                                ? "bg-primary text-primary-foreground rounded-2xl rounded-tr-sm"
-                                                : "bg-card text-foreground border border-border rounded-2xl rounded-tl-sm shadow-sm"}`}>
+                                        <div className="min-w-0 space-y-2">
+                                            <div className={`whitespace-pre-wrap break-words px-3.5 py-2.5 text-sm leading-relaxed ${isUser
+                                                ? "rounded-2xl rounded-tr-sm bg-primary text-primary-foreground"
+                                                : "rounded-2xl rounded-tl-sm border border-border bg-card text-foreground shadow-sm"}`}>
                                                 {msg.content}
                                             </div>
 
                                             {msg.pets && msg.pets.length > 0 && (
-                                                <div className="space-y-2">
-                                                    {msg.pets.map(pet => (
-                                                        <a
-                                                            key={pet.id}
-                                                            href={`/mascotas/${pet.id}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="group flex gap-3 bg-card border border-border hover:border-primary/50 rounded-xl p-2 transition-colors"
-                                                        >
-                                                            {pet.image_urls?.[0] ? (
-                                                                <img src={pet.image_urls[0]} alt={pet.name ?? "Mascota"} className="w-14 h-14 object-cover rounded-lg shrink-0" />
-                                                            ) : (
-                                                                <div className="w-14 h-14 rounded-lg bg-accent flex items-center justify-center shrink-0"><PawPrint className="h-6 w-6 text-primary/60" /></div>
-                                                            )}
-                                                            <div className="flex-1 min-w-0 text-xs">
-                                                                <div className="flex items-center gap-2">
-                                                                    <p className="font-bold text-foreground truncate">{pet.name || "Sin nombre"}</p>
-                                                                    <span className={`shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold ${STATUS_STYLE[pet.status] ?? "bg-secondary"}`}>
-                                                                        {STATUS_LABEL[pet.status] ?? pet.status}
-                                                                    </span>
-                                                                </div>
-                                                                <p className="text-muted-foreground truncate">{[TYPE_LABEL[pet.type], pet.breed].filter(Boolean).join(" · ")}</p>
-                                                                {pet.last_seen_district && (
-                                                                    <p className="text-muted-foreground flex items-center gap-1 truncate"><MapPin className="h-3 w-3 shrink-0" />{pet.last_seen_district}</p>
-                                                                )}
-                                                            </div>
-                                                            <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-primary self-center shrink-0" />
-                                                        </a>
-                                                    ))}
+                                                <div className="grid gap-2.5">
+                                                    {msg.pets.map(pet => <PetCard key={pet.id} pet={pet} onOpen={go} />)}
                                                 </div>
                                             )}
 
@@ -299,9 +294,9 @@ export function ChatbotWidget() {
                                                         <button
                                                             key={chip.label}
                                                             onClick={() => onChip(chip)}
-                                                            className="text-xs font-medium text-primary bg-accent hover:bg-primary hover:text-primary-foreground px-3 py-1.5 rounded-full border border-primary/20 transition-colors flex items-center gap-1"
+                                                            className="flex items-center gap-1 rounded-full border border-primary/20 bg-accent px-3 py-1.5 text-xs font-medium text-primary transition-colors hover:bg-primary hover:text-primary-foreground"
                                                         >
-                                                            {chip.href ? <ArrowUpRight className="h-3 w-3" /> : <Sparkles className="h-3 w-3" />} {chip.label}
+                                                            {chip.href ? <ArrowUpRight className="h-3 w-3" aria-hidden /> : <Sparkles className="h-3 w-3" aria-hidden />} {chip.label}
                                                         </button>
                                                     ))}
                                                 </div>
@@ -313,27 +308,24 @@ export function ChatbotWidget() {
                         })}
 
                         {isTyping && (
-                            <div className="flex gap-2 items-center">
-                                <div className="w-7 h-7 rounded-full bg-accent flex items-center justify-center shrink-0"><PawPrint className="h-3.5 w-3.5 text-primary" /></div>
-                                <div className="bg-card px-4 py-3 rounded-2xl rounded-tl-sm border border-border shadow-sm flex gap-1" aria-label="Escribiendo">
-                                    <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce" />
-                                    <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.15s]" />
-                                    <span className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.3s]" />
+                            <div className="flex items-center gap-2">
+                                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent"><PawPrint className="h-3.5 w-3.5 text-primary" /></div>
+                                <div className="flex gap-1 rounded-2xl rounded-tl-sm border border-border bg-card px-4 py-3 shadow-sm" aria-label="Escribiendo">
+                                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary" />
+                                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:0.15s]" />
+                                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary [animation-delay:0.3s]" />
                                 </div>
                             </div>
                         )}
                     </div>
 
-                    <form
-                        className="p-3 bg-card border-t"
-                        onSubmit={e => { e.preventDefault(); void send(input) }}
-                    >
-                        <div className="flex items-center gap-2 bg-background border rounded-full pl-4 pr-1.5 py-1.5 focus-within:ring-2 focus-within:ring-primary/30 transition-shadow">
+                    <form className="border-t bg-card p-3" onSubmit={e => { e.preventDefault(); void send(input) }}>
+                        <div className="flex items-center gap-2 rounded-full border bg-background py-1.5 pl-4 pr-1.5 transition-shadow focus-within:ring-2 focus-within:ring-primary/30">
                             <input
                                 ref={inputRef}
                                 style={{ outline: "none", boxShadow: "none" }}
-                                className="flex-1 bg-transparent outline-none text-sm placeholder:text-muted-foreground min-w-0"
-                                placeholder="Describe a tu mascota o el distrito…"
+                                className="min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                                placeholder="Ej: perro negro perdido en Surco"
                                 aria-label="Mensaje"
                                 maxLength={500}
                                 value={input}
@@ -343,30 +335,32 @@ export function ChatbotWidget() {
                                 type="submit"
                                 aria-label="Enviar"
                                 disabled={!input.trim() || isTyping}
-                                className="h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center shrink-0 disabled:opacity-40 transition-opacity"
+                                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground transition-opacity disabled:opacity-40"
                             >
                                 <Send className="h-4 w-4" />
                             </button>
                         </div>
-                        <p className="mt-1.5 text-center text-[10px] text-muted-foreground">Respuestas generadas por IA · pueden contener errores</p>
+                        <p className="mt-1.5 text-center text-[10px] text-muted-foreground">Respuestas generadas por IA a partir de los reportes del sitio · pueden contener errores</p>
                     </form>
                 </div>
             )}
 
             {showPrompt && !isOpen && (
-                <button
-                    onClick={open}
-                    className="absolute bottom-20 right-0 mr-2 bg-card px-4 py-2.5 rounded-2xl shadow-xl border border-border text-left animate-in slide-in-from-right-5 fade-in duration-500 hover:bg-background transition-colors w-max max-w-[220px] pointer-events-auto"
-                >
-                    <p className="text-xs font-bold text-foreground">¿Buscas a tu mascota?</p>
-                    <p className="text-[11px] text-muted-foreground">Te ayudo a encontrarla</p>
-                </button>
+                <div className="pointer-events-auto absolute bottom-20 right-0 mr-2 w-max max-w-[230px] rounded-2xl border border-border bg-card p-3 pr-8 text-left shadow-xl duration-500 animate-in fade-in slide-in-from-right-5">
+                    <button onClick={open} className="block text-left">
+                        <p className="text-xs font-bold text-foreground">¿Buscas a tu mascota?</p>
+                        <p className="text-[11px] text-muted-foreground">Dime cómo es y la busco en los reportes</p>
+                    </button>
+                    <button onClick={dismissPrompt} aria-label="Cerrar aviso" className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:bg-accent">
+                        <X className="h-3.5 w-3.5" />
+                    </button>
+                </div>
             )}
 
             <button
                 aria-label="Abrir asistente de ayuda"
                 onClick={open}
-                className={`relative h-16 w-16 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 pointer-events-auto bg-gradient-to-tr from-teal-800 to-teal-600 border-4 border-white ${isOpen ? "scale-0 opacity-0" : "scale-100 opacity-100 hover:scale-105"}`}
+                className={`pointer-events-auto relative flex h-16 w-16 items-center justify-center rounded-full border-4 border-white bg-gradient-to-tr from-teal-800 to-teal-600 shadow-2xl transition-all duration-300 ${isOpen ? "scale-0 opacity-0" : "scale-100 opacity-100 hover:scale-105"}`}
             >
                 <PawPrint className="h-7 w-7 text-white" />
             </button>

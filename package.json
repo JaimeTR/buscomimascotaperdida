@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "test:rls": "node scripts/check-rls.mjs",
-    "test": "node --test scripts/import-reports.test.mjs src/lib/matches.test.mjs src/lib/whatsapp.test.mjs src/lib/auth-guard.test.mjs",
+    "test": "node --test scripts/import-reports.test.mjs src/lib/matches.test.mjs src/lib/whatsapp.test.mjs src/lib/chat/search.test.mjs src/lib/auth-guard.test.mjs",
     "check:production-config": "node scripts/check-production-config.mjs"
   },
   "dependencies": {
