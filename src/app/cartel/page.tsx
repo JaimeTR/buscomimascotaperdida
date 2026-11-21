@@ -63,7 +63,7 @@ function PosterContent() {
     const [showReward, setShowReward] = useState(false)
     const [rewardAmount, setRewardAmount] = useState("")
 
-    const [image, setImage] = useState("https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=800&auto=format&fit=crop")
+    const [image, setImage] = useState("/img/stock/paseo-en-el-parque.webp")
 
     useEffect(() => {
         let cancelled = false

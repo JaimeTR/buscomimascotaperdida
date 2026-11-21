@@ -13,7 +13,7 @@ interface ImageGalleryProps {
 
 export function ImageGallery({ images, petName, status }: ImageGalleryProps) {
     const [currentIndex, setCurrentIndex] = useState(0)
-    const gallery = images.length > 0 ? images : ["https://via.placeholder.com/800x600?text=Sin+Foto"]
+    const gallery = images.length > 0 ? images : ["/img/stock/perrito-y-duena.webp"]
 
     const goToPrevious = () => {
         setCurrentIndex((prev) => (prev === 0 ? gallery.length - 1 : prev - 1))
