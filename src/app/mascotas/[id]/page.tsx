@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     const title = `${pet.status === 'found' ? 'Encontrado' : 'Perdido'}: ${pet.name ?? kind}${pet.last_seen_district ? ` en ${pet.last_seen_district}` : ''}`
     const description = `${kind}${pet.breed ? ` ${pet.breed}` : ''}. Ayúdanos a ${pet.status === 'found' ? 'encontrar a su dueño' : 'traerlo de vuelta a casa'}.`
     const images = [pet.image_urls?.[0] ?? `/mascotas/${id}/opengraph-image`]
-    return { title, description, openGraph: { title, description, images }, twitter: { card: 'summary_large_image', title, description, images } }
+    return { title, description, alternates: { canonical: `/mascotas/${id}` }, openGraph: { title, description, url: `/mascotas/${id}`, images }, twitter: { card: 'summary_large_image', title, description, images } }
 }
 
 export default async function PetPage({ params }: { params: Promise<{ id: string }> }) {
@@ -113,8 +113,39 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
     const mapCenterLat = validSightings[0]?.lat || pet.last_seen_lat || -12.0464
     const mapCenterLng = validSightings[0]?.lng || pet.last_seen_lng || -77.0428
 
+    // SEO/GEO: migas de pan + descripción de la página con su lugar (distrito/provincia).
+    const site = process.env.NEXT_PUBLIC_APP_URL || 'https://buscomimascotaperdida.com'
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            {
+                '@type': 'BreadcrumbList',
+                itemListElement: [
+                    { '@type': 'ListItem', position: 1, name: 'Inicio', item: site },
+                    { '@type': 'ListItem', position: 2, name: 'Mascotas', item: `${site}/mascotas` },
+                    { '@type': 'ListItem', position: 3, name: pet.name, item: `${site}/mascotas/${pet.id}` },
+                ],
+            },
+            {
+                '@type': 'WebPage',
+                url: `${site}/mascotas/${pet.id}`,
+                name: `${pet.status === 'found' ? 'Encontrado' : 'Perdido'}: ${pet.name}`,
+                inLanguage: 'es-PE',
+                datePublished: pet.created_at,
+                ...(pet.image_urls?.[0] ? { primaryImageOfPage: { '@type': 'ImageObject', url: pet.image_urls[0] } } : {}),
+                contentLocation: {
+                    '@type': 'Place',
+                    name: [pet.last_seen_district, pet.last_seen_province].filter(Boolean).join(', '),
+                    address: { '@type': 'PostalAddress', addressLocality: pet.last_seen_district, addressRegion: pet.last_seen_province, addressCountry: 'PE' },
+                    ...(pet.last_seen_lat != null && pet.last_seen_lng != null ? { geo: { '@type': 'GeoCoordinates', latitude: pet.last_seen_lat, longitude: pet.last_seen_lng } } : {}),
+                },
+            },
+        ],
+    }
+
     return (
         <div className="min-h-screen bg-background pb-20">
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
             <div className="container px-4 py-8 md:py-12 max-w-7xl mx-auto space-y-10">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
 
@@ -159,7 +190,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                                     <div>
                                                         <div className="font-bold text-foreground flex items-center gap-2">
                                                             {sighting.reporter?.full_name || "Usuario Anónimo"}
-                                                            {sighting.id === 'initial' && <Badge variant="secondary" className="bg-red-50 text-red-600 border-0 text-[10px] uppercase font-bold tracking-tight">Punto Inicial</Badge>}
+                                                            {sighting.id === 'initial' && <Badge variant="secondary" className="bg-red-50 text-red-700 border-0 text-[10px] uppercase font-bold tracking-tight">Punto Inicial</Badge>}
                                                         </div>
                                                         <div className="text-xs font-bold text-primary uppercase tracking-widest">
                                                             {sighting.id === 'initial' ? "Última vez visto" : `Visto en ${sighting.district}`} • {formatDistanceToNow(new Date(sighting.created_at), { addSuffix: true, locale: es })}
