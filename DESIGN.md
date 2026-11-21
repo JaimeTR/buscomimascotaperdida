@@ -128,5 +128,9 @@ Contraste AA, teclado completo, orden de foco lógico, `aria-current` en la nave
 | `/admin/*` | Moderar | Tablas paginadas, confirmaciones, auditoría |
 | `/privacidad`, `/terminos`, `/offline` | Confianza | Texto revisado con datos reales (retención, borrado) |
 
-## 12. Orden recomendado
+## 12. Estado de implementación (rediseño aplicado)
+- **Hecho:** Poppins (`next/font/google`) y Braze (`next/font/local`, archivo en `src/fonts/Braze.otf`) cargadas en `layout.tsx`; utilidades `font-sans` y `font-display`; tokens y variante de botón `cta`; barra superior, barra de pestañas móvil y pie; portada con panel, accesos rápidos y filtros (`PetFilters`); `PetCard`; dashboard (barra lateral, pestañas móviles, resumen, mis reportes) y panel de administración (barra lateral oscura, resumen con barras, reportes, usuarios y auditoría); clases `stone-*` y `teal-*` migradas a tokens en el resto de páginas; títulos principales en Braze.
+- **Pendiente:** `/reportar` por pasos, detalle `/mascotas/[id]` y `/cartel` con el estilo nuevo en profundidad, ajustes del dashboard, modo oscuro y la licencia de Braze (ver `docs/marca.md`).
+
+## 13. Orden recomendado
 1. Fuentes (Poppins y Braze) y revisión de tokens. 2. Barra, pie y portada. 3. Búsqueda y detalle. 4. Reportar y avistamiento. 5. Auth. 6. Dashboard y admin. Cada paso con el flujo de calidad: `npx eslint . --max-warnings 0`, `npx tsc --noEmit`, `npm run build` y revisión en 375, 768, 1024 y 1440 px.

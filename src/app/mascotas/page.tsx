@@ -56,16 +56,16 @@ function SearchContent() {
     const hasActiveFilters = query || district || type !== "all" || breed || size !== "all" || color || dateFrom
 
     return (
-        <div className="min-h-screen bg-stone-50/50">
+        <div className="min-h-screen bg-background">
 
             {/* Hero Header */}
-            <div className="bg-teal-50/50 pb-24 pt-12 md:pt-16 px-4 relative overflow-hidden">
+            <div className="bg-accent/50 pb-24 pt-12 md:pt-16 px-4 relative overflow-hidden">
                 <div className="container max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                     <div className="max-w-xl space-y-4">
-                        <h1 className="text-4xl md:text-5xl font-extrabold text-stone-900 leading-[1.15]">
+                        <h1 className="font-display text-4xl md:text-5xl uppercase tracking-wide text-primary leading-[1.1]">
                             Encuentra o reporta mascotas perdidas cerca de ti
                         </h1>
-                        <p className="text-lg text-stone-600">
+                        <p className="text-lg text-muted-foreground">
                             Ayuda a otras personas a encontrar sus mascotas perdidas y genera carteles fácilmente.
                         </p>
                     </div>
@@ -84,15 +84,15 @@ function SearchContent() {
 
                 {/* Floating Search Bar */}
                 <div className="container max-w-7xl mx-auto -mb-32 mt-12 relative z-20">
-                    <div className="bg-white rounded-2xl shadow-xl p-4 space-y-4 border border-stone-100">
+                    <div className="bg-card rounded-2xl shadow-xl p-4 space-y-4 border border-border">
                         <div className="flex flex-col md:flex-row items-center gap-4">
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-1 w-full">
                                 {/* Text Search */}
                                 <div className="relative md:col-span-2">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         placeholder="Buscar por nombre, raza o señas..."
-                                        className="pl-9 h-12 border-stone-200"
+                                        className="pl-9 h-12 border-border"
                                         value={query}
                                         onChange={(e) => setQuery(e.target.value)}
                                     />
@@ -100,10 +100,10 @@ function SearchContent() {
 
                                 {/* District Filter */}
                                 <div className="relative">
-                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         placeholder="Distrito (ej. Miraflores)"
-                                        className="pl-9 h-12 border-stone-200"
+                                        className="pl-9 h-12 border-border"
                                         value={district}
                                         onChange={(e) => setDistrict(e.target.value)}
                                     />
@@ -111,7 +111,7 @@ function SearchContent() {
 
                                 {/* Type Filter */}
                                 <select
-                                    className="h-12 w-full rounded-md border border-stone-200 px-3 py-2 text-sm focus:ring-2 focus:ring-teal-100 outline-none"
+                                    className="h-12 w-full rounded-md border border-border px-3 py-2 text-sm focus:ring-2 focus:ring-teal-100 outline-none"
                                     value={type}
                                     onChange={(e) => setType(e.target.value)}
                                 >
@@ -124,7 +124,7 @@ function SearchContent() {
                             <div className="flex gap-2">
                                 <Button
                                     variant="outline"
-                                    className={`h-12 gap-2 border-stone-200 ${showAdvanced ? 'bg-teal-50 text-teal-800 border-teal-200' : ''}`}
+                                    className={`h-12 gap-2 border-border ${showAdvanced ? 'bg-accent text-primary border-teal-200' : ''}`}
                                     onClick={() => setShowAdvanced(!showAdvanced)}
                                 >
                                     <Filter className="h-4 w-4" /> Filtros
@@ -132,7 +132,7 @@ function SearchContent() {
                                 {hasActiveFilters && (
                                     <Button
                                         variant="outline"
-                                        className="h-12 gap-2 border-stone-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+                                        className="h-12 gap-2 border-border hover:bg-red-50 hover:text-red-600 hover:border-red-200"
                                         onClick={clearFilters}
                                     >
                                         <X className="h-4 w-4" /> Limpiar
@@ -143,18 +143,18 @@ function SearchContent() {
 
                         {/* Advanced Filters */}
                         {showAdvanced && (
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t border-stone-100 animate-in fade-in slide-in-from-top-2 duration-300">
+                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4 border-t border-border animate-in fade-in slide-in-from-top-2 duration-300">
                                 <div className="relative">
-                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         placeholder="Raza específica"
-                                        className="pl-9 h-10 border-stone-200 text-sm"
+                                        className="pl-9 h-10 border-border text-sm"
                                         value={breed}
                                         onChange={(e) => setBreed(e.target.value)}
                                     />
                                 </div>
                                 <select
-                                    className="h-10 w-full rounded-md border border-stone-200 px-3 text-sm focus:ring-2 focus:ring-teal-100 outline-none"
+                                    className="h-10 w-full rounded-md border border-border px-3 text-sm focus:ring-2 focus:ring-teal-100 outline-none"
                                     value={size}
                                     onChange={(e) => setSize(e.target.value)}
                                 >
@@ -164,19 +164,19 @@ function SearchContent() {
                                     <option value="large">Grande</option>
                                 </select>
                                 <div className="relative">
-                                    <Palette className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                                    <Palette className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         placeholder="Color"
-                                        className="pl-9 h-10 border-stone-200 text-sm"
+                                        className="pl-9 h-10 border-border text-sm"
                                         value={color}
                                         onChange={(e) => setColor(e.target.value)}
                                     />
                                 </div>
                                 <div className="relative">
-                                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-400" />
+                                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                     <Input
                                         type="date"
-                                        className="pl-9 h-10 border-stone-200 text-sm"
+                                        className="pl-9 h-10 border-border text-sm"
                                         value={dateFrom}
                                         onChange={(e) => setDateFrom(e.target.value)}
                                     />
@@ -196,7 +196,7 @@ function SearchContent() {
 
                         {/* Header & Controls */}
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                            <h2 className="text-2xl font-bold text-stone-900">
+                            <h2 className="text-2xl font-bold text-foreground">
                                 {isLoading ? 'Buscando...' : `${pets.length} Mascotas encontradas`}
                             </h2>
                         </div>
@@ -205,7 +205,7 @@ function SearchContent() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 min-h-[400px]">
                             {isLoading ? (
                                 [...Array(4)].map((_, i) => (
-                                    <div key={i} className="h-[400px] w-full rounded-[2rem] bg-stone-100 animate-pulse"></div>
+                                    <div key={i} className="h-[400px] w-full rounded-[2rem] bg-secondary animate-pulse"></div>
                                 ))
                             ) : pets.length > 0 ? (
                                 pets.map(pet => (
@@ -226,14 +226,14 @@ function SearchContent() {
                                 ))
                             ) : (
                                 <div className="col-span-2 flex flex-col items-center justify-center py-12 text-center">
-                                    <div className="bg-stone-100 p-6 rounded-full mb-4">
-                                        <Search className="h-8 w-8 text-stone-400" />
+                                    <div className="bg-secondary p-6 rounded-full mb-4">
+                                        <Search className="h-8 w-8 text-muted-foreground" />
                                     </div>
-                                    <h3 className="font-bold text-stone-900 mb-1">No se encontraron mascotas</h3>
-                                    <p className="text-stone-500">Intenta con otros términos o limpia los filtros.</p>
+                                    <h3 className="font-bold text-foreground mb-1">No se encontraron mascotas</h3>
+                                    <p className="text-muted-foreground">Intenta con otros términos o limpia los filtros.</p>
                                     <Button
                                         variant="link"
-                                        className="text-teal-700 mt-2"
+                                        className="text-primary mt-2"
                                         onClick={() => { setQuery(""); setDistrict(""); setType("all") }}
                                     >
                                         Limpiar búsqueda
@@ -249,12 +249,12 @@ function SearchContent() {
                     <div className="lg:col-span-4 space-y-6">
 
                         {/* Report Widget */}
-                        <div className="bg-white rounded-2xl shadow-sm border p-6 space-y-6">
-                            <h3 className="text-lg font-bold text-stone-900">Reportar Mascota Perdida</h3>
+                        <div className="bg-card rounded-2xl shadow-sm border p-6 space-y-6">
+                            <h3 className="text-lg font-bold text-foreground">Reportar Mascota Perdida</h3>
 
                             <div className="space-y-4">
                                 <div className="flex gap-3">
-                                    <div className="h-8 w-8 rounded-full bg-teal-50 flex items-center justify-center text-primary shrink-0">
+                                    <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center text-primary shrink-0">
                                         <UserPlus className="h-4 w-4" />
                                     </div>
                                     <div className="text-sm">
@@ -263,7 +263,7 @@ function SearchContent() {
                                     </div>
                                 </div>
                                 <div className="flex gap-3">
-                                    <div className="h-8 w-8 rounded-full bg-teal-50 flex items-center justify-center text-primary shrink-0">
+                                    <div className="h-8 w-8 rounded-full bg-accent flex items-center justify-center text-primary shrink-0">
                                         <FileText className="h-4 w-4" />
                                     </div>
                                     <div className="text-sm">
@@ -291,7 +291,7 @@ function SearchContent() {
 
 export default function SearchPage() {
     return (
-        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-teal-700" /></div>}>
+        <Suspense fallback={<div className="flex h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
             <SearchContent />
         </Suspense>
     )

@@ -74,34 +74,34 @@ export function PWAInstallPrompt() {
     // iOS Installation Instructions
     if (isIOS && !isStandalone) {
         return (
-            <div className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-white rounded-2xl shadow-2xl border border-stone-200 p-5 z-50 animate-in slide-in-from-bottom-5 fade-in">
+            <div className="fixed bottom-24 left-4 right-4 md:bottom-20 md:left-auto md:right-4 md:w-96 bg-card rounded-2xl shadow-2xl border border-border p-5 z-50 animate-in slide-in-from-bottom-5 fade-in">
                 <button
                     onClick={handleDismiss}
-                    className="absolute top-3 right-3 text-stone-400 hover:text-stone-600"
+                    className="absolute top-3 right-3 text-muted-foreground hover:text-muted-foreground"
                 >
                     <X className="h-4 w-4" />
                 </button>
 
                 <div className="space-y-4">
                     <div className="flex items-start gap-3">
-                        <div className="bg-teal-100 p-2 rounded-xl">
-                            <Smartphone className="h-6 w-6 text-teal-800" />
+                        <div className="bg-accent p-2 rounded-xl">
+                            <Smartphone className="h-6 w-6 text-primary" />
                         </div>
                         <div className="flex-1">
-                            <h3 className="font-bold text-stone-900">
+                            <h3 className="font-bold text-foreground">
                                 Instala la App
                             </h3>
-                            <p className="text-sm text-stone-600 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                                 Accede más rápido y recibe notificaciones
                             </p>
                         </div>
                     </div>
 
-                    <div className="bg-stone-50 rounded-xl p-4 space-y-2">
-                        <p className="text-xs text-stone-700 font-medium">
+                    <div className="bg-background rounded-xl p-4 space-y-2">
+                        <p className="text-xs text-foreground font-medium">
                             Para instalar en iOS:
                         </p>
-                        <ol className="text-xs text-stone-600 space-y-2 list-decimal list-inside">
+                        <ol className="text-xs text-muted-foreground space-y-2 list-decimal list-inside">
                             <li>Toca el botón de Compartir (cuadrado con flecha)</li>
                             <li>Desliza y selecciona &quot;Añadir a pantalla de inicio&quot;</li>
                             <li>Confirma tocando &quot;Añadir&quot;</li>
@@ -114,7 +114,7 @@ export function PWAInstallPrompt() {
 
     // Android/Desktop Installation Prompt
     return (
-        <div className="fixed bottom-20 left-4 right-4 md:left-auto md:right-4 md:w-96 bg-gradient-to-br from-teal-700 to-teal-800 rounded-2xl shadow-2xl p-5 z-50 animate-in slide-in-from-bottom-5 fade-in">
+        <div className="fixed bottom-24 left-4 right-4 md:bottom-20 md:left-auto md:right-4 md:w-96 bg-gradient-to-br from-teal-700 to-teal-800 rounded-2xl shadow-2xl p-5 z-50 animate-in slide-in-from-bottom-5 fade-in">
             <button
                 onClick={handleDismiss}
                 className="absolute top-3 right-3 text-white/80 hover:text-white"
@@ -139,22 +139,22 @@ export function PWAInstallPrompt() {
 
                 <ul className="space-y-2 text-sm text-teal-50">
                     <li className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                        <div className="w-1.5 h-1.5 bg-card rounded-full" />
                         Acceso rápido desde tu pantalla de inicio
                     </li>
                     <li className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                        <div className="w-1.5 h-1.5 bg-card rounded-full" />
                         Notificaciones de mascotas cerca de ti
                     </li>
                     <li className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                        <div className="w-1.5 h-1.5 bg-card rounded-full" />
                         Funciona sin conexión
                     </li>
                 </ul>
 
                 <Button
                     onClick={handleInstallClick}
-                    className="w-full bg-white text-teal-800 hover:bg-teal-50 font-semibold"
+                    className="w-full bg-card text-primary hover:bg-accent font-semibold"
                 >
                     <Download className="h-4 w-4 mr-2" />
                     Instalar App

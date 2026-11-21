@@ -106,10 +106,10 @@ export function UserNav() {
     if (!user) {
         return (
             <div className="flex items-center gap-2">
-                <Button variant="ghost" asChild className="hidden sm:inline-flex font-bold text-stone-600">
+                <Button variant="ghost" asChild className="hidden sm:inline-flex font-bold text-muted-foreground">
                     <Link href="/login">Iniciar Sesión</Link>
                 </Button>
-                <Button asChild className="rounded-full bg-teal-700 hover:bg-teal-800 font-bold px-6 shadow-md shadow-teal-700/20">
+                <Button asChild className="rounded-full bg-primary hover:bg-primary font-bold px-6 shadow-md shadow-teal-700/20">
                     <Link href="/register">Unirme</Link>
                 </Button>
             </div>
@@ -143,12 +143,12 @@ export function UserNav() {
             <PopoverTrigger asChild>
                 <button className="flex items-center gap-2 group outline-none focus:ring-0">
                     <div className="hidden lg:flex flex-col items-end text-right">
-                        <span className="text-sm font-bold text-stone-900 leading-tight truncate max-w-[120px]">
+                        <span className="text-sm font-bold text-foreground leading-tight truncate max-w-[120px]">
                             {profile?.full_name || user.email.split('@')[0]}
                         </span>
                         <Link
                             href="/dashboard/reports"
-                            className="text-[10px] font-medium text-teal-700 hover:text-teal-800 transition-colors"
+                            className="text-[10px] font-medium text-primary hover:text-primary transition-colors"
                             onClick={(e) => e.stopPropagation()}
                         >
                             Ver dashboard
@@ -156,16 +156,16 @@ export function UserNav() {
                     </div>
                     <Avatar className="h-10 w-10 border-2 border-white shadow-sm transition-transform group-hover:scale-105 group-data-[state=open]:ring-2 group-data-[state=open]:ring-teal-100">
                         <AvatarImage src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`} />
-                        <AvatarFallback className="bg-teal-50 text-teal-800 font-bold">
+                        <AvatarFallback className="bg-accent text-primary font-bold">
                             {(profile?.full_name || user.email).substring(0, 2).toUpperCase()}
                         </AvatarFallback>
                     </Avatar>
                 </button>
             </PopoverTrigger>
-            <PopoverContent className="w-64 p-2 mt-2 mr-4 rounded-3xl border-stone-100 shadow-2xl animate-in fade-in zoom-in-95 duration-200" align="end">
+            <PopoverContent className="w-64 p-2 mt-2 mr-4 rounded-3xl border-border shadow-2xl animate-in fade-in zoom-in-95 duration-200" align="end">
                 <div className="p-3 mb-2 border-b border-stone-50">
-                    <p className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-0.5">Cuenta</p>
-                    <p className="text-sm font-black text-stone-900 truncate">{user.email}</p>
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Cuenta</p>
+                    <p className="text-sm font-bold text-foreground truncate">{user.email}</p>
                 </div>
 
                 <div className="space-y-1">
@@ -174,15 +174,15 @@ export function UserNav() {
                             key={item.href}
                             href={item.href}
                             onClick={() => setIsOpen(false)}
-                            className="flex items-start gap-3 p-3 rounded-2xl hover:bg-stone-50 transition-colors group"
+                            className="flex items-start gap-3 p-3 rounded-2xl hover:bg-background transition-colors group"
                         >
-                            <div className="bg-stone-100 p-2 rounded-xl group-hover:bg-white transition-colors">
-                                <item.icon className="h-4 w-4 text-stone-600" />
+                            <div className="bg-secondary p-2 rounded-xl group-hover:bg-card transition-colors">
+                                <item.icon className="h-4 w-4 text-muted-foreground" />
                             </div>
                             <div className="flex-1 flex justify-between items-center">
                                 <div className="space-y-0.5">
-                                    <p className="text-sm font-bold text-stone-900">{item.label}</p>
-                                    <p className="text-[10px] text-stone-400 leading-none">{item.description}</p>
+                                    <p className="text-sm font-bold text-foreground">{item.label}</p>
+                                    <p className="text-[10px] text-muted-foreground leading-none">{item.description}</p>
                                 </div>
                                 {item.badge && (
                                     <span className="bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">

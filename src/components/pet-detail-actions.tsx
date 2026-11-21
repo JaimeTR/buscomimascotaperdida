@@ -25,8 +25,8 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
         switch (s) {
             case 'lost': return 'bg-orange-500 text-white'
             case 'found': return 'bg-emerald-500 text-white'
-            case 'in_contact': return 'bg-teal-700 text-white'
-            default: return 'bg-stone-500 text-white'
+            case 'in_contact': return 'bg-primary text-white'
+            default: return 'bg-background0 text-white'
         }
     }
 
@@ -62,14 +62,14 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
             {/* Status Badge + Change State Button */}
             <div className="flex items-center gap-3">
                 <Badge
-                    className={`text-[10px] font-black tracking-wider uppercase px-3 py-1.5 border-0 ${getStatusColor(status)}`}
+                    className={`text-[10px] font-bold tracking-wider uppercase px-3 py-1.5 border-0 ${getStatusColor(status)}`}
                 >
                     {getStatusLabel(status)}
                 </Badge>
                 
                 <Popover open={isOpen} onOpenChange={setIsOpen}>
                     <PopoverTrigger asChild>
-                        <button className="h-10 px-4 rounded-xl border-2 border-stone-100 bg-white hover:bg-stone-50 text-stone-600 font-bold text-sm flex items-center gap-2 transition-all">
+                        <button className="h-10 px-4 rounded-xl border-2 border-border bg-card hover:bg-background text-muted-foreground font-bold text-sm flex items-center gap-2 transition-all">
                             Cambiar estado <ChevronDown className="h-4 w-4" />
                         </button>
                     </PopoverTrigger>
@@ -89,13 +89,13 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
                             </button>
                             <button
                                 onClick={() => handleStatusChange('in_contact')}
-                                className="w-full text-left px-3 py-2 text-sm font-bold rounded-lg hover:bg-teal-50 text-teal-800 transition-colors"
+                                className="w-full text-left px-3 py-2 text-sm font-bold rounded-lg hover:bg-accent text-primary transition-colors"
                             >
                                 En Contacto
                             </button>
                             <button
                                 onClick={() => handleStatusChange('reunited')}
-                                className="w-full text-left px-3 py-2 text-sm font-bold rounded-lg hover:bg-stone-100 text-stone-600 transition-colors"
+                                className="w-full text-left px-3 py-2 text-sm font-bold rounded-lg hover:bg-secondary text-muted-foreground transition-colors"
                             >
                                 Reunido
                             </button>
@@ -108,13 +108,13 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
                 nextUrl={`/mascotas/${petId}/avistamiento`}
                 label="Reportar avistamiento"
                 icon={<MapPin className="mr-3 h-6 w-6" />}
-                className="w-full h-16 text-xl font-black rounded-2xl shadow-2xl shadow-teal-700/30 bg-teal-800 hover:bg-teal-800 text-white border-0"
+                className="w-full h-16 text-xl font-bold rounded-2xl shadow-2xl shadow-teal-700/30 bg-primary hover:bg-primary text-white border-0"
                 size="lg"
             />
-            <Button className="w-full h-16 text-xl font-black rounded-2xl border-2 border-stone-100 bg-white text-stone-900 hover:bg-stone-50" size="lg">
-                <MessageCircle className="mr-3 h-6 w-6 text-teal-700" /> Contactar Dueño
+            <Button className="w-full h-16 text-xl font-bold rounded-2xl border-2 border-border bg-card text-foreground hover:bg-background" size="lg">
+                <MessageCircle className="mr-3 h-6 w-6 text-primary" /> Contactar Dueño
             </Button>
-            <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-stone-100 text-stone-600 hover:bg-stone-50" size="lg" asChild>
+            <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-border text-muted-foreground hover:bg-background" size="lg" asChild>
                 <Link href={`/cartel?id=${petId}`}>
                     <Download className="mr-3 h-5 w-5" /> Generar Cartel PDF
                 </Link>

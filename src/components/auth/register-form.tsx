@@ -88,12 +88,12 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2 animate-in fade-in slide-in-from-left-2 duration-300">
-                <label className="text-xs font-bold text-stone-500 uppercase">Nombre Completo</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase">Nombre Completo</label>
                 <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400" />
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         placeholder="Juan Pérez"
-                        className={`pl-10 h-12 bg-stone-50 border-stone-200 ${errors.fullName ? 'border-red-500' : ''}`}
+                        className={`pl-10 h-12 bg-background border-border ${errors.fullName ? 'border-red-500' : ''}`}
                         {...register("fullName")}
                     />
                 </div>
@@ -101,12 +101,12 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             </div>
 
             <div className="space-y-2 animate-in fade-in slide-in-from-left-2 duration-300 delay-75">
-                <label className="text-xs font-bold text-stone-500 uppercase">Teléfono / WhatsApp</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase">Teléfono / WhatsApp</label>
                 <div className="relative">
-                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400" />
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         placeholder="987 654 321"
-                        className={`pl-10 h-12 bg-stone-50 border-stone-200 ${errors.phone ? 'border-red-500' : ''}`}
+                        className={`pl-10 h-12 bg-background border-border ${errors.phone ? 'border-red-500' : ''}`}
                         {...register("phone")}
                     />
                 </div>
@@ -129,13 +129,13 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             </div>
 
             <div className="space-y-2">
-                <label className="text-xs font-bold text-stone-500 uppercase">Correo Electrónico</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase">Correo Electrónico</label>
                 <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         type="email"
                         placeholder="hola@ejemplo.com"
-                        className={`pl-10 h-12 bg-stone-50 border-stone-200 ${errors.email ? 'border-red-500' : ''}`}
+                        className={`pl-10 h-12 bg-background border-border ${errors.email ? 'border-red-500' : ''}`}
                         {...register("email")}
                     />
                 </div>
@@ -143,19 +143,19 @@ export function RegisterForm({ onSuccess }: RegisterFormProps) {
             </div>
 
             <div className="space-y-2">
-                <label className="text-xs font-bold text-stone-500 uppercase">Contraseña</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase">Contraseña</label>
                 <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         type={showPassword ? "text" : "password"}
                         placeholder="••••••••"
-                        className={`pl-10 pr-12 h-12 bg-stone-50 border-stone-200 ${errors.password ? 'border-red-500' : ''}`}
+                        className={`pl-10 pr-12 h-12 bg-background border-border ${errors.password ? 'border-red-500' : ''}`}
                         {...register("password")}
                     />
                     <button
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 transition-colors"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground transition-colors"
                     >
                         {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                     </button>

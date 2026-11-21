@@ -62,11 +62,11 @@ export function MapPicker({ lat, lng, zoom = 13, onChange }: MapPickerProps) {
     }, [])
 
     if (!isMounted) {
-        return <div className="h-full w-full bg-stone-50 animate-pulse flex items-center justify-center text-stone-400 text-xs">Cargando mapa...</div>
+        return <div className="h-full w-full bg-background animate-pulse flex items-center justify-center text-muted-foreground text-xs">Cargando mapa...</div>
     }
 
     if (typeof lat !== 'number' || typeof lng !== 'number') {
-        return <div className="h-full w-full bg-stone-50 flex items-center justify-center text-stone-400 text-xs italic">Ubicación no disponible</div>
+        return <div className="h-full w-full bg-background flex items-center justify-center text-muted-foreground text-xs italic">Ubicación no disponible</div>
     }
 
     return (

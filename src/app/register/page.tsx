@@ -22,7 +22,7 @@ export default function RegisterPage() {
     }, [router, supabase])
 
     return (
-        <div className="min-h-screen bg-stone-50 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
 
             <div className="mb-8 text-center flex flex-col items-center">
                 <Link href="/" className="group mb-6">
@@ -33,34 +33,34 @@ export default function RegisterPage() {
                     />
                 </Link>
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-black text-stone-900 tracking-tighter">Únete a la comunidad</h1>
-                    <p className="text-teal-700 font-bold text-[10px] uppercase tracking-[0.2em] px-4 opacity-80">
+                    <h1 className="font-display text-3xl uppercase tracking-wide text-primary">Únete a la comunidad</h1>
+                    <p className="text-primary font-bold text-[10px] uppercase tracking-[0.2em] px-4 opacity-80">
                         Registro de Usuario
                     </p>
                 </div>
             </div>
 
-            <div className="bg-white w-full max-w-md rounded-3xl shadow-xl border border-stone-100 overflow-hidden">
+            <div className="bg-card w-full max-w-md rounded-3xl shadow-xl border border-border overflow-hidden">
                 <div className="p-8">
 
                     <div className="mb-6 text-center">
-                        <h2 className="text-xl font-bold text-stone-800">Crear una cuenta</h2>
-                        <p className="text-sm text-stone-500">Completa tus datos para empezar</p>
+                        <h2 className="text-xl font-bold text-foreground">Crear una cuenta</h2>
+                        <p className="text-sm text-muted-foreground">Completa tus datos para empezar</p>
                     </div>
 
                     <RegisterForm onSuccess={() => router.push('/login')} />
 
-                    <div className="mt-8 pt-6 border-t border-stone-100 text-center">
-                        <p className="text-sm text-stone-600">
+                    <div className="mt-8 pt-6 border-t border-border text-center">
+                        <p className="text-sm text-muted-foreground">
                             ¿Ya tienes una cuenta?{" "}
-                            <Link href="/login" className="font-bold text-teal-800 hover:text-teal-800 hover:underline">
+                            <Link href="/login" className="font-bold text-primary hover:text-primary hover:underline">
                                 Inicia Sesión
                             </Link>
                         </p>
                     </div>
 
-                    <p className="text-center text-xs text-stone-400 leading-relaxed px-4 mt-6">
-                        Al registrarte aceptas nuestros <Link href="/terminos" className="text-teal-700 hover:underline">Términos</Link> y <Link href="/privacidad" className="text-teal-700 hover:underline">Política de Privacidad</Link>.
+                    <p className="text-center text-xs text-muted-foreground leading-relaxed px-4 mt-6">
+                        Al registrarte aceptas nuestros <Link href="/terminos" className="text-primary hover:underline">Términos</Link> y <Link href="/privacidad" className="text-primary hover:underline">Política de Privacidad</Link>.
                     </p>
 
                 </div>

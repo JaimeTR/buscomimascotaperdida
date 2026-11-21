@@ -55,8 +55,8 @@ function ForgotPasswordContent() {
     }
 
     return (
-        <div className="min-h-screen bg-stone-50 flex flex-col items-center justify-center p-4">
-            <div className="bg-white w-full max-w-sm rounded-[2rem] shadow-xl shadow-stone-200/50 border border-stone-100 overflow-hidden relative">
+        <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+            <div className="bg-card w-full max-w-sm rounded-[2rem] shadow-xl shadow-stone-200/50 border border-border overflow-hidden relative">
 
                 {/* Header Decoration */}
                 <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-teal-700 to-teal-800" />
@@ -64,11 +64,11 @@ function ForgotPasswordContent() {
                 <div className="p-8 pt-10">
 
                     <div className="text-center mb-8">
-                        <div className="bg-teal-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-teal-800 rotate-3">
+                        <div className="bg-accent w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary rotate-3">
                             <Mail className="h-8 w-8" />
                         </div>
-                        <h1 className="text-xl font-black text-stone-800 tracking-tight">Recuperar Contraseña</h1>
-                        <p className="text-sm text-stone-500 mt-2 px-2">
+                        <h1 className="text-xl font-bold text-foreground tracking-tight">Recuperar Contraseña</h1>
+                        <p className="text-sm text-muted-foreground mt-2 px-2">
                             Ingresa tu correo y te enviaremos un enlace para restablecer tu acceso.
                         </p>
                     </div>
@@ -76,13 +76,13 @@ function ForgotPasswordContent() {
                     {!isSuccess ? (
                         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Correo Electrónico</label>
+                                <label className="text-xs font-bold text-muted-foreground uppercase ml-1">Correo Electrónico</label>
                                 <div className="relative">
-                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-stone-400" />
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                                     <Input
                                         {...register("email")}
                                         placeholder="ejemplo@correo.com"
-                                        className={`pl-11 h-12 bg-stone-50 border-stone-200 rounded-xl focus-visible:ring-teal-700 ${errors.email ? 'border-red-500' : ''}`}
+                                        className={`pl-11 h-12 bg-background border-border rounded-xl focus-visible:ring-teal-700 ${errors.email ? 'border-red-500' : ''}`}
                                     />
                                 </div>
                                 {errors.email && <p className="text-xs text-red-500 font-medium ml-1">{errors.email.message}</p>}
@@ -90,7 +90,7 @@ function ForgotPasswordContent() {
 
                             <Button
                                 type="submit"
-                                className="w-full h-12 rounded-xl bg-teal-800 hover:bg-teal-800 text-white font-bold shadow-lg shadow-teal-700/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                                className="w-full h-12 rounded-xl bg-primary hover:bg-primary text-white font-bold shadow-lg shadow-teal-700/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
                                 disabled={isLoading}
                             >
                                 {isLoading ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : "Enviar Enlace"}
@@ -108,10 +108,10 @@ function ForgotPasswordContent() {
                         </div>
                     )}
 
-                    <div className="mt-8 pt-6 border-t border-stone-100 text-center">
+                    <div className="mt-8 pt-6 border-t border-border text-center">
                         <Link
                             href="/login"
-                            className="inline-flex items-center text-sm font-bold text-stone-500 hover:text-stone-800 transition-colors group"
+                            className="inline-flex items-center text-sm font-bold text-muted-foreground hover:text-foreground transition-colors group"
                         >
                             <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" />
                             Volver al Login
@@ -126,7 +126,7 @@ function ForgotPasswordContent() {
 
 export default function ForgotPasswordPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-stone-50 flex items-center justify-center text-stone-400">Cargando...</div>}>
+        <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground">Cargando...</div>}>
             <ForgotPasswordContent />
         </Suspense>
     )

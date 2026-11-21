@@ -50,7 +50,7 @@ export function SightingsMap({ initialLat, initialLng, sightings, className }: S
     }, [])
 
     if (!isMounted) {
-        return <div className={`bg-stone-50 animate-pulse flex items-center justify-center text-stone-400 text-xs rounded-[2.5rem] ${className}`}>Cargando mapa interactivo...</div>
+        return <div className={`bg-background animate-pulse flex items-center justify-center text-muted-foreground text-xs rounded-[2.5rem] ${className}`}>Cargando mapa interactivo...</div>
     }
 
     return (
@@ -70,8 +70,8 @@ export function SightingsMap({ initialLat, initialLng, sightings, className }: S
             <Marker position={[initialLat, initialLng]} icon={INITIAL_ICON}>
                 <Popup className="rounded-2xl overflow-hidden">
                     <div className="p-1">
-                        <p className="font-black text-stone-900 border-b pb-1 mb-1">📍 Punto Inicial</p>
-                        <p className="text-xs text-stone-600">Lugar donde se perdió originalmente.</p>
+                        <p className="font-bold text-foreground border-b pb-1 mb-1">📍 Punto Inicial</p>
+                        <p className="text-xs text-muted-foreground">Lugar donde se perdió originalmente.</p>
                     </div>
                 </Popup>
             </Marker>
@@ -85,9 +85,9 @@ export function SightingsMap({ initialLat, initialLng, sightings, className }: S
                 >
                     <Popup>
                         <div className="p-1 space-y-1">
-                            <p className="font-bold text-teal-800">🐾 Avistamiento</p>
-                            <p className="text-xs font-medium text-stone-700 leading-tight">{sighting.description}</p>
-                            <p className="text-[10px] text-stone-400 font-bold uppercase tracking-wider pt-1 border-t">
+                            <p className="font-bold text-primary">🐾 Avistamiento</p>
+                            <p className="text-xs font-medium text-foreground leading-tight">{sighting.description}</p>
+                            <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider pt-1 border-t">
                                 {formatDistanceToNow(new Date(sighting.createdAt), { addSuffix: true, locale: es })}
                                 {sighting.reporterName && ` • por ${sighting.reporterName}`}
                             </p>

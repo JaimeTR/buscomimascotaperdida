@@ -38,7 +38,7 @@ export function GoogleLoginButton({ next }: { next: string }) {
         <Button
             type="button"
             variant="outline"
-            className="w-full h-12 border-stone-200 text-stone-700 font-bold hover:bg-stone-50"
+            className="w-full h-12 border-border text-foreground font-bold hover:bg-background"
             onClick={handleGoogleLogin}
             disabled={isLoading}
             aria-busy={isLoading}

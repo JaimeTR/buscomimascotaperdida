@@ -29,7 +29,7 @@ function LoginContent() {
     }, [router, nextUrl, supabase])
 
     return (
-        <div className="min-h-screen bg-stone-50 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
 
             <div className="mb-8 text-center flex flex-col items-center">
                 <Link href="/" className="group mb-6">
@@ -40,14 +40,14 @@ function LoginContent() {
                     />
                 </Link>
                 <div className="space-y-1">
-                    <h1 className="text-3xl font-black text-stone-900 tracking-tighter">Encuentra tu mascota perdida</h1>
-                    <p className="text-teal-700 font-bold text-[10px] uppercase tracking-[0.2em] px-4 opacity-80">
+                    <h1 className="font-display text-3xl uppercase tracking-wide text-primary">Encuentra tu mascota perdida</h1>
+                    <p className="text-primary font-bold text-[10px] uppercase tracking-[0.2em] px-4 opacity-80">
                         Red comunitaria de ayuda
                     </p>
                 </div>
             </div>
 
-            <div className="bg-white w-full max-w-md rounded-3xl shadow-xl border border-stone-100 overflow-hidden">
+            <div className="bg-card w-full max-w-md rounded-3xl shadow-xl border border-border overflow-hidden">
                 <div className="p-8">
                     {/* Show alert only if explicitly coming from a report action */}
                     {nextUrl && (nextUrl.includes('reportar') || nextUrl.includes('avistamiento')) && nextUrl !== '/dashboard' && (
@@ -65,31 +65,31 @@ function LoginContent() {
                     )}
 
                     <div className="mb-6 text-center">
-                        <h2 className="text-xl font-bold text-stone-800">Bienvenido de nuevo</h2>
-                        <p className="text-sm text-stone-500">Ingresa tus credenciales para continuar</p>
+                        <h2 className="text-xl font-bold text-foreground">Bienvenido de nuevo</h2>
+                        <p className="text-sm text-muted-foreground">Ingresa tus credenciales para continuar</p>
                     </div>
 
                     <LoginForm next={nextUrl} />
 
                     <div className="relative my-6">
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-stone-100" />
+                            <div className="w-full border-t border-border" />
                         </div>
                         <div className="relative flex justify-center text-xs">
-                            <span className="bg-white px-3 text-stone-400">o continúa con</span>
+                            <span className="bg-card px-3 text-muted-foreground">o continúa con</span>
                         </div>
                     </div>
 
                     <GoogleLoginButton next={nextUrl} />
 
-                    <p className="text-center text-xs text-stone-400 mt-4">
-                        ¿Olvidaste tu contraseña? <Link href={getForgotPasswordPath(nextUrl)} className="text-teal-700 hover:underline font-medium">Recupérala aquí</Link>
+                    <p className="text-center text-xs text-muted-foreground mt-4">
+                        ¿Olvidaste tu contraseña? <Link href={getForgotPasswordPath(nextUrl)} className="text-primary hover:underline font-medium">Recupérala aquí</Link>
                     </p>
 
-                    <div className="mt-8 pt-6 border-t border-stone-100 text-center">
-                        <p className="text-sm text-stone-600">
+                    <div className="mt-8 pt-6 border-t border-border text-center">
+                        <p className="text-sm text-muted-foreground">
                             ¿Aún no tienes cuenta?{" "}
-                            <Link href="/register" className="font-bold text-teal-800 hover:text-teal-800 hover:underline">
+                            <Link href="/register" className="font-bold text-primary hover:text-primary hover:underline">
                                 Regístrate gratis
                             </Link>
                         </p>
@@ -104,7 +104,7 @@ function LoginContent() {
 
 export default function LoginPage() {
     return (
-        <Suspense fallback={<div className="min-h-screen bg-stone-50 flex items-center justify-center text-stone-400">Cargando...</div>}>
+        <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground">Cargando...</div>}>
             <LoginContent />
         </Suspense>
     )

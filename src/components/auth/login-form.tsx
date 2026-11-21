@@ -43,14 +43,14 @@ export function LoginForm({ next }: { next: string }) {
             <input type="hidden" name="next" value={next} />
 
             <div className="space-y-2">
-                <Input name="email" type="email" placeholder="Correo electrónico" required className="h-12 bg-stone-50 border-stone-200" defaultValue={state.email || ""} />
+                <Input name="email" type="email" placeholder="Correo electrónico" required className="h-12 bg-background border-border" defaultValue={state.email || ""} />
                 {state?.validationErrors?.email && (
                     <p className="text-xs text-red-500">{state.validationErrors.email[0]}</p>
                 )}
             </div>
 
             <div className="space-y-2">
-                <Input name="password" type="password" placeholder="Contraseña" required className="h-12 bg-stone-50 border-stone-200" />
+                <Input name="password" type="password" placeholder="Contraseña" required className="h-12 bg-background border-border" />
                 {state?.validationErrors?.password && (
                     <p className="text-xs text-red-500">{state.validationErrors.password[0]}</p>
                 )}
@@ -74,7 +74,7 @@ export function LoginForm({ next }: { next: string }) {
                                     size="sm"
                                     onClick={handleResend}
                                     disabled={isResending}
-                                    className="bg-white border-amber-300 hover:bg-amber-100 text-amber-900 h-8 text-xs w-full sm:w-auto"
+                                    className="bg-card border-amber-300 hover:bg-amber-100 text-amber-900 h-8 text-xs w-full sm:w-auto"
                                 >
                                     {isResending ? <Loader2 className="h-3 w-3 animate-spin mr-2" /> : <CheckCircle2 className="h-3 w-3 mr-2" />}
                                     Reenviar confirmación
@@ -85,7 +85,7 @@ export function LoginForm({ next }: { next: string }) {
                 </div>
             )}
 
-            <Button type="submit" className="w-full h-12 bg-teal-800 hover:bg-teal-800 font-bold shadow-lg shadow-teal-700/20" disabled={isPending} aria-busy={isPending}>
+            <Button type="submit" className="w-full h-12 bg-primary hover:bg-primary font-bold shadow-lg shadow-teal-700/20" disabled={isPending} aria-busy={isPending}>
                 {isPending ? <Loader2 className="h-5 w-5 animate-spin" /> : "Ingresar"}
             </Button>
         </form>

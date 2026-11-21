@@ -53,7 +53,7 @@ export function ColorPopover({ onColorChange, initialColor, petType = 'dog' }: C
 
     return (
         <div className="p-3 space-y-3">
-            <p className="text-[10px] font-bold uppercase text-stone-400 tracking-wider">
+            <p className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider">
                 Colores de {petType === 'cat' ? 'Gato' : 'Perro'}
             </p>
             <div className="grid grid-cols-3 gap-3">
@@ -61,7 +61,7 @@ export function ColorPopover({ onColorChange, initialColor, petType = 'dog' }: C
                     <button
                         key={color.name}
                         onClick={() => handleSelect(color.name)}
-                        className={`group flex flex-col items-center gap-1.5 p-2 rounded-2xl transition-all ${selected === color.name ? 'bg-teal-50 ring-2 ring-teal-700' : 'hover:bg-stone-50'}`}
+                        className={`group flex flex-col items-center gap-1.5 p-2 rounded-2xl transition-all ${selected === color.name ? 'bg-accent ring-2 ring-teal-700' : 'hover:bg-background'}`}
                     >
                         <div
                             className="relative h-12 w-12 rounded-full border-2 border-white shadow-md overflow-hidden flex items-center justify-center ring-1 ring-stone-100"
@@ -72,12 +72,12 @@ export function ColorPopover({ onColorChange, initialColor, petType = 'dog' }: C
                             }}
                         >
                             {selected === color.name && (
-                                <div className="absolute inset-0 bg-teal-700/30 flex items-center justify-center backdrop-blur-[1px]">
+                                <div className="absolute inset-0 bg-primary/30 flex items-center justify-center backdrop-blur-[1px]">
                                     <Check className="h-6 w-6 text-white drop-shadow-md" />
                                 </div>
                             )}
                         </div>
-                        <span className={`text-[9px] font-bold text-center leading-tight ${selected === color.name ? 'text-teal-800' : 'text-stone-500'}`}>
+                        <span className={`text-[9px] font-bold text-center leading-tight ${selected === color.name ? 'text-primary' : 'text-muted-foreground'}`}>
                             {color.name}
                         </span>
                     </button>
@@ -87,7 +87,7 @@ export function ColorPopover({ onColorChange, initialColor, petType = 'dog' }: C
                 <Button
                     variant="ghost"
                     size="sm"
-                    className="w-full h-8 text-[10px] text-stone-400 hover:text-red-500 font-bold uppercase mt-2"
+                    className="w-full h-8 text-[10px] text-muted-foreground hover:text-red-500 font-bold uppercase mt-2"
                     onClick={() => handleSelect(selected)}
                 >
                     <X className="mr-1 h-3 w-3" /> Limpiar Selección

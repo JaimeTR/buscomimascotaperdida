@@ -1,7 +1,5 @@
 import Link from "next/link"
-import { Clock, MapPin, Dog, Cat, Squirrel } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { CalendarDays, MapPin, Dog, Cat, Squirrel } from "lucide-react"
 import { StatusBadge } from "@/components/status-badge"
 
 interface PetCardProps {
@@ -31,82 +29,51 @@ const COLOR_MAP: Record<string, string> = {
     "Bombay": "#000000"
 }
 
-export function PetCard({
-    id,
-    name,
-    type,
-    breed,
-    district,
-    province,
-    colors = [],
-    imageUrl,
-    status,
-    lostDate
-}: PetCardProps) {
+// Tarjeta de caso: foto 4:3, estado arriba, y datos clave. Toda la tarjeta es un solo enlace.
+export function PetCard({ id, name, type, breed, district, province, colors = [], imageUrl, status, lostDate }: PetCardProps) {
     const TypeIcon = type === 'dog' ? Dog : type === 'cat' ? Cat : Squirrel
-
-    // Format date: "12 Oct"
-    const dateObj = new Date(lostDate)
-    const formattedDate = dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })
+    const date = new Date(lostDate).toLocaleDateString('es-PE', { day: 'numeric', month: 'short' })
 
     return (
-        <div className="group relative overflow-hidden rounded-2xl border bg-card transition-shadow hover:shadow-lg">
-            <div className="aspect-[4/3] w-full overflow-hidden bg-muted relative">
+        <Link
+            href={`/mascotas/${id}`}
+            className="group block overflow-hidden rounded-3xl border bg-card shadow-[var(--shadow-soft)] transition-shadow hover:shadow-[var(--shadow-lift)]"
+        >
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
                 <img
                     src={imageUrl}
                     alt={`${name}, ${breed}`}
                     loading="lazy"
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute left-3 top-3 flex flex-col gap-2">
-                    <StatusBadge status={status} className="shadow-lg" />
-                    <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-stone-900 border-0 flex items-center gap-1 font-bold text-[10px] py-1 shadow-md">
-                        <Clock className="w-3 h-3 text-teal-700" /> {formattedDate}
-                    </Badge>
-                </div>
-
-                {/* Color Chips overlap on image */}
+                <StatusBadge status={status} className="absolute left-3 top-3 shadow-md" />
                 <div className="absolute bottom-3 right-3 flex -space-x-1.5">
                     {(colors || []).slice(0, 3).map((color, i) => (
-                        <div
+                        <span
                             key={i}
                             title={color}
                             className="h-5 w-5 rounded-full border-2 border-white shadow-md"
-                            style={{
-                                background: COLOR_MAP[color] || '#CBD5E0',
-                                zIndex: 3 - i
-                            }}
+                            style={{ background: COLOR_MAP[color] || '#CBD5E0', zIndex: 3 - i }}
                         />
                     ))}
                 </div>
             </div>
 
-            <div className="p-5 space-y-4">
-                <div className="space-y-1">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-xl font-black text-stone-800 tracking-tight leading-tight">{name}</h3>
-                        <div className="p-2 bg-teal-50 rounded-xl text-teal-700">
-                            <TypeIcon className="w-4 h-4" />
-                        </div>
+            <div className="space-y-3 p-5">
+                <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                        <h3 className="truncate text-lg font-semibold leading-tight">{name || "Sin nombre"}</h3>
+                        <p className="truncate text-sm text-muted-foreground">{breed}</p>
                     </div>
-                    <p className="text-xs font-bold text-stone-400 uppercase tracking-widest">{breed}</p>
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-foreground" aria-hidden>
+                        <TypeIcon className="h-4 w-4" />
+                    </span>
                 </div>
-
-                <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-sm text-stone-600 font-semibold">
-                        <MapPin className="w-4 h-4 text-red-400" />
-                        <span>{district}{province ? `, ${province}` : ''}</span>
-                    </div>
-                </div>
-
-                <div className="pt-2">
-                    <Button variant="outline" className="w-full rounded-2xl border-stone-200 font-bold text-stone-600 hover:bg-teal-50 hover:text-teal-800 hover:border-teal-200 transition-all group/btn" asChild>
-                        <Link href={`/mascotas/${id}`} className="flex items-center justify-center gap-2">
-                            Ver reporte completo
-                        </Link>
-                    </Button>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+                    <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-cta" aria-hidden />{district}{province ? `, ${province}` : ''}</span>
+                    <span className="inline-flex items-center gap-1.5"><CalendarDays className="h-4 w-4" aria-hidden />{date}</span>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }

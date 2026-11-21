@@ -2,59 +2,33 @@ import Link from "next/link"
 import Image from "next/image"
 
 const COLUMNS = [
-    {
-        title: "Plataforma",
-        links: [
-            { href: "/mascotas", label: "Buscar mascotas" },
-            { href: "/reportar", label: "Reportar una mascota" },
-            { href: "/cartel", label: "Crear cartel" },
-            { href: "/promocionar", label: "Difundir un caso" },
-        ],
-    },
-    {
-        title: "Ayuda",
-        links: [
-            { href: "/contacto", label: "Contacto" },
-            { href: "/privacidad", label: "Privacidad" },
-            { href: "/terminos", label: "Términos" },
-        ],
-    },
+    { title: "Plataforma", links: [["/mascotas", "Buscar mascotas"], ["/reportar", "Reportar una mascota"], ["/cartel", "Crear cartel"], ["/promocionar", "Difundir un caso"]] },
+    { title: "Ayuda", links: [["/contacto", "Contacto"], ["/privacidad", "Privacidad"], ["/terminos", "Términos"]] },
 ]
 
 export function Footer() {
     return (
-        <footer className="border-t bg-card">
-            <div className="container mx-auto grid gap-10 px-4 py-12 md:grid-cols-[2fr_1fr_1fr]">
+        <footer className="mt-16 bg-primary pb-24 text-primary-foreground md:pb-0">
+            <div className="container mx-auto grid gap-10 px-4 py-14 md:grid-cols-[2fr_1fr_1fr]">
                 <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                        <Image src="/logo_symbol.svg" alt="" width={32} height={40} className="h-9 w-auto" unoptimized />
-                        <span className="text-lg font-extrabold tracking-tight">Busco mi mascota</span>
-                    </div>
-                    <p className="max-w-sm text-sm leading-relaxed text-muted-foreground">
-                        Una red comunitaria para que las mascotas perdidas vuelvan a casa.
-                        Publica, busca y comparte, sin costo.
+                    <Image src="/brand/isologo-horizontal-claro.svg" alt="Busco mi mascota" width={300} height={85} className="h-20 w-auto" unoptimized />
+                    <p className="max-w-sm text-sm leading-relaxed text-primary-foreground/85">
+                        Una red comunitaria para que las mascotas perdidas vuelvan a casa. Publica, busca y comparte, sin costo.
                     </p>
                 </div>
-
-                {COLUMNS.map((col) => (
-                    <nav key={col.title} aria-label={col.title} className="space-y-3">
-                        <h2 className="text-sm font-bold">{col.title}</h2>
-                        <ul className="space-y-2 text-sm text-muted-foreground">
-                            {col.links.map((l) => (
-                                <li key={l.href}>
-                                    <Link href={l.href} className="hover:text-primary hover:underline">
-                                        {l.label}
-                                    </Link>
-                                </li>
+                {COLUMNS.map((c) => (
+                    <nav key={c.title} aria-label={c.title} className="space-y-3">
+                        <h2 className="font-display text-sm uppercase tracking-widest text-orange-300">{c.title}</h2>
+                        <ul className="space-y-2 text-sm">
+                            {c.links.map(([href, label]) => (
+                                <li key={href}><Link href={href} className="text-primary-foreground/90 hover:underline">{label}</Link></li>
                             ))}
                         </ul>
                     </nav>
                 ))}
             </div>
-            <div className="border-t">
-                <p className="container mx-auto px-4 py-5 text-xs text-muted-foreground">
-                    © {new Date().getFullYear()} Busco mi mascota. Todos los derechos reservados.
-                </p>
+            <div className="border-t border-white/15">
+                <p className="container mx-auto px-4 py-5 text-xs text-primary-foreground/75">© {new Date().getFullYear()} Busco mi mascota. Todos los derechos reservados.</p>
             </div>
         </footer>
     )

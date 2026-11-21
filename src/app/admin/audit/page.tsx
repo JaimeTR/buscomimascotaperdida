@@ -1,4 +1,5 @@
 import { requireAdmin } from "@/lib/admin"
+import { PageHeader } from "@/components/ui/page-header"
 
 const fmt = new Intl.DateTimeFormat("es-PE", { dateStyle: "short", timeStyle: "short" })
 
@@ -12,20 +13,20 @@ export default async function AdminAudit() {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-2xl font-extrabold tracking-tight">Auditoría</h1>
-            <div className="overflow-x-auto rounded-2xl border bg-card">
+            <PageHeader title="Auditoría" text="Registro de las acciones de moderación (las 100 más recientes)." />
+            <div className="overflow-x-auto rounded-3xl border bg-card shadow-[var(--shadow-soft)]">
                 <table className="w-full text-left text-sm">
-                    <thead className="border-b bg-muted/50 text-xs uppercase text-muted-foreground">
-                        <tr><th className="p-3">Fecha</th><th className="p-3">Acción</th><th className="p-3">Objetivo</th><th className="p-3">Admin</th></tr>
+                    <thead className="border-b bg-secondary/60 text-xs uppercase tracking-wider text-muted-foreground">
+                        <tr><th className="p-4">Fecha</th><th className="p-4">Acción</th><th className="p-4">Objetivo</th><th className="p-4">Admin</th></tr>
                     </thead>
                     <tbody className="divide-y">
-                        {(rows ?? []).length === 0 && <tr><td colSpan={4} className="p-6 text-center text-muted-foreground">Sin acciones registradas</td></tr>}
+                        {(rows ?? []).length === 0 && <tr><td colSpan={4} className="p-8 text-center text-muted-foreground">Sin acciones registradas</td></tr>}
                         {(rows ?? []).map((r) => (
                             <tr key={r.id}>
-                                <td className="p-3 whitespace-nowrap text-muted-foreground">{fmt.format(new Date(r.created_at))}</td>
-                                <td className="p-3 font-semibold">{r.action}</td>
-                                <td className="p-3 font-mono text-xs">{r.target_id}</td>
-                                <td className="p-3 font-mono text-xs">{r.admin_id.slice(0, 8)}</td>
+                                <td className="whitespace-nowrap p-4 text-muted-foreground">{fmt.format(new Date(r.created_at))}</td>
+                                <td className="p-4 font-semibold">{r.action}</td>
+                                <td className="p-4 font-mono text-xs">{r.target_id}</td>
+                                <td className="p-4 font-mono text-xs">{r.admin_id.slice(0, 8)}</td>
                             </tr>
                         ))}
                     </tbody>

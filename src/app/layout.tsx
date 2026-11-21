@@ -1,23 +1,33 @@
 import type { Metadata, Viewport } from "next";
-import { Outfit } from "next/font/google";
+import { Poppins } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import "leaflet/dist/leaflet.css";
 import "./leaflet-custom.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { MobileTabbar } from "@/components/mobile-tabbar";
 import { ChatbotWidget } from "@/components/chatbot-widget";
 import { ToastProvider } from "@/components/ui/toast-modern";
 import { ConfirmProvider } from "@/components/ui/confirm-modern";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { PWARegister } from "@/components/pwa-register";
 
-const outfit = Outfit({
+// Poppins: interfaz y texto. Braze: tipografía de marca (solo MAYÚSCULAS, títulos cortos). Ver DESIGN.md.
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-outfit",
-  display: 'swap',
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+const braze = localFont({
+  src: "../fonts/Braze.otf",
+  variable: "--font-braze",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://buscomimascotaperdida.com"),
   title: "Encuentra tu mascota perdida - Red de ayuda comunitaria",
   description: "La red comunitaria más grande y activa para encontrar a tu mejor amigo. Reporta mascotas perdidas y ayúdalas a volver a casa.",
   manifest: "/manifest.json",
@@ -64,7 +74,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning>
       <body
-        className={`${outfit.variable} font-sans antialiased min-h-screen flex flex-col bg-background`}
+        className={`${poppins.variable} ${braze.variable} font-sans antialiased min-h-screen flex flex-col bg-background`}
       >
         <PWARegister />
         <ToastProvider>
@@ -74,6 +84,7 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <MobileTabbar />
             <ChatbotWidget />
             <PWAInstallPrompt />
           </ConfirmProvider>

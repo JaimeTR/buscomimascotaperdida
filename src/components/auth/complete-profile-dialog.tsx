@@ -85,10 +85,10 @@ export function CompleteProfileDialog({ profile, onCompleted }: CompleteProfileD
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-stone-950/50 p-4" role="dialog" aria-modal="true" aria-labelledby="complete-profile-title">
-            <div className="w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl md:p-8">
+            <div className="w-full max-w-lg rounded-3xl bg-card p-6 shadow-2xl md:p-8">
                 <div className="mb-6 space-y-2">
-                    <h2 id="complete-profile-title" className="text-2xl font-bold text-stone-900">Completa tu perfil</h2>
-                    <p className="text-sm text-stone-500">
+                    <h2 id="complete-profile-title" className="text-2xl font-bold text-foreground">Completa tu perfil</h2>
+                    <p className="text-sm text-muted-foreground">
                         Necesitamos estos datos para identificarte y avisarte sobre tu reporte.
                     </p>
                 </div>
@@ -96,12 +96,12 @@ export function CompleteProfileDialog({ profile, onCompleted }: CompleteProfileD
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                     {missing.phone && (
                         <div className="space-y-2">
-                            <label className="text-xs font-bold uppercase text-stone-500">Teléfono / WhatsApp</label>
+                            <label className="text-xs font-bold uppercase text-muted-foreground">Teléfono / WhatsApp</label>
                             <div className="relative">
-                                <Phone className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-400" />
+                                <Phone className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                                 <Input
                                     placeholder="987 654 321"
-                                    className={`h-12 bg-stone-50 pl-10 ${errors.phone ? "border-red-500" : ""}`}
+                                    className={`h-12 bg-background pl-10 ${errors.phone ? "border-red-500" : ""}`}
                                     {...register("phone")}
                                 />
                             </div>
@@ -123,7 +123,7 @@ export function CompleteProfileDialog({ profile, onCompleted }: CompleteProfileD
                         />
                     )}
 
-                    <Button type="submit" className="h-12 w-full bg-teal-800 font-bold hover:bg-teal-800" disabled={isSaving}>
+                    <Button type="submit" className="h-12 w-full bg-primary font-bold hover:bg-primary" disabled={isSaving}>
                         {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         Guardar y continuar
                     </Button>

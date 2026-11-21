@@ -60,14 +60,14 @@ export function OwnerContactModal({
     return (
         <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-                <Button className="w-full h-16 text-xl font-black rounded-2xl border-2 border-stone-100 bg-white text-stone-900 hover:bg-stone-50" size="lg">
-                    <MessageCircle className="mr-3 h-6 w-6 text-teal-700" /> Contactar Dueño
+                <Button className="w-full h-16 text-xl font-bold rounded-2xl border-2 border-border bg-card text-foreground hover:bg-background" size="lg">
+                    <MessageCircle className="mr-3 h-6 w-6 text-primary" /> Contactar Dueño
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-96 p-4">
                 <div className="space-y-2 mb-4">
-                    <h3 className="font-black text-lg">Contactar a {ownerName}</h3>
-                    <p className="text-sm text-stone-600">Datos de contacto disponibles</p>
+                    <h3 className="font-bold text-lg">Contactar a {ownerName}</h3>
+                    <p className="text-sm text-muted-foreground">Datos de contacto disponibles</p>
                 </div>
 
                 <div className="space-y-3">
@@ -77,8 +77,8 @@ export function OwnerContactModal({
                             <div className="flex items-center gap-3">
                                 <MessageCircle className="h-5 w-5 text-green-600" />
                                 <div className="flex-1">
-                                    <p className="text-sm font-medium text-stone-700">WhatsApp</p>
-                                    <p className="text-sm text-stone-600">{whatsapp}</p>
+                                    <p className="text-sm font-medium text-foreground">WhatsApp</p>
+                                    <p className="text-sm text-muted-foreground">{whatsapp}</p>
                                 </div>
                             </div>
                             <div className="flex gap-2">
@@ -106,12 +106,12 @@ export function OwnerContactModal({
 
                     {/* Phone */}
                     {phone && (
-                        <div className="flex items-center justify-between p-4 bg-teal-50 rounded-lg border border-teal-200">
+                        <div className="flex items-center justify-between p-4 bg-accent rounded-lg border border-teal-200">
                             <div className="flex items-center gap-3">
-                                <Phone className="h-5 w-5 text-teal-800" />
+                                <Phone className="h-5 w-5 text-primary" />
                                 <div className="flex-1">
-                                    <p className="text-sm font-medium text-stone-700">Teléfono</p>
-                                    <p className="text-sm text-stone-600">{phone}</p>
+                                    <p className="text-sm font-medium text-foreground">Teléfono</p>
+                                    <p className="text-sm text-muted-foreground">{phone}</p>
                                 </div>
                             </div>
                             <div className="flex gap-2">
@@ -121,14 +121,14 @@ export function OwnerContactModal({
                                     onClick={() => copyToClipboard(phone, 'Teléfono')}
                                 >
                                     {copiedField === 'Teléfono' ? (
-                                        <Check className="h-4 w-4 text-teal-800" />
+                                        <Check className="h-4 w-4 text-primary" />
                                     ) : (
                                         <Copy className="h-4 w-4" />
                                     )}
                                 </Button>
                                 <Button
                                     size="sm"
-                                    className="bg-teal-800 hover:bg-teal-800 text-white"
+                                    className="bg-primary hover:bg-primary text-white"
                                     onClick={handleCall}
                                 >
                                     Llamar
@@ -143,8 +143,8 @@ export function OwnerContactModal({
                             <div className="flex items-center gap-3">
                                 <Mail className="h-5 w-5 text-purple-600" />
                                 <div className="flex-1">
-                                    <p className="text-sm font-medium text-stone-700">Email</p>
-                                    <p className="text-sm text-stone-600 truncate">{email}</p>
+                                    <p className="text-sm font-medium text-foreground">Email</p>
+                                    <p className="text-sm text-muted-foreground truncate">{email}</p>
                                 </div>
                             </div>
                             <div className="flex gap-2">
@@ -171,7 +171,7 @@ export function OwnerContactModal({
                     )}
 
                     {!phone && !whatsapp && !email && (
-                        <div className="p-4 bg-stone-100 rounded-lg text-center text-stone-600">
+                        <div className="p-4 bg-secondary rounded-lg text-center text-muted-foreground">
                             El dueño no ha proporcionado datos de contacto público
                         </div>
                     )}

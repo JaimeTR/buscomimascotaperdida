@@ -231,11 +231,11 @@ export default function EditReportPage() {
     }
 
     if (isLoading) {
-        return <div className="min-h-screen flex items-center justify-center bg-stone-50"><Loader2 className="animate-spin h-10 w-10 text-teal-700" /></div>
+        return <div className="min-h-screen flex items-center justify-center bg-background"><Loader2 className="animate-spin h-10 w-10 text-primary" /></div>
     }
 
     return (
-        <div className="min-h-screen bg-stone-50 pb-20 pt-10">
+        <div className="min-h-screen bg-background pb-20 pt-10">
             <div className="container max-w-3xl mx-auto px-4 mt-12">
 
                 {/* Header */}
@@ -245,50 +245,50 @@ export default function EditReportPage() {
                     </Button>
 
                     <div className="text-center space-y-2 pt-4">
-                        <h1 className="text-3xl md:text-4xl font-extrabold text-stone-900">Editar Reporte</h1>
-                        <p className="text-stone-500">Actualiza la información de tu mascota perdida.</p>
+                        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground">Editar Reporte</h1>
+                        <p className="text-muted-foreground">Actualiza la información de tu mascota perdida.</p>
                     </div>
                 </div>
 
                 {/* Main Card */}
-                <div className="bg-white rounded-[2rem] shadow-xl shadow-stone-200/50 p-6 md:p-10 border border-stone-100 relative z-10 space-y-12">
+                <div className="bg-card rounded-[2rem] shadow-xl shadow-stone-200/50 p-6 md:p-10 border border-border relative z-10 space-y-12">
 
                     <section className="space-y-6">
-                        <h3 className="text-xl font-bold text-stone-900 flex items-center gap-2">
-                            <PawPrint className="h-5 w-5 text-teal-700" /> Datos de la Mascota
+                        <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
+                            <PawPrint className="h-5 w-5 text-primary" /> Datos de la Mascota
                         </h3>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Nombre</label>
+                                <label className="text-xs font-bold text-muted-foreground uppercase ml-1">Nombre</label>
                                 <Input
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     placeholder="¿Cómo se llama?"
-                                    className="h-12 bg-stone-50 border-stone-200 focus:bg-white focus:ring-2 focus:ring-teal-100 transition-all rounded-xl"
+                                    className="h-12 bg-background border-border focus:bg-card focus:ring-2 focus:ring-teal-100 transition-all rounded-xl"
                                 />
                             </div>
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Tipo de mascota</label>
-                                <div className="flex bg-stone-50 p-1 rounded-xl border border-stone-200 h-12">
+                                <label className="text-xs font-bold text-muted-foreground uppercase ml-1">Tipo de mascota</label>
+                                <div className="flex bg-background p-1 rounded-xl border border-border h-12">
                                     <button
                                         type="button"
                                         onClick={() => { setType('dog'); setBreed(""); }}
-                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'dog' ? 'bg-white shadow-sm text-teal-800 border border-stone-100' : 'text-stone-500 hover:text-stone-700'}`}
+                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'dog' ? 'bg-card shadow-sm text-primary border border-border' : 'text-muted-foreground hover:text-foreground'}`}
                                     >
                                         <Dog className="h-4 w-4" /> Perro
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => { setType('cat'); setBreed(""); }}
-                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'cat' ? 'bg-white shadow-sm text-teal-800 border border-stone-100' : 'text-stone-500 hover:text-stone-700'}`}
+                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'cat' ? 'bg-card shadow-sm text-primary border border-border' : 'text-muted-foreground hover:text-foreground'}`}
                                     >
                                         <Cat className="h-4 w-4" /> Gato
                                     </button>
                                     <button
                                         type="button"
                                         onClick={() => { setType('other'); setBreed(""); }}
-                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'other' ? 'bg-white shadow-sm text-teal-800 border border-stone-100' : 'text-stone-500 hover:text-stone-700'}`}
+                                        className={`flex-1 flex items-center justify-center gap-2 rounded-lg text-sm font-bold transition-all ${type === 'other' ? 'bg-card shadow-sm text-primary border border-border' : 'text-muted-foreground hover:text-foreground'}`}
                                     >
                                         <Squirrel className="h-4 w-4" /> Otro
                                     </button>
@@ -298,10 +298,10 @@ export default function EditReportPage() {
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                             <div className="space-y-2 md:col-span-1">
-                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Raza</label>
+                                <label className="text-xs font-bold text-muted-foreground uppercase ml-1">Raza</label>
                                 <Popover>
                                     <PopoverTrigger asChild>
-                                        <Button variant="outline" className="w-full h-12 justify-between bg-stone-50 border-stone-200 rounded-xl px-4 font-medium text-stone-700">
+                                        <Button variant="outline" className="w-full h-12 justify-between bg-background border-border rounded-xl px-4 font-medium text-foreground">
                                             {breed || "Seleccionar"} <ChevronDown className="h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
@@ -312,9 +312,9 @@ export default function EditReportPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Género</label>
+                                <label className="text-xs font-bold text-muted-foreground uppercase ml-1">Género</label>
                                 <Select value={gender} onValueChange={setGender}>
-                                    <SelectTrigger className="h-12 bg-stone-50 border-stone-200 rounded-xl">
+                                    <SelectTrigger className="h-12 bg-background border-border rounded-xl">
                                         <SelectValue placeholder="Seleccionar" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -326,9 +326,9 @@ export default function EditReportPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Tamaño</label>
+                                <label className="text-xs font-bold text-muted-foreground uppercase ml-1">Tamaño</label>
                                 <Select value={size} onValueChange={setSize}>
-                                    <SelectTrigger className="h-12 bg-stone-50 border-stone-200 rounded-xl">
+                                    <SelectTrigger className="h-12 bg-background border-border rounded-xl">
                                         <SelectValue placeholder="Seleccionar" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -340,10 +340,10 @@ export default function EditReportPage() {
                             </div>
 
                             <div className="space-y-2">
-                                <label className="text-xs font-bold text-stone-500 uppercase ml-1">Colores</label>
+                                <label className="text-xs font-bold text-muted-foreground uppercase ml-1">Colores</label>
                                 <Popover>
                                     <PopoverTrigger asChild>
-                                        <Button variant="outline" className="w-full h-12 justify-between bg-stone-50 border-stone-200 rounded-xl px-4 font-medium text-stone-700 overflow-hidden">
+                                        <Button variant="outline" className="w-full h-12 justify-between bg-background border-border rounded-xl px-4 font-medium text-foreground overflow-hidden">
                                             <span className="truncate">{selectedColors.length > 0 ? selectedColors.join(", ") : "Seleccionar"}</span> <Palette className="h-4 w-4 opacity-50" />
                                         </Button>
                                     </PopoverTrigger>
@@ -355,21 +355,21 @@ export default function EditReportPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-xs font-bold text-stone-500 uppercase ml-1">Descripción de la mascota</label>
+                            <label className="text-xs font-bold text-muted-foreground uppercase ml-1">Descripción de la mascota</label>
                             <Textarea
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder="Escribe señas particulares, comportamiento, o qué llevaba puesto..."
-                                className="min-h-[100px] bg-stone-50 border-stone-200 focus:bg-white transition-all rounded-2xl p-4"
+                                className="min-h-[100px] bg-background border-border focus:bg-card transition-all rounded-2xl p-4"
                             />
                         </div>
                     </section>
 
                     <section className="space-y-6">
-                        <h3 className="text-xl font-bold text-stone-900 flex items-center gap-2">
+                        <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
                             <MapPin className="h-5 w-5 text-red-500" /> Lugar de desaparición
                         </h3>
-                        <div className="bg-stone-50 rounded-2xl p-6 border border-stone-100">
+                        <div className="bg-background rounded-2xl p-6 border border-border">
                             <LocationPopover 
                                 onLocationChange={(loc) => {
                                     setLocation({
@@ -387,7 +387,7 @@ export default function EditReportPage() {
                     </section>
 
                     <section className="space-y-6">
-                        <h3 className="text-xl font-bold text-stone-900 flex items-center gap-2">
+                        <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
                             <Camera className="h-5 w-5 text-orange-500" /> Fotos de la mascota
                         </h3>
 
@@ -408,15 +408,15 @@ export default function EditReportPage() {
                                     </div>
 
                                     {img.isMain && (
-                                        <div className="absolute top-2 left-2 bg-orange-400 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-tighter shadow-lg">
+                                        <div className="absolute top-2 left-2 bg-orange-400 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-tight shadow-lg">
                                             Principal
                                         </div>
                                     )}
                                 </div>
                             ))}
 
-                            <label className="aspect-square border-2 border-dashed border-stone-200 rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-stone-50 hover:border-teal-700 transition-all text-stone-400 hover:text-teal-700 group">
-                                <div className="bg-stone-100 p-3 rounded-full group-hover:bg-teal-50 transition-colors">
+                            <label className="aspect-square border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-background hover:border-teal-700 transition-all text-muted-foreground hover:text-primary group">
+                                <div className="bg-secondary p-3 rounded-full group-hover:bg-accent transition-colors">
                                     <ImagePlus className="h-6 w-6" />
                                 </div>
                                 <span className="text-[10px] font-bold uppercase tracking-wide">Añadir Foto</span>
@@ -432,7 +432,7 @@ export default function EditReportPage() {
                         </Button>
                         <Button
                             size="lg"
-                            className="rounded-full px-8 bg-teal-700 hover:bg-teal-800 shadow-xl shadow-teal-700/30 text-base h-12"
+                            className="rounded-full px-8 bg-primary hover:bg-primary shadow-xl shadow-teal-700/30 text-base h-12"
                             onClick={handleSubmit}
                             disabled={isSubmitting}
                         >

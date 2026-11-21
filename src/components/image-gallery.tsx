@@ -26,9 +26,9 @@ export function ImageGallery({ images, petName, status }: ImageGalleryProps) {
     return (
         <div className="space-y-4">
             {/* Main Image */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] shadow-xl border-4 border-white bg-white group">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2.5rem] shadow-xl border-4 border-white bg-card group">
                 <Badge
-                    className={`absolute top-6 left-6 z-10 px-6 py-2 text-xs uppercase tracking-widest font-black shadow-lg border-0 ${status === 'lost' ? 'bg-red-500 text-white' : 'bg-emerald-500 text-white'
+                    className={`absolute top-6 left-6 z-10 px-6 py-2 text-xs uppercase tracking-widest font-bold shadow-lg border-0 ${status === 'lost' ? 'bg-red-500 text-white' : 'bg-emerald-500 text-white'
                         }`}
                 >
                     {status === 'lost' ? 'PERDIDO' : 'ENCONTRADO'}
@@ -45,18 +45,18 @@ export function ImageGallery({ images, petName, status }: ImageGalleryProps) {
                         <Button
                             variant="secondary"
                             size="icon"
-                            className="h-12 w-12 rounded-full shadow-2xl bg-white/90 hover:bg-white border-0"
+                            className="h-12 w-12 rounded-full shadow-2xl bg-white/90 hover:bg-card border-0"
                             onClick={goToPrevious}
                         >
-                            <ChevronLeft className="h-6 w-6 text-stone-800" />
+                            <ChevronLeft className="h-6 w-6 text-foreground" />
                         </Button>
                         <Button
                             variant="secondary"
                             size="icon"
-                            className="h-12 w-12 rounded-full shadow-2xl bg-white/90 hover:bg-white border-0"
+                            className="h-12 w-12 rounded-full shadow-2xl bg-white/90 hover:bg-card border-0"
                             onClick={goToNext}
                         >
-                            <ChevronRight className="h-6 w-6 text-stone-800" />
+                            <ChevronRight className="h-6 w-6 text-foreground" />
                         </Button>
                     </div>
                 )}

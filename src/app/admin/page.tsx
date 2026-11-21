@@ -1,4 +1,7 @@
+import { FileText, CalendarDays, EyeOff, Users } from "lucide-react"
 import { requireAdmin } from "@/lib/admin"
+import { PageHeader } from "@/components/ui/page-header"
+import { StatCard } from "@/components/ui/stat-card"
 import { statusLabel } from "@/components/status-badge"
 
 const STATUSES = ["lost", "found", "in_contact", "reunited", "paused", "closed"]
@@ -29,42 +32,47 @@ export default async function AdminHome() {
         }, {})
     ).sort((a, b) => b[1] - a[1]).slice(0, 8)
 
-    const cards = [
-        { label: "Reportes totales", value: total },
-        { label: "Últimos 30 días", value: recent },
-        { label: "Ocultos (moderados)", value: hidden },
-        { label: "Usuarios", value: users },
-    ]
+    const maxStatus = Math.max(1, ...byStatus)
+    const maxZone = Math.max(1, ...byZone.map(([, n]) => n))
 
     return (
         <div className="space-y-8">
-            <h1 className="text-2xl font-extrabold tracking-tight">Resumen</h1>
+            <PageHeader title="Resumen" text="Actividad de la plataforma." />
+
             <section aria-label="Métricas" className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-                {cards.map((c) => (
-                    <div key={c.label} className="rounded-2xl border bg-card p-5">
-                        <p className="text-sm font-semibold text-muted-foreground">{c.label}</p>
-                        <p className="text-3xl font-extrabold">{c.value}</p>
-                    </div>
-                ))}
+                <StatCard label="Reportes totales" value={total} icon={FileText} tone="teal" />
+                <StatCard label="Últimos 30 días" value={recent} icon={CalendarDays} tone="orange" />
+                <StatCard label="Ocultos (moderados)" value={hidden} icon={EyeOff} tone="amber" />
+                <StatCard label="Usuarios" value={users} icon={Users} tone="green" />
             </section>
 
-            <div className="grid gap-8 lg:grid-cols-2">
-                <section aria-labelledby="h-estados">
-                    <h2 id="h-estados" className="mb-3 text-lg font-bold">Por estado</h2>
-                    <ul className="divide-y rounded-2xl border bg-card">
+            <div className="grid gap-6 lg:grid-cols-2">
+                <section aria-labelledby="h-estados" className="rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
+                    <h2 id="h-estados" className="mb-4 text-lg font-semibold">Por estado</h2>
+                    <ul className="space-y-3">
                         {STATUSES.map((s, i) => (
-                            <li key={s} className="flex justify-between p-3 text-sm"><span>{statusLabel(s)}</span><strong>{byStatus[i]}</strong></li>
+                            <li key={s}>
+                                <div className="mb-1 flex justify-between text-sm"><span>{statusLabel(s)}</span><strong>{byStatus[i]}</strong></div>
+                                <div className="h-2 rounded-full bg-secondary"><div className="h-2 rounded-full bg-primary" style={{ width: `${(byStatus[i] / maxStatus) * 100}%` }} /></div>
+                            </li>
                         ))}
                     </ul>
                 </section>
-                <section aria-labelledby="h-zonas">
-                    <h2 id="h-zonas" className="mb-3 text-lg font-bold">Zonas con más reportes (30 días)</h2>
-                    <ul className="divide-y rounded-2xl border bg-card">
-                        {byZone.length === 0 && <li className="p-3 text-sm text-muted-foreground">Sin datos</li>}
-                        {byZone.map(([zone, n]) => (
-                            <li key={zone} className="flex justify-between p-3 text-sm"><span>{zone}</span><strong>{n}</strong></li>
-                        ))}
-                    </ul>
+
+                <section aria-labelledby="h-zonas" className="rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
+                    <h2 id="h-zonas" className="mb-4 text-lg font-semibold">Zonas con más reportes (30 días)</h2>
+                    {byZone.length === 0 ? (
+                        <p className="text-sm text-muted-foreground">Sin datos todavía.</p>
+                    ) : (
+                        <ul className="space-y-3">
+                            {byZone.map(([zone, n]) => (
+                                <li key={zone}>
+                                    <div className="mb-1 flex justify-between text-sm"><span>{zone}</span><strong>{n}</strong></div>
+                                    <div className="h-2 rounded-full bg-secondary"><div className="h-2 rounded-full bg-cta" style={{ width: `${(n / maxZone) * 100}%` }} /></div>
+                                </li>
+                            ))}
+                        </ul>
+                    )}
                 </section>
             </div>
         </div>
