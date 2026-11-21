@@ -14,6 +14,7 @@ interface PetCardProps {
     lostDate: string
     status: 'lost' | 'found' | 'reunited'
     timeLeft?: string
+    sourceName?: string | null // caso tomado de una fuente externa
 }
 
 const COLOR_MAP: Record<string, string> = {
@@ -30,7 +31,7 @@ const COLOR_MAP: Record<string, string> = {
 }
 
 // Tarjeta de caso: foto 4:3, estado arriba, y datos clave. Toda la tarjeta es un solo enlace.
-export function PetCard({ id, name, type, breed, district, province, colors = [], imageUrl, status, lostDate }: PetCardProps) {
+export function PetCard({ id, name, type, breed, district, province, colors = [], imageUrl, status, lostDate, sourceName }: PetCardProps) {
     const TypeIcon = type === 'dog' ? Dog : type === 'cat' ? Cat : Squirrel
     const date = new Date(lostDate).toLocaleDateString('es-PE', { day: 'numeric', month: 'short' })
 
@@ -47,6 +48,11 @@ export function PetCard({ id, name, type, breed, district, province, colors = []
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <StatusBadge status={status} className="absolute left-3 top-3 shadow-md" />
+                {sourceName && (
+                    <span className="absolute bottom-3 left-3 max-w-[70%] truncate rounded-full bg-black/70 px-2.5 py-1 text-[11px] font-semibold text-white">
+                        Fuente: {sourceName}
+                    </span>
+                )}
                 <div className="absolute bottom-3 right-3 flex -space-x-1.5">
                     {(colors || []).slice(0, 3).map((color, i) => (
                         <span

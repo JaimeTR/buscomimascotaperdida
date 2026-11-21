@@ -18,7 +18,7 @@ import { BreedPopover } from "@/components/breed-popover"
 import { ColorPopover } from "@/components/color-popover"
 import { LocationMap } from "@/components/location-map"
 import { CompleteProfileDialog } from "@/components/auth/complete-profile-dialog"
-import { getImageUploadError } from "@/lib/image-upload"
+import { getImageUploadError, prepareImageForUpload } from "@/lib/image-upload"
 
 export default function ReportPage() {
     const router = useRouter()
@@ -151,14 +151,15 @@ export default function ReportPage() {
                     const imageError = getImageUploadError(img.file)
                     if (imageError) throw new Error(imageError)
                     // Generate unique filename
-                    const fileExt = img.file.name.split('.').pop()
-                    const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+                    const prepared = await prepareImageForUpload(img.file)
+                    const fileName = `${userId}/${Date.now()}-${Math.random().toString(36).substring(7)}.${prepared.ext}`
 
-                    // Upload to Supabase Storage
+                    // Upload to Supabase Storage (nombre único => caché de 1 año)
                     const { data: uploadData, error: uploadError } = await supabase.storage
                         .from('pet-images')
-                        .upload(fileName, img.file, {
-                            cacheControl: '3600',
+                        .upload(fileName, prepared.blob, {
+                            cacheControl: '31536000',
+                            contentType: prepared.type,
                             upsert: false
                         })
 
