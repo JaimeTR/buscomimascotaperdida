@@ -1,4 +1,5 @@
 {
+    "id": "/",
     "name": "Busco Mi Mascota Perdida",
     "short_name": "Busco Mascota",
     "description": "Plataforma comunitaria para encontrar mascotas perdidas en Perú. Reporta, busca y ayuda a reunir familias con sus mascotas.",
@@ -33,20 +34,6 @@
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
-        }
-    ],
-    "screenshots": [
-        {
-            "src": "/screenshots/home-mobile.png",
-            "sizes": "390x844",
-            "type": "image/png",
-            "form_factor": "narrow"
-        },
-        {
-            "src": "/screenshots/search-mobile.png",
-            "sizes": "390x844",
-            "type": "image/png",
-            "form_factor": "narrow"
         }
     ],
     "shortcuts": [
@@ -87,6 +74,8 @@
             ]
         }
     ],
-    "related_applications": [],
-    "prefer_related_applications": false
+    "display_override": [
+        "standalone",
+        "minimal-ui"
+    ]
 }

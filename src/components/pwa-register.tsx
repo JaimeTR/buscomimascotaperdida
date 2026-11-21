@@ -4,7 +4,8 @@ import { useEffect } from 'react'
 
 export function PWARegister() {
     useEffect(() => {
-        if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+        // En desarrollo el SW cachearía chunks viejos y confundiría las pruebas.
+        if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
             navigator.serviceWorker
                 .register('/sw.js', { scope: '/' })
                 .then((registration) => {

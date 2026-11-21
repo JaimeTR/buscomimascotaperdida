@@ -29,6 +29,12 @@ export function PWAInstallPrompt() {
         const dismissed = localStorage.getItem('pwa-prompt-dismissed')
         if (dismissed) return
 
+        // iOS nunca dispara beforeinstallprompt: mostrar las instrucciones manuales por tiempo.
+        if (iOS && !isInStandaloneMode) {
+            const t = setTimeout(() => setShowPrompt(true), 30000)
+            return () => clearTimeout(t)
+        }
+
         // Listen for the install prompt
         const handler = (e: Event) => {
             e.preventDefault()

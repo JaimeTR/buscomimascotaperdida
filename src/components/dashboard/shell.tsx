@@ -85,12 +85,17 @@ export function DashboardShell({ name, avatarUrl, isAdmin, children }: Props) {
             {/* Barra superior (móvil) */}
             <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background/90 px-4 backdrop-blur md:hidden">
                 <Link href="/" aria-label="Ir al inicio"><BrandMark showName /></Link>
-                <button onClick={signOut} aria-label="Cerrar sesión" className="rounded-full p-2 text-muted-foreground">
-                    <Avatar className="h-9 w-9">
-                        {avatarUrl && <AvatarImage src={avatarUrl} alt="" />}
-                        <AvatarFallback className="bg-accent text-xs font-semibold text-accent-foreground">{initials}</AvatarFallback>
-                    </Avatar>
-                </button>
+                <div className="flex items-center gap-1 text-muted-foreground">
+                    <Link href="/" aria-label="Ir a la web" className="flex h-10 w-10 items-center justify-center rounded-full active:bg-secondary"><Home className="h-5 w-5" aria-hidden /></Link>
+                    {isAdmin && <Link href="/admin" aria-label="Administración" className="flex h-10 w-10 items-center justify-center rounded-full active:bg-secondary"><ShieldCheck className="h-5 w-5" aria-hidden /></Link>}
+                    <button onClick={signOut} aria-label="Cerrar sesión" className="flex h-10 w-10 items-center justify-center rounded-full active:bg-secondary hover:text-destructive"><LogOut className="h-5 w-5" aria-hidden /></button>
+                    <Link href="/dashboard/settings" aria-label="Mi perfil" className="ml-1">
+                        <Avatar className="h-9 w-9">
+                            {avatarUrl && <AvatarImage src={avatarUrl} alt="" />}
+                            <AvatarFallback className="bg-accent text-xs font-semibold text-accent-foreground">{initials}</AvatarFallback>
+                        </Avatar>
+                    </Link>
+                </div>
             </header>
 
             <main className="min-h-screen pb-28 md:pb-10">{children}</main>

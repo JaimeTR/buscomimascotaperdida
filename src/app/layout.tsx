@@ -95,6 +95,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
+  viewportFit: "cover", // sin esto env(safe-area-inset-*) vale 0 y la barra inferior queda bajo el notch/gestos
   themeColor: "#0f766e",
 };
 

@@ -1,0 +1,24 @@
+{
+  "packageId": "com.buscomimascotaperdida.app",
+  "host": "buscomimascotaperdida.com",
+  "name": "Busco mi mascota",
+  "launcherName": "Busco Mascota",
+  "display": "standalone",
+  "orientation": "portrait",
+  "themeColor": "#0f766e",
+  "navigationColor": "#faf8f3",
+  "backgroundColor": "#faf8f3",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://buscomimascotaperdida.com/icons/icon-512x512.png",
+  "maskableIconUrl": "https://buscomimascotaperdida.com/icons/maskable-512x512.png",
+  "webManifestUrl": "https://buscomimascotaperdida.com/manifest.json",
+  "fullScopeUrl": "https://buscomimascotaperdida.com/",
+  "appVersionName": "1.0.0",
+  "appVersion": "1",
+  "signingKey": { "path": "./android.keystore", "alias": "busco" },
+  "shortcuts": [
+    { "name": "Reportar mascota", "url": "/reportar", "icons": [{ "src": "/icons/icon-192x192.png" }] },
+    { "name": "Buscar mascotas", "url": "/mascotas", "icons": [{ "src": "/icons/icon-192x192.png" }] }
+  ]
+}
