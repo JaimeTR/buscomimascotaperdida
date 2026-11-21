@@ -73,9 +73,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning className={`${poppins.variable} ${braze.variable}`}>
       <body
-        className={`${poppins.variable} ${braze.variable} font-sans antialiased min-h-screen flex flex-col bg-background`}
+        className={`font-sans antialiased min-h-screen flex flex-col bg-background`}
       >
         <PWARegister />
         <ToastProvider>
