@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { ReportActionButton } from "@/components/report-action-button"
 import { createClient } from "@/utils/supabase/client"
 import { useToast } from "@/components/ui/toast-modern"
+import { ReunionDialog } from "@/components/reunion-dialog"
 
 interface PetDetailActionsProps {
     petId: string
@@ -18,6 +19,7 @@ interface PetDetailActionsProps {
 export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
     const [status, setStatus] = useState(petStatus)
     const [isOpen, setIsOpen] = useState(false)
+    const [reunionOpen, setReunionOpen] = useState(false)
     const supabase = createClient()
     const { toast } = useToast()
 
@@ -94,7 +96,7 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
                                 En Contacto
                             </button>
                             <button
-                                onClick={() => handleStatusChange('reunited')}
+                                onClick={() => { setIsOpen(false); setReunionOpen(true) }}
                                 className="w-full text-left px-3 py-2 text-sm font-bold rounded-lg hover:bg-secondary text-muted-foreground transition-colors"
                             >
                                 Reunido
@@ -103,6 +105,8 @@ export function PetDetailActions({ petId, petStatus }: PetDetailActionsProps) {
                     </PopoverContent>
                 </Popover>
             </div>
+
+            {reunionOpen && <ReunionDialog pet={{ id: petId, name: null }} onClose={() => setReunionOpen(false)} onDone={() => { setReunionOpen(false); setStatus("reunited") }} />}
 
             <ReportActionButton
                 nextUrl={`/mascotas/${petId}/avistamiento`}

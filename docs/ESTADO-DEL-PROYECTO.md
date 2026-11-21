@@ -14,12 +14,13 @@ Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimasco
 - **Imágenes HD:** hero (`reencuentro-atardecer.webp`, 2400px) y login/registro (`paseo-en-el-parque.webp`, 2000px). Créditos en `docs/creditos-imagenes.md`. `next.config.ts` permite `quality` 75/85/90.
 - **Encabezado:** solo isologo (el nombre en texto queda en el menú del dashboard).
 - **Acceso** (ver `docs/autenticacion.md`): guard de servidor, Google + Facebook, registro mínimo, recordar correo, avatar instantáneo.
+- **Casos de éxito** (ver `docs/casos-de-exito.md`): flujo de reencuentro con foto y relato, páginas públicas y recordatorios.
 - **Legal** (ver `docs/legal.md`): términos, privacidad (Ley 29733), cookies, libro de reclamaciones.
 - **Calidad:** tests `node --test` (`npm test`), CI en `.github/workflows/ci.yml`, tsc/eslint limpios.
 
 ## Pendiente (acciones tuyas, paneles externos)
 1. Supabase → Auth: Site URL y Redirect URLs de producción; activar proveedores **Google** y **Facebook**; decidir "Confirm email" (recomendado: activo).
-2. Aplicar migraciones pendientes de `supabase/migrations` (última de acceso: `20261121130500_oauth_profile_metadata.sql`; revisar también `push_subscriptions` y `promos`).
+2. Aplicar migraciones pendientes (incluye `20261121140000_reunion_stories.sql`) y programar el cron `/api/cron/remind-owners` con `CRON_SECRET`; de `supabase/migrations` (última de acceso: `20261121130500_oauth_profile_metadata.sql`; revisar también `push_subscriptions` y `promos`).
 3. Resend: verificar dominio y remitente.
 4. `insert into admin_users` con tu usuario.
 5. Variables de producción en el hosting (`.env.example`): `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_APP_URL`, VAPID, Sentry.
@@ -27,7 +28,7 @@ Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimasco
 
 ## Pendiente (desarrollo)
 - ~~Eliminar cuenta~~ hecho: Mi perfil → Seguridad (`delete-account.ts`, requiere `SUPABASE_SERVICE_ROLE_KEY`; admins no pueden autoeliminarse).
-- `notify-nearby-users`: usar cliente service-role en servidor; el enlace usa `/pets/<id>` en vez de `/mascotas/<id>`.
+- Revisar `notify-nearby-users` (parece corregido por otra sesión; verificar).
 - Libro de reclamaciones: hoy por correo; si hay volumen, guardarlo en tabla.
 - Si se añade analítica, revisar cookies y banner de consentimiento (hoy solo hay cookies técnicas).
 - Casos reales para reemplazar los demo; fotos reales en lugar de stock.

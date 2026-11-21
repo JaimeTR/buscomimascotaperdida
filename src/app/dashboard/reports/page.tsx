@@ -13,6 +13,8 @@ import { createClient } from "@/utils/supabase/client"
 import { useToast } from "@/components/ui/toast-modern"
 import { useConfirm } from "@/components/ui/confirm-modern"
 import { cn } from "@/lib/utils"
+import { ReunionDialog } from "@/components/reunion-dialog"
+import { reminderDue } from "@/lib/reunion"
 
 type Report = {
     id: string
@@ -23,6 +25,7 @@ type Report = {
     last_seen_district: string | null
     last_seen_department: string | null
     created_at: string
+    reminded_at: string | null
     sightings: { id: string }[] | null
 }
 
@@ -44,13 +47,14 @@ export default function MyReportsPage() {
     const [filter, setFilter] = useState("all")
     const [query, setQuery] = useState("")
     const [copied, setCopied] = useState<string | null>(null)
+    const [reuniting, setReuniting] = useState<Report | null>(null)
 
     const load = useCallback(async () => {
         const { data: { user } } = await supabase.auth.getUser()
         if (!user) return
         const { data, error } = await supabase
             .from("pets")
-            .select("id, name, status, breed, image_urls, last_seen_district, last_seen_department, created_at, sightings(id)")
+            .select("id, name, status, breed, image_urls, last_seen_district, last_seen_department, created_at, reminded_at, sightings(id)")
             .eq("owner_id", user.id) // ownership: solo mis reportes (RLS es la segunda barrera)
             .order("created_at", { ascending: false })
             .returns<Report[]>()
@@ -72,6 +76,13 @@ export default function MyReportsPage() {
         if (error) return toast("No se pudo actualizar el estado", { type: "error" })
         toast("Estado actualizado", { type: "success" })
         void load()
+    }
+
+    // "Todavía no": pospone el recordatorio 14 días.
+    const snooze = async (id: string) => {
+        const now = new Date().toISOString()
+        await supabase.from("pets").update({ reminded_at: now }).eq("id", id)
+        setReports((prev) => prev.map((x) => (x.id === id ? { ...x, reminded_at: now } : x)))
     }
 
     const remove = async (r: Report) => {
@@ -137,6 +148,16 @@ export default function MyReportsPage() {
                     <EmptyState icon={Search} title="Sin resultados" text="Prueba con otro filtro o búsqueda." />
                 )
             ) : (
+                <>
+                {reports.filter((r) => reminderDue(r)).slice(0, 2).map((r) => (
+                    <div key={r.id} role="status" className="mb-4 flex flex-col gap-3 rounded-2xl border border-cta/30 bg-cta/10 p-4 sm:flex-row sm:items-center sm:justify-between">
+                        <p className="text-sm font-medium">¿Ya apareció <strong>{r.name || "tu mascota"}</strong>? Si volvió a casa, cuéntanos y celebra su historia.</p>
+                        <div className="flex gap-2">
+                            <Button size="sm" variant="cta" onClick={() => setReuniting(r)}>Sí, ya apareció</Button>
+                            <Button size="sm" variant="ghost" onClick={() => snooze(r.id)}>Todavía no</Button>
+                        </div>
+                    </div>
+                ))}
                 <ul className="space-y-4">
                     {visible.map((r) => {
                         const isActive = ACTIVE.includes(r.status)
@@ -163,7 +184,7 @@ export default function MyReportsPage() {
                                         <Button size="sm" variant="outline" onClick={() => copyLink(r.id)}>
                                             {copied === r.id ? <Check className="mr-1.5 h-4 w-4" aria-hidden /> : <Copy className="mr-1.5 h-4 w-4" aria-hidden />} Copiar enlace
                                         </Button>
-                                        {isActive && <Button size="sm" onClick={() => setStatus(r.id, "reunited")}><Check className="mr-1.5 h-4 w-4" aria-hidden /> Marcar reunido</Button>}
+                                        {isActive && <Button size="sm" onClick={() => setReuniting(r)}><Check className="mr-1.5 h-4 w-4" aria-hidden /> Marcar reunido</Button>}
                                         {isActive && <Button size="sm" variant="ghost" onClick={() => setStatus(r.id, "paused")}><Pause className="mr-1.5 h-4 w-4" aria-hidden /> Pausar</Button>}
                                         {(r.status === "paused" || r.status === "closed") && <Button size="sm" variant="ghost" onClick={() => setStatus(r.id, "lost")}><Play className="mr-1.5 h-4 w-4" aria-hidden /> Reactivar</Button>}
                                         <Button size="sm" variant="ghost" className="text-destructive hover:bg-destructive/10" onClick={() => remove(r)} aria-label={`Eliminar reporte de ${r.name || "mascota"}`}>
@@ -175,7 +196,9 @@ export default function MyReportsPage() {
                         )
                     })}
                 </ul>
+                </>
             )}
+            {reuniting && <ReunionDialog pet={reuniting} onClose={() => setReuniting(null)} onDone={() => { setReuniting(null); void load() }} />}
         </div>
     )
 }

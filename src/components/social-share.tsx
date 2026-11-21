@@ -1,21 +1,22 @@
 "use client"
 
 import { useState } from "react"
-import { Facebook, Share2, Link2, Instagram, X } from "lucide-react"
+import { Facebook, Share2, Link2, MessageCircle, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useToast } from "@/components/ui/toast-modern"
 
 interface SocialShareProps {
     petName: string
+    text?: string // mensaje a compartir; por defecto, el de búsqueda
     variant?: "inline" | "floating"
 }
 
-export function SocialShare({ petName, variant = "inline" }: SocialShareProps) {
+export function SocialShare({ petName, text, variant = "inline" }: SocialShareProps) {
     const { toast } = useToast()
     const [isOpen, setIsOpen] = useState(false)
     const shareUrl = typeof window !== 'undefined' ? window.location.href : ""
-    const shareText = `¡Ayúdanos a encontrar a ${petName}! 🐾 Por favor comparte este reporte.`
+    const shareText = text ?? `¡Ayúdanos a encontrar a ${petName}! 🐾 Por favor comparte este reporte.`
 
     const handleShare = (platform: 'facebook' | 'twitter' | 'whatsapp' | 'copy') => {
         let url = ""
@@ -30,14 +31,16 @@ export function SocialShare({ petName, variant = "inline" }: SocialShareProps) {
                 url = `https://wa.me/?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`
                 break
             case 'copy':
-                navigator.clipboard.writeText(shareUrl)
-                toast("Enlace copiado al portapapeles", { type: "success", title: "¡Copiado!" })
+                navigator.clipboard?.writeText(shareUrl).then(
+                    () => toast("Enlace copiado al portapapeles", { type: "success", title: "¡Copiado!" }),
+                    () => toast("No se pudo copiar. Copia el enlace desde la barra del navegador.", { type: "error" }),
+                )
                 setIsOpen(false)
                 return
         }
 
         if (url) {
-            window.open(url, '_blank', 'width=600,height=400')
+            window.open(url, '_blank', 'noopener,noreferrer,width=600,height=400')
             setIsOpen(false)
         }
     }
@@ -46,15 +49,15 @@ export function SocialShare({ petName, variant = "inline" }: SocialShareProps) {
         return (
             <Popover open={isOpen} onOpenChange={setIsOpen}>
                 <PopoverTrigger asChild>
-                    <button aria-label="Compartir reporte" className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-primary hover:bg-primary text-white shadow-2xl shadow-teal-700/40 flex items-center justify-center transition-all hover:scale-110 group">
+                    <button aria-label="Compartir reporte" className="fixed bottom-24 left-4 md:bottom-6 md:left-6 z-50 h-14 w-14 rounded-full bg-primary hover:bg-primary text-white shadow-2xl shadow-teal-700/40 flex items-center justify-center transition-all hover:scale-110 group">
                         <Share2 className="h-6 w-6 group-hover:rotate-12 transition-transform" />
                     </button>
                 </PopoverTrigger>
-                <PopoverContent className="w-72 p-4 mb-2 mr-4 rounded-2xl shadow-2xl" align="end" side="top">
+                <PopoverContent className="w-72 p-4 mb-2 ml-4 rounded-2xl shadow-2xl" align="start" side="top">
                     <div className="space-y-4">
                         <div className="flex items-center justify-between">
                             <h3 className="font-bold text-foreground">Compartir reporte</h3>
-                            <button onClick={() => setIsOpen(false)} className="text-muted-foreground hover:text-muted-foreground">
+                            <button onClick={() => setIsOpen(false)} aria-label="Cerrar" className="text-muted-foreground hover:text-foreground">
                                 <X className="h-4 w-4" />
                             </button>
                         </div>
@@ -78,7 +81,7 @@ export function SocialShare({ petName, variant = "inline" }: SocialShareProps) {
                                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                                     </svg>
                                 </div>
-                                <span className="text-[10px] font-bold text-muted-foreground">Twitter</span>
+                                <span className="text-[10px] font-bold text-muted-foreground">X</span>
                             </button>
 
                             <button
@@ -117,6 +120,7 @@ export function SocialShare({ petName, variant = "inline" }: SocialShareProps) {
                 <Button
                     variant="outline"
                     size="icon"
+                    aria-label="Compartir en Facebook"
                     className="rounded-full h-12 w-12 border-border text-muted-foreground hover:text-primary hover:bg-accent transition-all"
                     onClick={() => handleShare('facebook')}
                 >
@@ -126,7 +130,8 @@ export function SocialShare({ petName, variant = "inline" }: SocialShareProps) {
                 <Button
                     variant="outline"
                     size="icon"
-                    className="rounded-full h-12 w-12 border-border text-muted-foreground hover:text-teal-500 hover:bg-accent transition-all"
+                    aria-label="Compartir en X"
+                    className="rounded-full h-12 w-12 border-border text-muted-foreground hover:text-primary hover:bg-accent transition-all"
                     onClick={() => handleShare('twitter')}
                 >
                     <svg className="h-4 w-4 fill-current" viewBox="0 0 24 24">
@@ -137,16 +142,18 @@ export function SocialShare({ petName, variant = "inline" }: SocialShareProps) {
                 <Button
                     variant="outline"
                     size="icon"
-                    className="rounded-full h-12 w-12 border-border text-muted-foreground hover:text-pink-500 hover:bg-pink-50 transition-all"
-                    onClick={() => handleShare('copy')}
+                    aria-label="Compartir por WhatsApp"
+                    className="rounded-full h-12 w-12 border-border text-muted-foreground hover:text-emerald-700 hover:bg-emerald-50 transition-all"
+                    onClick={() => handleShare('whatsapp')}
                 >
-                    <Instagram className="h-5 w-5" />
+                    <MessageCircle className="h-5 w-5" />
                 </Button>
 
                 <Button
                     variant="outline"
                     size="icon"
-                    className="rounded-full h-12 w-12 border-border text-muted-foreground hover:text-emerald-500 hover:bg-emerald-50 transition-all"
+                    aria-label="Copiar enlace"
+                    className="rounded-full h-12 w-12 border-border text-muted-foreground hover:text-primary hover:bg-accent transition-all"
                     onClick={() => handleShare('copy')}
                 >
                     <Link2 className="h-5 w-5" />
