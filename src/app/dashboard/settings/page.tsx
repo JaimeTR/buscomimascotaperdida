@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Switch } from "@/components/ui/switch"
 import { PushToggle } from "@/components/push-toggle"
+import { DeleteAccountCard } from "@/components/delete-account-card"
 import { LogOut, Camera, Loader2 } from "lucide-react"
 import { useToast } from "@/components/ui/toast-modern"
 import { useState, useEffect } from "react"
@@ -412,6 +413,7 @@ export default function SettingsPage() {
                             <Button>Actualizar Contraseña</Button>
                         </CardFooter>
                     </Card>
+                    <DeleteAccountCard />
                 </TabsContent>
 
             </Tabs>

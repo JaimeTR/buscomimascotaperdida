@@ -20,4 +20,4 @@ Maquetación común: `src/components/legal-page.tsx` (la fecha `LEGAL_UPDATED` y
 - **Registro del banco de datos personales** ante la Autoridad Nacional de Protección de Datos Personales.
 - **Libro de reclamaciones** formal (hoja virtual con datos del proveedor) si hay promociones de pago.
 - Condiciones de los **planes de promoción** (precios, reembolsos) cuando se cobre.
-- **Eliminar cuenta** desde el perfil (hoy solo por correo).
+- **Eliminar cuenta**: disponible en Mi perfil → Seguridad; actualizar la política si cambia el alcance del borrado.

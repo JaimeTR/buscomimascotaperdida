@@ -26,7 +26,7 @@ Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimasco
 6. Datos legales reales (RUC, razón social, domicilio): ver `docs/legal.md`.
 
 ## Pendiente (desarrollo)
-- Eliminar cuenta desde el perfil (derecho de cancelación; hoy solo por correo).
+- ~~Eliminar cuenta~~ hecho: Mi perfil → Seguridad (`delete-account.ts`, requiere `SUPABASE_SERVICE_ROLE_KEY`; admins no pueden autoeliminarse).
 - `notify-nearby-users`: usar cliente service-role en servidor; el enlace usa `/pets/<id>` en vez de `/mascotas/<id>`.
 - Libro de reclamaciones: hoy por correo; si hay volumen, guardarlo en tabla.
 - Si se añade analítica, revisar cookies y banner de consentimiento (hoy solo hay cookies técnicas).
