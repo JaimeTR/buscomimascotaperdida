@@ -2,11 +2,12 @@
 
 import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
-import { Search, MapPin, Filter, FileText, UserPlus, Loader2, Calendar, Palette, X } from "lucide-react"
+import { Search, MapPin, Filter, FileText, UserPlus, Loader2, Calendar, Palette, X, List, Map as MapIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PetCard } from "@/components/pet-card"
+import { PetsMapWrapper } from "@/components/pets-map-wrapper"
 import { usePets } from "@/hooks/use-pets"
 import { ReportActionButton } from "@/components/report-action-button"
 import Image from "next/image"
@@ -26,6 +27,7 @@ function SearchContent({ ad }: { ad?: React.ReactNode }) {
     const [dateFrom, setDateFrom] = useState("")
 
     const [showAdvanced, setShowAdvanced] = useState(false)
+    const [view, setView] = useState<"list" | "map">("list")
 
     // Sync query from URL if changed elsewhere
     useEffect(() => {
@@ -197,10 +199,16 @@ function SearchContent({ ad }: { ad?: React.ReactNode }) {
                             <h2 className="text-2xl font-bold text-foreground">
                                 {isLoading ? 'Buscando...' : `${pets.length} Mascotas encontradas`}
                             </h2>
+                            <div className="flex gap-1 rounded-lg border border-border p-1" role="group" aria-label="Vista">
+                                <Button size="sm" variant={view === "list" ? "default" : "ghost"} aria-pressed={view === "list"} onClick={() => setView("list")}><List className="mr-1 h-4 w-4" />Lista</Button>
+                                <Button size="sm" variant={view === "map" ? "default" : "ghost"} aria-pressed={view === "map"} onClick={() => setView("map")}><MapIcon className="mr-1 h-4 w-4" />Mapa</Button>
+                            </div>
                         </div>
 
+                        {view === "map" && !isLoading && <PetsMapWrapper pets={pets} />}
+
                         {/* Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 min-h-[400px]">
+                        <div className={view === "map" ? "hidden" : "grid grid-cols-1 sm:grid-cols-2 gap-6 min-h-[400px]"}>
                             {isLoading ? (
                                 [...Array(4)].map((_, i) => (
                                     <div key={i} className="h-[400px] w-full rounded-[2rem] bg-secondary animate-pulse"></div>
