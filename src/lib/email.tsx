@@ -194,3 +194,16 @@ export async function sendSightingNotification(
         react: SightingTemplate,
     })
 }
+
+/**
+ * Recordatorio al dueño: "¿ya apareció tu mascota?"
+ */
+export async function sendReunionReminderEmail(to: string, petName: string, url: string) {
+    const { ReunionReminderEmail } = await import('@/emails/reunion-reminder-template')
+
+    return sendEmail({
+        to,
+        subject: `¿Ya apareció ${petName}?`,
+        react: ReunionReminderEmail({ petName, url }),
+    })
+}
