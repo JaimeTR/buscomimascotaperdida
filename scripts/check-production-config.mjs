@@ -74,7 +74,7 @@ function addPatternFindings(relativeFile, content, findings) {
 if (process.argv.includes('--self-test')) {
   const fixtures = [
     ['hardcoded Gemini key', 'const key = "AIza123456789012345678901234567890";', hardcodedGeminiPattern],
-    ['hardcoded Hugging Face key', 'const key = "hf_REDACTED";', hardcodedHuggingFacePattern],
+    ['hardcoded Hugging Face key', 'const key = "hf_123456789012345678901234567890";', hardcodedHuggingFacePattern],
     ['concrete Supabase URL', 'const url = "https://qiiwqphdhpzkrjhrxsce.supabase.co";', concreteSupabaseUrlPattern],
   ]
   const failed = fixtures.filter(([, value, pattern]) => !pattern.test(value))
