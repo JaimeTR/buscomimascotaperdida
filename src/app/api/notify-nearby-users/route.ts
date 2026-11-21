@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
 
         const { data: pet } = await supabase
             .from('pets')
-            .select('id, owner_id, name, type, breed, last_seen_district, last_seen_lat, last_seen_lng, image_urls, notified_at')
+            .select('id, owner_id, name, type, breed, last_seen_district, last_seen_lat, last_seen_lng, image_urls, notified_at, status, colors, last_seen_date')
             .eq('id', body.data.petId)
             .eq('owner_id', user.id)
             .maybeSingle<NotifiablePet>()
