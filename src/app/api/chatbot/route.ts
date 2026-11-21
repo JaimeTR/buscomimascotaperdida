@@ -143,6 +143,7 @@ export async function POST(request: NextRequest) {
                 analysis,
                 filters,
                 pets: showPets ? pets : [],
+                relaxed: showPets && relaxed,
                 sources: knowledge.slice(0, 2).map((d) => ({ title: d.title, url: d.url })),
             })
         }

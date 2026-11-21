@@ -43,9 +43,8 @@ En el panel de Hostinger, agrega estas variables de entorno:
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=replace-me-with-supabase-anon-key
 RESEND_API_KEY=replace-me-with-resend-key
-HUGGINGFACE_API_KEY=replace-me-if-chatbot-is-enabled
-GEMINI_API_KEY=replace-me-if-chatbot-is-enabled
-ALLOWED_ORIGIN=https://tu-dominio-en-hostinger.com
+GROQ_API_KEY=replace-me-if-chatbot-is-enabled
+SUPABASE_SERVICE_ROLE_KEY=replace-me-server-only
 EMAIL_TEST_TOKEN=replace-me-local-test-token
 NEXT_PUBLIC_APP_URL=https://tu-dominio-en-hostinger.com
 NODE_ENV=production
@@ -53,10 +52,10 @@ NODE_ENV=production
 
 ⚠️ **IMPORTANTE**: Reemplaza todos los placeholders en el panel de Hostinger. Nunca subas estas claves al repositorio ni las pegues en esta guía.
 
-Las claves `GEMINI_API_KEY`, `HUGGINGFACE_API_KEY` y `ALLOWED_ORIGIN` de la
-Edge Function deben configurarse como secretos de Supabase. `SUPABASE_SERVICE_ROLE_KEY`
-solo se usa localmente para el importador administrativo y nunca debe configurarse
-como variable pública ni en el navegador.
+`SUPABASE_SERVICE_ROLE_KEY` lo usa solo el servidor (avisos por correo y push, límite de
+peticiones del chatbot y el importador administrativo). Nunca debe configurarse como
+variable pública ni llegar al navegador. El chatbot (Huellita) usa `GROQ_API_KEY`; sin ella
+sigue funcionando con respuestas basadas en los reportes y la base de conocimiento, sin IA.
 
 ### Paso 4: Desplegar
 
