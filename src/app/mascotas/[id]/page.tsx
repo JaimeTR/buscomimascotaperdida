@@ -162,7 +162,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                         {/* Recent Sightings Section */}
                         <div className="bg-card rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-border space-y-8">
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-wrap items-center justify-between gap-3">
                                 <h2 className="text-2xl font-bold text-foreground">Historial de avistamientos</h2>
                                 <ReportActionButton
                                     nextUrl={`/mascotas/${pet.id}/avistamiento`}
