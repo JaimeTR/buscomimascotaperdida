@@ -88,7 +88,7 @@ export function ReunionDialog({ pet, onClose, onDone }: { pet: { id: string; nam
                         <div className="flex flex-wrap gap-3">
                             {files.map((f, i) => (
                                 <div key={f.url} className="relative h-24 w-24 overflow-hidden rounded-xl border">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    { }
                                     <img src={f.url} alt={`Foto ${i + 1} del reencuentro`} className="h-full w-full object-cover" />
                                     <button type="button" onClick={() => { URL.revokeObjectURL(f.url); setFiles((p) => p.filter((x) => x !== f)) }} aria-label="Quitar foto" className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 text-white"><X className="h-4 w-4" aria-hidden /></button>
                                 </div>

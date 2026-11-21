@@ -97,10 +97,7 @@ export function usePets(options: UsePetsOptions = {}) {
                     query = query.limit(options.limit)
                 }
 
-                // FIXME: Uncomment this when 'is_featured' column is added to the 'pets' table
-                // if (options.featured !== undefined) {
-                //     query = query.eq('is_featured', options.featured)
-                // }
+                // 'featured' se ignora: la tabla 'pets' no tiene columna is_featured.
 
                 if (options.type && options.type !== 'all') {
                     query = query.eq('type', options.type.toLowerCase())
