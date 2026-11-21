@@ -1,4 +1,4 @@
-// Encabezado de página: título en Braze (mayúsculas), descripción y acciones a la derecha.
+// Encabezado de página: título en Outfit, descripción y acciones a la derecha.
 export function PageHeader({ title, text, children }: { title: string; text?: string; children?: React.ReactNode }) {
     return (
         <header className="flex flex-wrap items-end justify-between gap-4">

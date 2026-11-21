@@ -1,6 +1,6 @@
 # Marca — Busco mi mascota
 
-Guía visual en una imagen: `public/brand/guia-de-marca.png`. Todo se regenera con `node scripts/build-logos.mjs` (logos, símbolo, guía) y `node scripts/build-brand.mjs` (favicon, íconos de la app, imagen para compartir).
+Todo se regenera con `node scripts/build-logos.mjs`.
 
 **Nombre:** Busco mi mascota · **Dominio:** buscomimascotaperdida.com
 **Eslogan:** Juntos, de vuelta a casa
@@ -8,53 +8,38 @@ Guía visual en una imagen: `public/brand/guia-de-marca.png`. Todo se regenera c
 
 ## 1. El símbolo
 
-Un perro de perfil (cráneo redondo, hocico con la nariz marcada, línea de la boca, oreja caída) con un gato sentado recortado en el espacio negativo de su pecho y una lupa pequeña dentro del gato. Funciona para perros y gatos y dice "buscar" sin ser una lupa gigante.
-
-- El símbolo es de **un solo color** más dos tonos propios en la versión a color: la oreja y la nariz van en un tono más profundo (22 % más oscuro sobre fondo claro, 12 % sobre crema).
-- La lupa usa el color del perro y contrasta con el hueco del gato: **verde sobre el gato blanco, blanca sobre el gato verde**.
-- En monocromo (blanco o negro) la oreja se marca con un contorno y la nariz con un hueco, porque no hay tonos.
+Un **pin de ubicación** teal con una **huella de mascota** recortada en el centro y un punto naranja en el suelo (el lugar donde se encuentra). Dice "buscar" y "mascota" sin depender de perro o gato, y se lee bien a 16 px.
 
 ## 2. Estructura del logotipo
 
-- **Nombre:** siempre en **MAYÚSCULAS** y en **dos líneas**: `BUSCO MI` (color de marca) y `MASCOTA` (naranja). En las versiones monocromas ambas líneas llevan el mismo color.
-- **Eslogan:** `JUNTOS, DE VUELTA A CASA` en Poppins Medium mayúsculas, con espaciado de 0.12 em y **ajustado para medir exactamente lo mismo que la línea `BUSCO MI`**.
-- **Isologo horizontal:** el símbolo mide exactamente de la parte alta de `BUSCO MI` a la base del eslogan.
-- Todos los textos están convertidos a trazos: no hace falta instalar fuentes para usar los archivos.
+- **Nombre:** `busco mi mascota` en minúsculas, Outfit 600. `busco mi` en color de marca y `mascota` en naranja; en monocromo ambos del mismo color.
+- **Eslogan:** `Juntos, de vuelta a casa`, Outfit 500.
+- Todos los textos están convertidos a trazos: no hace falta instalar fuentes.
 
 ## 3. Versiones del logo
 
-Cada pieza existe en cuatro versiones (sufijo del archivo) en SVG y PNG, dentro de `public/brand/`:
+Cada pieza existe en cuatro versiones (sufijo) en SVG y PNG, dentro de `public/brand/`:
 
-| Versión | Sufijo | Fondo donde se usa | Colores |
+| Versión | Sufijo | Fondo | Colores |
 |---|---|---|---|
-| **Color** | (ninguno) | Crema, blanco o fotos muy claras | Teal + naranja, oreja y nariz en tono profundo |
-| **Claro** | `-claro` | Teal `#0f766e` (incluye su fondo teal) | Crema + naranja claro `#fdba74` |
-| **Blanco** | `-blanco` | Cualquier fondo oscuro o foto oscura (transparente) | Solo blanco `#ffffff` |
-| **Negro** | `-negro` | Cualquier fondo claro, fax, sellos, un solo color de tinta (transparente) | Solo negro `#000000` |
-
-Piezas:
+| **Color** | (ninguno) | Crema, blanco | Teal + naranja |
+| **Claro** | `-claro` | Teal `#0f766e` (incluye su fondo) | Crema + naranja claro |
+| **Blanco** | `-blanco` | Fondos oscuros (transparente) | Blanco |
+| **Negro** | `-negro` | Fondos claros, una tinta (transparente) | Negro |
 
 | Pieza | Archivo base | Uso |
 |---|---|---|
-| Isologo horizontal | `isologo-horizontal` | Cabeceras anchas, documentos, firmas de correo |
-| Isologo vertical | `isologo-vertical` | Portadas, carteles, pantallas altas |
-| Isologo cuadrado 1:1 | `isologo-cuadrado` | Perfiles, stickers, impresión cuadrada |
-| Logotipo horizontal (solo texto, a la izquierda) | `logotipo-horizontal` | Donde el símbolo ya aparece cerca |
-| Logotipo vertical (solo texto, centrado) | `logotipo-vertical` | Formatos altos, textiles |
-| Símbolo solo | `simbolo` (+ sufijos) | Favicon, avatar de app, sellos |
-| Perro suelto / gato suelto | `simbolo-perro.svg`, `simbolo-gato.svg` | Íconos por tipo de mascota (filtros, etiquetas) |
+| Isologo horizontal | `isologo-horizontal` | Cabeceras, documentos, firmas |
+| Isologo vertical | `isologo-vertical` | Portadas, carteles |
+| Isologo cuadrado 1:1 | `isologo-cuadrado` | Perfiles, impresión cuadrada |
+| Logotipo horizontal (solo texto) | `logotipo-horizontal` | Donde el símbolo ya aparece cerca |
+| Símbolo solo | `simbolo` (+ sufijos) | Sellos, iconos |
+| Símbolo cuadrado (app) | `simbolo-cuadrado.svg`, `social-avatar.png` | Avatar de redes, ícono de app |
+| Imagen para compartir 1200×630 | `public/og.png` | Vista previa al compartir |
+| Símbolo web y favicon | `public/logo_symbol.svg`, `src/app/icon.svg` | Barra de navegación, pestaña |
+| Íconos de la app | `public/icons/*` | PWA |
 
-Piezas para redes y la web (no tienen versión monocroma):
-
-| Pieza | Archivo | Uso |
-|---|---|---|
-| Avatar 1080² (recorte circular seguro) | `social-avatar.png` | Foto de perfil Instagram, Facebook, TikTok, WhatsApp |
-| Cuadrado de publicación 1080² | `social-cuadrado.png` | Publicación fija, historias destacadas (incluye el dominio) |
-| Imagen para compartir 1200×630 | `public/og.png` | Vista previa al compartir el enlace |
-| Símbolo web y favicon | `public/logo_symbol.svg`, `src/app/icon.svg` | Barra de navegación, pestaña del navegador |
-| Íconos de la app | `public/icons/*` (incluye `maskable-512x512.png`) | Instalación como app (PWA) |
-
-Láminas de control (no se usan en la web): `revision.png` (color y claro), `revision-monocromo.png` (blanco y negro).
+Lámina de control (no se usa en la web): `revision.png`.
 
 ### Cuándo usar cada versión
 - Fondo crema/blanco → **color**. Fondo teal de marca → **claro**.
@@ -65,10 +50,10 @@ Láminas de control (no se usan en la web): `revision.png` (color y claro), `rev
 
 | Nombre | Hex | Uso |
 |---|---|---|
-| **Teal** (primario) | `#0f766e` | Marca, enlaces, botones principales, `BUSCO MI` |
+| **Teal** (primario) | `#0f766e` | Marca, enlaces, botones principales, `busco mi` |
 | Teal profundo | `#115e59` | Hover del primario, fondos oscuros |
-| **Naranja** (acento) | `#c2410c` | `MASCOTA`, **un solo** botón de acción (CTA) por pantalla |
-| Naranja claro | `#fdba74` | `MASCOTA` y detalles sobre fondo teal |
+| **Naranja** (acento) | `#c2410c` | `mascota`, **un solo** botón de acción (CTA) por pantalla |
+| Naranja claro | `#fdba74` | `mascota` y detalles sobre fondo teal |
 | **Crema** | `#faf8f3` | Fondo de la web |
 | **Tinta** | `#0b2b2a` | Texto principal |
 | Gris teal | `#3d5655` | Texto secundario y eslogan |
@@ -94,24 +79,20 @@ Escalas completas (teal y naranja) y tokens de la web: ver `DESIGN.md`.
 
 ## 5. Tipografía
 
-- **Braze** — nombre del logo y títulos cortos. Solo mayúsculas. Es la tipografía de marca de Devmark; el archivo está en `scripts/fonts/Braze.otf`. **No trae licencia visible**: confirmar que se puede usar fuera de Devmark antes de publicar el repositorio o servirla en la web.
-- **Poppins** (Medium 500 en el logo; 400/500/600/700 en la web) — eslogan, interfaz y párrafos.
-- La interfaz web usa hoy Outfit (`next/font`); el rediseño la reemplaza (ver `DESIGN.md`).
+- **Outfit** (500/600) — nombre del logo y títulos de la web, en minúsculas normales (sentence case).
+- **Poppins** (400/500/600/700) — interfaz y párrafos.
 
 ## 6. Reglas de uso
 
-- **Espacio libre mínimo:** el ancho de la oreja del perro alrededor de cualquier versión.
-- **Tamaño mínimo:** símbolo 24 px (a ese tamaño la lupa y el gato son apenas una marca); isologo horizontal 140 px de ancho; isologo vertical 90 px.
-- No rotar, estirar, añadir sombras, contornos ni degradados. No cambiar los colores entre sí (excepto las cuatro versiones oficiales).
-- No separar el símbolo de la lupa del gato ni cambiar la posición del gato.
-- No escribir el nombre en minúsculas dentro del logo.
-- Con fondos de color distintos al teal, usar la versión `blanco` o `negro`, no inventar combinaciones.
+- **Espacio libre mínimo:** el ancho de la huella alrededor de cualquier versión.
+- **Tamaño mínimo:** símbolo 16 px; isologo horizontal 140 px de ancho.
+- No rotar, estirar, añadir sombras, contornos ni degradados. No cambiar colores fuera de las cuatro versiones.
+- Con fondos de color distintos al teal, usar `blanco` o `negro`.
 
 ## 7. Cómo regenerar
 
 ```bash
-node scripts/build-logos.mjs   # isologos, logotipos, símbolo, avatar, cuadrado, guía
-node scripts/build-brand.mjs   # favicon, íconos PWA, og.png
+node scripts/build-logos.mjs   # todo: logos, símbolo, íconos PWA, og.png, revisión
 ```
 
-Fuentes del dibujo: `scripts/brand-shapes.mjs` (perro y gato), `scripts/brand-models.mjs` (símbolo, lupa, variantes), `scripts/brand-text.mjs` (texto a trazos), `scripts/brand-core.mjs` (colores, nombre y eslogan).
+Fuentes de texto: `scripts/fonts/outfit-*.woff` (OFL).

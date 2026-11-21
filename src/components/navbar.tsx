@@ -18,13 +18,13 @@ const LINKS = [
     { href: "/contacto", label: "Contacto" },
 ]
 
-// Logo: símbolo + nombre en Braze (texto real, nítido a cualquier tamaño).
+// Logo: símbolo + nombre (texto real, nítido a cualquier tamaño).
 export function BrandMark({ className }: { className?: string }) {
     return (
         <span className={cn("flex shrink-0 items-center gap-2.5 whitespace-nowrap", className)}>
             <Image src="/logo_symbol.svg" alt="" width={36} height={44} className="h-10 w-auto" priority unoptimized />
-            <span className="font-display text-[15px] leading-[1.05]">
-                <span className="block text-primary">Busco mi</span>
+            <span className="font-display text-[19px] leading-[1.0]">
+                <span className="block text-primary">busco mi</span>
                 <span className="block text-cta">mascota</span>
             </span>
         </span>

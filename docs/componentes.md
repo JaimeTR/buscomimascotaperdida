@@ -6,7 +6,7 @@ Tokens y marca: ver `DESIGN.md` y `docs/marca.md`. Todo usa los tokens de `globa
 | Componente | Uso |
 |---|---|
 | `Button` | Variantes: default, outline, ghost, link, `cta` (naranja, acción principal). |
-| `PageHeader` | Título (fuente Braze, mayúsculas) + texto de apoyo. |
+| `PageHeader` | Título (Outfit) + texto de apoyo. |
 | `EmptyState` | Estado vacío con icono, texto y acción. |
 | `StatCard` | Cifra + etiqueta en paneles. |
 | `Reveal` | Aparición animada al hacer scroll (framer-motion, respeta `prefers-reduced-motion`). Props: `delay`, `as`. |

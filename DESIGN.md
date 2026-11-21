@@ -1,6 +1,6 @@
 # Sistema de diseño — Busco mi mascota (web)
 
-Fuente de verdad para rediseñar la web. La identidad (logo, versiones, reglas) está en `docs/marca.md` y la guía visual en `public/brand/guia-de-marca.png`. El producto y el tono están en `PRODUCT.md`. Dirección: **Confianza comunitaria** — cálida, clara, accesible y orientada a la acción.
+Fuente de verdad para rediseñar la web. La identidad (logo, versiones, reglas) está en `docs/marca.md`. El producto y el tono están en `PRODUCT.md`. Dirección: **Confianza comunitaria** — cálida, clara, accesible y orientada a la acción.
 
 ## 1. Principios
 1. **Una acción principal por sección.** El naranja se reserva para un solo CTA por pantalla; el teal es el color de todo lo demás.
@@ -75,7 +75,7 @@ Ancho de línea máximo del texto: 65–70 caracteres.
 
 ### Entrega de las fuentes
 - **Poppins:** `next/font/google` con los pesos 400, 500, 600 y 700 (`display: "swap"`), reemplaza a Outfit.
-- **Braze:** convertir `scripts/fonts/Braze.otf` a `woff2` con subconjunto (A–Z, 0–9, acentos y puntuación básica) y cargarla con `next/font/local` solo para display y H1. **Antes de servirla en la web hay que confirmar su licencia** (la fuente no trae licencia visible y es de la marca Devmark).
+- **Outfit:** `next/font/google`, pesos 500 y 600, solo para títulos.
 
 ## 4. Espacio y retícula
 - Unidad base 4 px. Escala: 4, 8, 12, 16, 24, 32, 48, 64, 96.
@@ -117,7 +117,7 @@ Contraste AA, teclado completo, orden de foco lógico, `aria-current` en la nave
 ## 11. Guía de rediseño por página
 | Página | Objetivo | Cambios clave |
 |---|---|---|
-| `/` | Buscar o publicar en segundos | Hero con `Display` en Braze y búsqueda protagonista, CTA naranja, casos recientes reales, "cómo funciona" |
+| `/` | Buscar o publicar en segundos | Hero con `Display` en Outfit y búsqueda protagonista, CTA naranja, casos recientes reales, "cómo funciona" |
 | `/mascotas` | Explorar y filtrar | Filtros en panel (móvil) y barra (escritorio), mapa diferido, estados de carga/vacío/error |
 | `/mascotas/[id]` | Ayudar a un caso | Galería accesible, estado, mapa aproximado, contacto solo si es público, compartir |
 | `/reportar` y `/mascotas/[id]/avistamiento` | Publicar sin perderse | Formulario en pasos (datos → fotos → ubicación → contacto), vista previa de fotos |
@@ -129,8 +129,8 @@ Contraste AA, teclado completo, orden de foco lógico, `aria-current` en la nave
 | `/privacidad`, `/terminos`, `/offline` | Confianza | Texto revisado con datos reales (retención, borrado) |
 
 ## 12. Estado de implementación (rediseño aplicado)
-- **Hecho:** Poppins (`next/font/google`) y Braze (`next/font/local`, archivo en `src/fonts/Braze.otf`) cargadas en `layout.tsx`; utilidades `font-sans` y `font-display`; tokens y variante de botón `cta`; barra superior, barra de pestañas móvil y pie; portada con panel, accesos rápidos y filtros (`PetFilters`); `PetCard`; dashboard (barra lateral, pestañas móviles, resumen, mis reportes) y panel de administración (barra lateral oscura, resumen con barras, reportes, usuarios y auditoría); clases `stone-*` y `teal-*` migradas a tokens en el resto de páginas; títulos principales en Braze.
-- **Pendiente:** `/reportar` por pasos, detalle `/mascotas/[id]` y `/cartel` con el estilo nuevo en profundidad, ajustes del dashboard, modo oscuro y la licencia de Braze (ver `docs/marca.md`).
+- **Hecho:** Poppins (`next/font/google`) y Outfit (`next/font/google`) cargadas en `layout.tsx`; utilidades `font-sans` y `font-display`; tokens y variante de botón `cta`; barra superior, barra de pestañas móvil y pie; portada con panel, accesos rápidos y filtros (`PetFilters`); `PetCard`; dashboard (barra lateral, pestañas móviles, resumen, mis reportes) y panel de administración (barra lateral oscura, resumen con barras, reportes, usuarios y auditoría); clases `stone-*` y `teal-*` migradas a tokens en el resto de páginas; títulos principales en Outfit.
+- **Pendiente:** `/reportar` por pasos, detalle `/mascotas/[id]` y `/cartel` con el estilo nuevo en profundidad, ajustes del dashboard, modo oscuro.
 
 ## 13. Orden recomendado
-1. Fuentes (Poppins y Braze) y revisión de tokens. 2. Barra, pie y portada. 3. Búsqueda y detalle. 4. Reportar y avistamiento. 5. Auth. 6. Dashboard y admin. Cada paso con el flujo de calidad: `npx eslint . --max-warnings 0`, `npx tsc --noEmit`, `npm run build` y revisión en 375, 768, 1024 y 1440 px.
+1. Fuentes (Poppins y Outfit) y revisión de tokens. 2. Barra, pie y portada. 3. Búsqueda y detalle. 4. Reportar y avistamiento. 5. Auth. 6. Dashboard y admin. Cada paso con el flujo de calidad: `npx eslint . --max-warnings 0`, `npx tsc --noEmit`, `npm run build` y revisión en 375, 768, 1024 y 1440 px.

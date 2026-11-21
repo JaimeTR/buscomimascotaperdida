@@ -1,0 +1,14 @@
+# Busco mi mascota
+
+> Red comunitaria gratuita en Perú para reportar y encontrar mascotas perdidas (perros y gatos). Cualquier persona puede publicar un caso con fotos y la zona, buscar por distrito, raza y color, crear un cartel imprimible y reportar avistamientos.
+
+## Páginas principales
+- [Buscar mascotas perdidas y encontradas](https://buscomimascotaperdida.com/mascotas): listado y mapa de casos, filtrables por distrito, tipo, raza y color.
+- [Reportar una mascota](https://buscomimascotaperdida.com/reportar): publicar un caso perdido o encontrado.
+- [Crear cartel](https://buscomimascotaperdida.com/cartel): cartel de mascota perdida listo para imprimir.
+- [Aliados y voluntarios](https://buscomimascotaperdida.com/aliados): veterinarias, refugios y voluntarios.
+- [Contacto y preguntas frecuentes](https://buscomimascotaperdida.com/contacto)
+
+## Datos
+- Cada caso vive en https://buscomimascotaperdida.com/mascotas/{id} con distrito, provincia, fecha y mapa de avistamientos.
+- Cobertura: Perú (foco en Lima). Idioma: español.
