@@ -1,0 +1,184 @@
+[
+  {
+    "name": "Kira",
+    "type": "dog",
+    "breed": "Mestizo",
+    "colors": [
+      "marrón"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "lost",
+    "district": "Lince",
+    "address": "Cerca del parque Micaela Bastidas",
+    "last_seen_date": "2026-11-02",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/1",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "name": "Kuki",
+    "type": "dog",
+    "breed": "Mestizo",
+    "colors": [
+      "blanco",
+      "manchas negras"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "lost",
+    "district": "Cercado de Lima",
+    "address": "Zona Plaza Dos de Mayo",
+    "last_seen_date": "2026-11-03",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/2",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "name": "Lucho",
+    "type": "dog",
+    "breed": "Cocker Spaniel",
+    "colors": [
+      "dorado"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "lost",
+    "district": "San Martín de Porres",
+    "address": "Av. Perú, cerca del mercado",
+    "last_seen_date": "2026-10-30",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/3",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "name": "Laica",
+    "type": "dog",
+    "breed": "Mestizo",
+    "colors": [
+      "negro"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "lost",
+    "district": "El Agustino",
+    "address": "Av. Riva Agüero",
+    "last_seen_date": "2026-11-04",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/4",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "name": "Tintin",
+    "type": "cat",
+    "breed": "Doméstico",
+    "colors": [
+      "gris",
+      "blanco"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "lost",
+    "district": "Barranco",
+    "address": "Cerca del malecón",
+    "last_seen_date": "2026-11-12",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/5",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "name": "Corona",
+    "type": "cat",
+    "breed": "Doméstico",
+    "colors": [
+      "carey"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "lost",
+    "district": "Surquillo",
+    "address": "Calle Gonzales Prada",
+    "last_seen_date": "2026-11-08",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/6",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "name": "Bruno",
+    "type": "dog",
+    "breed": "Labrador",
+    "colors": [
+      "negro"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "lost",
+    "district": "Miraflores",
+    "address": "Parque Kennedy",
+    "last_seen_date": "2026-11-15",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/7",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "name": "Mishi",
+    "type": "cat",
+    "breed": "Siamés",
+    "colors": [
+      "crema",
+      "marrón"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "lost",
+    "district": "San Borja",
+    "address": "Av. San Luis",
+    "last_seen_date": "2026-11-10",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/8",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "name": "Toby",
+    "type": "dog",
+    "breed": "Schnauzer",
+    "colors": [
+      "gris"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "found",
+    "district": "Surco",
+    "address": "Cerca del Jockey Plaza",
+    "last_seen_date": "2026-11-17",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/9",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "name": "Simba",
+    "type": "dog",
+    "breed": "Golden Retriever",
+    "colors": [
+      "dorado"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "lost",
+    "district": "La Molina",
+    "address": "Urb. Las Viñas",
+    "last_seen_date": "2026-11-18",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/10",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "type": "dog",
+    "breed": "Pug",
+    "colors": [
+      "beige"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "found",
+    "district": "Lince",
+    "address": "Entre Los Geranios y Navarrete",
+    "last_seen_date": "2026-11-19",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/11",
+    "source_name": "Ejemplo (demo)"
+  },
+  {
+    "name": "Garfield",
+    "type": "cat",
+    "breed": "Doméstico",
+    "colors": [
+      "naranja"
+    ],
+    "description": "Caso de ejemplo para demostración del sitio. No es un reporte real.",
+    "status": "lost",
+    "district": "San Isidro",
+    "address": "Parque El Olivar",
+    "last_seen_date": "2026-11-20",
+    "source_url": "https://buscomimascotaperdida.com/ejemplo/12",
+    "source_name": "Ejemplo (demo)"
+  }
+]
