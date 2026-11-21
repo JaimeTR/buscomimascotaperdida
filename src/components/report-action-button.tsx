@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { createClient } from "@/utils/supabase/client"
 import { Button, ButtonProps } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
-import { useConfirm } from "@/components/ui/confirm-modern"
 
 interface ReportActionButtonProps extends ButtonProps {
     nextUrl: string
@@ -16,7 +15,6 @@ interface ReportActionButtonProps extends ButtonProps {
 export function ReportActionButton({ nextUrl, label, icon, ...props }: ReportActionButtonProps) {
     const router = useRouter()
     const supabase = createClient()
-    const { confirm } = useConfirm()
     const [isChecking, setIsChecking] = useState(false)
 
     const handleClick = async (e: React.MouseEvent) => {
@@ -26,22 +24,8 @@ export function ReportActionButton({ nextUrl, label, icon, ...props }: ReportAct
         try {
             const { data: { session } } = await supabase.auth.getSession()
 
-            if (!session) {
-                // Not logged in
-                const ok = await confirm({
-                    title: "Inicio de sesión requerido",
-                    message: "Para realizar un reporte necesitas una cuenta. ¿Deseas iniciar sesión o registrarte ahora?",
-                    confirmLabel: "Ir al Login",
-                    cancelLabel: "Ahora no"
-                })
-
-                if (ok) {
-                    router.push(`/login?next=${encodeURIComponent(nextUrl)}`)
-                }
-            } else {
-                // Logged in
-                router.push(nextUrl)
-            }
+            // Sin sesión: directo al login con aviso (sin popup); al entrar vuelve a donde ibas.
+            router.push(session ? nextUrl : `/login?next=${encodeURIComponent(nextUrl)}&reason=report`)
         } catch (error) {
             console.error("Error checking session:", error)
             // Fallback to login just in case

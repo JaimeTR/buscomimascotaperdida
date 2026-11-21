@@ -18,15 +18,17 @@ const LINKS = [
     { href: "/contacto", label: "Contacto" },
 ]
 
-// Logo: símbolo + nombre (texto real, nítido a cualquier tamaño).
-export function BrandMark({ className }: { className?: string }) {
+// Logo: isologo (símbolo) y, si `showName`, el nombre como texto real (nítido a cualquier tamaño).
+export function BrandMark({ className, showName = false }: { className?: string; showName?: boolean }) {
     return (
         <span className={cn("flex shrink-0 items-center gap-2.5 whitespace-nowrap", className)}>
-            <Image src="/logo_symbol.svg" alt="" width={36} height={44} className="h-10 w-auto" priority unoptimized />
-            <span className="font-display text-[19px] leading-[1.0]">
-                <span className="block text-primary">busco mi</span>
-                <span className="block text-cta">mascota</span>
-            </span>
+            <Image src="/logo_symbol.svg" alt="" width={36} height={44} className="h-11 w-auto" priority unoptimized />
+            {showName && (
+                <span className="font-display text-[19px] leading-[1.0]">
+                    <span className="block text-primary">busco mi</span>
+                    <span className="block text-cta">mascota</span>
+                </span>
+            )}
         </span>
     )
 }

@@ -12,9 +12,30 @@ const requestCounts = new Map<string, { count: number; resetTime: number }>()
 const RATE_LIMIT_WINDOW = 60 * 1000
 const MAX_REQUESTS_PER_WINDOW = 10
 const optionalFilter = z.string().trim().max(100).transform((value) => value || null)
+const HISTORY_LIMIT = 8
+const MODEL = 'meta-llama/Llama-3.1-8B-Instruct'
+const inputSchema = z.object({
+    messages: z.array(z.object({
+        role: z.enum(['user', 'assistant']),
+        content: z.string().trim().min(1).max(500),
+    })).min(1).max(30),
+})
+const SYSTEM_PROMPT = `Eres "Huellita", asistente de buscomimascotaperdida.com, plataforma peruana para reportar y encontrar mascotas perdidas o halladas.
+Tono: cálido, empático, breve (máx. 3 oraciones), español peruano natural. Quien escribe suele estar angustiado: tranquiliza y da un siguiente paso claro.
+Capacidades del sitio: /reportar (reportar mascota perdida o encontrada), /mascotas (ver y filtrar reportes), /cartel (generar cartel imprimible), /contacto.
+Consejos útiles cuando aplique: revisar refugios y veterinarias cercanas, pedir a vecinos que revisen sus jardines, llevar a la mascota a escanear microchip, publicar rápido con foto clara y zona exacta.
+Nunca inventes mascotas ni datos; los resultados los muestra el sitio. No pidas datos personales sensibles.
+Responde SOLO un JSON válido, sin markdown, con este formato exacto:
+{"intent":"search|report_lost|report_found|help|other","isPetSearch":true|false,"response":"texto","suggestions":["hasta 3 respuestas rápidas cortas"],"filters":{"type":"dog|cat|rabbit|null","breed":null,"color":null,"size":"small|medium|large|null","district":null,"gender":"male|female|null"}}
+- intent search: el usuario busca una mascota (isPetSearch=true); rellena filters con lo que dijo (distrito de Lima/Perú en district) y usa null en lo demás. Acumula filtros mencionados antes en la conversación.
+- intent report_lost / report_found: quiere reportar; isPetSearch=false y guía a /reportar.
+- Si falta info clave para buscar, pregunta UNA cosa y ofrece suggestions.
+- Fuera de tema: redirige amablemente a mascotas.`
 const analysisSchema = z.object({
+    intent: z.enum(['search', 'report_lost', 'report_found', 'help', 'other']).catch('other'),
     isPetSearch: z.boolean(),
-    response: z.string().trim().min(1).max(500),
+    response: z.string().trim().min(1).max(600),
+    suggestions: z.array(z.string().trim().min(1).max(40)).max(3).catch([]),
     filters: z.object({
         type: z.enum(['dog', 'cat', 'rabbit']).nullable().optional().default(null),
         breed: optionalFilter.nullable().optional().default(null),
@@ -60,15 +81,12 @@ export async function POST(request: NextRequest) {
             return invalidPayloadResponse()
         }
 
-        const body: unknown = parsedBody.body
-        const message = (
-            typeof body === 'object' &&
-            body !== null &&
-            'message' in body &&
-            typeof body.message === 'string'
-        ) ? body.message.trim() : ''
-
-        if (!message || message.length > 500) {
+        const parsedInput = inputSchema.safeParse(parsedBody.body)
+        if (!parsedInput.success) {
+            return NextResponse.json({ error: 'Mensaje inválido' }, { status: 400 })
+        }
+        const history = parsedInput.data.messages.slice(-HISTORY_LIMIT)
+        if (history[history.length - 1].role !== 'user') {
             return NextResponse.json({ error: 'Mensaje inválido' }, { status: 400 })
         }
 
@@ -86,9 +104,8 @@ export async function POST(request: NextRequest) {
         const timeout = setTimeout(() => controller.abort(), 15_000)
         let hfResponse: Response
         try {
-            hfResponse = await fetch(
-            'https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf',
-            {
+            // Router OpenAI-compatible de Hugging Face (el endpoint api-inference y Llama-2 ya no sirven).
+            hfResponse = await fetch('https://router.huggingface.co/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     Authorization: 'Bearer ' + huggingfaceApiKey,
@@ -96,31 +113,12 @@ export async function POST(request: NextRequest) {
                 },
                 signal: controller.signal,
                 body: JSON.stringify({
-                    inputs: `Eres un asistente para buscar mascotas perdidas en Perú. Analiza este mensaje y responde SOLO en JSON válido:
-
-Mensaje: "${message}"
-
-Responde EXACTAMENTE en este formato JSON (sin markdown):
-{
-  "isPetSearch": true o false,
-  "response": "string con respuesta amable en español",
-  "filters": {
-    "type": "dog" o "cat" o "rabbit" o null,
-    "breed": "string o null",
-    "color": "string o null",
-    "size": "small" o "medium" o "large" o null,
-    "district": "string o null",
-    "gender": "male" o "female" o null
-  }
-}`,
-                    parameters: {
-                        max_new_tokens: 300,
-                        temperature: 0.7,
-                        top_p: 0.95,
-                    },
+                    model: MODEL,
+                    max_tokens: 400,
+                    temperature: 0.3,
+                    messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...history],
                 }),
-            }
-            )
+            })
             if (!hfResponse.ok) {
                 console.error('chatbot provider request failed', { status: hfResponse.status })
                 return NextResponse.json(
@@ -131,16 +129,11 @@ Responde EXACTAMENTE en este formato JSON (sin markdown):
 
             const hfData: unknown = await hfResponse.json()
             let analysis: unknown = null
+            const text = (hfData as { choices?: { message?: { content?: unknown } }[] })
+                ?.choices?.[0]?.message?.content
 
-            if (
-                Array.isArray(hfData) &&
-                hfData.length > 0 &&
-                typeof hfData[0] === 'object' &&
-                hfData[0] !== null &&
-                'generated_text' in hfData[0] &&
-                typeof hfData[0].generated_text === 'string'
-            ) {
-                const jsonMatch = hfData[0].generated_text.match(/\{[\s\S]*\}/)
+            if (typeof text === 'string') {
+                const jsonMatch = text.match(/\{[\s\S]*\}/)
                 if (jsonMatch) {
                     try {
                         analysis = JSON.parse(jsonMatch[0])

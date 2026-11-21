@@ -134,8 +134,8 @@ export default function ReportPage() {
         }
 
         // Validation
-        if (!name || !type || !location.district || images.length === 0) {
-            toast("Nombre, tipo, ubicación y al menos una foto son obligatorios", { type: "error" })
+        if (!name || !type || !location.district) {
+            toast("Nombre, tipo y ubicación son obligatorios", { type: "error" })
             return
         }
 
@@ -181,7 +181,7 @@ export default function ReportPage() {
 
             // 2. Reorder so main image is first
             const mainImageIndex = images.findIndex(img => img.isMain)
-            const finalImageUrls = [
+            const finalImageUrls = mainImageIndex < 0 ? [] : [
                 uploadedUrls[mainImageIndex],
                 ...uploadedUrls.filter((_, i) => i !== mainImageIndex)
             ]
@@ -460,6 +460,12 @@ export default function ReportPage() {
                         <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
                             <Camera className="h-5 w-5 text-orange-500" /> Fotos de la mascota
                         </h3>
+
+                        <p role="note" className={`rounded-2xl border px-4 py-3 text-sm font-medium ${images.length === 0 ? "border-orange-300 bg-orange-50 text-orange-900" : "border-teal-200 bg-teal-50 text-teal-900"}`}>
+                            {images.length === 0
+                                ? "Te recomendamos subir una foto: los anuncios con foto se reconocen mucho más rápido. Sin foto, tu anuncio mostrará nuestro logo con un aviso para que quien tenga una foto la suba."
+                                : "¡Muy bien! Las fotos ayudan a que reconozcan a tu mascota más rápido."}
+                        </p>
 
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                             {images.map((img, index) => (

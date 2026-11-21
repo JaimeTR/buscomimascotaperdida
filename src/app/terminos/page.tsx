@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 
+export const metadata = { title: "Términos y condiciones | Busco mi mascota", description: "Condiciones de uso de la red comunitaria Busco mi mascota.", alternates: { canonical: "/terminos" } }
+
 export default function TermsPage() {
     return (
         <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">

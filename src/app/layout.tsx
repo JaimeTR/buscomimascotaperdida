@@ -22,10 +22,45 @@ const poppins = Poppins({
 });
 const outfit = Outfit({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-outfit", display: "swap" });
 
+const SITE = process.env.NEXT_PUBLIC_APP_URL || "https://buscomimascotaperdida.com"
+
+// Datos estructurados del sitio (SEO + GEO): quién es, dónde opera y cómo se busca.
+const SITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE}/#org`,
+      name: "Busco mi mascota",
+      url: SITE,
+      logo: `${SITE}/icons/icon-512x512.png`,
+      description: "Red comunitaria gratuita para reportar y encontrar mascotas perdidas en Perú.",
+      areaServed: { "@type": "Country", name: "Perú" },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE}/#website`,
+      url: SITE,
+      name: "Busco mi mascota",
+      inLanguage: "es-PE",
+      publisher: { "@id": `${SITE}/#org` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${SITE}/mascotas?q={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
+}
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://buscomimascotaperdida.com"),
-  title: "Encuentra tu mascota perdida - Red de ayuda comunitaria",
-  description: "La red comunitaria más grande y activa para encontrar a tu mejor amigo. Reporta mascotas perdidas y ayúdalas a volver a casa.",
+  metadataBase: new URL(SITE),
+  title: "Mascotas perdidas en Perú: reporta y encuentra | Busco mi mascota",
+  description: "Red comunitaria gratuita para encontrar mascotas perdidas en Lima y todo el Perú. Reporta un perro o gato perdido, busca por distrito y comparte el caso.",
+  applicationName: "Busco mi mascota",
+  keywords: ["mascotas perdidas", "perro perdido", "gato perdido", "mascota encontrada", "Lima", "Perú", "cartel de mascota perdida"],
+  other: { "geo.region": "PE", "geo.placename": "Perú", language: "es" },
+  twitter: { card: "summary_large_image" },
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -33,7 +68,8 @@ export const metadata: Metadata = {
     title: "Busco Mascota",
   },
   openGraph: {
-    title: "Busco mi mascota",
+    siteName: "Busco mi mascota",
+    title: "Mascotas perdidas en Perú: reporta y encuentra",
     description: "Red comunitaria para que las mascotas perdidas vuelvan a casa.",
     images: [{ url: "/og.png", width: 1200, height: 630 }],
     locale: "es_PE",
@@ -72,6 +108,7 @@ export default function RootLayout({
       <body
         className={`font-sans antialiased min-h-screen flex flex-col bg-background`}
       >
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SITE_JSON_LD) }} />
         <PWARegister />
         <ToastProvider>
           <ConfirmProvider>

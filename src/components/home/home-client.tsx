@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
 import { PetCard } from "@/components/pet-card"
 import { PetFilters, EMPTY_FILTERS, hasActiveFilters, type Filters } from "@/components/pet-filters"
-import { usePets } from "@/hooks/use-pets"
+import { usePets, type Pet } from "@/hooks/use-pets"
 import { Reveal } from "@/components/ui/reveal"
 import { STOCK } from "@/lib/stock-images"
 
@@ -25,11 +25,13 @@ const STEPS = [
   { t: "Vuelve a casa", d: "Te contactan de forma segura. Marca el caso como resuelto." },
 ]
 
-export function HomeClient({ adSlot }: { adSlot: React.ReactNode }) {
+export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; initialPets: Pet[] }) {
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS)
   const active = hasActiveFilters(filters)
 
-  const { pets, isLoading } = usePets({
+  // Sin filtros se usan los casos renderizados en servidor (indexables); con filtros, consulta en el cliente.
+  const { pets: found, isLoading: searching } = usePets({
+    enabled: active,
     limit: 20,
     featured: false,
     searchQuery: filters.q,
@@ -41,6 +43,8 @@ export function HomeClient({ adSlot }: { adSlot: React.ReactNode }) {
     color: filters.color,
     dateFrom: filters.dateFrom,
   })
+  const pets = active ? found : initialPets
+  const isLoading = active && searching
 
   return (
     <div>
@@ -64,7 +68,7 @@ export function HomeClient({ adSlot }: { adSlot: React.ReactNode }) {
             </Button>
           </div>
           <div className="relative hidden aspect-[4/5] overflow-hidden rounded-[2rem] shadow-[var(--shadow-lift)] md:block">
-            <Image src={STOCK.reencuentro.src} alt={STOCK.reencuentro.alt} fill priority sizes="(min-width: 768px) 38vw, 0px" className="object-cover transition-transform duration-700 hover:scale-105" />
+            <Image src={STOCK.reencuentro.src} alt={STOCK.reencuentro.alt} fill priority quality={90} sizes="(min-width: 768px) 38vw, 0px" className="object-cover transition-transform duration-700 hover:scale-105" />
           </div>
           </div>
         </div>

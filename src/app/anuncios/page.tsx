@@ -8,7 +8,7 @@ import { AdCard, HouseAd } from "@/components/ads/ad-card"
 import { getAds } from "@/lib/ads"
 
 export const revalidate = 300
-export const metadata = { title: "Anuncios | Busco mi mascota", description: "Negocios y servicios para quienes aman a sus mascotas." }
+export const metadata = { title: "Anuncios | Busco mi mascota", description: "Negocios y servicios para quienes aman a sus mascotas.", alternates: { canonical: "/anuncios" } }
 
 export default async function AnunciosPage() {
     const ads = await getAds("ads_page", 40)

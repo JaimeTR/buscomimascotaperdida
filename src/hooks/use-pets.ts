@@ -68,6 +68,7 @@ type UsePetsOptions = {
     color?: string
     dateFrom?: string
     size?: string
+    enabled?: boolean // false: no consulta (el llamador ya tiene los datos)
 }
 
 export function usePets(options: UsePetsOptions = {}) {
@@ -78,6 +79,7 @@ export function usePets(options: UsePetsOptions = {}) {
 
     useEffect(() => {
         let cancelled = false
+        if (options.enabled === false) return
         const fetchPets = async () => {
             setIsLoading(true)
             setError(null)
@@ -179,8 +181,9 @@ export function usePets(options: UsePetsOptions = {}) {
         options.color,
         options.dateFrom,
         options.size,
+        options.enabled,
         supabase
     ])
 
-    return { pets, isLoading, error }
+    return { pets, isLoading: options.enabled === false ? false : isLoading, error }
 }

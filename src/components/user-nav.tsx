@@ -1,206 +1,126 @@
-
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { User, FileText, MessageSquare, LogOut, Loader2 } from "lucide-react"
+import { User, FileText, Lightbulb, LogOut, LogIn } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { createClient } from "@/utils/supabase/client"
 
+type Me = { email: string; name: string | null; avatar: string | null }
+
+const CACHE_KEY = "bmm.me"
+const readCache = (): Me | null => {
+    try { return JSON.parse(localStorage.getItem(CACHE_KEY) ?? "null") } catch { return null }
+}
+const writeCache = (me: Me | null) => {
+    try { if (me) localStorage.setItem(CACHE_KEY, JSON.stringify(me)); else localStorage.removeItem(CACHE_KEY) } catch { /* sin storage */ }
+}
+
+const MENU = [
+    { label: "Mis reportes", icon: FileText, href: "/dashboard/reports", description: "Gestiona tus reportes" },
+    { label: "Pistas recibidas", icon: Lightbulb, href: "/dashboard/messages", description: "Avistamientos de tus casos" },
+    { label: "Mi perfil", icon: User, href: "/dashboard/settings", description: "Datos de contacto y avisos" },
+]
+
 export function UserNav() {
     const router = useRouter()
-    const supabase = createClient()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [user, setUser] = useState<any>(null)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const [profile, setProfile] = useState<any>(null)
-    const [isLoading, setIsLoading] = useState(true)
+    const [supabase] = useState(() => createClient())
+    // undefined = aún sin saber; null = sin sesión. La foto en caché aparece al instante y luego se verifica.
+    const [me, setMe] = useState<Me | null | undefined>(undefined)
     const [isOpen, setIsOpen] = useState(false)
 
-    useEffect(() => {
-        const getSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession()
-            if (session) {
-                setUser(session.user)
-                subscribeProfile(session.user.id)
-                // Fetch extra profile info if needed (like name for fallback)
-                const { data } = await supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', session.user.id)
-                    .single()
-                if (data) setProfile(data)
-            }
-            setIsLoading(false)
+    const load = useCallback(async () => {
+        const cached = readCache()
+        if (cached) setMe((prev) => prev ?? cached)
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!session) { setMe(null); writeCache(null); return }
+        const user = session.user
+        const base: Me = {
+            email: user.email ?? "",
+            name: user.user_metadata?.full_name ?? user.user_metadata?.name ?? null,
+            avatar: user.user_metadata?.avatar_url ?? user.user_metadata?.picture ?? null,
         }
-
-        // Realtime de perfil: se crea con el id de sesión real (antes usaba un `user` obsoleto).
-        let profileChannel: ReturnType<typeof supabase.channel> | null = null
-        const subscribeProfile = (id: string) => {
-            profileChannel?.unsubscribe()
-            profileChannel = supabase
-                .channel('profile-changes')
-                .on('postgres_changes',
-                    { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${id}` },
-                    (payload) => setProfile(payload.new)
-                )
-                .subscribe()
-        }
-
-        getSession()
-
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            if (session) {
-                setUser(session.user)
-                subscribeProfile(session.user.id)
-                // Re-fetch profile when auth state changes
-                supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', session.user.id)
-                    .single()
-                    .then(({ data }) => {
-                        if (data) setProfile(data)
-                    })
-            } else {
-                setUser(null)
-                setProfile(null)
-            }
-        })
-
-        // Refresh profile when window gains focus (useful after updating in settings)
-        const handleFocus = async () => {
-            const { data: { session } } = await supabase.auth.getSession()
-            if (session) {
-                const { data } = await supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', session.user.id)
-                    .single()
-                if (data) setProfile(data)
-            }
-        }
-        window.addEventListener('focus', handleFocus)
-
-        return () => {
-            subscription.unsubscribe()
-            profileChannel?.unsubscribe()
-            window.removeEventListener('focus', handleFocus)
-        }
+        setMe((prev) => prev ?? base)
+        const { data } = await supabase.from("profiles").select("full_name, avatar_url").eq("id", user.id).maybeSingle()
+        const next = { ...base, name: data?.full_name ?? base.name, avatar: data?.avatar_url ?? base.avatar }
+        setMe(next)
+        writeCache(next)
     }, [supabase])
+
+    useEffect(() => {
+        const t = setTimeout(load, 0) // fuera del cuerpo síncrono del efecto
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+            if (event === "SIGNED_OUT") { setMe(null); writeCache(null) }
+            else if (event === "SIGNED_IN" || event === "USER_UPDATED") load()
+        })
+        window.addEventListener("focus", load) // refleja cambios hechos en Mi perfil
+        return () => { clearTimeout(t); subscription.unsubscribe(); window.removeEventListener("focus", load) }
+    }, [supabase, load])
 
     const handleLogout = async () => {
         await supabase.auth.signOut()
-        router.push('/')
+        setMe(null)
+        writeCache(null)
+        router.push("/")
         router.refresh()
     }
 
-    if (isLoading) {
-        return <Loader2 className="h-5 w-5 animate-spin text-stone-300" />
-    }
+    if (me === undefined) return <div className="h-10 w-10 rounded-full bg-muted" aria-hidden />
 
-    if (!user) {
+    if (!me) {
         return (
-            <div className="flex items-center gap-2">
-                <Button variant="ghost" asChild className="hidden sm:inline-flex font-bold text-muted-foreground">
-                    <Link href="/login">Iniciar Sesión</Link>
+            <div className="flex items-center gap-1 sm:gap-2">
+                <Button variant="ghost" asChild className="hidden font-semibold text-muted-foreground sm:inline-flex">
+                    <Link href="/login">Iniciar sesión</Link>
                 </Button>
-                <Button asChild className="rounded-full bg-primary hover:bg-primary font-bold px-6 shadow-md shadow-teal-700/20">
+                <Button variant="ghost" size="icon" asChild className="sm:hidden">
+                    <Link href="/login" aria-label="Iniciar sesión"><LogIn className="h-5 w-5" aria-hidden /></Link>
+                </Button>
+                <Button asChild className="rounded-full bg-primary px-5 font-bold shadow-md shadow-primary/20 hover:bg-primary">
                     <Link href="/register">Unirme</Link>
                 </Button>
             </div>
         )
     }
 
-    const menuItems = [
-        {
-            label: "Reportes",
-            icon: FileText,
-            href: "/dashboard/reports",
-            description: "Gestiona tus reportes de mascotas"
-        },
-        {
-            label: "Mi Perfil",
-            icon: User,
-            href: "/dashboard/settings",
-            description: "Datos de contacto y redes"
-        },
-        {
-            label: "Mensajes",
-            icon: MessageSquare,
-            href: "/dashboard/messages",
-            description: "Bandeja de entrada",
-            badge: "2" // Example badge
-        }
-    ]
+    const display = me.name || me.email.split("@")[0]
 
     return (
         <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
-                <button className="flex items-center gap-2 group outline-none focus:ring-0">
-                    <div className="hidden lg:flex flex-col items-end text-right">
-                        <span className="text-sm font-bold text-foreground leading-tight truncate max-w-[120px]">
-                            {profile?.full_name || user.email.split('@')[0]}
-                        </span>
-                        <Link
-                            href="/dashboard/reports"
-                            className="text-[10px] font-medium text-primary hover:text-primary transition-colors"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            Ver dashboard
-                        </Link>
-                    </div>
-                    <Avatar className="h-10 w-10 border-2 border-white shadow-sm transition-transform group-hover:scale-105 group-data-[state=open]:ring-2 group-data-[state=open]:ring-teal-100">
-                        <AvatarImage src={profile?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.email}`} />
-                        <AvatarFallback className="bg-accent text-primary font-bold">
-                            {(profile?.full_name || user.email).substring(0, 2).toUpperCase()}
-                        </AvatarFallback>
+                <button aria-label={`Mi cuenta, ${display}`} className="group flex items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                    <span className="hidden max-w-[120px] truncate text-sm font-bold leading-tight text-foreground lg:block">{display}</span>
+                    <Avatar className="h-10 w-10 border-2 border-card shadow-sm transition-transform group-hover:scale-105">
+                        {me.avatar && <AvatarImage src={me.avatar} alt="" referrerPolicy="no-referrer" />}
+                        <AvatarFallback className="bg-accent font-bold text-primary">{display.substring(0, 2).toUpperCase()}</AvatarFallback>
                     </Avatar>
                 </button>
             </PopoverTrigger>
-            <PopoverContent className="w-64 p-2 mt-2 mr-4 rounded-3xl border-border shadow-2xl animate-in fade-in zoom-in-95 duration-200" align="end">
-                <div className="p-3 mb-2 border-b border-stone-50">
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Cuenta</p>
-                    <p className="text-sm font-bold text-foreground truncate">{user.email}</p>
+            <PopoverContent className="mr-4 mt-2 w-64 rounded-3xl border-border p-2 shadow-2xl" align="end">
+                <div className="mb-2 border-b p-3">
+                    <p className="truncate text-sm font-bold text-foreground">{display}</p>
+                    <p className="truncate text-xs text-muted-foreground">{me.email}</p>
                 </div>
 
                 <div className="space-y-1">
-                    {menuItems.map((item) => (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            onClick={() => setIsOpen(false)}
-                            className="flex items-start gap-3 p-3 rounded-2xl hover:bg-background transition-colors group"
-                        >
-                            <div className="bg-secondary p-2 rounded-xl group-hover:bg-card transition-colors">
-                                <item.icon className="h-4 w-4 text-muted-foreground" />
-                            </div>
-                            <div className="flex-1 flex justify-between items-center">
-                                <div className="space-y-0.5">
-                                    <p className="text-sm font-bold text-foreground">{item.label}</p>
-                                    <p className="text-[10px] text-muted-foreground leading-none">{item.description}</p>
-                                </div>
-                                {item.badge && (
-                                    <span className="bg-red-500 text-white text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">
-                                        {item.badge}
-                                    </span>
-                                )}
+                    {MENU.map((item) => (
+                        <Link key={item.href} href={item.href} onClick={() => setIsOpen(false)} className="group/item flex items-start gap-3 rounded-2xl p-3 transition-colors hover:bg-accent">
+                            <div className="rounded-xl bg-secondary p-2"><item.icon className="h-4 w-4 text-muted-foreground" aria-hidden /></div>
+                            <div className="space-y-0.5">
+                                <p className="text-sm font-bold text-foreground">{item.label}</p>
+                                <p className="text-xs leading-none text-muted-foreground">{item.description}</p>
                             </div>
                         </Link>
                     ))}
                 </div>
 
-                <div className="mt-2 pt-2 border-t border-stone-50 px-1">
-                    <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-3 p-3 rounded-2xl text-red-500 hover:bg-red-50 transition-colors font-bold text-sm"
-                    >
-                        <LogOut className="h-4 w-4" />
-                        Cerrar Sesión
+                <div className="mt-2 border-t px-1 pt-2">
+                    <button onClick={handleLogout} className="flex min-h-11 w-full items-center gap-3 rounded-2xl p-3 text-sm font-bold text-destructive transition-colors hover:bg-destructive/10">
+                        <LogOut className="h-4 w-4" aria-hidden /> Cerrar sesión
                     </button>
                 </div>
             </PopoverContent>

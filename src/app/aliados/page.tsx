@@ -9,7 +9,7 @@ import { getPartners, PARTNER_KINDS } from "@/lib/ads"
 import { STOCK } from "@/lib/stock-images"
 import { createClient } from "@/utils/supabase/server"
 
-export const metadata = { title: "Aliados y colaboradores | Busco mi mascota", description: "Empresas, veterinarias, refugios y personas que ayudan a que las mascotas vuelvan a casa." }
+export const metadata = { title: "Aliados y colaboradores | Busco mi mascota", description: "Empresas, veterinarias, refugios y personas que ayudan a que las mascotas vuelvan a casa.", alternates: { canonical: "/aliados" } }
 
 const WAYS = [
     { icon: Building2, title: "Empresas", text: "Apoya con difusión, descuentos para casos resueltos o publicidad dentro de la plataforma." },

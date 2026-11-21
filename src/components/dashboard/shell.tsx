@@ -34,7 +34,7 @@ export function DashboardShell({ name, avatarUrl, isAdmin, children }: Props) {
         <div className="min-h-screen bg-background md:pl-72">
             {/* Barra lateral (escritorio) */}
             <aside className="fixed inset-y-0 left-0 z-40 hidden w-72 flex-col border-r bg-card p-5 md:flex">
-                <Link href="/" aria-label="Ir al inicio"><BrandMark /></Link>
+                <Link href="/" aria-label="Ir al inicio"><BrandMark showName /></Link>
 
                 <Link
                     href="/reportar"
@@ -84,7 +84,7 @@ export function DashboardShell({ name, avatarUrl, isAdmin, children }: Props) {
 
             {/* Barra superior (móvil) */}
             <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background/90 px-4 backdrop-blur md:hidden">
-                <Link href="/" aria-label="Ir al inicio"><BrandMark /></Link>
+                <Link href="/" aria-label="Ir al inicio"><BrandMark showName /></Link>
                 <button onClick={signOut} aria-label="Cerrar sesión" className="rounded-full p-2 text-muted-foreground">
                     <Avatar className="h-9 w-9">
                         {avatarUrl && <AvatarImage src={avatarUrl} alt="" />}

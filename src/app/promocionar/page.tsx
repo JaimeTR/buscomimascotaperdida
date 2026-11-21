@@ -8,7 +8,7 @@ import { STOCK } from "@/lib/stock-images"
 import { createClient } from "@/utils/supabase/server"
 import { cn } from "@/lib/utils"
 
-export const metadata = { title: "Promociona tu negocio | Busco mi mascota", description: "Muestra tu marca a la comunidad que ama a sus mascotas: portada, detalle de casos y página de anuncios." }
+export const metadata = { title: "Promociona tu negocio | Busco mi mascota", description: "Muestra tu marca a la comunidad que ama a sus mascotas: portada, detalle de casos y página de anuncios.", alternates: { canonical: "/promocionar" } }
 
 const STEPS = [
     { t: "Elige un plan", d: "Básico, Destacado o Premium, según dónde quieras aparecer." },

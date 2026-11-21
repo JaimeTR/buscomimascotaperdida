@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 
+export const metadata = { title: "Política de privacidad | Busco mi mascota", description: "Cómo tratamos tus datos personales según la Ley N° 29733 de Perú.", alternates: { canonical: "/privacidad" } }
+
 export default function PrivacyPage() {
     return (
         <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">

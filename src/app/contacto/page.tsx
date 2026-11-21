@@ -5,7 +5,7 @@ import { Reveal } from "@/components/ui/reveal"
 import { PageHeader } from "@/components/ui/page-header"
 import { STOCK } from "@/lib/stock-images"
 
-export const metadata = { title: "Contacto y ayuda | Busco mi mascota", description: "Preguntas frecuentes, soporte y formas de colaborar con Busco mi mascota." }
+export const metadata = { title: "Contacto y ayuda | Busco mi mascota", description: "Preguntas frecuentes, soporte y formas de colaborar con Busco mi mascota.", alternates: { canonical: "/contacto" } }
 
 const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim()
 
@@ -24,9 +24,17 @@ const FAQ = [
     { q: "Vi un reporte falso o un abuso, ¿cómo aviso?", a: "Escríbenos con el enlace del reporte y lo revisamos. Los administradores pueden ocultar o eliminar reportes que incumplan las normas." },
 ]
 
+// FAQPage: respuestas citables por buscadores y asistentes de IA (GEO).
+const FAQ_JSON_LD = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+}
+
 export default function ContactPage() {
     return (
         <div className="container mx-auto space-y-14 px-4 py-8 md:py-12">
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }} />
             <div className="grid items-center gap-8 overflow-hidden rounded-[2rem] bg-accent md:grid-cols-[1.2fr_1fr]">
                 <div className="space-y-4 p-8 md:p-12">
                     <PageHeader title="Contacto y ayuda" text="Estamos para ayudarte a que más mascotas vuelvan a casa." />
