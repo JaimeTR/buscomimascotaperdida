@@ -2,14 +2,15 @@ import Link from "next/link"
 import Image from "next/image"
 
 const COLUMNS = [
-    { title: "Plataforma", links: [["/mascotas", "Buscar mascotas"], ["/reportar", "Reportar una mascota"], ["/cartel", "Crear cartel"], ["/promocionar", "Difundir un caso"]] },
+    { title: "Plataforma", links: [["/mascotas", "Buscar mascotas"], ["/reportar", "Reportar una mascota"], ["/cartel", "Crear cartel"]] },
+    { title: "Comunidad", links: [["/aliados", "Aliados y voluntarios"], ["/anuncios", "Anuncios"], ["/promocionar", "Promociona tu negocio"]] },
     { title: "Ayuda", links: [["/contacto", "Contacto"], ["/privacidad", "Privacidad"], ["/terminos", "Términos"]] },
 ]
 
 export function Footer() {
     return (
         <footer className="mt-16 bg-primary pb-24 text-primary-foreground md:pb-0">
-            <div className="container mx-auto grid gap-10 px-4 py-14 md:grid-cols-[2fr_1fr_1fr]">
+            <div className="container mx-auto grid gap-10 px-4 py-14 md:grid-cols-[2fr_1fr_1fr_1fr]">
                 <div className="space-y-4">
                     <Image src="/brand/isologo-horizontal-claro.svg" alt="Busco mi mascota" width={300} height={85} className="h-20 w-auto" unoptimized />
                     <p className="max-w-sm text-sm leading-relaxed text-primary-foreground/85">

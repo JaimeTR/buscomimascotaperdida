@@ -29,6 +29,7 @@ export default function ReportPage() {
     const [userId, setUserId] = useState<string | null>(null)
     const [profile, setProfile] = useState<{ id: string, phone?: string | null, department?: string | null, district?: string | null } | null>(null)
     const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false)
+    const [step, setStep] = useState(0)
 
     // Form State
     const [name, setName] = useState("")
@@ -109,6 +110,19 @@ export default function ReportPage() {
             }
             return updated
         })
+    }
+
+    const STEPS = ["La mascota", "El lugar", "Las fotos"]
+    const goNext = () => {
+        if (step === 0 && !name.trim()) return toast("Escribe el nombre de la mascota (o \"Sin nombre\").", { type: "error" })
+        if (step === 1 && !location.district) return toast("Elige al menos el distrito donde la viste por última vez.", { type: "error" })
+        setStep((s) => Math.min(s + 1, 2))
+        window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+    const goBack = () => {
+        if (step === 0) return router.back()
+        setStep((s) => s - 1)
+        window.scrollTo({ top: 0, behavior: "smooth" })
     }
 
     const handleSubmit = async () => {
@@ -274,13 +288,26 @@ export default function ReportPage() {
 
                     <div className="text-center space-y-2 pt-4">
                         <h1 className="font-display text-3xl md:text-4xl uppercase tracking-wide text-primary">Reportar Mascota Perdida</h1>
-                        <p className="text-muted-foreground">Mientra más detalles nos des, más rápido podrá ayudar nuestra comunidad.</p>
+                        <p className="text-muted-foreground">Mientras más detalles nos des, más rápido podrá ayudar nuestra comunidad.</p>
                     </div>
+
+                    <ol aria-label="Pasos del reporte" className="mx-auto flex max-w-md items-center justify-center gap-2 pt-2">
+                        {STEPS.map((label, i) => (
+                            <li key={label} className="flex flex-1 items-center gap-2" aria-current={step === i ? "step" : undefined}>
+                                <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-colors ${i < step ? "bg-primary text-primary-foreground" : i === step ? "bg-cta text-cta-foreground" : "bg-secondary text-muted-foreground"}`}>
+                                    {i < step ? <CheckCircle2 className="h-5 w-5" aria-hidden /> : i + 1}
+                                </span>
+                                <span className={`hidden text-sm font-medium sm:block ${i === step ? "text-foreground" : "text-muted-foreground"}`}>{label}</span>
+                                {i < STEPS.length - 1 && <span className="h-0.5 flex-1 rounded bg-border" aria-hidden />}
+                            </li>
+                        ))}
+                    </ol>
                 </div>
 
                 {/* Main Card */}
                 <div className="bg-card rounded-[2rem] shadow-xl shadow-stone-200/50 p-6 md:p-10 border border-border relative z-10 space-y-12">
 
+                    {step === 0 && (
                     <section className="space-y-6">
                         <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
                             <PawPrint className="h-5 w-5 text-primary" /> Datos de la Mascota
@@ -391,7 +418,9 @@ export default function ReportPage() {
                             />
                         </div>
                     </section>
+                    )}
 
+                    {step === 1 && (
                     <section className="space-y-6">
                         <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
                             <MapPin className="h-5 w-5 text-red-500" /> Lugar de desaparición
@@ -424,7 +453,9 @@ export default function ReportPage() {
                             </div>
                         </div>
                     </section>
+                    )}
 
+                    {step === 2 && (
                     <section className="space-y-6">
                         <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
                             <Camera className="h-5 w-5 text-orange-500" /> Fotos de la mascota
@@ -466,24 +497,26 @@ export default function ReportPage() {
                             * Se recomienda subir al menos 3 fotos (frente, perfil, cuerpo entero).
                         </p>
                     </section>
+                    )}
 
-                    {/* Actions */}
-                    <div className="flex items-center justify-between pt-10">
-                        <Button variant="ghost" onClick={() => router.back()} disabled={isSubmitting}>
-                            <ArrowLeft className="mr-2 h-4 w-4" /> Cancelar
+                    {/* Acciones */}
+                    <div className="flex items-center justify-between pt-6">
+                        <Button variant="ghost" onClick={goBack} disabled={isSubmitting}>
+                            <ArrowLeft className="mr-2 h-4 w-4" /> {step === 0 ? "Cancelar" : "Atrás"}
                         </Button>
-                        <Button
-                            size="lg"
-                            className="rounded-full px-8 bg-primary hover:bg-primary shadow-xl shadow-teal-700/30 text-base h-12"
-                            onClick={handleSubmit}
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? (
-                                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...</>
-                            ) : (
-                                <>Publicar Reporte <ArrowRight className="ml-2 h-5 w-5" /></>
-                            )}
-                        </Button>
+                        {step < 2 ? (
+                            <Button size="lg" className="rounded-full px-8" onClick={goNext}>
+                                Siguiente <ArrowRight className="ml-2 h-5 w-5" />
+                            </Button>
+                        ) : (
+                            <Button size="lg" variant="cta" className="rounded-full px-8" onClick={handleSubmit} disabled={isSubmitting}>
+                                {isSubmitting ? (
+                                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Enviando...</>
+                                ) : (
+                                    <>Publicar reporte <ArrowRight className="ml-2 h-5 w-5" /></>
+                                )}
+                            </Button>
+                        )}
                     </div>
 
                 </div>

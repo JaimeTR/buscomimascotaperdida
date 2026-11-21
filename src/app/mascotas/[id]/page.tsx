@@ -15,6 +15,7 @@ import { es } from "date-fns/locale"
 import { SightingsMapWrapper } from "@/components/sightings-map-wrapper"
 import { ImageGallery } from "@/components/image-gallery"
 import { OwnerContactModal } from "@/components/owner-contact-modal"
+import { AdSlot } from "@/components/ads/ad-slot"
 
 export default async function PetPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
@@ -314,6 +315,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                         <Download className="mr-3 h-5 w-5" /> Generar Cartel PDF
                                     </Link>
                                 </Button>
+                                <AdSlot placement="detail_sidebar" variant="side" />
                             </div>
                         </div>
                     </div>

@@ -1,192 +1,105 @@
-
-"use client"
-
-import { useState } from "react"
-import { Star, Zap, Share2, ArrowUp, ShieldCheck, CreditCard, QrCode, ArrowRight } from "lucide-react"
-
+import Image from "next/image"
+import { Check, Megaphone, Eye, MousePointerClick, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+import { Reveal } from "@/components/ui/reveal"
+import { PromoRequestForm } from "@/components/promo/request-form"
+import { PLANS } from "@/lib/ads"
+import { STOCK } from "@/lib/stock-images"
+import { createClient } from "@/utils/supabase/server"
+import { cn } from "@/lib/utils"
 
-export default function PromotePage() {
-    const [amount, setAmount] = useState(15)
-    const [method, setMethod] = useState<'yape' | 'plin'>('yape')
+export const metadata = { title: "Promociona tu negocio | Busco mi mascota", description: "Muestra tu marca a la comunidad que ama a sus mascotas: portada, detalle de casos y página de anuncios." }
+
+const STEPS = [
+    { t: "Elige un plan", d: "Básico, Destacado o Premium, según dónde quieras aparecer." },
+    { t: "Envía la solicitud", d: "Cuéntanos de tu negocio. La revisamos en pocos días." },
+    { t: "Coordinamos y publicamos", d: "Te escribimos para el pago y tu anuncio sale en las páginas del plan." },
+]
+
+const BENEFITS = [
+    { icon: Eye, t: "Visibilidad real", d: "Tu anuncio aparece en la portada, en el detalle de cada caso y en la página de anuncios." },
+    { icon: MousePointerClick, t: "Clics medidos", d: "Cada anuncio cuenta sus clics para que sepas cuánta gente llega a tu web o redes." },
+    { icon: ShieldCheck, t: "Con transparencia", d: "Siempre marcado como anuncio y revisado antes de publicarse; nunca se mezcla con los reportes." },
+]
+
+export default async function PromocionarPage() {
+    const { data: { user } } = await (await createClient()).auth.getUser()
 
     return (
-        <div className="min-h-screen bg-background py-12">
-            <div className="container mx-auto px-4 md:px-6">
-
-                {/* Header */}
-                <div className="max-w-3xl mb-12">
-                    <h1 className="font-display text-4xl md:text-5xl uppercase tracking-wide text-primary leading-tight mb-4">
-                        ¡Destaca tu reporte y llega a <br /> <span className="text-primary">más personas</span>!
-                    </h1>
-                    <p className="text-lg text-muted-foreground leading-relaxed">
-                        Tu contribución voluntaria nos ayuda a mantener la plataforma activa y le da a tu mascota la visibilidad prioritaria que necesita para volver a casa.
-                    </p>
-                </div>
-
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-
-                    {/* Left Column: Visuals & Benefits */}
-                    <div className="space-y-12">
-
-                        {/* Visual Comparison */}
-                        <div className="space-y-4">
-                            <div className="flex items-center gap-2 text-foreground font-bold text-lg">
-                                <Star className="h-5 w-5 text-primary fill-current" /> Mira la diferencia
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                {/* Standard Card */}
-                                <div className="bg-card p-3 rounded-2xl border border-border opacity-60 scale-95 origin-top-right">
-                                    <div className="aspect-[4/5] bg-secondary rounded-xl mb-3 overflow-hidden relative">
-                                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=400&auto=format&fit=crop" alt="Ejemplo de reporte estándar" className="w-full h-full object-cover grayscale" />
-                                        <Badge variant="outline" className="absolute bottom-2 left-2 bg-white/80 text-[10px]">ESTÁNDAR</Badge>
-                                    </div>
-                                    <h4 className="font-bold text-foreground text-sm">Reporte Estándar</h4>
-                                    <p className="text-[10px] text-muted-foreground mt-1">Aparece cronológicamente en el feed general.</p>
-                                </div>
-
-                                {/* Featured Card */}
-                                <div className="bg-card p-3 rounded-2xl border-4 border-amber-400 shadow-2xl relative transform hover:scale-105 transition-transform duration-300">
-                                    <div className="absolute -top-3 -right-3 bg-amber-400 text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1 shadow-sm">
-                                        <Star className="h-3 w-3 fill-current" /> Destacado
-                                    </div>
-                                    <div className="aspect-[4/5] bg-secondary rounded-xl mb-3 overflow-hidden relative">
-                                        <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?q=80&w=400&auto=format&fit=crop" alt="Ejemplo de reporte destacado" className="w-full h-full object-cover" />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
-                                            <div>
-                                                <p className="text-white font-bold text-lg leading-none mb-1">&quot;Max&quot; - Visto hace 2h</p>
-                                                <p className="text-white/80 text-xs">Surco, Lima</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <h4 className="font-bold text-amber-500 text-sm">Reporte Destacado (Home Page)</h4>
-                                    <p className="text-[10px] text-muted-foreground mt-1">Ubicación prioritaria, mayor alcance y visibilidad 24/7.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Features Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div className="bg-card p-6 rounded-2xl border border-border shadow-sm">
-                                <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-primary mb-3">
-                                    <Zap className="h-5 w-5 fill-current" />
-                                </div>
-                                <h3 className="font-bold text-foreground text-sm mb-1">Prioridad IA</h3>
-                                <p className="text-xs text-muted-foreground">Análisis prioritario en nuestro motor de búsqueda visual.</p>
-                            </div>
-                            <div className="bg-card p-6 rounded-2xl border border-border shadow-sm">
-                                <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-primary mb-3">
-                                    <Share2 className="h-5 w-5 fill-current" />
-                                </div>
-                                <h3 className="font-bold text-foreground text-sm mb-1">Redes Sociales</h3>
-                                <p className="text-xs text-muted-foreground">Impulso automático en nuestras historias de Instagram y FB.</p>
-                            </div>
-                            <div className="bg-card p-6 rounded-2xl border border-border shadow-sm">
-                                <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center text-primary mb-3">
-                                    <ArrowUp className="h-5 w-5" />
-                                </div>
-                                <h3 className="font-bold text-foreground text-sm mb-1">Top Inicio</h3>
-                                <p className="text-xs text-muted-foreground">Tu reporte aparecerá siempre arriba en tu ciudad.</p>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    {/* Right Column: Payment Action */}
-                    <div className="space-y-6 lg:ml-auto w-full max-w-md">
-                        <div className="bg-card rounded-3xl p-8 shadow-xl border border-border">
-
-                            <div className="mb-8">
-                                <h2 className="text-xl font-bold text-foreground mb-1">Elige tu aporte</h2>
-                                <p className="text-sm text-muted-foreground">Selecciona el monto para destacar tu reporte por 7 días.</p>
-                            </div>
-
-                            {/* Amount Selector */}
-                            <div className="grid grid-cols-3 gap-4 mb-6">
-                                {[5, 15, 30].map((val) => (
-                                    <button
-                                        key={val}
-                                        onClick={() => setAmount(val)}
-                                        className={`group relative h-20 rounded-2xl border-2 transition-all flex flex-col items-center justify-center ${amount === val
-                                                ? 'border-teal-700 bg-accent text-primary shadow-inner'
-                                                : 'border-border hover:border-border hover:bg-background'
-                                            }`}
-                                    >
-                                        {val === 15 && (
-                                            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded-full">POPULAR</span>
-                                        )}
-                                        <span className="text-xs font-medium text-muted-foreground mb-0.5">S/</span>
-                                        <span className="text-2xl font-bold">{val}</span>
-                                    </button>
-                                ))}
-                            </div>
-
-                            <div className="mb-8">
-                                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2 block">Otro monto</label>
-                                <div className="relative">
-                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground font-bold">S/</span>
-                                    <Input
-                                        type="number"
-                                        placeholder="0.00"
-                                        className="h-12 pl-10 bg-background border-border font-medium text-lg"
-                                        value={amount || ''}
-                                        onChange={(e) => setAmount(Number(e.target.value))}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Payment Method */}
-                            <div className="mb-8">
-                                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider mb-2 block">Pagar rápido con</label>
-                                <div className="flex gap-4">
-                                    <button
-                                        onClick={() => setMethod('yape')}
-                                        className={`flex-1 h-12 rounded-full flex items-center justify-center gap-2 font-bold transition-all ${method === 'yape'
-                                                ? 'bg-[#762678] text-white shadow-lg'
-                                                : 'bg-secondary text-muted-foreground hover:bg-secondary'
-                                            }`}
-                                    >
-                                        <QrCode className="h-4 w-4" /> Yape
-                                    </button>
-                                    <button
-                                        onClick={() => setMethod('plin')}
-                                        className={`flex-1 h-12 rounded-full flex items-center justify-center gap-2 font-bold transition-all ${method === 'plin'
-                                                ? 'bg-[#00C3D6] text-white shadow-lg'
-                                                : 'bg-secondary text-muted-foreground hover:bg-secondary'
-                                            }`}
-                                    >
-                                        <CreditCard className="h-4 w-4" /> Plin
-                                    </button>
-                                </div>
-                            </div>
-
-                            <Button className="w-full h-14 bg-primary hover:bg-primary text-lg font-bold shadow-xl shadow-teal-700/20 mb-4 rounded-xl">
-                                Continuar al Pago <ArrowRight className="ml-2 h-5 w-5" />
-                            </Button>
-
-                            <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                                <ShieldCheck className="h-4 w-4 text-emerald-500" />
-                                Transacción 100% segura y transparente
-                            </div>
-
-                        </div>
-
-                        {/* Trust Box */}
-                        <div className="bg-accent border border-teal-200 rounded-2xl p-4 flex gap-4 items-start">
-                            <div className="bg-primary rounded-full p-1.5 shrink-0 mt-0.5">
-                                <Star className="h-4 w-4 text-white fill-current" />
-                            </div>
-                            <p className="text-xs text-primary leading-relaxed font-medium">
-                                <strong>Compromiso:</strong> El 100% de tu aporte voluntario se utiliza para financiar servidores, campañas de marketing digital y mantenimiento de la infraestructura que ayuda a miles de mascotas.
-                            </p>
+        <div>
+            <section className="container mx-auto px-4 pt-6 md:pt-10">
+                <div className="grid overflow-hidden rounded-[2rem] bg-primary text-primary-foreground md:grid-cols-[1.1fr_1fr]">
+                    <div className="flex flex-col justify-center gap-5 p-8 md:p-14">
+                        <p className="inline-flex w-fit items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-medium"><Megaphone className="h-4 w-4" aria-hidden /> Promociones</p>
+                        <h1 className="font-display text-4xl uppercase leading-[1.05] tracking-wide md:text-5xl">Tu marca, junto a quienes <span className="text-orange-300">aman a sus mascotas</span></h1>
+                        <p className="text-lg text-primary-foreground/90">Muestra tu negocio en la portada, en los casos y en la página de anuncios. Y ayudas a sostener la red.</p>
+                        <div className="flex flex-wrap gap-3">
+                            <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#planes">Ver planes</a></Button>
+                            <Button asChild size="lg" variant="outline" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"><a href="#solicitud">Enviar solicitud</a></Button>
                         </div>
                     </div>
-
+                    <div className="relative min-h-64 md:min-h-[26rem]">
+                        <Image src={STOCK.paseo.src} alt={STOCK.paseo.alt} fill priority sizes="(min-width: 768px) 45vw, 100vw" className="object-cover" />
+                    </div>
                 </div>
-            </div>
+            </section>
+
+            <section aria-label="Beneficios" className="container mx-auto grid gap-4 px-4 py-12 md:grid-cols-3">
+                {BENEFITS.map((b, i) => (
+                    <Reveal key={b.t} delay={i * 0.06}>
+                        <div className="h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
+                            <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground"><b.icon className="h-6 w-6" aria-hidden /></span>
+                            <h2 className="text-lg font-semibold">{b.t}</h2>
+                            <p className="mt-1 text-sm text-muted-foreground">{b.d}</p>
+                        </div>
+                    </Reveal>
+                ))}
+            </section>
+
+            <section id="planes" className="container mx-auto scroll-mt-20 px-4 py-6">
+                <h2 className="mb-2 text-center font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">Planes</h2>
+                <p className="mb-8 text-center text-sm text-muted-foreground">Precios referenciales por 30 días; el equipo confirma el monto al coordinar contigo.</p>
+                <ul className="grid gap-5 lg:grid-cols-3">
+                    {PLANS.map((p, i) => (
+                        <Reveal as="li" key={p.key} delay={i * 0.07}>
+                            <div className={cn("relative flex h-full flex-col rounded-3xl border p-7 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]", p.tone, "highlight" in p && p.highlight && "ring-2 ring-primary")}>
+                                {"highlight" in p && p.highlight && <span className="absolute -top-3 left-6 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">Más elegido</span>}
+                                <h3 className="font-display text-2xl uppercase tracking-wide text-primary">{p.name}</h3>
+                                <p className="mt-2"><span className="text-4xl font-bold">{p.price}</span> <span className="text-sm text-muted-foreground">/ {p.period}</span></p>
+                                <ul className="mt-5 flex-1 space-y-3 text-sm">
+                                    {p.perks.map((perk) => <li key={perk} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> {perk}</li>)}
+                                </ul>
+                                <Button asChild variant={"highlight" in p && p.highlight ? "cta" : "default"} className="mt-6 w-full rounded-full"><a href="#solicitud">Elegir {p.name}</a></Button>
+                            </div>
+                        </Reveal>
+                    ))}
+                </ul>
+            </section>
+
+            <section aria-labelledby="h-pasos" className="container mx-auto px-4 py-14">
+                <h2 id="h-pasos" className="mb-8 text-center font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">Cómo funciona</h2>
+                <ol className="grid gap-4 md:grid-cols-3">
+                    {STEPS.map((s, i) => (
+                        <Reveal as="li" key={s.t} delay={i * 0.06}>
+                            <div className="h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
+                                <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">{i + 1}</span>
+                                <h3 className="mb-1 text-lg font-semibold">{s.t}</h3>
+                                <p className="text-sm text-muted-foreground">{s.d}</p>
+                            </div>
+                        </Reveal>
+                    ))}
+                </ol>
+            </section>
+
+            <section id="solicitud" className="container mx-auto scroll-mt-20 px-4 pb-6">
+                <div className="mx-auto max-w-3xl space-y-6">
+                    <div className="text-center">
+                        <h2 className="font-display text-3xl uppercase tracking-wide text-primary md:text-4xl">Solicita tu anuncio</h2>
+                        <p className="mt-2 text-muted-foreground">Completa el formulario y te contactamos.</p>
+                    </div>
+                    <PromoRequestForm loggedIn={Boolean(user)} kinds={[{ value: "anuncio", label: "Quiero anunciar mi negocio" }]} defaultKind="anuncio" />
+                </div>
+            </section>
         </div>
     )
 }
