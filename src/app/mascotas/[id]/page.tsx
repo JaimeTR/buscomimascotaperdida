@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     const kind = pet.type === 'cat' ? 'Gato' : pet.type === 'dog' ? 'Perro' : 'Mascota'
     const title = `${pet.status === 'found' ? 'Encontrado' : 'Perdido'}: ${pet.name ?? kind}${pet.last_seen_district ? ` en ${pet.last_seen_district}` : ''}`
     const description = `${kind}${pet.breed ? ` ${pet.breed}` : ''}. Ayúdanos a ${pet.status === 'found' ? 'encontrar a su dueño' : 'traerlo de vuelta a casa'}.`
-    const images = pet.image_urls?.[0] ? [pet.image_urls[0]] : undefined
+    const images = [pet.image_urls?.[0] ?? `/mascotas/${id}/opengraph-image`]
     return { title, description, openGraph: { title, description, images }, twitter: { card: 'summary_large_image', title, description, images } }
 }
 
