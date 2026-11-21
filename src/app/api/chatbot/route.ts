@@ -13,7 +13,7 @@ const RATE_LIMIT_WINDOW = 60 * 1000
 const MAX_REQUESTS_PER_WINDOW = 10
 const optionalFilter = z.string().trim().max(100).transform((value) => value || null)
 const HISTORY_LIMIT = 8
-const MODEL = 'meta-llama/Llama-3.1-8B-Instruct'
+const MODEL = 'openai/gpt-oss-120b'
 const inputSchema = z.object({
     messages: z.array(z.object({
         role: z.enum(['user', 'assistant']),
@@ -90,9 +90,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Mensaje inválido' }, { status: 400 })
         }
 
-        const { huggingfaceApiKey, chatbotProviderReady } = assertServerEnv()
+        const { groqApiKey, chatbotProviderReady } = assertServerEnv()
 
-        if (!chatbotProviderReady || !huggingfaceApiKey) {
+        if (!chatbotProviderReady || !groqApiKey) {
             console.error('chatbot provider is not configured')
             return NextResponse.json(
                 { error: 'Servicio temporalmente no disponible', fallback: true },
@@ -104,17 +104,18 @@ export async function POST(request: NextRequest) {
         const timeout = setTimeout(() => controller.abort(), 15_000)
         let hfResponse: Response
         try {
-            // Router OpenAI-compatible de Hugging Face (el endpoint api-inference y Llama-2 ya no sirven).
-            hfResponse = await fetch('https://router.huggingface.co/v1/chat/completions', {
+            // Groq (API compatible con OpenAI, plan gratuito).
+            hfResponse = await fetch('https://api.groq.com/openai/v1/chat/completions', {
                 method: 'POST',
                 headers: {
-                    Authorization: 'Bearer ' + huggingfaceApiKey,
+                    Authorization: 'Bearer ' + groqApiKey,
                     'Content-Type': 'application/json',
                 },
                 signal: controller.signal,
                 body: JSON.stringify({
                     model: MODEL,
-                    max_tokens: 400,
+                    max_tokens: 1000,
+                    reasoning_effort: 'low',
                     temperature: 0.3,
                     messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...history],
                 }),

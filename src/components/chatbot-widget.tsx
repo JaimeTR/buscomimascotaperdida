@@ -137,7 +137,7 @@ export function ChatbotWidget() {
             : "No hay reportes con esas características todavía. Puedes publicar uno y te avisamos si aparece algo."
         push({
             role: "bot",
-            content: intro && pets.length && !note ? `${intro} ${found}` : found,
+            content: found,
             pets,
             chips: pets.length
                 ? [{ label: "Ver todos", href: "/mascotas" }, { label: "Generar cartel", href: "/cartel" }]

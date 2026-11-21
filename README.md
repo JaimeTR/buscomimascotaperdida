@@ -4,7 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 Copia `.env.example` a `.env.local` y completa las variables en tu entorno local.
 En producción, `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-son obligatorias. `RESEND_API_KEY` y `HUGGINGFACE_API_KEY` son opcionales, pero
+son obligatorias. `RESEND_API_KEY` y `GROQ_API_KEY` son opcionales, pero
 deben configurarse si se habilitan sus servicios. `NEXT_PUBLIC_APP_URL` debe
 apuntar al dominio público de producción para que funcionen los callbacks de
 autenticación; en desarrollo puede omitirse y se usa un fallback local.

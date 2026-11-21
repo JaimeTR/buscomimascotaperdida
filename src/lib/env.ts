@@ -5,7 +5,7 @@ export type ServerEnv = {
     supabaseAnonKey: string
     appUrl?: string
     resendApiKey?: string
-    huggingfaceApiKey?: string
+    groqApiKey?: string
     chatbotProviderReady: boolean
     emailTestToken?: string
 }
@@ -40,8 +40,8 @@ export function assertServerEnv(): ServerEnv {
         supabaseAnonKey,
         appUrl,
         resendApiKey: readEnv('RESEND_API_KEY'),
-        huggingfaceApiKey: readEnv('HUGGINGFACE_API_KEY'),
-        chatbotProviderReady: Boolean(readEnv('HUGGINGFACE_API_KEY')),
+        groqApiKey: readEnv('GROQ_API_KEY'),
+        chatbotProviderReady: Boolean(readEnv('GROQ_API_KEY')),
         emailTestToken: readEnv('EMAIL_TEST_TOKEN'),
     }
 }
