@@ -21,9 +21,9 @@ const writeCache = (me: Me | null) => {
 }
 
 const MENU = [
-    { label: "Mis reportes", icon: FileText, href: "/dashboard/reports", description: "Gestiona tus reportes" },
-    { label: "Pistas recibidas", icon: Lightbulb, href: "/dashboard/messages", description: "Avistamientos de tus casos" },
-    { label: "Mi perfil", icon: User, href: "/dashboard/settings", description: "Datos de contacto y avisos" },
+    { label: "Mis reportes", icon: FileText, href: "/panel/reportes", description: "Gestiona tus reportes" },
+    { label: "Pistas recibidas", icon: Lightbulb, href: "/panel/mensajes", description: "Avistamientos de tus casos" },
+    { label: "Mi perfil", icon: User, href: "/panel/ajustes", description: "Datos de contacto y avisos" },
 ]
 
 export function UserNav() {
@@ -75,13 +75,13 @@ export function UserNav() {
         return (
             <div className="flex items-center gap-1 sm:gap-2">
                 <Button variant="ghost" asChild className="hidden font-semibold text-muted-foreground sm:inline-flex">
-                    <Link href="/login">Iniciar sesión</Link>
+                    <Link href="/ingresar">Iniciar sesión</Link>
                 </Button>
                 <Button variant="ghost" size="icon" asChild className="sm:hidden">
-                    <Link href="/login" aria-label="Iniciar sesión"><LogIn className="h-5 w-5" aria-hidden /></Link>
+                    <Link href="/ingresar" aria-label="Iniciar sesión"><LogIn className="h-5 w-5" aria-hidden /></Link>
                 </Button>
                 <Button asChild className="rounded-full bg-primary px-5 font-bold shadow-md shadow-primary/20 hover:bg-primary">
-                    <Link href="/register">Unirme</Link>
+                    <Link href="/registro">Unirme</Link>
                 </Button>
             </div>
         )

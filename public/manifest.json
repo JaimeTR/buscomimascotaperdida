@@ -65,7 +65,7 @@
             "name": "Mis Reportes",
             "short_name": "Reportes",
             "description": "Ver mis reportes de mascotas",
-            "url": "/dashboard/reports?utm_source=pwa_shortcut",
+            "url": "/panel/reportes?utm_source=pwa_shortcut",
             "icons": [
                 {
                     "src": "/icons/icon-192x192.png",

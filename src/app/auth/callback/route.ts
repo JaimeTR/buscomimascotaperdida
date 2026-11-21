@@ -12,7 +12,7 @@ export async function handleAuthCallback(
 ) {
     const { searchParams, origin } = new URL(request.url)
     const code = searchParams.get('code')
-    const next = isSafeInternalPath(searchParams.get('next'), '/dashboard')
+    const next = isSafeInternalPath(searchParams.get('next'), '/panel')
 
     if (code) {
         const { data, error } = await exchangeCodeForSession(code)
@@ -23,7 +23,7 @@ export async function handleAuthCallback(
     }
 
     // Si hay error o no hay code, redirigir a login con mensaje de error
-    return Response.redirect(`${origin}/login?error=auth-callback-failed`, 307)
+    return Response.redirect(`${origin}/ingresar?error=auth-callback-failed`, 307)
 }
 
 export async function GET(request: Request) {

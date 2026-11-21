@@ -28,7 +28,7 @@ export const ACTIVE_STATUSES = ["lost", "found", "in_contact"]
 export async function getOwnerData() {
     const supabase = await createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    if (!user) redirect("/login?next=/dashboard")
+    if (!user) redirect("/ingresar?next=/panel")
 
     const { data: pets } = await supabase
         .from("pets")

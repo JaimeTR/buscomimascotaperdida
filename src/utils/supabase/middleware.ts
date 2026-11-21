@@ -35,7 +35,7 @@ export async function updateSession(request: NextRequest) {
     const { pathname, search } = request.nextUrl
     if (!user && isProtectedPath(pathname)) {
         const url = request.nextUrl.clone()
-        url.pathname = '/login'
+        url.pathname = '/ingresar'
         const params = new URLSearchParams({ next: pathname + search })
         const reason = loginReason(pathname)
         if (reason) params.set('reason', reason)
@@ -44,7 +44,7 @@ export async function updateSession(request: NextRequest) {
     }
     if (user && isGuestOnlyPath(pathname)) {
         const url = request.nextUrl.clone()
-        const next = isSafeInternalPath(request.nextUrl.searchParams.get('next'), '/dashboard')
+        const next = isSafeInternalPath(request.nextUrl.searchParams.get('next'), '/panel')
         url.pathname = next.split('?')[0]
         url.search = next.includes('?') ? `?${next.split('?')[1]}` : ''
         return NextResponse.redirect(url)

@@ -25,7 +25,7 @@ export async function loginAction(_prevState: LoginActionState, formData: FormDa
     const nextValue = formData.get("next")
     const email = typeof emailValue === "string" ? emailValue : ""
     const password = typeof passwordValue === "string" ? passwordValue : ""
-    const next = isSafeInternalPath(typeof nextValue === "string" ? nextValue : null, "/dashboard")
+    const next = isSafeInternalPath(typeof nextValue === "string" ? nextValue : null, "/panel")
 
     const result = loginSchema.safeParse({ email, password })
 
@@ -82,7 +82,7 @@ export async function resendConfirmationAction(email: unknown) {
 export async function registerAction(data: unknown, nextValue?: unknown) {
     const supabase = await createClient()
     const origin = assertServerEnv().appUrl || "http://localhost:3000"
-    const next = isSafeInternalPath(typeof nextValue === "string" ? nextValue : null, "/dashboard")
+    const next = isSafeInternalPath(typeof nextValue === "string" ? nextValue : null, "/panel")
 
     const result = registerSchema.safeParse(data)
 
@@ -126,7 +126,7 @@ export async function registerAction(data: unknown, nextValue?: unknown) {
     return { success: true, needsConfirmation: !authData.session, email }
 }
 
-export async function resetPasswordAction(email: unknown, next: unknown = "/dashboard") {
+export async function resetPasswordAction(email: unknown, next: unknown = "/panel") {
     const emailResult = loginSchema.shape.email.safeParse(email)
     if (!emailResult.success) {
         return { error: "Datos inválidos." }
@@ -150,5 +150,5 @@ export async function resetPasswordAction(email: unknown, next: unknown = "/dash
 export async function logoutAction() {
     const supabase = await createClient()
     await supabase.auth.signOut()
-    redirect("/login")
+    redirect("/ingresar")
 }

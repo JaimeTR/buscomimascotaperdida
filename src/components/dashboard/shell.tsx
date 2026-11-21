@@ -9,10 +9,10 @@ import { createClient } from "@/utils/supabase/client"
 import { cn } from "@/lib/utils"
 
 const ITEMS = [
-    { href: "/dashboard", label: "Resumen", icon: LayoutDashboard, exact: true },
-    { href: "/dashboard/reports", label: "Mis reportes", icon: FileText },
-    { href: "/dashboard/messages", label: "Pistas", icon: Lightbulb },
-    { href: "/dashboard/settings", label: "Ajustes", icon: Settings },
+    { href: "/panel", label: "Resumen", icon: LayoutDashboard, exact: true },
+    { href: "/panel/reportes", label: "Mis reportes", icon: FileText },
+    { href: "/panel/mensajes", label: "Pistas", icon: Lightbulb },
+    { href: "/panel/ajustes", label: "Ajustes", icon: Settings },
 ]
 
 type Props = { name: string; avatarUrl?: string | null; isAdmin: boolean; children: React.ReactNode }
@@ -89,7 +89,7 @@ export function DashboardShell({ name, avatarUrl, isAdmin, children }: Props) {
                     <Link href="/" aria-label="Ir a la web" className="flex h-10 w-10 items-center justify-center rounded-full active:bg-secondary"><Home className="h-5 w-5" aria-hidden /></Link>
                     {isAdmin && <Link href="/admin" aria-label="Administración" className="flex h-10 w-10 items-center justify-center rounded-full active:bg-secondary"><ShieldCheck className="h-5 w-5" aria-hidden /></Link>}
                     <button onClick={signOut} aria-label="Cerrar sesión" className="flex h-10 w-10 items-center justify-center rounded-full active:bg-secondary hover:text-destructive"><LogOut className="h-5 w-5" aria-hidden /></button>
-                    <Link href="/dashboard/settings" aria-label="Mi perfil" className="ml-1">
+                    <Link href="/panel/ajustes" aria-label="Mi perfil" className="ml-1">
                         <Avatar className="h-9 w-9">
                             {avatarUrl && <AvatarImage src={avatarUrl} alt="" />}
                             <AvatarFallback className="bg-accent text-xs font-semibold text-accent-foreground">{initials}</AvatarFallback>

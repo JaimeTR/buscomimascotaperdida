@@ -21,14 +21,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 </p>
                 <div className="flex-1"><AdminNav variant="side" /></div>
                 <div className="space-y-1 border-t border-white/15 pt-4 text-sm">
-                    <Link href="/dashboard" className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-white/70 hover:bg-white/10 hover:text-white"><LayoutDashboard className="h-5 w-5" aria-hidden /> Mi dashboard</Link>
+                    <Link href="/panel" className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-white/70 hover:bg-white/10 hover:text-white"><LayoutDashboard className="h-5 w-5" aria-hidden /> Mi panel</Link>
                     <Link href="/" className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-white/70 hover:bg-white/10 hover:text-white"><Home className="h-5 w-5" aria-hidden /> Ir a la web</Link>
                 </div>
             </aside>
 
             <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-foreground px-4 text-background lg:hidden">
                 <Link href="/" aria-label="Ir al inicio"><Image src="/brand/isologo-horizontal-blanco.svg" alt="Busco mi mascota" width={300} height={85} className="h-10 w-auto" unoptimized /></Link>
-                <Link href="/dashboard" className="text-sm font-medium text-white/80">Mi dashboard</Link>
+                <Link href="/panel" className="text-sm font-medium text-white/80">Mi panel</Link>
             </header>
             <AdminNav variant="top" />
 

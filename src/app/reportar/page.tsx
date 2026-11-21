@@ -58,7 +58,7 @@ export default function ReportPage() {
         const checkSession = async () => {
             const { data: { session } } = await supabase.auth.getSession()
             if (!session) {
-                router.push("/login?next=/reportar")
+                router.push("/ingresar?next=/reportar")
             } else {
                 setUserId(session.user.id)
                 const { data: currentProfile, error } = await supabase
@@ -238,7 +238,7 @@ export default function ReportPage() {
             }
 
             toast("Reporte creado con éxito", { type: "success", title: "¡Excelente!" })
-            router.push(insertedPet ? `/cartel/${insertedPet.id}?nuevo=1` : '/dashboard')
+            router.push(insertedPet ? `/cartel/${insertedPet.id}?nuevo=1` : '/panel')
 
         } catch (error) {
             console.error('Error reporting pet:', error)

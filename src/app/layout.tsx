@@ -58,6 +58,7 @@ export const metadata: Metadata = {
   title: "Mascotas perdidas en Perú: reporta y encuentra | Busco mi mascota",
   description: "Red comunitaria gratuita para encontrar mascotas perdidas en Lima y todo el Perú. Reporta un perro o gato perdido, busca por distrito y comparte el caso.",
   applicationName: "Busco mi mascota",
+  alternates: { canonical: "./" },
   keywords: ["mascotas perdidas", "perro perdido", "gato perdido", "mascota encontrada", "Lima", "Perú", "cartel de mascota perdida"],
   other: { "geo.region": "PE", "geo.placename": "Perú", language: "es" },
   twitter: { card: "summary_large_image" },

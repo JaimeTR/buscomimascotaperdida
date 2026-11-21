@@ -32,7 +32,7 @@ export default function SettingsPage() {
             try {
                 const { data: { session } } = await supabase.auth.getSession()
                 if (!session) {
-                    router.push("/login")
+                    router.push("/ingresar")
                     return
                 }
 

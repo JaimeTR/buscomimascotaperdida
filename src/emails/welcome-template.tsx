@@ -76,7 +76,7 @@ export const WelcomeEmail = ({ firstName = "Usuario" }: WelcomeEmailProps) => {
 
                             <Button
                                 className="bg-primary rounded-full text-white text-[16px] font-bold no-underline text-center px-8 py-4 block w-full shadow-lg shadow-teal-700/30"
-                                href="http://localhost:3000/dashboard"
+                                href="http://localhost:3000/panel"
                             >
                                 Ir a mi Panel
                             </Button>

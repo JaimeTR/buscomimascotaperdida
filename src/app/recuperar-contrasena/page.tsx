@@ -38,7 +38,7 @@ function ForgotPasswordContent() {
     const onSubmit = async (data: ForgotPasswordSchema) => {
         setIsLoading(true)
         try {
-            const next = isSafeInternalPath(searchParams.get("next"), "/dashboard")
+            const next = isSafeInternalPath(searchParams.get("next"), "/panel")
             const result = await resetPasswordAction(data.email, next)
             if (result?.error) {
                 toast(result.error, { type: "error" })
@@ -85,7 +85,7 @@ function ForgotPasswordContent() {
             )}
 
             <p className="mt-8 text-center">
-                <Link href="/login" className="inline-flex min-h-11 items-center gap-2 font-semibold text-primary underline-offset-4 hover:underline">
+                <Link href="/ingresar" className="inline-flex min-h-11 items-center gap-2 font-semibold text-primary underline-offset-4 hover:underline">
                     <ArrowLeft className="h-4 w-4" aria-hidden /> Volver a iniciar sesión
                 </Link>
             </p>

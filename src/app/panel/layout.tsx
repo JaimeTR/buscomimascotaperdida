@@ -1,5 +1,6 @@
 import { createClient } from "@/utils/supabase/server"
 import { DashboardShell } from "@/components/dashboard/shell"
+export const metadata = { title: "Mi panel | Busco mi mascota", robots: { index: false, follow: false } }
 
 // El acceso sin sesión ya se corta en el proxy; aquí solo se leen los datos del marco.
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {

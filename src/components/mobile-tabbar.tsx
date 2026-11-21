@@ -18,13 +18,13 @@ const TABS = [
 ]
 
 const ACCOUNT = [
-    { href: "/dashboard/reports", label: "Mis reportes", icon: FileText },
-    { href: "/dashboard/messages", label: "Pistas recibidas", icon: Lightbulb },
-    { href: "/dashboard/settings", label: "Mi perfil", icon: UserRound },
+    { href: "/panel/reportes", label: "Mis reportes", icon: FileText },
+    { href: "/panel/mensajes", label: "Pistas recibidas", icon: Lightbulb },
+    { href: "/panel/ajustes", label: "Mi perfil", icon: UserRound },
 ]
 const GUEST = [
-    { href: "/login", label: "Iniciar sesión", icon: LogIn },
-    { href: "/register", label: "Crear cuenta gratis", icon: UserPlus },
+    { href: "/ingresar", label: "Iniciar sesión", icon: LogIn },
+    { href: "/registro", label: "Crear cuenta gratis", icon: UserPlus },
 ]
 const EXPLORE = [
     { href: "/aliados", label: "Aliados", icon: Handshake },
@@ -54,7 +54,7 @@ export function MobileTabbar() {
     const pathname = usePathname()
     const sheet = useRef<HTMLDialogElement>(null)
     const [logged, setLogged] = useState<boolean | null>(null)
-    if (pathname.startsWith("/dashboard") || pathname.startsWith("/admin")) return null
+    if (pathname.startsWith("/panel") || pathname.startsWith("/admin")) return null
 
     const open = () => {
         sheet.current?.showModal()

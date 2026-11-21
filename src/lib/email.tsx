@@ -96,7 +96,7 @@ export async function sendPasswordResetEmail(
     firstName: string
 ) {
     const appUrl = assertServerEnv().appUrl || 'http://localhost:3000'
-    const resetUrl = `${appUrl}/update-password?token=${resetToken}`
+    const resetUrl = `${appUrl}/nueva-contrasena?token=${resetToken}`
 
     const PasswordResetTemplate = (
         <div style={{ fontFamily: 'Arial, sans-serif', maxWidth: '600px', margin: '0 auto' }}>

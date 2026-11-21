@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/components/ui/toast-modern"
-import { deleteAccountAction } from "@/app/dashboard/settings/delete-account"
+import { deleteAccountAction } from "@/app/panel/ajustes/delete-account"
 
 const DELETE_CONFIRM_WORD = "ELIMINAR"
 

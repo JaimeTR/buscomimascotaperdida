@@ -24,9 +24,9 @@ export default async function DashboardPage() {
             </PageHeader>
 
             <section aria-label="Métricas" className="grid gap-4 sm:grid-cols-3">
-                <StatCard label="Casos activos" value={active.length} icon={Megaphone} href="/dashboard/reports" tone="orange" />
-                <StatCard label="Pistas recibidas" value={sightings.length} icon={Lightbulb} href="/dashboard/messages" tone="teal" />
-                <StatCard label="Casos resueltos" value={resolved} icon={CheckCircle2} href="/dashboard/reports" tone="green" hint="Mascotas que volvieron a casa" />
+                <StatCard label="Casos activos" value={active.length} icon={Megaphone} href="/panel/reportes" tone="orange" />
+                <StatCard label="Pistas recibidas" value={sightings.length} icon={Lightbulb} href="/panel/mensajes" tone="teal" />
+                <StatCard label="Casos resueltos" value={resolved} icon={CheckCircle2} href="/panel/reportes" tone="green" hint="Mascotas que volvieron a casa" />
             </section>
 
             <section aria-label="Accesos rápidos" className="grid gap-4 sm:grid-cols-3">
@@ -51,7 +51,7 @@ export default async function DashboardPage() {
                     <section aria-labelledby="h-casos">
                         <div className="mb-3 flex items-center justify-between">
                             <h2 id="h-casos" className="text-lg font-semibold">Casos recientes</h2>
-                            <Link href="/dashboard/reports" className="inline-flex items-center text-sm font-semibold text-primary hover:underline">Ver todos <ArrowRight className="ml-1 h-4 w-4" aria-hidden /></Link>
+                            <Link href="/panel/reportes" className="inline-flex items-center text-sm font-semibold text-primary hover:underline">Ver todos <ArrowRight className="ml-1 h-4 w-4" aria-hidden /></Link>
                         </div>
                         <ul className="divide-y overflow-hidden rounded-3xl border bg-card shadow-[var(--shadow-soft)]">
                             {pets.slice(0, 5).map((p) => (
@@ -62,7 +62,7 @@ export default async function DashboardPage() {
                                     </div>
                                     <div className="flex items-center gap-3">
                                         <StatusBadge status={p.status} />
-                                        <Link href={`/dashboard/reports/${p.id}/edit`} className="text-sm font-semibold text-primary hover:underline">Editar</Link>
+                                        <Link href={`/panel/reportes/${p.id}/editar`} className="text-sm font-semibold text-primary hover:underline">Editar</Link>
                                     </div>
                                 </li>
                             ))}
@@ -72,7 +72,7 @@ export default async function DashboardPage() {
                     <section aria-labelledby="h-pistas">
                         <div className="mb-3 flex items-center justify-between">
                             <h2 id="h-pistas" className="text-lg font-semibold">Últimas pistas</h2>
-                            <Link href="/dashboard/messages" className="inline-flex items-center text-sm font-semibold text-primary hover:underline">Ver todas <ArrowRight className="ml-1 h-4 w-4" aria-hidden /></Link>
+                            <Link href="/panel/mensajes" className="inline-flex items-center text-sm font-semibold text-primary hover:underline">Ver todas <ArrowRight className="ml-1 h-4 w-4" aria-hidden /></Link>
                         </div>
                         {sightings.length === 0 ? (
                             <p className="rounded-3xl border bg-card p-6 text-sm text-muted-foreground">Todavía nadie ha reportado un avistamiento. Comparte tu caso para llegar a más personas.</p>

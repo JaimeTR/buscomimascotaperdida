@@ -379,7 +379,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                         <div className="mt-3 rounded-xl bg-accent p-3 text-accent-foreground">
                                             <p className="font-semibold">¿Es tu mascota?</p>
                                             <p className="mt-0.5">Crea tu cuenta y dale seguimiento a la búsqueda: sube fotos, recibe avisos de avistamientos y actualiza el caso.</p>
-                                            <Link href="/register" className="mt-2 inline-block font-bold underline">Crear mi cuenta</Link>
+                                            <Link href="/registro" className="mt-2 inline-block font-bold underline">Crear mi cuenta</Link>
                                         </div>
                                     </div>
                                 ) : (

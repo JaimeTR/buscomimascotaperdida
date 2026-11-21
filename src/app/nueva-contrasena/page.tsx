@@ -21,7 +21,7 @@ function UpdatePasswordContent() {
     const [showPassword, setShowPassword] = useState(false)
     const { toast } = useToast()
     const supabase = createClient()
-    const next = isSafeInternalPath(searchParams.get("next"), "/dashboard")
+    const next = isSafeInternalPath(searchParams.get("next"), "/panel")
 
     // Función para traducir errores de Supabase al español
     const translateError = (errorMessage: string): string => {
@@ -99,7 +99,7 @@ function UpdatePasswordContent() {
 
             toast("Contraseña actualizada con éxito", { type: 'success', title: "¡Listo!" })
 
-            // Redirigir al dashboard después de 1 segundo
+            // Redirigir al panel después de 1 segundo
             setTimeout(() => {
                 router.push(next)
             }, 1000)
