@@ -151,6 +151,49 @@ body::before {
   background-size: 220px 220px;
 }
 
+
+/* ---------- Movimiento ---------- */
+/* Tarjetas y bloques que reaccionan al pasar el mouse y al tocar: se elevan y, al presionar, se hunden un poco. */
+@utility hover-lift {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+  &:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+  &:active { transform: translateY(-1px) scale(0.99); }
+}
+/* Imagen que se acerca suavemente dentro de su contenedor al pasar el mouse sobre el grupo. */
+@utility img-zoom {
+  transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+  :where(.group):hover & { transform: scale(1.06); }
+}
+
+/* Entrada suave de cada página (app/template.tsx). */
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.page-enter { animation: page-in 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+/* Hojas y ventanas nativas (<dialog>): entran y SALEN con transición (donde el navegador lo soporta; si no, aparecen sin animar). */
+dialog {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), overlay 0.3s allow-discrete, display 0.3s allow-discrete;
+}
+dialog[open] { opacity: 1; transform: none; }
+@starting-style {
+  dialog[open] { opacity: 0; transform: translateY(24px); }
+}
+dialog::backdrop {
+  background-color: rgb(0 0 0 / 0);
+  transition: background-color 0.3s ease, overlay 0.3s allow-discrete, display 0.3s allow-discrete;
+}
+dialog[open]::backdrop { background-color: rgb(0 0 0 / 0.4); }
+@starting-style {
+  dialog[open]::backdrop { background-color: rgb(0 0 0 / 0); }
+}
+
+/* Toques sin el destello gris del navegador móvil: la respuesta visual la dan los estados :active. */
+a, button, summary, label { -webkit-tap-highlight-color: transparent; }
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

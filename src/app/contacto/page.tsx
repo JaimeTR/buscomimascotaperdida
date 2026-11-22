@@ -1,18 +1,21 @@
 import Link from "next/link"
 import Image from "next/image"
-import { HeartHandshake, Building2, LifeBuoy, ChevronDown, Mail } from "lucide-react"
+import { HeartHandshake, Building2, LifeBuoy, ChevronDown, Mail, Phone, MessageCircle, Handshake, HandHeart, Users, PawPrint, Sparkles } from "lucide-react"
 import { Reveal } from "@/components/ui/reveal"
 import { PageHeader } from "@/components/ui/page-header"
+import { Button } from "@/components/ui/button"
+import { ContactForm } from "@/components/contact/contact-form"
+import { CONTACT_KINDS, type ContactKind } from "@/lib/contact-kinds"
+import { CopyButton } from "@/components/contact/copy-button"
+import { SITE_CONTACT, SUPPORT_METHODS } from "@/lib/site-config"
 import { STOCK } from "@/lib/stock-images"
 
-export const metadata = { title: "Contacto y ayuda | Busco mi mascota", description: "Preguntas frecuentes, soporte y formas de colaborar con Busco mi mascota.", alternates: { canonical: "/contacto" } }
+export const metadata = { title: "Contacto, alianzas y apoyo | Busco mi mascota", description: "Escríbenos, sé aliado o voluntario, colabora con el proyecto o apóyalo con Yape o Plin. Preguntas frecuentes y soporte.", alternates: { canonical: "/contacto" } }
 
-const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim()
-
-const PATHS = [
-    { href: "/aliados#colaborar", icon: HeartHandshake, title: "Quiero ser voluntario", text: "Reparte carteles, comparte casos y acompaña a quienes perdieron a su mascota." },
-    { href: "/promocionar", icon: Building2, title: "Tengo un negocio", text: "Promociona tu marca o conviértete en aliado de la plataforma." },
-    { href: "#faq", icon: LifeBuoy, title: "Necesito ayuda", text: "Respuestas rápidas sobre reportes, privacidad y cómo funciona la red." },
+const PATHS: { kind: ContactKind; icon: typeof Handshake; title: string; text: string }[] = [
+    { kind: "aliado", icon: Building2, title: "Ser aliado", text: "Veterinarias, refugios, tiendas y marcas que quieren sumarse a la red y ayudar a su comunidad." },
+    { kind: "voluntario", icon: HeartHandshake, title: "Ser voluntario", text: "Reparte carteles, comparte casos y acompaña a quienes perdieron a una mascota." },
+    { kind: "colaborar", icon: Sparkles, title: "Colaborar en el proyecto", text: "Difusión, diseño, programación, traducciones o donaciones en especie: todo suma." },
 ]
 
 const FAQ = [
@@ -21,7 +24,8 @@ const FAQ = [
     { q: "Encontré una mascota, ¿qué hago?", a: "Busca en la lista si hay un reporte que coincida y envía un avistamiento desde su página. Si no hay reporte, toma buenas fotos y compártelas con los vecinos de la zona; también puedes llevarla a una veterinaria cercana para revisar si tiene microchip." },
     { q: "Mi mascota ya volvió, ¿cómo lo marco?", a: "Entra a tu panel, abre «Mis reportes» y pulsa «Marcar reunido». El reporte deja de aparecer como activo." },
     { q: "¿Cómo se eligen los anuncios y aliados?", a: "El equipo revisa cada solicitud. Los anuncios siempre se muestran marcados como anuncio y nunca se mezclan con los reportes de mascotas." },
-    { q: "Vi un reporte falso o un abuso, ¿cómo aviso?", a: "Escríbenos con el enlace del reporte y lo revisamos. Los administradores pueden ocultar o eliminar reportes que incumplan las normas." },
+    { q: "Vi un reporte falso o un abuso, ¿cómo aviso?", a: "Escríbenos desde el formulario con el enlace del reporte y lo revisamos. Los administradores pueden ocultar o eliminar reportes que incumplan las normas." },
+    { q: "¿Para qué se usan los aportes?", a: "Apoyar el proyecto es voluntario. Ayuda a cubrir los costos de mantenerlo gratis: servidor, correos y avisos, y la difusión de casos." },
 ]
 
 // FAQPage: respuestas citables por buscadores y asistentes de IA (GEO).
@@ -31,45 +35,136 @@ const FAQ_JSON_LD = {
     mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
 }
 
-export default function ContactPage() {
+const lift = "transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]"
+
+export default async function ContactPage({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
+    const { tipo } = await searchParams
+    const initialKind = CONTACT_KINDS.find((k) => k.value === tipo)?.value ?? "consulta"
+    const { email, phone, whatsapp, collabGroupUrl } = SITE_CONTACT
+    const channels = [
+        whatsapp && { href: `https://wa.me/${whatsapp.replace(/\D/g, "")}`, icon: MessageCircle, label: "WhatsApp", value: "Escríbenos", external: true },
+        email && { href: `mailto:${email}`, icon: Mail, label: "Correo", value: email, external: false },
+        phone && { href: `tel:${phone.replace(/[^\d+]/g, "")}`, icon: Phone, label: "Teléfono", value: phone, external: false },
+    ].filter(Boolean) as { href: string; icon: typeof Mail; label: string; value: string; external: boolean }[]
+
     return (
-        <div className="container mx-auto space-y-14 px-4 py-8 md:py-12">
+        <div className="container mx-auto space-y-16 px-4 py-8 md:py-12">
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }} />
-            <div className="grid items-center gap-8 overflow-hidden rounded-[2rem] bg-accent md:grid-cols-[1.2fr_1fr]">
-                <div className="space-y-4 p-8 md:p-12">
-                    <PageHeader title="Contacto y ayuda" text="Estamos para ayudarte a que más mascotas vuelvan a casa." />
-                    {CONTACT_EMAIL && (
-                        <a href={`mailto:${CONTACT_EMAIL}`} className="inline-flex items-center gap-2 rounded-full bg-card px-5 py-2.5 text-sm font-semibold text-primary shadow-[var(--shadow-soft)] hover:bg-secondary">
-                            <Mail className="h-4 w-4" aria-hidden /> {CONTACT_EMAIL}
-                        </a>
-                    )}
+
+            {/* Portada */}
+            <div className="relative grid items-center gap-8 overflow-hidden rounded-[2rem] bg-accent md:grid-cols-[1.2fr_1fr]">
+                <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.07]" />
+                <div className="relative space-y-5 p-8 md:p-12">
+                    <PageHeader title="Contacto, alianzas y apoyo" text="Escríbenos, súmate como aliado o voluntario, o apoya el proyecto para que más mascotas vuelvan a casa." />
+                    <div className="flex flex-wrap gap-3">
+                        <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#formulario">Escribir un mensaje</a></Button>
+                        <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><a href="#apoyar"><HandHeart className="mr-2 h-5 w-5" aria-hidden /> Apoyar el proyecto</a></Button>
+                    </div>
                 </div>
-                <div className="relative hidden h-full min-h-60 md:block">
+                <div className="relative hidden h-full min-h-72 md:block">
                     <Image src={STOCK.voluntaria.src} alt={STOCK.voluntaria.alt} fill sizes="40vw" className="object-cover" />
                 </div>
             </div>
 
-            <ul className="grid gap-4 md:grid-cols-3">
-                {PATHS.map((p, i) => (
-                    <Reveal as="li" key={p.title} delay={i * 0.06}>
-                        <Link href={p.href} className="group block h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]">
-                            <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground"><p.icon className="h-6 w-6" aria-hidden /></span>
-                            <h2 className="text-lg font-semibold">{p.title}</h2>
-                            <p className="mt-1 text-sm text-muted-foreground">{p.text}</p>
-                        </Link>
-                    </Reveal>
-                ))}
-            </ul>
+            {/* Canales directos (solo los configurados) */}
+            {channels.length > 0 && (
+                <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {channels.map((c, i) => (
+                        <Reveal as="li" key={c.label} delay={i * 0.06}>
+                            <a href={c.href} {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})} className={`group flex items-center gap-4 rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)] ${lift}`}>
+                                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110"><c.icon className="h-6 w-6" aria-hidden /></span>
+                                <span className="min-w-0"><span className="block text-sm text-muted-foreground">{c.label}</span><span className="block truncate font-semibold">{c.value}</span></span>
+                            </a>
+                        </Reveal>
+                    ))}
+                </ul>
+            )}
 
+            {/* Súmate */}
+            <section aria-labelledby="h-sumate" className="space-y-6">
+                <div className="mx-auto max-w-2xl text-center">
+                    <h2 id="h-sumate" className="font-display text-3xl text-primary md:text-4xl">Súmate a la red</h2>
+                    <p className="mt-2 text-muted-foreground">Cada persona y cada negocio que se une hace la red más fuerte. Elige cómo quieres ayudar.</p>
+                </div>
+                <ul className="grid gap-4 md:grid-cols-3">
+                    {PATHS.map((p, i) => (
+                        <Reveal as="li" key={p.kind} delay={i * 0.06}>
+                            <Link href={`/contacto?tipo=${p.kind}#formulario`} scroll className={`group block h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)] active:scale-[0.99] ${lift}`}>
+                                <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"><p.icon className="h-6 w-6" aria-hidden /></span>
+                                <h3 className="text-lg font-semibold">{p.title}</h3>
+                                <p className="mt-1 text-sm text-muted-foreground">{p.text}</p>
+                                <span className="mt-4 inline-flex items-center text-sm font-semibold text-primary">Quiero sumarme <span className="ml-1 transition-transform duration-300 group-hover:translate-x-1" aria-hidden>→</span></span>
+                            </Link>
+                        </Reveal>
+                    ))}
+                </ul>
+                <p className="text-center text-sm text-muted-foreground">¿Tienes un negocio y quieres anunciarte? Mira los <Link href="/promocionar" className="font-semibold text-primary underline-offset-2 hover:underline">planes de promoción</Link>.</p>
+            </section>
+
+            {/* Apoyar el proyecto */}
+            <section id="apoyar" aria-labelledby="h-apoyo" className="scroll-mt-20 overflow-hidden rounded-[2rem] border bg-card shadow-[var(--shadow-soft)]">
+                <div className="grid md:grid-cols-[1fr_1.1fr]">
+                    <div className="relative space-y-4 bg-primary p-8 text-primary-foreground md:p-12">
+                        <div aria-hidden className="paws-white pointer-events-none absolute inset-0 opacity-[0.07]" />
+                        <div className="relative space-y-4">
+                            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15"><HandHeart className="h-6 w-6" aria-hidden /></span>
+                            <h2 id="h-apoyo" className="font-display text-3xl leading-tight md:text-4xl">Apoya el proyecto</h2>
+                            <p className="text-primary-foreground/90">Busco mi mascota es gratis y seguirá siéndolo. Tu aporte, grande o pequeño, es voluntario y ayuda a cubrir servidor, avisos por correo y la difusión de casos.</p>
+                            <p className="text-sm text-primary-foreground/80">¿Ya apoyaste? Avísanos para agradecerte: puedes adjuntar tu comprobante y, si quieres, unirte al grupo de colaboradores.</p>
+                            <Button asChild variant="cta" size="lg" className="rounded-full"><Link href="/contacto?tipo=apoyo#formulario">Ya apoyé, avisar</Link></Button>
+                        </div>
+                    </div>
+                    <div className="space-y-4 p-8 md:p-12">
+                        <h3 className="text-lg font-semibold">Formas de apoyar</h3>
+                        {SUPPORT_METHODS.length > 0 ? (
+                            <ul className="space-y-3">
+                                {SUPPORT_METHODS.map((m) => (
+                                    <li key={m.id} className={`flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-4 ${lift}`}>
+                                        <div className="flex items-center gap-3">
+                                            <span className={`flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold ${m.color}`}>{m.name}</span>
+                                            <div>
+                                                <p className="font-display text-xl tracking-wide">{m.number}</p>
+                                                {m.holder && <p className="text-xs text-muted-foreground">A nombre de {m.holder}</p>}
+                                            </div>
+                                        </div>
+                                        <CopyButton text={m.number!} label={`número de ${m.name}`} />
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="rounded-2xl border border-dashed p-5 text-sm text-muted-foreground">Estamos preparando los medios de apoyo (Yape y Plin). Mientras tanto puedes <Link href="/contacto?tipo=colaborar#formulario" className="font-semibold text-primary underline-offset-2 hover:underline">escribirnos</Link> y te contamos cómo colaborar.</p>
+                        )}
+                        <ul className="space-y-2 text-sm text-muted-foreground">
+                            <li className="flex gap-2"><PawPrint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> También aceptamos ayuda en especie: difusión, diseño, tiempo.</li>
+                            <li className="flex gap-2"><PawPrint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> Si quieres, mencionamos tu apoyo en la sección de colaboradores.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            {/* Formulario */}
+            <section id="formulario" aria-labelledby="h-form" className="scroll-mt-20 grid gap-8 lg:grid-cols-[1fr_1.5fr]">
+                <div className="space-y-5">
+                    <h2 id="h-form" className="font-display text-3xl text-primary md:text-4xl">Escríbenos</h2>
+                    <p className="text-muted-foreground">Cuéntanos qué necesitas: una consulta, una alianza, ser voluntario, colaborar o avisarnos que apoyaste. Te respondemos al correo que indiques.</p>
+                    <ul className="space-y-3 text-sm">
+                        <li className="flex gap-3 rounded-2xl bg-accent/50 p-4"><Users className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden /><span><strong className="block">Grupo de colaboradores</strong><span className="text-muted-foreground">Voluntarios, aliados y personas que apoyan se coordinan en un grupo. Marca la opción en el formulario o elige «Unirme al grupo».</span></span></li>
+                        <li className="flex gap-3 rounded-2xl bg-accent/50 p-4"><LifeBuoy className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden /><span><strong className="block">¿Un reporte falso o un abuso?</strong><span className="text-muted-foreground">Incluye el enlace del reporte en tu mensaje.</span></span></li>
+                    </ul>
+                </div>
+                <ContactForm key={initialKind} initialKind={initialKind} groupUrl={collabGroupUrl} />
+            </section>
+
+            {/* Preguntas frecuentes */}
             <section id="faq" aria-labelledby="h-faq" className="mx-auto max-w-3xl scroll-mt-20 space-y-4">
                 <h2 id="h-faq" className="text-center font-display text-3xl text-primary md:text-4xl">Preguntas frecuentes</h2>
                 {FAQ.map((f) => (
-                    <details key={f.q} className="group rounded-2xl border bg-card p-5 shadow-[var(--shadow-soft)] open:shadow-[var(--shadow-lift)]">
+                    <details key={f.q} className="group rounded-2xl border bg-card p-5 shadow-[var(--shadow-soft)] transition-shadow open:shadow-[var(--shadow-lift)]">
                         <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold">
                             {f.q}
-                            <ChevronDown className="h-5 w-5 shrink-0 text-primary transition-transform group-open:rotate-180" aria-hidden />
+                            <ChevronDown className="h-5 w-5 shrink-0 text-primary transition-transform duration-300 group-open:rotate-180" aria-hidden />
                         </summary>
-                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{f.a}</p>
+                        <p className="mt-3 text-sm leading-relaxed text-muted-foreground animate-in fade-in slide-in-from-top-1 duration-300">{f.a}</p>
                     </details>
                 ))}
             </section>

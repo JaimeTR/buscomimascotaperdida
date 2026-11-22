@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { PetFilters, EMPTY_FILTERS, type Filters } from "@/components/pet-filters"
 import { PetCard } from "@/components/pet-card"
 import { PetsMapWrapper } from "@/components/pets-map-wrapper"
-import { usePets } from "@/hooks/use-pets"
+import { useInfinitePets } from "@/hooks/use-pets"
 import { ReportCta, ReportPopup, type ReportCtaVariant } from "@/components/pets/report-ctas"
 import Image from "next/image"
 import { Reveal } from "@/components/ui/reveal"
@@ -21,11 +21,11 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
 
     const [filters, setFilters] = useState<Filters>({ ...EMPTY_FILTERS, q: initialQuery })
     const [view, setView] = useState<"list" | "map">("list")
-    const [shown, setShown] = useState(PAGE)
     const sentinel = useRef<HTMLDivElement>(null)
-    const applyFilters = (f: Filters) => { setFilters(f); setShown(PAGE) }
+    const applyFilters = (f: Filters) => setFilters(f)
 
-    const { pets, isLoading } = usePets({
+    // La base entrega 12 por vez (paginación real); al acercarse al final se pide el siguiente bloque.
+    const { pets, total, isLoading, isLoadingMore, hasMore, loadMore } = useInfinitePets({
         searchQuery: filters.q,
         type: filters.petType,
         status: filters.status,
@@ -36,23 +36,25 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
         color: filters.color,
         dateFrom: filters.dateFrom,
         size: filters.size,
-    })
+    }, PAGE)
 
-    // Scroll infinito con precarga: el siguiente bloque se pide cuando falta ~1 pantalla para llegar al final.
-    const hasMore = shown < pets.length
+    // Precarga: el siguiente bloque se pide cuando falta ~1 pantalla para llegar al final.
     useEffect(() => {
         const el = sentinel.current
         if (!el || !hasMore || view !== "list") return
-        const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) setShown((n) => n + PAGE) }, { rootMargin: "900px 0px" })
+        const io = new IntersectionObserver((e) => { if (e[0].isIntersecting) void loadMore() }, { rootMargin: "900px 0px" })
         io.observe(el)
         return () => io.disconnect()
-    }, [hasMore, view, shown])
+    }, [hasMore, view, loadMore, pets.length])
 
-    const visible = pets.slice(0, shown)
+    // El mapa necesita todos los puntos: al abrirlo se completa la carga, de a poco.
+    useEffect(() => { if (view === "map" && hasMore && !isLoadingMore) void loadMore() }, [view, hasMore, isLoadingMore, loadMore])
+
+    const visible = pets
 
     return (
         <div className="min-h-screen bg-background">
-            <ReportPopup active={shown > PAGE && view === "list"} />
+            <ReportPopup active={pets.length > PAGE && view === "list"} />
 
             {/* Hero Header */}
             <div className="bg-accent/50 pb-10 pt-12 md:pt-16 px-4 relative overflow-hidden">
@@ -89,7 +91,7 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
                     {/* Header & Controls */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                         <h2 className="text-2xl font-bold text-foreground">
-                            {isLoading ? "Buscando..." : `${pets.length} ${pets.length === 1 ? "mascota encontrada" : "mascotas encontradas"}`}
+                            {isLoading ? "Buscando..." : `${total} ${total === 1 ? "mascota encontrada" : "mascotas encontradas"}`}
                         </h2>
                         <div className="flex gap-1 rounded-lg border border-border p-1 self-start" role="group" aria-label="Vista">
                             <Button size="sm" variant={view === "list" ? "default" : "ghost"} aria-pressed={view === "list"} onClick={() => setView("list")}><List className="mr-1 h-4 w-4" />Lista</Button>
@@ -126,7 +128,7 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
                                     </Reveal>
                                 )
                                 // Al cerrar cada bloque de 12 (y si aún quedan más) va un bloque de llamado a la acción.
-                                const endOfBlock = (i + 1) % PAGE === 0 && i + 1 < pets.length
+                                const endOfBlock = (i + 1) % PAGE === 0 && i + 1 < total
                                 if (!endOfBlock) return [card]
                                 const block = BLOCKS[((i + 1) / PAGE - 1) % BLOCKS.length]
                                 return [card, (
@@ -152,7 +154,7 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
                     {/* Precarga del siguiente bloque */}
                     {view === "list" && !isLoading && hasMore && (
                         <div ref={sentinel} className="flex items-center justify-center py-6 text-sm text-muted-foreground" role="status">
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> Cargando más mascotas…
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden /> {isLoadingMore ? "Cargando más mascotas…" : "Desliza para ver más"}
                         </div>
                     )}
 

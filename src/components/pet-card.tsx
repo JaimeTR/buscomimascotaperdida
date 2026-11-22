@@ -38,14 +38,14 @@ export function PetCard({ id, name, type, breed, district, province, colors = []
     return (
         <Link
             href={`/mascotas/${id}`}
-            className="group block overflow-hidden rounded-3xl border bg-card shadow-[var(--shadow-soft)] transition-shadow hover:shadow-[var(--shadow-lift)]"
+            className="group hover-lift block overflow-hidden rounded-3xl border bg-card shadow-[var(--shadow-soft)]"
         >
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
                 <img
                     src={imageUrl}
                     alt={`${name}, ${breed}`}
                     loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full object-cover img-zoom"
                 />
                 <StatusBadge status={status} className="absolute left-3 top-3 shadow-md" />
                 {sourceName && (

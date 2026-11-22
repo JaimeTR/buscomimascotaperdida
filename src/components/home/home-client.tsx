@@ -106,8 +106,8 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {ACTIONS.map((a, i) => (
             <Reveal as="li" key={a.href} delay={i * 0.06}>
-              <Link href={a.href} className="group block h-full rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]">
-                <span className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl ${a.tone}`}><a.icon className="h-6 w-6" aria-hidden /></span>
+              <Link href={a.href} className="group hover-lift block h-full rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)]">
+                <span className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6 ${a.tone}`}><a.icon className="h-6 w-6" aria-hidden /></span>
                 <h2 className="text-lg font-semibold">{a.title}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">{a.text}</p>
               </Link>
@@ -170,7 +170,7 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
         <h2 className="mb-8 text-center font-display text-3xl text-primary md:text-4xl">Cómo funciona</h2>
         <ol className="grid gap-4 md:grid-cols-3">
           {STEPS.map((s, i) => (
-            <Reveal as="li" key={s.t} delay={i * 0.06} className="rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
+            <Reveal as="li" key={s.t} delay={i * 0.06} className="hover-lift rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
               <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">{i + 1}</span>
               <h3 className="mb-1 text-lg font-semibold">{s.t}</h3>
               <p className="text-sm text-muted-foreground">{s.d}</p>
@@ -182,8 +182,8 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
       {/* Aliados y voluntarios */}
       <section className="container mx-auto px-4 pb-14">
         <div className="grid overflow-hidden rounded-[2rem] border bg-card shadow-[var(--shadow-soft)] md:grid-cols-2">
-          <div className="relative min-h-60">
-            <Image src={STOCK.veterinarios.src} alt={STOCK.veterinarios.alt} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
+          <div className="group relative min-h-60 overflow-hidden">
+            <Image src={STOCK.veterinarios.src} alt={STOCK.veterinarios.alt} fill sizes="(min-width: 768px) 50vw, 100vw" className="img-zoom object-cover" />
           </div>
           <div className="flex flex-col justify-center gap-4 p-8 md:p-12">
             <h2 className="font-display text-3xl leading-tight text-primary">Empresas y voluntarios que suman</h2>
