@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
   images: { qualities: [75, 85, 90] },
   async redirects() {
     return [
+      { source: '/promocionar', destination: '/anuncios', permanent: true },
       { source: '/login', destination: '/ingresar', permanent: true },
       { source: '/register', destination: '/registro', permanent: true },
       { source: '/forgot-password', destination: '/recuperar-contrasena', permanent: true },

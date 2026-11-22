@@ -98,7 +98,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                         </Reveal>
                     ))}
                 </ul>
-                <p className="text-center text-sm text-muted-foreground">¿Tienes un negocio y quieres anunciarte? Mira los <Link href="/promocionar" className="font-semibold text-primary underline-offset-2 hover:underline">planes de promoción</Link>.</p>
+                <p className="text-center text-sm text-muted-foreground">¿Tienes un negocio y quieres anunciarte? Mira los <Link href="/anuncios" className="font-semibold text-primary underline-offset-2 hover:underline">planes de promoción</Link>.</p>
             </section>
 
             {/* Apoyar el proyecto */}

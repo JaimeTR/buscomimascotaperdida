@@ -1,11 +1,10 @@
 import { createPublicClient } from "@/utils/supabase/public"
 
-export type Placement = "home_banner" | "detail_sidebar" | "listing_inline" | "ads_page"
+export type Placement = "home_banner" | "detail_sidebar" | "listing_inline" | "ads_page" // ads_page: heredado, ya no hay página pública de anuncios
 export const PLACEMENTS: { key: Placement; label: string }[] = [
     { key: "home_banner", label: "Portada (banner)" },
     { key: "detail_sidebar", label: "Detalle de mascota (lateral)" },
     { key: "listing_inline", label: "Entre los resultados" },
-    { key: "ads_page", label: "Página de anuncios" },
 ]
 
 export type Ad = {
@@ -37,11 +36,11 @@ export const PARTNER_KINDS: Record<Partner["kind"], string> = {
 export const PLANS = [
     {
         key: "basico", name: "Básico", price: "S/ 50", period: "30 días", tone: "bg-secondary",
-        perks: ["Anuncio en la página de anuncios", "Enlace a tu web o redes", "Etiqueta “Anuncio” visible"],
+        perks: ["Destacado en la portada", "Enlace a tu web o redes", "Etiqueta “Anuncio” visible"],
     },
     {
         key: "destacado", name: "Destacado", price: "S/ 120", period: "30 días", tone: "bg-accent", highlight: true,
-        perks: ["Todo lo del plan Básico", "Banner en la portada", "Espacio lateral en el detalle de mascotas"],
+        perks: ["Todo lo del plan Básico", "Espacio lateral en el detalle de mascotas", "Mayor rotación en la portada"],
     },
     {
         key: "premium", name: "Premium", price: "S/ 250", period: "30 días", tone: "bg-orange-100",

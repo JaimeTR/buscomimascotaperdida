@@ -32,7 +32,7 @@ export default async function AliadosPage() {
                         <p className="text-lg text-muted-foreground">Cada empresa, veterinaria y persona que colabora ayuda a que más mascotas vuelvan a casa.</p>
                         <div className="flex flex-wrap gap-3">
                             <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#colaborar">Quiero colaborar</a></Button>
-                            <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><Link href="/promocionar">Ver planes de promoción</Link></Button>
+                            <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><Link href="/anuncios">Ver planes de promoción</Link></Button>
                         </div>
                     </div>
                     <div className="relative min-h-64 md:min-h-[26rem]">

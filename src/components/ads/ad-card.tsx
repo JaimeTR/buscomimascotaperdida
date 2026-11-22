@@ -50,7 +50,7 @@ export function AdCard({ ad, variant = "card" }: { ad: Ad; variant?: "card" | "b
 export function HouseAd({ variant = "banner" }: { variant?: "banner" | "side" }) {
     return (
         <Link
-            href="/promocionar"
+            href="/anuncios"
             className={cn("group flex items-center gap-4 rounded-3xl border border-dashed bg-card/60 p-5 transition-colors hover:bg-accent", variant === "banner" ? "md:p-8" : "flex-col text-center")}
         >
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-100 text-orange-800"><Megaphone className="h-6 w-6" aria-hidden /></span>

@@ -52,7 +52,7 @@ export async function approveAdRequest(formData: FormData) {
     const { days, ...rest } = data
     await run("promo.approve_ad", "promo_request", data.request_id, async (db) => {
         const ends = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString()
-        const ins = await db.from("ads").insert({ ...rest, placements: placements.length ? placements : ["ads_page"], status: "active", ends_at: ends })
+        const ins = await db.from("ads").insert({ ...rest, placements: placements.length ? placements : ["home_banner"], status: "active", ends_at: ends })
         if (ins.error) return ins
         return db.from("promo_requests").update({ status: "approved" }).eq("id", data.request_id)
     })

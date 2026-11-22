@@ -4,7 +4,7 @@ import { useActionState } from "react"
 import Link from "next/link"
 import { CheckCircle2, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { submitPromoRequest, type PromoState } from "@/app/promocionar/actions"
+import { submitPromoRequest, type PromoState } from "@/app/anuncios/actions"
 import { PLANS } from "@/lib/ads"
 
 const field = "h-12 w-full rounded-xl border border-input bg-card px-4 text-sm outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring"
@@ -34,7 +34,7 @@ export function PromoRequestForm({ loggedIn, kinds, defaultKind, defaultPlan }: 
                 <h3 className="text-xl font-semibold">Inicia sesión para enviar tu solicitud</h3>
                 <p className="mx-auto mt-1 max-w-md text-muted-foreground">Así evitamos el spam y puedes ver el estado de tus solicitudes. Es gratis.</p>
                 <div className="mt-5 flex justify-center gap-3">
-                    <Button asChild variant="cta"><Link href="/ingresar?next=/promocionar">Iniciar sesión</Link></Button>
+                    <Button asChild variant="cta"><Link href="/ingresar?next=/anuncios">Iniciar sesión</Link></Button>
                     <Button asChild variant="outline"><Link href="/registro">Crear cuenta</Link></Button>
                 </div>
             </div>

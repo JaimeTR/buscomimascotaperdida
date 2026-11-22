@@ -14,7 +14,7 @@ const LINKS = [
     { href: "/mascotas", label: "Buscar mascota" },
     { href: "/cartel", label: "Crear cartel" },
     { href: "/aliados", label: "Aliados" },
-    { href: "/anuncios", label: "Anuncios" },
+    { href: "/anuncios", label: "Anunciar" },
     { href: "/contacto", label: "Contacto" },
 ]
 

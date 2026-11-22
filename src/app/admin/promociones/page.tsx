@@ -71,7 +71,7 @@ export default async function AdminPromos() {
                                         <fieldset className="sm:col-span-2">
                                             <legend className="mb-1 text-sm font-medium">Espacios</legend>
                                             <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-                                                {PLACEMENTS.map((p) => <label key={p.key} className="flex items-center gap-2"><input type="checkbox" name="placements" value={p.key} defaultChecked={p.key === "ads_page"} /> {p.label}</label>)}
+                                                {PLACEMENTS.map((p) => <label key={p.key} className="flex items-center gap-2"><input type="checkbox" name="placements" value={p.key} defaultChecked={p.key === "home_banner"} /> {p.label}</label>)}
                                             </div>
                                         </fieldset>
                                         <div className="sm:col-span-2"><Button type="submit" variant="cta">Publicar anuncio</Button></div>

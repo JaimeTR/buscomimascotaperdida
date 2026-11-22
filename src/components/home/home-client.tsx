@@ -16,7 +16,7 @@ const ACTIONS = [
   { href: "/reportar", icon: PawPrint, title: "Reportar una mascota", text: "Publica en minutos con fotos y la zona donde la viste por última vez.", tone: "bg-orange-100 text-orange-800" },
   { href: "/mascotas", icon: MapPinned, title: "Buscar en tu zona", text: "Filtra por distrito, tipo, raza y color, y mira los casos en el mapa.", tone: "bg-accent text-accent-foreground" },
   { href: "/cartel", icon: Megaphone, title: "Crear un cartel", text: "Genera un cartel listo para imprimir y pegar en tu barrio.", tone: "bg-amber-100 text-amber-800" },
-  { href: "/promocionar", icon: Share2, title: "Difundir un caso", text: "Comparte un reporte en redes para que llegue a más personas.", tone: "bg-emerald-100 text-emerald-800" },
+  { href: "/anuncios", icon: Share2, title: "Difundir un caso", text: "Comparte un reporte en redes para que llegue a más personas.", tone: "bg-emerald-100 text-emerald-800" },
 ]
 
 const STEPS = [
@@ -163,7 +163,7 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
       </section>
 
       {/* Espacio publicitario (servidor) */}
-      <section aria-label="Anuncio" className="container mx-auto px-4 py-6">{adSlot}</section>
+      {adSlot}
 
       {/* Cómo funciona */}
       <section className="container mx-auto px-4 py-14">
@@ -190,7 +190,7 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
             <p className="text-muted-foreground">Veterinarias, refugios, negocios y personas que ayudan a que más mascotas vuelvan a casa. Súmate o promociona tu negocio.</p>
             <div className="flex flex-wrap gap-3">
               <Button asChild className="rounded-full"><Link href="/aliados">Ser aliado</Link></Button>
-              <Button asChild variant="outline" className="rounded-full"><Link href="/promocionar">Promocionar mi negocio</Link></Button>
+              <Button asChild variant="outline" className="rounded-full"><Link href="/anuncios">Promocionar mi negocio</Link></Button>
             </div>
           </div>
         </div>

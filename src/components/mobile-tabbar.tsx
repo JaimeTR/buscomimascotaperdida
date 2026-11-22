@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import {
     Home, Search, Plus, Megaphone, Menu, X, FileText, Lightbulb, UserRound, LogIn, UserPlus, LogOut,
-    Handshake, Newspaper, Store, Mail, ChevronRight, Sparkles,
+    Handshake, Store, Mail, ChevronRight, Sparkles,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/utils/supabase/client"
@@ -32,8 +32,7 @@ const GUEST = [
 const EXPLORE = [
     { href: "/cartel", label: "Crear cartel", icon: Megaphone },
     { href: "/aliados", label: "Aliados", icon: Handshake },
-    { href: "/anuncios", label: "Anuncios", icon: Newspaper },
-    { href: "/promocionar", label: "Promociona tu negocio", icon: Store },
+    { href: "/anuncios", label: "Anunciar tu negocio", icon: Store },
     { href: "/contacto", label: "Contacto", icon: Mail },
 ]
 const LEGAL = [
