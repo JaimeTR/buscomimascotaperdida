@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { Search, ChevronDown, Calendar, X, MapPin, Dog, Palette, PawPrint, Cat, Squirrel, Check, SlidersHorizontal, Ruler } from "lucide-react"
+import { Search, ChevronDown, Calendar, X, MapPin, Dog, Palette, PawPrint, Cat, Squirrel, Check, SlidersHorizontal, Ruler, RotateCcw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -246,9 +246,9 @@ function FiltersSheet({ value, onApply, onClose }: { value: Filters; onApply: (f
             </div>
 
             <div className="flex items-center gap-3 border-t bg-card px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-                <Button type="button" variant="ghost" className="h-12 rounded-full" onClick={() => setDraft({ ...EMPTY_FILTERS, q: value.q })} disabled={n === 0}>Limpiar</Button>
+                <Button type="button" variant="ghost" className="h-12 rounded-full" onClick={() => setDraft({ ...EMPTY_FILTERS, q: value.q })} disabled={n === 0}><RotateCcw className="mr-2 h-4 w-4" aria-hidden /> Limpiar</Button>
                 <Button type="button" className="h-12 flex-1 rounded-full text-base" onClick={() => { onApply(draft); onClose() }}>
-                    Aplicar{n > 0 ? ` (${n})` : ""}
+                    <Check className="mr-2 h-5 w-5" aria-hidden /> Aplicar{n > 0 ? ` (${n})` : ""}
                 </Button>
             </div>
         </>
@@ -308,7 +308,7 @@ export function PetFilters({ value, onChange, onSubmit, compact = false }: { val
                         <X className="h-4 w-4" aria-hidden />
                     </button>
                 )}
-                <Button type="submit" className="absolute right-1.5 top-1.5 h-11 rounded-full px-5 sm:px-6">Buscar</Button>
+                <Button type="submit" className="absolute right-1.5 top-1.5 h-11 rounded-full px-4 sm:px-6"><Search className="mr-2 h-4 w-4" aria-hidden /> Buscar</Button>
             </form>
 
             <div className={compact ? "grid grid-cols-[1fr_1.3fr] items-center gap-2 sm:flex sm:flex-wrap" : "flex flex-wrap items-center gap-2"}>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { loginAction, resendConfirmationAction } from "@/app/auth/actions"
 import type { LoginActionState } from "@/app/auth/actions"
 import Link from "next/link"
-import { Loader2, AlertTriangle, CheckCircle2, Eye, EyeOff, Mail, Lock } from "lucide-react"
+import { Loader2, AlertTriangle, CheckCircle2, Eye, EyeOff, Mail, Lock, LogIn } from "lucide-react"
 import { useToast } from "@/components/ui/toast-modern"
 
 // Define the initial state type
@@ -111,7 +111,7 @@ export function LoginForm({ next, forgotHref }: { next: string; forgotHref: stri
             )}
 
             <Button type="submit" variant="cta" className="h-12 w-full rounded-xl text-base font-bold" disabled={isPending} aria-busy={isPending}>
-                {isPending ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> Ingresando…</> : "Ingresar"}
+                {isPending ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> Ingresando…</> : <><LogIn className="mr-2 h-5 w-5" aria-hidden /> Ingresar</>}
             </Button>
         </form>
     )

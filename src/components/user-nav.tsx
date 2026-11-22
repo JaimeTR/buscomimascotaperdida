@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { User, FileText, Lightbulb, LogOut, LogIn } from "lucide-react"
+import { User, FileText, Lightbulb, LogOut, LogIn, UserPlus } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -76,13 +76,13 @@ export function UserNav() {
             // En móvil, ingresar y crear cuenta están en el menú inferior.
             <div className="hidden items-center gap-2 lg:flex">
                 <Button variant="ghost" asChild className="hidden font-semibold text-muted-foreground xl:inline-flex">
-                    <Link href="/ingresar">Iniciar sesión</Link>
+                    <Link href="/ingresar"><LogIn className="mr-2 h-4 w-4" aria-hidden /> Iniciar sesión</Link>
                 </Button>
                 <Button variant="ghost" size="icon" asChild className="xl:hidden">
                     <Link href="/ingresar" aria-label="Iniciar sesión"><LogIn className="h-5 w-5" aria-hidden /></Link>
                 </Button>
                 <Button asChild className="rounded-full bg-primary px-5 font-bold shadow-md shadow-primary/20 hover:bg-primary">
-                    <Link href="/registro">Unirme</Link>
+                    <Link href="/registro"><UserPlus className="mr-2 h-4 w-4" aria-hidden /> Unirme</Link>
                 </Button>
             </div>
         )
@@ -94,7 +94,6 @@ export function UserNav() {
         <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
                 <button aria-label={`Mi cuenta, ${display}`} className="group flex items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring">
-                    <span className="hidden max-w-[120px] truncate text-sm font-bold leading-tight text-foreground lg:block">{display}</span>
                     <Avatar className="h-10 w-10 border-2 border-card shadow-sm transition-transform group-hover:scale-105">
                         {me.avatar && <AvatarImage src={me.avatar} alt="" referrerPolicy="no-referrer" />}
                         <AvatarFallback className="bg-accent font-bold text-primary">{display.substring(0, 2).toUpperCase()}</AvatarFallback>

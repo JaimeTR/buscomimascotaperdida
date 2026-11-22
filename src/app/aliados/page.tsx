@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Building2, HeartHandshake, Stethoscope, Newspaper, ArrowUpRight, Handshake } from "lucide-react"
+import { Building2, HeartHandshake, Stethoscope, Newspaper, ArrowUpRight, Handshake, HandHeart, Megaphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
 import { Reveal } from "@/components/ui/reveal"
@@ -32,8 +32,8 @@ export default async function AliadosPage() {
                         <h1 className="font-display text-4xl leading-[1.05] text-primary md:text-5xl">Juntos llegamos <span className="text-cta">más lejos</span></h1>
                         <p className="text-lg text-muted-foreground">Cada empresa, veterinaria y persona que colabora ayuda a que más mascotas vuelvan a casa.</p>
                         <div className="flex flex-wrap gap-3">
-                            <OpenFormButton form="aliados" variant="cta" size="lg" className="rounded-full">Quiero colaborar</OpenFormButton>
-                            <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><Link href="/anuncios">Ver planes de promoción</Link></Button>
+                            <OpenFormButton form="aliados" variant="cta" size="lg" className="rounded-full"><HandHeart className="mr-2 h-5 w-5" aria-hidden /> Quiero colaborar</OpenFormButton>
+                            <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><Link href="/anuncios"><Megaphone className="mr-2 h-5 w-5" aria-hidden /> Ver planes de promoción</Link></Button>
                         </div>
                     </div>
                     <div className="relative min-h-64 md:min-h-[26rem]">
@@ -61,7 +61,7 @@ export default async function AliadosPage() {
                 <h2 id="h-aliados" className="mb-8 font-display text-3xl text-primary">Nuestros aliados</h2>
                 {partners.length === 0 ? (
                     <EmptyState icon={Handshake} title="Aún no hay aliados publicados" text="Sé la primera empresa o persona en aparecer aquí y ayuda a que la red crezca.">
-                        <OpenFormButton form="aliados" detail={{ kind: "aliado" }} variant="cta">Quiero ser aliado</OpenFormButton>
+                        <OpenFormButton form="aliados" detail={{ kind: "aliado" }} variant="cta"><Handshake className="mr-2 h-4 w-4" aria-hidden /> Quiero ser aliado</OpenFormButton>
                     </EmptyState>
                 ) : (
                     <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { Search, List, Map as MapIcon, Loader2, MapPinned, PawPrint } from "lucide-react"
+import { Search, List, Map as MapIcon, Loader2, MapPinned, PawPrint, Megaphone } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { PetFilters, EMPTY_FILTERS, type Filters } from "@/components/pet-filters"
@@ -75,10 +75,10 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
                             </p>
                             <div className="flex flex-col gap-3 sm:flex-row">
                                 <Button asChild variant="cta" size="lg" className="h-12 rounded-full px-7 text-base shadow-[var(--shadow-soft)]">
-                                    <Link href="/reportar">Reportar una mascota</Link>
+                                    <Link href="/reportar"><PawPrint className="mr-2 h-5 w-5" aria-hidden /> Reportar una mascota</Link>
                                 </Button>
                                 <Button asChild variant="outline" size="lg" className="h-12 rounded-full border-primary/30 bg-card px-7 text-base text-primary hover:bg-card/80">
-                                    <Link href="/cartel">Crear cartel</Link>
+                                    <Link href="/cartel"><Megaphone className="mr-2 h-5 w-5" aria-hidden /> Crear cartel</Link>
                                 </Button>
                             </div>
                         </div>
@@ -117,7 +117,7 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
                         </div>
                     </div>
 
-                    {view === "map" && !isLoading && <PetsMapWrapper pets={pets} />}
+                    {view === "map" && !isLoading && <PetsMapWrapper pets={pets} loadingMore={hasMore} />}
 
                     {/* Lista: 12 por bloque y un llamado a la acción entre bloques */}
                     <div className={view === "map" ? "hidden" : "grid min-h-[400px] grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"}>

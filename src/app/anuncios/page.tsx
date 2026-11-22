@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Check, Megaphone, Eye, MousePointerClick, ShieldCheck } from "lucide-react"
+import { ArrowRight, Check, Gem, Megaphone, Eye, MousePointerClick, Send, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Reveal } from "@/components/ui/reveal"
 import { PromoDialog } from "@/components/promo/promo-dialog"
@@ -35,8 +35,8 @@ export default async function AnunciosPage() {
                         <h1 className="font-display text-4xl leading-[1.05] md:text-5xl">Tu marca, junto a quienes <span className="text-orange-300">aman a sus mascotas</span></h1>
                         <p className="text-lg text-primary-foreground/90">Aparece como destacado en la portada y junto a los casos de tu zona. Y ayudas a sostener la red.</p>
                         <div className="flex flex-wrap gap-3">
-                            <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#planes">Ver planes</a></Button>
-                            <OpenFormButton form="anuncios" size="lg" variant="outline" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white">Enviar solicitud</OpenFormButton>
+                            <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#planes"><Gem className="mr-2 h-5 w-5" aria-hidden /> Ver planes</a></Button>
+                            <OpenFormButton form="anuncios" size="lg" variant="outline" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"><Send className="mr-2 h-5 w-5" aria-hidden /> Enviar solicitud</OpenFormButton>
                         </div>
                     </div>
                     <div className="relative min-h-64 md:min-h-[26rem]">
@@ -70,7 +70,7 @@ export default async function AnunciosPage() {
                                 <ul className="mt-5 flex-1 space-y-3 text-sm">
                                     {p.perks.map((perk) => <li key={perk} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> {perk}</li>)}
                                 </ul>
-                                <OpenFormButton form="anuncios" detail={{ plan: p.key }} variant={"highlight" in p && p.highlight ? "cta" : "default"} className="mt-6 w-full rounded-full">Elegir {p.name}</OpenFormButton>
+                                <OpenFormButton form="anuncios" detail={{ plan: p.key }} variant={"highlight" in p && p.highlight ? "cta" : "default"} className="mt-6 w-full rounded-full">Elegir {p.name} <ArrowRight className="ml-2 h-4 w-4" aria-hidden /></OpenFormButton>
                             </div>
                         </Reveal>
                     ))}
@@ -99,7 +99,7 @@ export default async function AnunciosPage() {
                         <Megaphone className="mx-auto h-9 w-9 text-primary" aria-hidden />
                         <h2 className="font-display text-3xl text-primary md:text-4xl">Solicita tu anuncio</h2>
                         <p className="text-muted-foreground">Cuéntanos de tu negocio y te contactamos para coordinar todo.</p>
-                        <OpenFormButton form="anuncios" variant="cta" size="lg" className="rounded-full">Enviar solicitud</OpenFormButton>
+                        <OpenFormButton form="anuncios" variant="cta" size="lg" className="rounded-full"><Send className="mr-2 h-5 w-5" aria-hidden /> Enviar solicitud</OpenFormButton>
                     </div>
                 </div>
             </section>

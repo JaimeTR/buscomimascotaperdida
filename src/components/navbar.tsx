@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
+import { useSyncExternalStore } from "react"
 import { usePathname } from "next/navigation"
 import { Plus } from "lucide-react"
 
@@ -19,10 +20,10 @@ const LINKS = [
 ]
 
 // Logo: isologo (símbolo) y, si `showName`, el nombre como texto real (nítido a cualquier tamaño).
-export function BrandMark({ className, showName = false, nameClassName }: { className?: string; showName?: boolean; nameClassName?: string }) {
+export function BrandMark({ className, showName = false, nameClassName, symbolClassName }: { className?: string; showName?: boolean; nameClassName?: string; symbolClassName?: string }) {
     return (
         <span className={cn("flex shrink-0 items-center gap-2.5 whitespace-nowrap", className)}>
-            <Image src="/logo_symbol.svg" alt="" width={36} height={44} className="h-9 w-auto sm:h-11" priority unoptimized />
+            <Image src="/logo_symbol.svg" alt="" width={36} height={44} className={cn("h-9 w-auto transition-all duration-300 sm:h-11", symbolClassName)} priority unoptimized />
             {showName && (
                 <span className={cn("font-display text-[16px] leading-[1.0] sm:text-[19px] lg:text-[21px]", nameClassName)}>
                     <span className="block text-primary">busco mi</span>
@@ -33,17 +34,22 @@ export function BrandMark({ className, showName = false, nameClassName }: { clas
     )
 }
 
+// Verdadero cuando la página ya se desplazó: el encabezado fijo se encoge y queda delgado.
+const subscribeScroll = (cb: () => void) => { window.addEventListener("scroll", cb, { passive: true }); return () => window.removeEventListener("scroll", cb) }
+const isScrolled = () => window.scrollY > 24
+
 export function Navbar() {
     const pathname = usePathname()
+    const scrolled = useSyncExternalStore(subscribeScroll, isScrolled, () => false)
 
     // El dashboard y el admin traen su propia navegación.
     if (pathname.startsWith("/panel") || pathname.startsWith("/admin")) return null
 
     return (
         // Móvil: encabezado simple que se va con el scroll (solo logo); cuenta y accesos viven en la barra inferior.
-        <header className="z-50 bg-background lg:sticky lg:top-0 lg:border-b lg:bg-background/90 lg:backdrop-blur">
-            <div className="container mx-auto flex h-14 items-center justify-center gap-2 px-4 lg:h-16 lg:justify-between xl:gap-4">
-                <Link href="/" aria-label="Busco mi mascota, inicio"><BrandMark showName nameClassName="lg:hidden" /></Link>
+        <header className={cn("z-50 bg-background transition-shadow duration-300 lg:sticky lg:top-0 lg:border-b lg:bg-background/90 lg:backdrop-blur", scrolled && "lg:bg-background/95 lg:shadow-[0_6px_20px_-12px_rgb(11_43_42/0.35)]")}>
+            <div className={cn("container mx-auto flex h-14 items-center justify-center gap-2 px-4 transition-[height] duration-300 lg:justify-between xl:gap-4", scrolled ? "lg:h-12" : "lg:h-16")}>
+                <Link href="/" aria-label="Busco mi mascota, inicio"><BrandMark showName nameClassName="lg:hidden" symbolClassName={scrolled ? "lg:h-8" : undefined} /></Link>
 
                 <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
                     {LINKS.map((l) => (
@@ -52,7 +58,7 @@ export function Navbar() {
                             href={l.href}
                             aria-current={pathname === l.href ? "page" : undefined}
                             className={cn(
-                                "whitespace-nowrap rounded-full px-2 py-2 text-sm font-medium text-muted-foreground xl:px-4 transition-colors hover:bg-accent hover:text-accent-foreground",
+                                "whitespace-nowrap rounded-full px-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:bg-accent hover:text-accent-foreground xl:px-4", scrolled ? "py-1" : "py-2",
                                 pathname === l.href && "bg-accent text-accent-foreground"
                             )}
                         >
@@ -67,7 +73,7 @@ export function Navbar() {
                         label="Reportar mascota"
                         icon={<Plus className="mr-2 h-4 w-4" aria-hidden />}
                         variant="cta"
-                        className="rounded-full"
+                        className={cn("rounded-full transition-all duration-300", scrolled && "h-9 px-4")}
                     />
                     <UserNav />
                 </div>

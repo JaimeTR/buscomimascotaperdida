@@ -7,7 +7,7 @@ import { registerSchema, RegisterSchema } from "@/lib/schemas/auth"
 import { registerAction, resendConfirmationAction } from "@/app/auth/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Loader2, Eye, EyeOff, MailCheck, Mail, Lock, User } from "lucide-react"
+import { Loader2, Eye, EyeOff, MailCheck, Mail, Lock, User, UserPlus } from "lucide-react"
 import { useToast } from "@/components/ui/toast-modern"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -92,7 +92,7 @@ export function RegisterForm({ next, loginHref }: { next: string; loginHref: str
             </div>
 
             <Button type="submit" variant="cta" className="h-12 w-full rounded-xl text-base font-bold" disabled={isSubmitting} aria-busy={isSubmitting}>
-                {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> Creando cuenta…</> : "Crear cuenta"}
+                {isSubmitting ? <><Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> Creando cuenta…</> : <><UserPlus className="mr-2 h-5 w-5" aria-hidden /> Crear cuenta</>}
             </Button>
         </form>
     )

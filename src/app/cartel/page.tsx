@@ -2,7 +2,7 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import {
     BadgeCheck, Camera, Download, Hand, ImagePlus, LayoutTemplate, MapPin, Megaphone, PawPrint, Phone, Printer, QrCode,
-    Scissors, Share2, Smartphone, Sparkles, Type,
+    Scissors, Share2, Smartphone, Sparkles, Type, LogIn, Search,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -70,8 +70,8 @@ export default async function PosterHubPage({ searchParams }: { searchParams: Pr
                             <h1 className="text-balance font-display text-[2rem] leading-[1.08] text-primary sm:text-4xl md:text-6xl md:leading-[1.05]">Un cartel <span className="text-cta">profesional</span> en minutos</h1>
                             <p className="max-w-xl text-base text-muted-foreground sm:text-lg">Elige una plantilla, personaliza los textos y la foto, y descárgalo o imprímelo. Con QR directo al reporte y en el tamaño que necesites.</p>
                             <div className="flex flex-col gap-3 sm:flex-row">
-                                <Button asChild variant="cta" size="lg" className="h-12 rounded-full px-7 text-base"><a href="#mis-reportes">Crear el cartel de mi reporte</a></Button>
-                                <Button asChild variant="outline" size="lg" className="h-12 rounded-full border-primary/30 bg-card px-7 text-base text-primary hover:bg-card/80"><Link href="/reportar">Reportar una mascota</Link></Button>
+                                <Button asChild variant="cta" size="lg" className="h-12 rounded-full px-7 text-base"><a href="#mis-reportes"><Megaphone className="mr-2 h-5 w-5" aria-hidden /> Crear el cartel de mi reporte</a></Button>
+                                <Button asChild variant="outline" size="lg" className="h-12 rounded-full border-primary/30 bg-card px-7 text-base text-primary hover:bg-card/80"><Link href="/reportar"><PawPrint className="mr-2 h-5 w-5" aria-hidden /> Reportar una mascota</Link></Button>
                             </div>
                             <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-muted-foreground">
                                 {["Gratis", "PDF, PNG o impreso", "Se guarda solo"].map((t) => <li key={t} className="inline-flex items-center gap-1.5"><BadgeCheck className="h-4 w-4 text-primary" aria-hidden /> {t}</li>)}
@@ -99,8 +99,8 @@ export default async function PosterHubPage({ searchParams }: { searchParams: Pr
                         <Megaphone className="mx-auto h-9 w-9 text-primary" aria-hidden />
                         <p className="mx-auto mt-3 max-w-md text-muted-foreground">¿Quieres ayudar a otra familia? Abre su reporte en la lista y pulsa «Generar cartel».</p>
                         <div className="mt-5 flex flex-wrap justify-center gap-3">
-                            <Button asChild variant="cta" size="lg" className="rounded-full"><Link href="/ingresar?next=/cartel">Iniciar sesión</Link></Button>
-                            <Button asChild variant="outline" size="lg" className="rounded-full"><Link href="/mascotas">Ver mascotas reportadas</Link></Button>
+                            <Button asChild variant="cta" size="lg" className="rounded-full"><Link href="/ingresar?next=/cartel"><LogIn className="mr-2 h-5 w-5" aria-hidden /> Iniciar sesión</Link></Button>
+                            <Button asChild variant="outline" size="lg" className="rounded-full"><Link href="/mascotas"><Search className="mr-2 h-5 w-5" aria-hidden /> Ver mascotas reportadas</Link></Button>
                         </div>
                     </div>
                 ) : !reports?.length ? (
@@ -108,7 +108,7 @@ export default async function PosterHubPage({ searchParams }: { searchParams: Pr
                         <PawPrint className="mx-auto h-9 w-9 text-primary" aria-hidden />
                         <h3 className="mt-3 text-xl font-semibold">Aún no tienes reportes</h3>
                         <p className="mt-1 text-muted-foreground">Al publicar un reporte se genera tu cartel automáticamente.</p>
-                        <Button asChild variant="cta" size="lg" className="mt-5 rounded-full"><Link href="/reportar">Reportar una mascota</Link></Button>
+                        <Button asChild variant="cta" size="lg" className="mt-5 rounded-full"><Link href="/reportar"><PawPrint className="mr-2 h-5 w-5" aria-hidden /> Reportar una mascota</Link></Button>
                     </div>
                 ) : (
                     <ul className="grid gap-4 sm:grid-cols-2">

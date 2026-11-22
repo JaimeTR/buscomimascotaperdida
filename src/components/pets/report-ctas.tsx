@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { Bell, Camera, FileText, PawPrint, UserPlus, X } from "lucide-react"
+import { Bell, Camera, FileText, HandHeart, PawPrint, UserPlus, X } from "lucide-react"
 
 import { ReportActionButton } from "@/components/report-action-button"
 import { STOCK } from "@/lib/stock-images"
@@ -18,7 +18,7 @@ function Aviso() {
                 <p className="font-semibold text-foreground">¿Perdiste o encontraste una mascota?</p>
                 <p className="text-sm text-muted-foreground">Publícala gratis en minutos y avisamos a las personas de tu zona.</p>
             </div>
-            <ReportActionButton nextUrl="/reportar" label="Reportar ahora" variant="cta" className="w-full rounded-full sm:w-auto" />
+            <ReportActionButton nextUrl="/reportar" label="Reportar ahora" icon={<PawPrint className="mr-2 h-4 w-4" aria-hidden />} variant="cta" className="w-full rounded-full sm:w-auto" />
         </div>
     )
 }
@@ -47,7 +47,7 @@ function Pasos() {
                         )
                     })}
                 </ol>
-                <ReportActionButton nextUrl="/reportar" label="Reportar mascota" variant="cta" size="lg" className="w-full rounded-full sm:w-auto" />
+                <ReportActionButton nextUrl="/reportar" label="Reportar mascota" icon={<PawPrint className="mr-2 h-5 w-5" aria-hidden />} variant="cta" size="lg" className="w-full rounded-full sm:w-auto" />
             </div>
         </div>
     )
@@ -63,8 +63,8 @@ function Seccion() {
                 <h2 className="font-display text-3xl leading-tight md:text-4xl">Cada reporte puede traer a una mascota de vuelta a casa</h2>
                 <p className="text-primary-foreground/90">Publica en minutos. Es gratis y lo ve toda la comunidad.</p>
                 <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row">
-                    <ReportActionButton nextUrl="/reportar" label="Perdí a mi mascota" variant="cta" size="lg" className="rounded-full" />
-                    <ReportActionButton nextUrl="/reportar?tipo=encontrada" label="Encontré una mascota" variant="outline" size="lg" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white" />
+                    <ReportActionButton nextUrl="/reportar" label="Perdí a mi mascota" icon={<PawPrint className="mr-2 h-5 w-5" aria-hidden />} variant="cta" size="lg" className="rounded-full" />
+                    <ReportActionButton nextUrl="/reportar?tipo=encontrada" label="Encontré una mascota" icon={<HandHeart className="mr-2 h-5 w-5" aria-hidden />} variant="outline" size="lg" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white" />
                 </div>
             </div>
         </div>
@@ -91,7 +91,7 @@ export function ReportPopup({ active }: { active: boolean }) {
             <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-100 text-orange-800"><PawPrint className="h-5 w-5" aria-hidden /></span>
             <p className="pr-6 font-display text-lg leading-tight text-primary">¿Perdiste o encontraste una mascota?</p>
             <p className="mt-1 text-sm text-muted-foreground">Publícala gratis y avisamos a tu zona.</p>
-            <ReportActionButton nextUrl="/reportar" label="Reportar ahora" variant="cta" className="mt-4 w-full rounded-full" />
+            <ReportActionButton nextUrl="/reportar" label="Reportar ahora" icon={<PawPrint className="mr-2 h-4 w-4" aria-hidden />} variant="cta" className="mt-4 w-full rounded-full" />
         </div>
     )
 }

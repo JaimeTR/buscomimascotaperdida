@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Search, Megaphone, MapPinned, Share2, Loader2, PawPrint, CheckCircle2 } from "lucide-react"
+import { ArrowRight, Search, Megaphone, MapPinned, Share2, Loader2, PawPrint, CheckCircle2, HandHeart, Handshake } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
 import { PetCard } from "@/components/pet-card"
@@ -68,10 +68,10 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
               </p>
               <div className="flex flex-col gap-3 sm:flex-row">
                 <Button asChild variant="cta" size="lg" className="h-12 rounded-full px-7 text-base shadow-[var(--shadow-soft)]">
-                  <Link href="/reportar">Reportar una mascota</Link>
+                  <Link href="/reportar"><PawPrint className="mr-2 h-5 w-5" aria-hidden /> Reportar una mascota</Link>
                 </Button>
                 <Button asChild variant="outline" size="lg" className="h-12 rounded-full border-primary/30 bg-card px-7 text-base text-primary hover:bg-card/80">
-                  <Link href="/reportar?tipo=encontrada">Encontré una mascota</Link>
+                  <Link href="/reportar?tipo=encontrada"><HandHeart className="mr-2 h-5 w-5" aria-hidden /> Encontré una mascota</Link>
                 </Button>
               </div>
               <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-muted-foreground">
@@ -189,8 +189,8 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
             <h2 className="font-display text-3xl leading-tight text-primary">Empresas y voluntarios que suman</h2>
             <p className="text-muted-foreground">Veterinarias, refugios, negocios y personas que ayudan a que más mascotas vuelvan a casa. Súmate o promociona tu negocio.</p>
             <div className="flex flex-wrap gap-3">
-              <Button asChild className="rounded-full"><Link href="/aliados">Ser aliado</Link></Button>
-              <Button asChild variant="outline" className="rounded-full"><Link href="/anuncios">Promocionar mi negocio</Link></Button>
+              <Button asChild className="rounded-full"><Link href="/aliados"><Handshake className="mr-2 h-4 w-4" aria-hidden /> Ser aliado</Link></Button>
+              <Button asChild variant="outline" className="rounded-full"><Link href="/anuncios"><Megaphone className="mr-2 h-4 w-4" aria-hidden /> Promocionar mi negocio</Link></Button>
             </div>
           </div>
         </div>
@@ -203,7 +203,7 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
           <h2 className="relative mx-auto max-w-2xl font-display text-3xl leading-tight md:text-4xl">¿Perdiste a tu mascota o encontraste una?</h2>
           <p className="relative mx-auto mt-3 max-w-xl text-primary-foreground/90">Cada minuto cuenta. Publica ahora y activa la red de tu zona.</p>
           <Button asChild variant="cta" size="lg" className="relative mt-6 rounded-full">
-            <Link href="/reportar">Reportar una mascota</Link>
+            <Link href="/reportar"><PawPrint className="mr-2 h-5 w-5" aria-hidden /> Reportar una mascota</Link>
           </Button>
         </div>
       </section>
