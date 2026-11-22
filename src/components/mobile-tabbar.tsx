@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import {
     Home, Search, Plus, Megaphone, Menu, X, FileText, Lightbulb, UserRound, LogIn, UserPlus, LogOut,
-    Handshake, Newspaper, Store, Mail, ChevronRight,
+    Handshake, Newspaper, Store, Mail, ChevronRight, Sparkles,
 } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/utils/supabase/client"
@@ -17,7 +17,7 @@ const TABS = [
     { href: "/", label: "Inicio", icon: Home },
     { href: "/mascotas", label: "Buscar", icon: Search },
     { href: "/reportar", label: "Reportar", icon: Plus, center: true },
-    { href: "/cartel", label: "Cartel", icon: Megaphone },
+    { href: "#asistente", label: "Asistente", icon: Sparkles, chat: true },
 ]
 
 const ACCOUNT = [
@@ -30,6 +30,7 @@ const GUEST = [
     { href: "/registro", label: "Crear cuenta gratis", icon: UserPlus },
 ]
 const EXPLORE = [
+    { href: "/cartel", label: "Crear cartel", icon: Megaphone },
     { href: "/aliados", label: "Aliados", icon: Handshake },
     { href: "/anuncios", label: "Anuncios", icon: Newspaper },
     { href: "/promocionar", label: "Promociona tu negocio", icon: Store },
@@ -95,6 +96,15 @@ export function MobileTabbar() {
             <nav aria-label="Navegación móvil" className="fixed inset-x-0 bottom-0 z-40 border-t bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
                 <ul className="mx-auto grid max-w-md grid-cols-5 items-end px-2">
                     {TABS.map((t) => {
+                        if (t.chat) {
+                            return (
+                                <li key={t.href} className="flex justify-center">
+                                    <button onClick={() => window.dispatchEvent(new Event("bmm:open-chat"))} aria-haspopup="dialog" className={cn(tab, "text-muted-foreground")}>
+                                        <t.icon className="h-6 w-6" aria-hidden /> {t.label}
+                                    </button>
+                                </li>
+                            )
+                        }
                         const active = t.href === "/" ? pathname === "/" : pathname.startsWith(t.href)
                         return (
                             <li key={t.href} className="flex justify-center">

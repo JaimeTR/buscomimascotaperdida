@@ -136,6 +136,13 @@ export function ChatbotWidget() {
         scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" })
     }, [messages, isTyping, isOpen])
 
+    // La barra inferior móvil abre el asistente con este evento (no hay botón flotante en móvil).
+    useEffect(() => {
+        const onOpen = () => { setIsOpen(true); setShowPrompt(false) }
+        window.addEventListener("bmm:open-chat", onOpen)
+        return () => window.removeEventListener("bmm:open-chat", onOpen)
+    }, [])
+
     useEffect(() => {
         if (!isOpen) return
         inputRef.current?.focus()
@@ -150,7 +157,7 @@ export function ChatbotWidget() {
 
     const go = useCallback((href: string) => {
         router.push(href)
-        if (window.matchMedia("(max-width: 639px)").matches) setIsOpen(false) // en móvil el chat tapa la página
+        if (window.matchMedia("(max-width: 767px)").matches) setIsOpen(false) // en móvil el chat tapa la página
     }, [router])
 
     const send = useCallback(async (raw: string, memory: Filters = filters) => {
@@ -226,29 +233,31 @@ export function ChatbotWidget() {
     const active = Object.entries(filters)
 
     return (
-        <div className="pointer-events-none fixed bottom-24 right-4 z-[100] flex flex-col items-end md:bottom-6 md:right-6">
+        <div className="pointer-events-none fixed bottom-6 right-6 z-[100] flex flex-col items-end max-md:inset-0 max-md:bottom-auto max-md:right-auto">
             {isOpen && (
                 <div
                     role="dialog"
                     aria-label="Asistente Huellita"
-                    className="pointer-events-auto mb-4 flex h-[min(640px,calc(100dvh-9rem))] w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-2xl duration-200 animate-in fade-in slide-in-from-bottom-5 sm:w-[400px]"
+                    className="pointer-events-auto mb-4 flex h-[min(680px,calc(100dvh-11rem))] w-[420px] flex-col overflow-hidden rounded-[1.75rem] border border-border bg-card shadow-[0_28px_70px_-14px_rgba(15,118,110,0.45)] ring-1 ring-black/5 duration-200 animate-in fade-in slide-in-from-bottom-5 max-md:fixed max-md:inset-0 max-md:mb-0 max-md:h-[100dvh] max-md:w-full max-md:rounded-none max-md:border-0"
                 >
-                    <div className="flex items-center justify-between bg-gradient-to-r from-teal-800 to-teal-600 px-4 py-3 text-white">
-                        <div className="flex items-center gap-3">
-                            <div className="rounded-full bg-white/20 p-2"><PawPrint className="h-5 w-5" /></div>
+                    <div className="relative flex items-center justify-between overflow-hidden bg-gradient-to-br from-teal-900 via-teal-700 to-teal-600 px-5 py-4 pt-[max(1rem,env(safe-area-inset-top))] text-white">
+                        <div aria-hidden className="paws-white pointer-events-none absolute inset-0 opacity-[0.09]" />
+                        <div className="relative flex items-center gap-3">
+                            <div className="relative">
+                                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/20 ring-2 ring-white/30"><PawPrint className="h-6 w-6" /></div>
+                                <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-teal-700 bg-emerald-300" aria-hidden />
+                            </div>
                             <div>
-                                <h3 className="text-sm font-bold leading-tight">Huellita</h3>
-                                <p className="flex items-center gap-1.5 text-[11px] text-teal-50">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" /> Busca en los reportes reales
-                                </p>
+                                <h3 className="font-display text-base leading-tight">Huellita</h3>
+                                <p className="text-xs text-teal-50/90">Tu asistente para encontrar mascotas</p>
                             </div>
                         </div>
-                        <div className="flex items-center gap-1">
-                            <button aria-label="Reiniciar conversación" title="Reiniciar" onClick={reset} className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-white/20">
+                        <div className="relative flex items-center gap-1">
+                            <button aria-label="Reiniciar conversación" title="Reiniciar" onClick={reset} className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/20">
                                 <RotateCcw className="h-4 w-4" />
                             </button>
-                            <button aria-label="Cerrar chat" onClick={() => setIsOpen(false)} className="flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-white/20">
-                                <X className="h-4 w-4" />
+                            <button aria-label="Cerrar chat" onClick={() => setIsOpen(false)} className="flex h-9 w-9 items-center justify-center rounded-full transition-colors hover:bg-white/20">
+                                <X className="h-5 w-5" />
                             </button>
                         </div>
                     </div>
@@ -264,7 +273,7 @@ export function ChatbotWidget() {
                         </div>
                     )}
 
-                    <div className="flex-1 space-y-4 overflow-y-auto bg-background p-4" ref={scrollRef} role="log" aria-live="polite">
+                    <div className="relative flex-1 space-y-4 overflow-y-auto bg-background p-4 sm:p-5" ref={scrollRef} role="log" aria-live="polite">
                         {messages.map((msg, i) => {
                             const isLast = i === messages.length - 1
                             const isUser = msg.role === "user"
@@ -321,8 +330,8 @@ export function ChatbotWidget() {
                         )}
                     </div>
 
-                    <form className="border-t bg-card p-3" onSubmit={e => { e.preventDefault(); void send(input) }}>
-                        <div className="flex items-center gap-2 rounded-full border bg-background py-1.5 pl-4 pr-1.5 transition-shadow focus-within:ring-2 focus-within:ring-primary/30">
+                    <form className="border-t bg-card p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]" onSubmit={e => { e.preventDefault(); void send(input) }}>
+                        <div className="flex items-center gap-2 rounded-full border bg-background py-1.5 pl-4 pr-1.5 shadow-[var(--shadow-soft)] transition-shadow focus-within:ring-2 focus-within:ring-primary/30">
                             <input
                                 ref={inputRef}
                                 style={{ outline: "none", boxShadow: "none" }}
@@ -348,7 +357,7 @@ export function ChatbotWidget() {
             )}
 
             {showPrompt && !isOpen && (
-                <div className="pointer-events-auto absolute bottom-20 right-0 mr-2 w-max max-w-[230px] rounded-2xl border border-border bg-card p-3 pr-8 text-left shadow-xl duration-500 animate-in fade-in slide-in-from-right-5">
+                <div className="pointer-events-auto absolute bottom-20 right-0 mr-2 hidden w-max max-w-[230px] md:block rounded-2xl border border-border bg-card p-3 pr-8 text-left shadow-xl duration-500 animate-in fade-in slide-in-from-right-5">
                     <button onClick={open} className="block text-left">
                         <p className="text-xs font-bold text-foreground">¿Buscas a tu mascota?</p>
                         <p className="text-[11px] text-muted-foreground">Dime cómo es y la busco en los reportes</p>
@@ -359,12 +368,14 @@ export function ChatbotWidget() {
                 </div>
             )}
 
+            {/* Solo escritorio: en móvil el asistente se abre desde la barra inferior. El botón sigue visible y alterna abrir/cerrar. */}
             <button
-                aria-label="Abrir asistente de ayuda"
-                onClick={open}
-                className={`pointer-events-auto relative flex h-16 w-16 items-center justify-center rounded-full border-4 border-white bg-gradient-to-tr from-teal-800 to-teal-600 shadow-2xl transition-all duration-300 ${isOpen ? "scale-0 opacity-0" : "scale-100 opacity-100 hover:scale-105"}`}
+                aria-label={isOpen ? "Cerrar asistente" : "Abrir asistente de ayuda"}
+                aria-expanded={isOpen}
+                onClick={() => (isOpen ? setIsOpen(false) : open())}
+                className="pointer-events-auto relative hidden h-16 w-16 items-center justify-center rounded-full border-4 border-white bg-gradient-to-tr from-teal-800 to-teal-600 shadow-2xl transition-transform duration-300 hover:scale-105 md:flex"
             >
-                <PawPrint className="h-7 w-7 text-white" />
+                {isOpen ? <X className="h-7 w-7 text-white" aria-hidden /> : <PawPrint className="h-7 w-7 text-white" aria-hidden />}
             </button>
         </div>
     )
