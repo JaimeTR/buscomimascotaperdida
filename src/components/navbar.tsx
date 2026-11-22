@@ -43,7 +43,7 @@ export function Navbar() {
         // Móvil: encabezado simple que se va con el scroll (solo logo); cuenta y accesos viven en la barra inferior.
         <header className="z-50 bg-background lg:sticky lg:top-0 lg:border-b lg:bg-background/90 lg:backdrop-blur">
             <div className="container mx-auto flex h-14 items-center justify-center gap-2 px-4 lg:h-16 lg:justify-between xl:gap-4">
-                <Link href="/" aria-label="Busco mi mascota, inicio"><BrandMark showName nameClassName="lg:hidden xl:block" /></Link>
+                <Link href="/" aria-label="Busco mi mascota, inicio"><BrandMark showName nameClassName="lg:hidden" /></Link>
 
                 <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
                     {LINKS.map((l) => (

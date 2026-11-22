@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { Search, ChevronDown, Calendar, X, MapPin, Dog, Palette, PawPrint, Cat, Squirrel, Flag, Check, SlidersHorizontal, Ruler } from "lucide-react"
+import { Search, ChevronDown, Calendar, X, MapPin, Dog, Palette, PawPrint, Cat, Squirrel, Check, SlidersHorizontal, Ruler } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -18,19 +18,13 @@ export const hasActiveFilters = (f: Filters) =>
     Boolean(f.q || f.location.department || f.petType !== "all" || f.status !== "all" || f.breed || f.color || f.dateFrom || f.size !== "all")
 // Cantidad de filtros aplicados (sin contar el texto de búsqueda): se muestra en el botón "Filtros".
 const countFilters = (f: Filters) =>
-    [f.location.department, f.petType !== "all", f.status !== "all", f.breed, f.color, f.dateFrom, f.size !== "all"].filter(Boolean).length
+    [f.location.department, f.petType !== "all", f.breed, f.color, f.dateFrom, f.size !== "all"].filter(Boolean).length
 
 const TYPES = [
     { value: "all", label: "Todas", icon: PawPrint },
     { value: "dog", label: "Perros", icon: Dog },
     { value: "cat", label: "Gatos", icon: Cat },
     { value: "other", label: "Otros", icon: Squirrel },
-]
-const STATUSES = [
-    { value: "all", label: "Todos" },
-    { value: "lost", label: "Perdidas" },
-    { value: "found", label: "Encontradas" },
-    { value: "reunited", label: "Reunidas" },
 ]
 // Mismos valores que guarda el formulario de reporte.
 const SIZES = [
@@ -52,6 +46,8 @@ const SWATCH: Record<string, string> = {
     Siamés: "linear-gradient(90deg, #f3e5d0 50%, #5b4636 50%)",
     Colorido: "linear-gradient(135deg, #ef4444, #f59e0b, #22c55e, #3b82f6)",
 }
+// Tonos claros: el check de selección va oscuro para que se vea.
+const LIGHT = new Set(["Blanco", "Beige", "Crema", "Dorado", "Manchado", "Bicolor", "Calicó", "Siamés"])
 const COLORS: Record<string, string[]> = {
     dog: ["Blanco", "Negro", "Marrón", "Beige", "Caramelo", "Dorado", "Gris", "Crema", "Manchado", "Atigrado", "Bicolor"],
     cat: ["Blanco", "Negro", "Gris", "Beige", "Crema", "Atigrado", "Calicó", "Carey", "Siamés", "Naranja"],
@@ -178,12 +174,6 @@ function FiltersSheet({ value, onApply, onClose }: { value: Filters; onApply: (f
                     </div>
                 </Section>
 
-                <Section title="Estado">
-                    <div className="flex flex-wrap gap-2">
-                        {STATUSES.map((s) => <Choice key={s.value} selected={draft.status === s.value} onClick={() => set({ status: s.value })}>{s.label}</Choice>)}
-                    </div>
-                </Section>
-
                 <Section title="Lugar">
                     <div className="grid gap-2 sm:grid-cols-3">
                         <select aria-label="Departamento" className={selectCls} value={loc.department} onChange={(e) => set({ location: { department: e.target.value, province: "", district: "" } })}>
@@ -211,21 +201,31 @@ function FiltersSheet({ value, onApply, onClose }: { value: Filters; onApply: (f
                     </Section>
                 )}
 
-                <Section title="Color">
-                    <div className="grid grid-cols-4 gap-2 sm:grid-cols-5">
-                        {colors.map((c) => (
-                            <button
-                                key={c}
-                                type="button"
-                                aria-pressed={draft.color === c}
-                                onClick={() => set({ color: draft.color === c ? "" : c })}
-                                className={cn("flex flex-col items-center gap-1.5 rounded-xl p-2 hover:bg-accent", draft.color === c && "bg-accent ring-2 ring-primary")}
-                            >
-                                <span className="h-9 w-9 rounded-full border border-stone-300" style={{ background: SWATCH[c] }} aria-hidden />
-                                <span className="text-[11px] font-medium leading-tight">{c}</span>
-                            </button>
-                        ))}
+                <Section title="Color de la mascota">
+                    <div className="grid grid-cols-4 gap-x-2 gap-y-3 min-[440px]:grid-cols-5 sm:grid-cols-6">
+                        {colors.map((c) => {
+                            const on = draft.color === c
+                            return (
+                                <button
+                                    key={c}
+                                    type="button"
+                                    aria-pressed={on}
+                                    onClick={() => set({ color: on ? "" : c })}
+                                    className={cn("group flex flex-col items-center gap-1.5 rounded-2xl px-1 py-2 transition-colors hover:bg-accent/60 active:scale-95", on && "bg-accent")}
+                                >
+                                    <span
+                                        className={cn("relative flex h-12 w-12 items-center justify-center rounded-full border border-stone-300 shadow-sm transition-transform duration-200 group-hover:scale-110", on && "scale-110 ring-2 ring-primary ring-offset-2 ring-offset-card")}
+                                        style={{ background: SWATCH[c] }}
+                                        aria-hidden
+                                    >
+                                        {on && <Check className={cn("h-5 w-5 drop-shadow", LIGHT.has(c) ? "text-stone-800" : "text-white")} />}
+                                    </span>
+                                    <span className={cn("text-xs leading-tight", on ? "font-semibold text-primary" : "font-medium text-foreground")}>{c}</span>
+                                </button>
+                            )
+                        })}
                     </div>
+                    {draft.color && <p className="text-xs text-muted-foreground">Mostrando mascotas de color <strong className="text-foreground">{draft.color.toLowerCase()}</strong> o con ese color entre sus tonos.</p>}
                 </Section>
 
                 <Section title="Tamaño">
@@ -263,8 +263,7 @@ export function PetFilters({ value, onChange, onSubmit, compact = false }: { val
     const set = (patch: Partial<Filters>) => onChange({ ...value, ...patch })
     const loc = value.location
     const type = TYPES.find((t) => t.value === value.petType) ?? TYPES[0]
-    const status = STATUSES.find((s) => s.value === value.status) ?? STATUSES[0]
-    const setLoc = (patch: Partial<Location>) => set({ location: { ...loc, ...patch } })
+        const setLoc = (patch: Partial<Location>) => set({ location: { ...loc, ...patch } })
     const total = countFilters(value)
     const provinces = loc.department ? Object.keys(PERU_LOCATIONS[loc.department] ?? {}) : []
     const districts = loc.department && loc.province ? PERU_LOCATIONS[loc.department]?.[loc.province] ?? [] : []
@@ -312,7 +311,7 @@ export function PetFilters({ value, onChange, onSubmit, compact = false }: { val
                 <Button type="submit" className="absolute right-1.5 top-1.5 h-11 rounded-full px-5 sm:px-6">Buscar</Button>
             </form>
 
-            <div className={compact ? "grid grid-cols-[1fr_1.3fr_1fr] items-center gap-2 sm:flex sm:flex-wrap" : "flex flex-wrap items-center gap-2"}>
+            <div className={compact ? "grid grid-cols-[1fr_1.3fr] items-center gap-2 sm:flex sm:flex-wrap" : "flex flex-wrap items-center gap-2"}>
                 <FilterChip
                     fill={compact}
                     icon={MapPin}
@@ -362,17 +361,7 @@ export function PetFilters({ value, onChange, onSubmit, compact = false }: { val
                     )}
                 </FilterChip>
 
-                <FilterChip fill={compact} icon={Flag} label={value.status === "all" ? "Estado" : status.label} active={value.status !== "all"} onClear={() => set({ status: "all" })} className="w-52 p-2">
-                    {(close) => (
-                        <>
-                            {STATUSES.map((s) => (
-                                <Option key={s.value} selected={value.status === s.value} onClick={() => { set({ status: s.value }); close() }}>{s.label}</Option>
-                            ))}
-                        </>
-                    )}
-                </FilterChip>
-
-                {compact ? <div className="col-span-3 sm:col-auto">{filtersButton}</div> : filtersButton}
+                {compact ? <div className="col-span-2 sm:col-auto">{filtersButton}</div> : filtersButton}
             </div>
 
             {(extra.length > 0 || total > 0) && (
