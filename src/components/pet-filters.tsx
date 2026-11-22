@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { Search, ChevronDown, Calendar, X, MapPin, Dog, Palette, PawPrint, Cat, Squirrel, Check, SlidersHorizontal, Ruler, RotateCcw } from "lucide-react"
+import { ChevronDown, Calendar, X, MapPin, Dog, Palette, PawPrint, Cat, Squirrel, Check, SlidersHorizontal, Ruler, RotateCcw, Sparkles } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -257,7 +257,7 @@ function FiltersSheet({ value, onApply, onClose }: { value: Filters; onApply: (f
 
 // Barra de búsqueda + filtros rápidos (lugar, mascota, estado) + botón "Filtros" con el panel completo.
 // `compact`: filtros rápidos en cuadrícula de 3 (portada); si no, en fila. El estado vive en el padre.
-export function PetFilters({ value, onChange, onSubmit, compact = false }: { value: Filters; onChange: (f: Filters) => void; onSubmit?: () => void; compact?: boolean }) {
+export function PetFilters({ value, onChange }: { value: Filters; onChange: (f: Filters) => void; onSubmit?: () => void; compact?: boolean }) {
     const dialog = useRef<HTMLDialogElement>(null)
     const [sheetKey, setSheetKey] = useState(0)
     const set = (patch: Partial<Filters>) => onChange({ ...value, ...patch })
@@ -279,41 +279,58 @@ export function PetFilters({ value, onChange, onSubmit, compact = false }: { val
         value.dateFrom && { key: "date", label: `Desde ${fmtDate(value.dateFrom)}`, clear: () => set({ dateFrom: "" }) },
     ].filter(Boolean) as { key: string; label: string; clear: () => void }[]
 
+    // El botón "Filtros" (panel completo) es para celular; en escritorio todos los filtros van en fila, centrados.
     const filtersButton = (
         <Button
             type="button"
             variant="outline"
             onClick={openSheet}
             aria-haspopup="dialog"
-            className={cn("h-10 shrink-0 gap-2 rounded-full border-input bg-card px-4 font-medium", compact && "max-sm:w-full")}
+            className="h-10 shrink-0 gap-2 rounded-full border-input bg-card px-4 font-medium max-sm:w-full md:hidden"
         >
             <SlidersHorizontal className="h-4 w-4 opacity-70" aria-hidden /> Filtros
             {total > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] font-bold text-primary-foreground">{total}</span>}
         </Button>
     )
 
+    const [ask, setAsk] = useState("")
+    // La búsqueda por texto es la IA: abre el asistente con lo que escribiste y con los filtros elegidos como contexto.
+    const consultAI = (e?: React.FormEvent) => {
+        e?.preventDefault()
+        const sizeMap: Record<string, string> = { "Pequeño": "small", "Mediano": "medium", "Grande": "large" }
+        const filters = {
+            ...(value.petType !== "all" && { type: value.petType }),
+            ...(value.size !== "all" && { size: sizeMap[value.size] }),
+            ...(loc.district && { district: loc.district }),
+            ...(value.color && { color: value.color }),
+            ...(value.breed && { breed: value.breed }),
+        }
+        window.dispatchEvent(new CustomEvent("bmm:open-chat", { detail: { message: ask.trim() || undefined, filters } }))
+        setAsk("")
+    }
+    const breeds = breedsFor(value.petType)
+    const colors = COLORS[value.petType] ?? COLORS.all
+
     return (
-        <div className="space-y-3">
-            <form role="search" className="relative" onSubmit={(e) => { e.preventDefault(); onSubmit?.() }}>
-                <Search className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" aria-hidden />
+        <div className="space-y-4">
+            <form role="search" onSubmit={consultAI} className="relative mx-auto w-full max-w-2xl">
+                <Sparkles className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-primary" aria-hidden />
                 <Input
-                    aria-label="Buscar mascotas"
-                    value={value.q}
-                    onChange={(e) => set({ q: e.target.value })}
-                    className="h-14 rounded-full border-input bg-card pl-12 pr-32 text-base shadow-[var(--shadow-soft)] sm:pr-36"
-                    placeholder="Nombre o raza"
+                    aria-label="Pregúntale a nuestra IA"
+                    value={ask}
+                    onChange={(e) => setAsk(e.target.value)}
+                    maxLength={300}
+                    className="h-14 rounded-full border-input bg-card pl-12 pr-16 text-base shadow-[var(--shadow-soft)] sm:pr-52"
+                    placeholder="Describe a tu mascota a la IA"
                 />
-                {value.q && (
-                    <button type="button" aria-label="Borrar búsqueda" onClick={() => set({ q: "" })} className="absolute right-[5.5rem] top-1/2 flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary sm:right-28">
-                        <X className="h-4 w-4" aria-hidden />
-                    </button>
-                )}
-                <Button type="submit" className="absolute right-1.5 top-1.5 h-11 rounded-full px-4 sm:px-6"><Search className="mr-2 h-4 w-4" aria-hidden /> Buscar</Button>
+                <Button type="submit" aria-label="Consultar a nuestra IA" className="absolute right-1.5 top-1.5 h-11 rounded-full px-3.5 sm:px-5">
+                    <Sparkles className="h-4 w-4 sm:mr-2" aria-hidden /> <span className="hidden sm:inline">Consultar a nuestra IA</span>
+                </Button>
             </form>
 
-            <div className={compact ? "grid grid-cols-[1fr_1.3fr] items-center gap-2 sm:flex sm:flex-wrap" : "flex flex-wrap items-center gap-2"}>
+            <div className="grid grid-cols-[1fr_1.3fr] items-center gap-2 sm:flex sm:flex-wrap sm:justify-center">
                 <FilterChip
-                    fill={compact}
+                    fill
                     icon={MapPin}
                     label={loc.district || loc.province || loc.department || "Lugar"}
                     active={Boolean(loc.department)}
@@ -349,7 +366,7 @@ export function PetFilters({ value, onChange, onSubmit, compact = false }: { val
                     )}
                 </FilterChip>
 
-                <FilterChip fill={compact} icon={type.icon} label={value.petType === "all" ? "Mascota" : type.label} active={value.petType !== "all"} onClear={() => set({ petType: "all", breed: "", color: "" })} className="w-52 p-2">
+                <FilterChip fill icon={type.icon} label={value.petType === "all" ? "Mascota" : type.label} active={value.petType !== "all"} onClear={() => set({ petType: "all", breed: "", color: "" })} className="w-52 p-2">
                     {(close) => (
                         <>
                             {TYPES.map((t) => (
@@ -361,22 +378,81 @@ export function PetFilters({ value, onChange, onSubmit, compact = false }: { val
                     )}
                 </FilterChip>
 
-                {compact ? <div className="col-span-2 sm:col-auto">{filtersButton}</div> : filtersButton}
+                {/* Solo escritorio: el resto de filtros en la misma fila */}
+                {value.petType !== "other" && (
+                    <div className="hidden md:block">
+                        <FilterChip icon={PawPrint} label={value.breed || "Raza"} active={Boolean(value.breed)} onClear={() => set({ breed: "" })} className="w-60 p-2">
+                            {(close) => (
+                                <>
+                                    {["Mestizo", ...breeds].map((b) => (
+                                        <Option key={b} selected={value.breed === b} onClick={() => { set({ breed: b }); close() }}>{b}</Option>
+                                    ))}
+                                </>
+                            )}
+                        </FilterChip>
+                    </div>
+                )}
+                <div className="hidden md:block">
+                    <FilterChip icon={Palette} label={value.color || "Color"} active={Boolean(value.color)} onClear={() => set({ color: "" })} className="w-80">
+                        {(close) => (
+                            <div className="grid grid-cols-4 gap-2">
+                                {colors.map((c) => (
+                                    <button
+                                        key={c}
+                                        type="button"
+                                        onClick={() => { set({ color: c }); close() }}
+                                        className={cn("group flex flex-col items-center gap-1.5 rounded-xl p-2 transition-all hover:bg-accent active:scale-95", value.color === c && "bg-accent ring-2 ring-primary")}
+                                    >
+                                        <span className="h-9 w-9 rounded-full border border-stone-300 transition-transform group-hover:scale-110" style={{ background: SWATCH[c] }} aria-hidden />
+                                        <span className="text-[11px] font-medium leading-tight">{c}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </FilterChip>
+                </div>
+                <div className="hidden md:block">
+                    <FilterChip icon={Ruler} label={value.size === "all" ? "Tamaño" : value.size} active={value.size !== "all"} onClear={() => set({ size: "all" })} className="w-52 p-2">
+                        {(close) => (
+                            <>
+                                {SIZES.map((z) => (
+                                    <Option key={z.value} selected={value.size === z.value} onClick={() => { set({ size: z.value }); close() }}>{z.label}</Option>
+                                ))}
+                            </>
+                        )}
+                    </FilterChip>
+                </div>
+                <div className="hidden md:block">
+                    <FilterChip icon={Calendar} label={value.dateFrom ? `Desde ${fmtDate(value.dateFrom)}` : "Fecha"} active={Boolean(value.dateFrom)} onClear={() => set({ dateFrom: "" })} className="w-64 p-2">
+                        {(close) => (
+                            <>
+                                {DATE_PRESETS.map((p) => (
+                                    <Option key={p.label} selected={value.dateFrom === daysAgo(p.days)} onClick={() => { set({ dateFrom: daysAgo(p.days) }); close() }}>{p.label}</Option>
+                                ))}
+                                <div className="mt-1 border-t px-1 pt-3">
+                                    <label htmlFor="desde-fecha-inline" className="mb-1.5 block text-xs font-semibold text-muted-foreground">Desde otra fecha</label>
+                                    <Input id="desde-fecha-inline" type="date" max={iso(new Date())} value={value.dateFrom} onChange={(e) => set({ dateFrom: e.target.value })} className="h-10" />
+                                </div>
+                            </>
+                        )}
+                    </FilterChip>
+                </div>
+
+                <div className="col-span-2 sm:col-auto md:hidden">{filtersButton}</div>
             </div>
 
-            {(extra.length > 0 || total > 0) && (
-                <div className="flex flex-wrap items-center gap-2" aria-label="Filtros aplicados">
+            {total > 0 && (
+                <div className="flex flex-wrap items-center justify-center gap-2" aria-label="Filtros aplicados">
+                    {/* En celular se resumen los filtros avanzados; en escritorio ya se ven en cada chip */}
                     {extra.map((e) => (
-                        <button key={e.key} type="button" onClick={e.clear} aria-label={`Quitar filtro: ${e.label}`} className="inline-flex h-8 items-center gap-1.5 rounded-full border border-primary/30 bg-accent px-3 text-xs font-medium text-accent-foreground hover:bg-accent/70">
+                        <button key={e.key} type="button" onClick={e.clear} aria-label={`Quitar filtro: ${e.label}`} className="inline-flex h-8 items-center gap-1.5 rounded-full border border-primary/30 bg-accent px-3 text-xs font-medium text-accent-foreground transition-all hover:-translate-y-0.5 hover:bg-accent/70 active:scale-95 md:hidden">
                             {e.key === "color" ? <Palette className="h-3.5 w-3.5" aria-hidden /> : e.key === "date" ? <Calendar className="h-3.5 w-3.5" aria-hidden /> : e.key === "size" ? <Ruler className="h-3.5 w-3.5" aria-hidden /> : <PawPrint className="h-3.5 w-3.5" aria-hidden />}
                             {e.label} <X className="h-3.5 w-3.5" aria-hidden />
                         </button>
                     ))}
-                    {total > 0 && (
-                        <Button type="button" variant="ghost" size="sm" onClick={() => onChange({ ...EMPTY_FILTERS, q: value.q })} className="h-8 gap-1 rounded-full px-3 text-xs text-muted-foreground">
-                            <X className="h-3.5 w-3.5" aria-hidden /> Limpiar filtros
-                        </Button>
-                    )}
+                    <Button type="button" variant="ghost" size="sm" onClick={() => onChange({ ...EMPTY_FILTERS, q: value.q })} className="h-8 gap-1 rounded-full px-3 text-xs text-muted-foreground">
+                        <X className="h-3.5 w-3.5" aria-hidden /> Limpiar filtros
+                    </Button>
                 </div>
             )}
 

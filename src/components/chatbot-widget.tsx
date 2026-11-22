@@ -108,6 +108,8 @@ export function ChatbotWidget() {
     const [messages, setMessages] = useState<Message[]>([WELCOME])
     const [filters, setFilters] = useState<Filters>({})
     const [restored, setRestored] = useState(false)
+    const pendingAsk = useRef<{ text: string; memory: Filters } | null>(null)
+    const [askTick, setAskTick] = useState(0)
 
     // Memoria de la sesión: la conversación y la búsqueda sobreviven a navegar y recargar (solo en esta pestaña).
     useEffect(() => {
@@ -138,7 +140,15 @@ export function ChatbotWidget() {
 
     // La barra inferior móvil abre el asistente con este evento (no hay botón flotante en móvil).
     useEffect(() => {
-        const onOpen = () => { setIsOpen(true); setShowPrompt(false) }
+        const onOpen = (e: Event) => {
+            const d = (e as CustomEvent<{ message?: string; filters?: Filters }>).detail
+            setIsOpen(true)
+            setShowPrompt(false)
+            if (d?.filters && Object.keys(d.filters).length) setFilters((prev) => ({ ...prev, ...d.filters }))
+            if (d?.message) pendingAsk.current = { text: d.message, memory: { ...(d.filters ?? {}) } }
+            else if (d?.filters && Object.keys(d.filters).length) pendingAsk.current = null
+            setAskTick((n) => n + 1)
+        }
         window.addEventListener("bmm:open-chat", onOpen)
         return () => window.removeEventListener("bmm:open-chat", onOpen)
     }, [])
@@ -199,6 +209,16 @@ export function ChatbotWidget() {
             setIsTyping(false)
         }
     }, [filters, isTyping, messages, push])
+
+    // Consulta que llegó desde el buscador de la portada: se envía ya con los filtros de contexto.
+    useEffect(() => {
+        const p = pendingAsk.current
+        if (!p || isTyping || !restored) return
+        pendingAsk.current = null
+        const t = setTimeout(() => { void send(p.text, { ...filters, ...p.memory }) }, 0)
+        return () => clearTimeout(t)
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- se dispara solo con una consulta nueva (askTick)
+    }, [askTick])
 
     const onChip = (chip: Chip) => {
         if (chip.href) { go(chip.href); return }

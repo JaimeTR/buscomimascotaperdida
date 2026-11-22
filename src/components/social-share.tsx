@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/toast-modern"
 interface SocialShareProps {
     petName: string
     text?: string // mensaje a compartir; por defecto, el de búsqueda
-    variant?: "inline" | "floating"
+    variant?: "inline" | "floating" | "button"
 }
 
 export function SocialShare({ petName, text, variant = "inline" }: SocialShareProps) {
@@ -43,6 +43,32 @@ export function SocialShare({ petName, text, variant = "inline" }: SocialSharePr
             window.open(url, '_blank', 'noopener,noreferrer,width=600,height=400')
             setIsOpen(false)
         }
+    }
+
+    // Botón normal: en celulares abre el menú nativo de compartir; en escritorio, el panel con redes.
+    if (variant === "button") {
+        return (
+            <Popover open={isOpen} onOpenChange={setIsOpen}>
+                <PopoverTrigger asChild>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        className="h-12 w-full rounded-full border-2 text-base"
+                        onClick={(e) => {
+                            if (typeof navigator !== "undefined" && "share" in navigator) {
+                                e.preventDefault()
+                                void navigator.share({ title: petName, text: shareText, url: shareUrl }).catch(() => { /* cancelado */ })
+                            }
+                        }}
+                    >
+                        <Share2 className="mr-2 h-5 w-5" aria-hidden /> Compartir
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-72 rounded-2xl p-4 shadow-2xl" align="center" side="top">
+                    <ShareOptions onShare={handleShare} />
+                </PopoverContent>
+            </Popover>
+        )
     }
 
     if (variant === "floating") {
@@ -163,3 +189,22 @@ export function SocialShare({ petName, text, variant = "inline" }: SocialSharePr
     )
 }
 
+
+type Platform = 'facebook' | 'twitter' | 'whatsapp' | 'copy'
+
+// Opciones de compartir (panel del botón "Compartir" en escritorio).
+function ShareOptions({ onShare }: { onShare: (p: Platform) => void }) {
+    const item = "group flex flex-col items-center gap-2 rounded-xl p-2 transition-all hover:-translate-y-0.5 hover:bg-accent active:scale-95"
+    const circle = "flex h-12 w-12 items-center justify-center rounded-full bg-accent transition-transform group-hover:scale-110"
+    return (
+        <div className="space-y-3">
+            <h3 className="font-bold text-foreground">Compartir reporte</h3>
+            <div className="grid grid-cols-4 gap-2">
+                <button type="button" onClick={() => onShare('whatsapp')} className={item}><span className={`${circle} bg-emerald-50`}><MessageCircle className="h-5 w-5 text-emerald-600" aria-hidden /></span><span className="text-[11px] font-semibold text-muted-foreground">WhatsApp</span></button>
+                <button type="button" onClick={() => onShare('facebook')} className={item}><span className={circle}><Facebook className="h-5 w-5 fill-teal-800 text-teal-800" aria-hidden /></span><span className="text-[11px] font-semibold text-muted-foreground">Facebook</span></button>
+                <button type="button" onClick={() => onShare('twitter')} className={item}><span className={circle}><svg className="h-4 w-4 fill-stone-800" viewBox="0 0 24 24" aria-hidden><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg></span><span className="text-[11px] font-semibold text-muted-foreground">X</span></button>
+                <button type="button" onClick={() => onShare('copy')} className={item}><span className={`${circle} bg-secondary`}><Link2 className="h-5 w-5 text-muted-foreground" aria-hidden /></span><span className="text-[11px] font-semibold text-muted-foreground">Copiar</span></button>
+            </div>
+        </div>
+    )
+}

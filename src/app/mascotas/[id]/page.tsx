@@ -1,24 +1,24 @@
 
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { MapPin, Flag, Phone, Download, ChevronRight, MessageCircle, Clock, Send, Mail } from "lucide-react"
+import { Calendar, ChevronRight, Download, Flag, MapPin, Megaphone, Pencil, PartyPopper, Ruler, ShieldAlert, Tag, UserRound, VenusAndMars, Cake, Cpu, Palette, PawPrint, Dog } from "lucide-react"
+import { formatDistanceToNow } from "date-fns"
+import { es } from "date-fns/locale"
 
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import { PetCard } from "@/components/pet-card"
+import { StatusBadge } from "@/components/status-badge"
 import { createClient } from "@/utils/supabase/server"
 import { Sighting } from "@/hooks/use-pets"
 import { ReportActionButton } from "@/components/report-action-button"
 import { SocialShare } from "@/components/social-share"
-import { formatDistanceToNow } from "date-fns"
-import { es } from "date-fns/locale"
 import { SightingsMapWrapper } from "@/components/sightings-map-wrapper"
-import { ImageGallery } from "@/components/image-gallery"
-import { OwnerContactModal } from "@/components/owner-contact-modal"
+import { PetGallery } from "@/components/pet/pet-gallery"
+import { ContactCard } from "@/components/pet/contact-card"
+import { SightingTimeline } from "@/components/pet/sighting-timeline"
 import { Reveal } from "@/components/ui/reveal"
 import { AdSlot } from "@/components/ads/ad-slot"
 import { matchScore } from "@/lib/matches"
-import { whatsappLink } from "@/lib/whatsapp"
 
 import type { Metadata } from "next"
 import { createPublicClient } from "@/utils/supabase/public"
@@ -35,6 +35,22 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     return { title, description, alternates: { canonical: `/mascotas/${id}` }, openGraph: { title, description, url: `/mascotas/${id}`, images }, twitter: { card: 'summary_large_image', title, description, images } }
 }
 
+const SWATCH: Record<string, string> = {
+    blanco: "#ffffff", negro: "#1c1917", marrón: "#78492a", dorado: "#d9a441", gris: "#9ca3af", naranja: "#f08a24", beige: "#e8d5b5", crema: "#f3e8cf", caramelo: "#b8742f",
+    atigrado: "repeating-linear-gradient(45deg, #78492a 0 4px, #d9a441 4px 8px)", manchado: "radial-gradient(circle at 30% 30%, #1c1917 0 22%, transparent 24%), #fff", plomo: "#6b7280",
+}
+const TYPE_LABEL: Record<string, string> = { dog: "Perro", cat: "Gato", other: "Otra mascota" }
+const dateFmt = new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "long", year: "numeric" })
+
+function Fact({ icon: Icon, label, children }: { icon: typeof Tag; label: string; children: React.ReactNode }) {
+    return (
+        <div className="flex items-start gap-3 rounded-2xl bg-background p-3.5">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-foreground"><Icon className="h-4 w-4" aria-hidden /></span>
+            <div className="min-w-0"><p className="text-xs font-semibold text-muted-foreground">{label}</p><div className="font-semibold">{children}</div></div>
+        </div>
+    )
+}
+
 export default async function PetPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
     const supabase = await createClient()
@@ -46,16 +62,20 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
     if (!pet) return notFound()
 
+    const { data: { user } } = await supabase.auth.getUser()
+    const isOwner = !!user && user.id === pet.owner_id
+
     const { data: extras } = await supabase.rpc('pet_contact_info', { p_pet: id })
     const owner: { full_name?: string; avatar_url?: string; phone?: string; whatsapp?: string; email?: string } = extras?.owner ?? {}
+    const hasPublicContact = Boolean(owner.phone || owner.whatsapp || owner.email)
 
-    // Sort sightings by date (most recent first)
+    // Avistamientos del más reciente al más antiguo
     const dbSightings: Sighting[] = (extras?.sightings ?? []).sort(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (a: any, b: any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     )
 
-    // Add initial loss as a special "sighting" at the end (it's the first event)
+    // El extravío inicial es el primer evento: va al final de la línea de tiempo
     const initialSighting: Sighting = {
         id: 'initial',
         pet_id: pet.id,
@@ -65,18 +85,11 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
         district: pet.last_seen_district,
         description: `Punto inicial de extravío: ${pet.last_seen_address || pet.last_seen_district}`,
         created_at: pet.last_seen_date,
-        reporter: {
-            full_name: owner.full_name || "Dueño",
-            avatar_url: owner.avatar_url ?? "",
-            whatsapp: owner.whatsapp,
-            phone: owner.phone,
-            phone_public: !!owner.phone
-        }
+        reporter: { full_name: owner.full_name || "Dueño", avatar_url: owner.avatar_url ?? "" },
     }
-
     const sightings = [...dbSightings, initialSighting]
 
-    // 2. Fetch Similar Pets (same district or type)
+    // 2. Otros casos de la zona
     const { data: similarPets } = await supabase
         .from('pets')
         .select('*')
@@ -100,18 +113,15 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
         .sort((a, b) => b.score - a.score)
         .slice(0, 4)
 
-    // Format date: "12 de Octubre"
-    const dateObj = new Date(pet.last_seen_date)
-    const formattedDate = dateObj.toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
-
-    const lastSightingDateStr = sightings.length > 0
-        ? new Date(sightings[0].created_at).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })
-        : formattedDate
-
-    // Filter valid sightings for the map
+    const found = pet.status === 'found'
+    const reunited = pet.status === 'reunited'
+    const kind = TYPE_LABEL[pet.type] ?? "Mascota"
+    const lastSignal = new Date(sightings[0].created_at)
     const validSightings = sightings.filter(s => s.lat != null && s.lng != null)
     const mapCenterLat = validSightings[0]?.lat || pet.last_seen_lat || -12.0464
     const mapCenterLng = validSightings[0]?.lng || pet.last_seen_lng || -77.0428
+    const place = [pet.last_seen_district, pet.last_seen_province].filter(Boolean).join(", ")
+    const colors: string[] = pet.colors ?? []
 
     // SEO/GEO: migas de pan + descripción de la página con su lugar (distrito/provincia).
     const site = process.env.NEXT_PUBLIC_APP_URL || 'https://buscomimascotaperdida.com'
@@ -129,13 +139,13 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
             {
                 '@type': 'WebPage',
                 url: `${site}/mascotas/${pet.id}`,
-                name: `${pet.status === 'found' ? 'Encontrado' : 'Perdido'}: ${pet.name}`,
+                name: `${found ? 'Encontrado' : 'Perdido'}: ${pet.name}`,
                 inLanguage: 'es-PE',
                 datePublished: pet.created_at,
                 ...(pet.image_urls?.[0] ? { primaryImageOfPage: { '@type': 'ImageObject', url: pet.image_urls[0] } } : {}),
                 contentLocation: {
                     '@type': 'Place',
-                    name: [pet.last_seen_district, pet.last_seen_province].filter(Boolean).join(', '),
+                    name: place,
                     address: { '@type': 'PostalAddress', addressLocality: pet.last_seen_district, addressRegion: pet.last_seen_province, addressCountry: 'PE' },
                     ...(pet.last_seen_lat != null && pet.last_seen_lng != null ? { geo: { '@type': 'GeoCoordinates', latitude: pet.last_seen_lat, longitude: pet.last_seen_lng } } : {}),
                 },
@@ -144,326 +154,220 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
     }
 
     return (
-        <div className="min-h-screen bg-background pb-20">
+        <div className="min-h-screen pb-28 lg:pb-20">
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
-            <div className="container px-4 py-8 md:py-12 max-w-7xl mx-auto space-y-10">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            <div className="container mx-auto max-w-7xl space-y-8 px-4 py-6 md:py-10">
 
-                    {/* Left Column: Gallery & Description */}
-                    <div className="lg:col-span-7 space-y-8">
-                        {/* Image Gallery */}
-                        <ImageGallery
-                            images={pet.image_urls || []}
-                            petName={pet.name}
-                            status={pet.status}
-                        />
-
-
-
-                        {/* Recent Sightings Section */}
-                        <div className="bg-card rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-border space-y-8">
-                            <div className="flex flex-wrap items-center justify-between gap-3">
-                                <h2 className="text-2xl font-bold text-foreground">Historial de avistamientos</h2>
-                                <ReportActionButton
-                                    nextUrl={`/mascotas/${pet.id}/avistamiento`}
-                                    label="Reportar lugar de avistamiento"
-                                    icon={<Send className="w-4 h-4 mr-2" />}
-                                    className="bg-primary hover:bg-primary text-white font-bold rounded-xl px-6"
-                                />
+                {/* Encabezado del caso */}
+                <header className="space-y-4">
+                    <nav aria-label="Migas de pan" className="flex flex-wrap items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                        <Link href="/" className="hover:text-foreground">Inicio</Link><ChevronRight className="h-3 w-3 opacity-50" aria-hidden />
+                        <Link href="/mascotas" className="hover:text-foreground">Mascotas</Link><ChevronRight className="h-3 w-3 opacity-50" aria-hidden />
+                        <span className="text-foreground">{pet.name}</span>
+                    </nav>
+                    <div className="flex flex-wrap items-end justify-between gap-4">
+                        <div className="min-w-0 space-y-2">
+                            <div className="flex flex-wrap items-center gap-3">
+                                <h1 className="font-display text-4xl leading-tight text-primary md:text-5xl">{pet.name}</h1>
+                                <StatusBadge status={pet.status} className="px-3.5 py-1 text-xs" />
                             </div>
+                            <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-medium text-muted-foreground">
+                                <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-cta" aria-hidden /> {place || "Zona no indicada"}</span>
+                                <span className="inline-flex items-center gap-1.5"><Calendar className="h-4 w-4" aria-hidden /> {found ? "Encontrado" : "Visto por última vez"} {formatDistanceToNow(new Date(pet.last_seen_date), { addSuffix: true, locale: es })}</span>
+                            </p>
+                        </div>
+                    </div>
+                </header>
 
-                            {sightings.length > 0 ? (
-                                <div className="space-y-8 relative before:absolute before:left-7 before:top-2 before:bottom-2 before:w-0.5 before:bg-secondary">
-                                    {sightings.map((sighting) => (
-                                        <div key={sighting.id} className="relative pl-16 group">
-                                            {/* Avatar reporter */}
-                                            <div className="absolute left-0 top-0 h-14 w-14 rounded-full border-4 border-white shadow-lg overflow-hidden bg-secondary z-10 group-hover:scale-105 transition-transform">
-                                                {sighting.reporter?.avatar_url ? (
-                                                    <img src={sighting.reporter.avatar_url} alt={sighting.reporter.full_name} className="h-full w-full object-cover" />
-                                                ) : (
-                                                    <span className="flex h-full w-full items-center justify-center bg-accent text-lg font-bold text-primary" aria-hidden>{(sighting.reporter?.full_name || "?").charAt(0).toUpperCase()}</span>
-                                                )}
-                                            </div>
+                <div className="grid gap-6 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-8">
+                    {/* Galería */}
+                    <div className="lg:col-span-7"><PetGallery images={pet.image_urls || []} petName={pet.name} status={pet.status} /></div>
 
-                                            <div className="bg-background p-6 rounded-[2rem] space-y-3 group-hover:bg-card group-hover:shadow-md transition-all border border-transparent group-hover:border-border">
-                                                <div className="flex items-center justify-between">
-                                                    <div>
-                                                        <div className="font-bold text-foreground flex items-center gap-2">
-                                                            {sighting.reporter?.full_name || "Usuario Anónimo"}
-                                                            {sighting.id === 'initial' && <Badge variant="secondary" className="bg-red-50 text-red-700 border-0 text-[10px] uppercase font-bold tracking-tight">Punto Inicial</Badge>}
-                                                        </div>
-                                                        <div className="text-xs font-bold text-primary uppercase tracking-widest">
-                                                            {sighting.id === 'initial' ? "Última vez visto" : `Visto en ${sighting.district}`} • {formatDistanceToNow(new Date(sighting.created_at), { addSuffix: true, locale: es })}
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Contact Options - Show based on sighting sharing preferences */}
-                                                    <div className="flex gap-2">
-                                                        {sighting.share_whatsapp && whatsappLink(sighting.reporter?.whatsapp) && (
-                                                            <Button
-                                                                size="icon"
-                                                                variant="outline"
-                                                                className="h-9 w-9 rounded-xl text-emerald-500 border-emerald-100 hover:bg-emerald-50"
-                                                                asChild
-                                                            >
-                                                                <a href={whatsappLink(sighting.reporter?.whatsapp, `Hola, te contacto por el avistamiento de ${pet.name}`)!} target="_blank" rel="noopener noreferrer">
-                                                                    <MessageCircle className="h-4 w-4 fill-current" />
-                                                                </a>
-                                                            </Button>
-                                                        )}
-                                                        {sighting.share_phone && sighting.reporter?.phone && (
-                                                            <Button
-                                                                size="icon"
-                                                                variant="outline"
-                                                                className="h-9 w-9 rounded-xl text-primary border-teal-100 hover:bg-accent"
-                                                                asChild
-                                                            >
-                                                                <a href={`tel:${sighting.reporter.phone}`}>
-                                                                    <Phone className="h-4 w-4 fill-current" />
-                                                                </a>
-                                                            </Button>
-                                                        )}
-                                                        {sighting.share_email && sighting.reporter?.email && (
-                                                            <Button
-                                                                size="icon"
-                                                                variant="outline"
-                                                                className="h-9 w-9 rounded-xl text-muted-foreground border-border hover:bg-background"
-                                                                asChild
-                                                            >
-                                                                <a href={`mailto:${sighting.reporter.email}?subject=Avistamiento de ${pet.name}`}>
-                                                                    <Mail className="h-4 w-4" />
-                                                                </a>
-                                                            </Button>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                                <p className="text-muted-foreground leading-relaxed font-medium">
-                                                    &quot;{sighting.description}&quot;
-                                                </p>
-
-                                                {/* Sighting Image */}
-                                                {sighting.image_url && (
-                                                    <div className="mt-4">
-                                                        <a
-                                                            href={sighting.image_url}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="block w-fit"
-                                                        >
-                                                            <img
-                                                                src={sighting.image_url}
-                                                                alt="Foto del avistamiento"
-                                                                className="h-32 w-auto rounded-xl object-cover border-2 border-border hover:scale-110 hover:shadow-lg transition-all duration-300 cursor-pointer"
-                                                            />
-                                                        </a>
-                                                    </div>
-                                                )}                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="flex flex-col items-center justify-center py-10 text-center space-y-4 bg-background rounded-[2.5rem] border border-dashed border-border">
-                                    <div className="h-16 w-16 bg-card rounded-full shadow-sm flex items-center justify-center">
-                                        <Clock className="h-8 w-8 text-stone-300" />
-                                    </div>
-                                    <div className="max-w-xs">
-                                        <p className="font-bold text-foreground">No hay avistamientos aún</p>
-                                        <p className="text-sm text-muted-foreground">Ayuda a {pet.name} a volver a casa reportando si lo has visto.</p>
+                    {/* Acciones (a la derecha en escritorio; debajo de la galería en móvil) */}
+                    <aside className="space-y-5 lg:col-span-5 lg:row-span-3">
+                        <div className="space-y-5 lg:sticky lg:top-20">
+                            {isOwner && (
+                                <div className="space-y-3 rounded-[1.5rem] border border-primary/30 bg-accent p-5">
+                                    <p className="flex items-center gap-2 font-semibold text-accent-foreground"><UserRound className="h-5 w-5" aria-hidden /> Este es tu reporte</p>
+                                    {!hasPublicContact && (
+                                        <p className="flex gap-2 rounded-xl bg-card p-3 text-sm text-muted-foreground"><ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-cta" aria-hidden /><span>Nadie puede contactarte directamente porque no muestras datos de contacto. Las personas te escribirán por avistamientos. <Link href="/panel/ajustes" className="font-semibold text-primary underline-offset-2 hover:underline">Elige qué datos mostrar</Link>.</span></p>
+                                    )}
+                                    <div className="flex flex-wrap gap-2">
+                                        <Button asChild size="sm" className="rounded-full"><Link href={`/panel/reportes/${pet.id}/editar`}><Pencil className="mr-1.5 h-4 w-4" aria-hidden /> Editar</Link></Button>
+                                        <Button asChild size="sm" variant="outline" className="rounded-full bg-card"><Link href="/panel/reportes">Mis reportes</Link></Button>
+                                        <Button asChild size="sm" variant="outline" className="rounded-full bg-card"><Link href="/panel/ajustes">Datos de contacto</Link></Button>
                                     </div>
                                 </div>
                             )}
-                        </div>
 
-                        {/* Qué hacer si lo ves */}
-                        <div className="rounded-[2.5rem] border bg-accent p-8 md:p-10 space-y-4">
-                            <h2 className="font-display text-2xl text-primary">Si ves a {pet.name}</h2>
-                            <ul className="space-y-2 text-sm text-accent-foreground">
-                                <li>1. No lo persigas: acércate despacio y háblale con calma.</li>
-                                <li>2. Toma una foto o video desde lejos si puedes.</li>
-                                <li>3. Reporta el avistamiento con el lugar exacto y la hora.</li>
-                                <li>4. Si lo logras resguardar, llévalo a una veterinaria para revisar si tiene microchip.</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    {/* Sidebar: Sticky Info Card */}
-                    <div className="lg:col-span-5">
-                        <div className="bg-card rounded-[2.5rem] shadow-2xl border border-border overflow-hidden p-8 md:p-10 space-y-8 sticky top-6">
-                            {/* Breadcrumb */}
-                            <div className="flex items-center gap-2 text-xs text-muted-foreground font-medium">
-                                <Link href="/" className="hover:text-foreground transition-colors">Inicio</Link>
-                                <ChevronRight className="h-3 w-3 opacity-50" />
-                                <Link href="/mascotas" className="hover:text-foreground transition-colors">Mascotas</Link>
-                                <ChevronRight className="h-3 w-3 opacity-50" />
-                                <span>{pet.name}</span>
-                            </div>
-
-                            <div className="space-y-2">
-                                <h1 className="font-display text-4xl md:text-5xl text-primary">{pet.name}</h1>
-                                <div className="flex items-center text-muted-foreground gap-2 font-semibold">
-                                    <MapPin className="h-5 w-5 text-red-400" />
-                                    <span>{pet.last_seen_district}, {pet.last_seen_province}</span>
+                            {reunited && (
+                                <div className="flex items-start gap-3 rounded-[1.5rem] border border-primary/30 bg-accent p-5 text-accent-foreground">
+                                    <PartyPopper className="mt-0.5 h-6 w-6 shrink-0 text-primary" aria-hidden />
+                                    <div><p className="font-semibold">¡{pet.name} ya volvió a casa!</p><p className="text-sm">Gracias a toda la comunidad. <Link href="/casos-de-exito" className="font-semibold text-primary underline-offset-2 hover:underline">Ver casos de éxito</Link></p></div>
                                 </div>
-                            </div>
+                            )}
 
-                            {/* Description */}
-                            <div className="space-y-2 pb-6 border-b border-border">
-                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Descripción</span>
-                                <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                                    {pet.description || "Sin descripción proporcionada."}
-                                </p>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="p-5 bg-background rounded-3xl space-y-1">
-                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Raza</span>
-                                    <div className="font-bold text-foreground truncate">{pet.breed}</div>
-                                </div>
-                                <div className="p-5 bg-background rounded-3xl space-y-1">
-                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Género</span>
-                                    <div className="font-bold text-foreground">{pet.gender || 'No espec.'}</div>
-                                </div>
-                                <div className="p-5 bg-background rounded-3xl space-y-1">
-                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Tamaño</span>
-                                    <div className="font-bold text-foreground">{pet.size || 'No espec.'}</div>
-                                </div>
-                                <div className="p-5 bg-background rounded-3xl space-y-1">
-                                    <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Color</span>
-                                    <div className="font-bold text-foreground truncate">{pet.colors?.join(', ') || 'No espec.'}</div>
-                                </div>
-                            </div>
-
-                            {/* Map Info Box */}
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm font-bold text-foreground">Mapa de avistamientos</span>
-                                    <Badge variant="secondary" className="bg-accent text-primary border-0 font-bold">
-                                        Última señal: {lastSightingDateStr}
-                                    </Badge>
-                                </div>
-
-                                <div className="h-64 w-full border-4 border-white shadow-2xl rounded-[2.5rem] overflow-hidden">
-                                    <SightingsMapWrapper
-                                        initialLat={mapCenterLat}
-                                        initialLng={mapCenterLng}
-                                        sightings={validSightings.map(s => ({
-                                            id: s.id,
-                                            lat: s.lat as number,
-                                            lng: s.lng as number,
-                                            description: s.description,
-                                            createdAt: s.created_at,
-                                            reporterName: s.reporter?.full_name
-                                        }))}
-                                        className="h-full w-full"
+                            <div className="space-y-4 rounded-[1.5rem] border bg-card p-5 shadow-[var(--shadow-lift)] sm:rounded-[2rem] sm:p-7">
+                                {!reunited && (
+                                    <div className="space-y-1">
+                                        <h2 className="font-display text-2xl text-primary">{found ? "¿Es tu mascota?" : `¿Viste a ${pet.name}?`}</h2>
+                                        <p className="text-sm text-muted-foreground">{found ? "Escríbele a quien la encontró o reporta un dato que ayude." : "Cualquier dato ayuda: dónde y a qué hora."}</p>
+                                    </div>
+                                )}
+                                {!reunited && (
+                                    <ReportActionButton
+                                        nextUrl={`/mascotas/${pet.id}/avistamiento`}
+                                        label="Reportar avistamiento"
+                                        icon={<MapPin className="mr-2 h-5 w-5" aria-hidden />}
+                                        variant="cta"
+                                        size="lg"
+                                        className="h-14 w-full rounded-full text-base"
                                     />
-                                </div>
-                            </div>
+                                )}
 
-                            <div className="space-y-4 pt-4">
-                                <ReportActionButton
-                                    nextUrl={`/mascotas/${pet.id}/avistamiento`}
-                                    label="Reportar avistamiento"
-                                    icon={<MapPin className="mr-3 h-6 w-6" />}
-                                    className="w-full h-16 text-xl font-bold rounded-2xl shadow-2xl shadow-teal-700/30 bg-primary hover:bg-primary text-white border-0"
-                                    size="lg"
-                                />
                                 {pet.source_url ? (
-                                    <div className="rounded-2xl border bg-card p-4 text-sm">
+                                    <div className="space-y-3 rounded-2xl border bg-background p-4 text-sm">
                                         <p className="font-semibold">Información tomada de {pet.source_name || "una fuente externa"}</p>
-                                        <p className="mt-1 text-muted-foreground">
-                                            Este caso lo publicamos nosotros a partir de esa fuente. Los datos de contacto están en la publicación original.
-                                        </p>
-                                        <a href={pet.source_url} target="_blank" rel="noopener noreferrer nofollow" className="mt-2 inline-block font-bold text-primary hover:underline">
-                                            Ver fuente: {pet.source_name || "enlace original"}
-                                        </a>
-                                        <div className="mt-3 rounded-xl bg-accent p-3 text-accent-foreground">
+                                        <p className="text-muted-foreground">Este caso lo publicamos nosotros a partir de esa fuente. Los datos de contacto están en la publicación original.</p>
+                                        <a href={pet.source_url} target="_blank" rel="noopener noreferrer nofollow" className="inline-block font-bold text-primary hover:underline">Ver fuente: {pet.source_name || "enlace original"}</a>
+                                        <div className="rounded-xl bg-accent p-3 text-accent-foreground">
                                             <p className="font-semibold">¿Es tu mascota?</p>
                                             <p className="mt-0.5">Crea tu cuenta y dale seguimiento a la búsqueda: sube fotos, recibe avisos de avistamientos y actualiza el caso.</p>
                                             <Link href="/registro" className="mt-2 inline-block font-bold underline">Crear mi cuenta</Link>
                                         </div>
                                     </div>
-                                ) : (
-                                                                    <OwnerContactModal
-                                        ownerName={owner.full_name}
-                                        petName={pet.name}
-                                        phone={owner.phone}
-                                        whatsapp={owner.whatsapp}
-                                        email={owner.email}
-                                    />
+                                ) : !isOwner && (
+                                    <ContactCard petId={pet.id} petName={pet.name} ownerName={owner.full_name} found={found} phone={owner.phone} whatsapp={owner.whatsapp} email={owner.email} />
                                 )}
-                                <Button variant="outline" className="w-full h-16 text-lg font-bold rounded-2xl border-2 border-border text-muted-foreground hover:bg-background" size="lg" asChild>
-                                    <Link href={`/cartel/${pet.id}`}>
-                                        <Download className="mr-3 h-5 w-5" /> Generar cartel
-                                    </Link>
-                                </Button>
-                                <AdSlot placement="detail_sidebar" variant="side" />
+
+                                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                                    <SocialShare petName={pet.name} variant="button" text={found ? `Encontramos a ${pet.name}. ¿Es tu mascota? Comparte para ayudar a encontrar a su familia 🐾` : undefined} />
+                                    <Button asChild variant="outline" className="h-12 w-full rounded-full border-2 text-base"><Link href={`/cartel/${pet.id}`}><Download className="mr-2 h-5 w-5" aria-hidden /> Generar cartel</Link></Button>
+                                </div>
                             </div>
+
+                            <div className="flex items-center gap-3 rounded-2xl border bg-card p-4 text-sm">
+                                <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent font-bold text-primary">
+                                    {owner.avatar_url
+                                        ? <img src={owner.avatar_url} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
+                                        : (owner.full_name || "?").charAt(0).toUpperCase()}
+                                </span>
+                                <div className="min-w-0">
+                                    <p className="text-xs text-muted-foreground">{found ? "Encontrado y publicado por" : "Reportado por"}</p>
+                                    <p className="truncate font-semibold">{owner.full_name || (pet.source_name ? `Fuente: ${pet.source_name}` : "Usuario de la comunidad")}</p>
+                                    <p className="text-xs text-muted-foreground">Publicado el {dateFmt.format(new Date(pet.created_at))}</p>
+                                </div>
+                            </div>
+
+                            <AdSlot placement="detail_sidebar" variant="side" />
                         </div>
+                    </aside>
+
+                    {/* Detalle, mapa, historial */}
+                    <div className="space-y-6 lg:col-span-7">
+                        <section aria-labelledby="h-sobre" className="space-y-5 rounded-[1.5rem] border bg-card p-5 shadow-[var(--shadow-soft)] sm:rounded-[2rem] sm:p-8">
+                            <h2 id="h-sobre" className="font-display text-2xl text-primary sm:text-3xl">Sobre {pet.name}</h2>
+                            <p className="whitespace-pre-wrap leading-relaxed text-foreground/90">{pet.description || "Sin descripción proporcionada."}</p>
+
+                            <div className="grid gap-3 sm:grid-cols-2">
+                                <Fact icon={Dog} label="Tipo">{kind}</Fact>
+                                <Fact icon={PawPrint} label="Raza"><span className="truncate">{pet.breed || "No especificada"}</span></Fact>
+                                <Fact icon={VenusAndMars} label="Género">{pet.gender || "No especificado"}</Fact>
+                                <Fact icon={Ruler} label="Tamaño">{pet.size || "No especificado"}</Fact>
+                                {pet.age && <Fact icon={Cake} label="Edad">{pet.age}</Fact>}
+                                {pet.microchip && <Fact icon={Cpu} label="Microchip">Sí tiene</Fact>}
+                                <Fact icon={Palette} label="Colores">
+                                    {colors.length ? (
+                                        <span className="flex flex-wrap gap-x-3 gap-y-1">
+                                            {colors.map((c) => (
+                                                <span key={c} className="inline-flex items-center gap-1.5 text-sm">
+                                                    <span className="h-3.5 w-3.5 rounded-full border border-stone-300" style={{ background: SWATCH[c.toLowerCase()] ?? "#cbd5e0" }} aria-hidden /> {c}
+                                                </span>
+                                            ))}
+                                        </span>
+                                    ) : "No especificado"}
+                                </Fact>
+                            </div>
+
+                            {(pet.markings || pet.personality?.length > 0) && (
+                                <div className="space-y-3 border-t pt-4">
+                                    {pet.markings && <p className="text-sm"><span className="font-semibold">Señas particulares:</span> <span className="text-muted-foreground">{pet.markings}</span></p>}
+                                    {pet.personality?.length > 0 && (
+                                        <div className="flex flex-wrap gap-2">
+                                            {pet.personality.map((t: string) => <span key={t} className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">{t}</span>)}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </section>
+
+                        <section aria-labelledby="h-mapa" className="space-y-4 rounded-[1.5rem] border bg-card p-5 shadow-[var(--shadow-soft)] sm:rounded-[2rem] sm:p-8">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <h2 id="h-mapa" className="font-display text-2xl text-primary sm:text-3xl">Mapa de avistamientos</h2>
+                                <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">Última señal: {dateFmt.format(lastSignal)}</span>
+                            </div>
+                            <div className="h-72 w-full overflow-hidden rounded-2xl border sm:h-96">
+                                <SightingsMapWrapper
+                                    initialLat={mapCenterLat}
+                                    initialLng={mapCenterLng}
+                                    sightings={validSightings.map(s => ({
+                                        id: s.id,
+                                        lat: s.lat as number,
+                                        lng: s.lng as number,
+                                        description: s.description,
+                                        createdAt: s.created_at,
+                                        reporterName: s.reporter?.full_name
+                                    }))}
+                                    className="h-full w-full"
+                                />
+                            </div>
+                        </section>
+
+                        <SightingTimeline sightings={sightings} petId={pet.id} petName={pet.name} />
+
+                        {!reunited && (
+                            <section aria-labelledby="h-ves" className="space-y-4 rounded-[1.5rem] border bg-accent p-5 sm:rounded-[2rem] sm:p-8">
+                                <h2 id="h-ves" className="flex items-center gap-2 font-display text-2xl text-primary"><Megaphone className="h-6 w-6" aria-hidden /> {found ? "Si crees que es tu mascota" : `Si ves a ${pet.name}`}</h2>
+                                <ol className="space-y-2 text-sm text-accent-foreground">
+                                    {(found
+                                        ? ["Mira bien las fotos y los datos del reporte.", "Escribe a quien la encontró con una foto tuya de ella.", "Preparen un punto de encuentro seguro y público.", "Si ya es tuya, marca el caso como reunido desde tu cuenta."]
+                                        : ["No lo persigas: acércate despacio y háblale con calma.", "Toma una foto o video desde lejos si puedes.", "Reporta el avistamiento con el lugar exacto y la hora.", "Si lo logras resguardar, llévalo a una veterinaria para revisar si tiene microchip."]
+                                    ).map((t, i) => <li key={t} className="flex gap-3"><span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-card text-xs font-bold text-primary">{i + 1}</span> {t}</li>)}
+                                </ol>
+                            </section>
+                        )}
                     </div>
                 </div>
 
                 {matches.length > 0 && (
-                    <div className="space-y-8 pt-12 border-t border-border">
-                        <h2 className="text-3xl font-bold text-foreground tracking-tight">
-                            Posibles coincidencias con {pet.status === 'found' ? 'mascotas perdidas' : 'mascotas encontradas'}
-                        </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <section className="space-y-6 border-t pt-10">
+                        <h2 className="font-display text-3xl text-primary">Posibles coincidencias con {found ? 'mascotas perdidas' : 'mascotas encontradas'}</h2>
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                             {matches.map(({ pet: m }, i) => (
                                 <Reveal key={m.id} delay={i * 0.05}>
-                                <PetCard
-                                    id={m.id}
-                                    name={m.name}
-                                    type={m.type}
-                                    breed={m.breed}
-                                    district={m.last_seen_district}
-                                    province={m.last_seen_province}
-                                    colors={m.colors}
-                                    imageUrl={m.image_urls?.[0]}
-                                    status={m.status}
-                                    lostDate={m.last_seen_date}
-                                    timeLeft="Reciente"
-                                />
+                                    <PetCard id={m.id} name={m.name} type={m.type} breed={m.breed} district={m.last_seen_district} province={m.last_seen_province} colors={m.colors} imageUrl={m.image_urls?.[0]} status={m.status} lostDate={m.last_seen_date} timeLeft="Reciente" />
                                 </Reveal>
                             ))}
                         </div>
-                    </div>
+                    </section>
                 )}
 
-                {/* Similar Pets Section */}
                 {similarPets && similarPets.length > 0 && (
-                    <div className="space-y-8 pt-12 border-t border-border">
+                    <section className="space-y-6 border-t pt-10">
                         <div className="flex items-center gap-3">
-                            <div className="p-3 bg-red-50 rounded-2xl text-red-500 shadow-sm">
-                                <Flag className="h-6 w-6" />
-                            </div>
-                            <h2 className="text-3xl font-bold text-foreground tracking-tight">Otras alertas en {pet.last_seen_district}</h2>
+                            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-accent text-primary"><Flag className="h-5 w-5" aria-hidden /></span>
+                            <h2 className="font-display text-3xl text-primary">Otras alertas en {pet.last_seen_district}</h2>
                         </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                             {similarPets.map((similar, i) => (
                                 <Reveal key={similar.id} delay={i * 0.05}>
-                                <PetCard
-                                    id={similar.id}
-                                    name={similar.name}
-                                    type={similar.type}
-                                    breed={similar.breed}
-                                    district={similar.last_seen_district}
-                                    province={similar.last_seen_province}
-                                    colors={similar.colors}
-                                    imageUrl={similar.image_urls?.[0]}
-                                    status={similar.status}
-                                    lostDate={similar.last_seen_date}
-                                    timeLeft="Reciente"
-                                />
+                                    <PetCard id={similar.id} name={similar.name} type={similar.type} breed={similar.breed} district={similar.last_seen_district} province={similar.last_seen_province} colors={similar.colors} imageUrl={similar.image_urls?.[0]} status={similar.status} lostDate={similar.last_seen_date} timeLeft="Reciente" />
                                 </Reveal>
                             ))}
                         </div>
-                    </div>
+                    </section>
                 )}
             </div>
-
-            {/* Floating Share Button */}
-            <SocialShare petName={pet.name} variant="floating" />
         </div>
     )
 }
