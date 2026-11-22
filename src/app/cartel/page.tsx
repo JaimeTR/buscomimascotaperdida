@@ -13,7 +13,7 @@ import { FORMATS, TEMPLATES, type FormatId, type TemplateId } from "@/lib/poster
 import { createClient } from "@/utils/supabase/server"
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
-const lift = "transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]"
+const lift = "hover-lift"
 
 const FEATURES = [
     { icon: LayoutTemplate, t: "5 plantillas", d: "Marca, Alerta, Foto completa, Urgente y Encontrado: cambia el estilo con un toque." },

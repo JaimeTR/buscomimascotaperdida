@@ -4,7 +4,8 @@ import { Building2, HeartHandshake, Stethoscope, Newspaper, ArrowUpRight, Handsh
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
 import { Reveal } from "@/components/ui/reveal"
-import { PromoRequestForm } from "@/components/promo/request-form"
+import { PromoDialog } from "@/components/promo/promo-dialog"
+import { OpenFormButton } from "@/components/ui/form-dialog"
 import { getPartners, PARTNER_KINDS } from "@/lib/ads"
 import { STOCK } from "@/lib/stock-images"
 import { createClient } from "@/utils/supabase/server"
@@ -31,7 +32,7 @@ export default async function AliadosPage() {
                         <h1 className="font-display text-4xl leading-[1.05] text-primary md:text-5xl">Juntos llegamos <span className="text-cta">más lejos</span></h1>
                         <p className="text-lg text-muted-foreground">Cada empresa, veterinaria y persona que colabora ayuda a que más mascotas vuelvan a casa.</p>
                         <div className="flex flex-wrap gap-3">
-                            <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#colaborar">Quiero colaborar</a></Button>
+                            <OpenFormButton form="aliados" variant="cta" size="lg" className="rounded-full">Quiero colaborar</OpenFormButton>
                             <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><Link href="/anuncios">Ver planes de promoción</Link></Button>
                         </div>
                     </div>
@@ -46,7 +47,7 @@ export default async function AliadosPage() {
                 <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {WAYS.map((w, i) => (
                         <Reveal as="li" key={w.title} delay={i * 0.06}>
-                            <div className="h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]">
+                            <div className="hover-lift h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
                                 <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground"><w.icon className="h-6 w-6" aria-hidden /></span>
                                 <h3 className="text-lg font-semibold">{w.title}</h3>
                                 <p className="mt-1 text-sm text-muted-foreground">{w.text}</p>
@@ -60,7 +61,7 @@ export default async function AliadosPage() {
                 <h2 id="h-aliados" className="mb-8 font-display text-3xl text-primary">Nuestros aliados</h2>
                 {partners.length === 0 ? (
                     <EmptyState icon={Handshake} title="Aún no hay aliados publicados" text="Sé la primera empresa o persona en aparecer aquí y ayuda a que la red crezca.">
-                        <Button asChild variant="cta"><a href="#colaborar">Quiero ser aliado</a></Button>
+                        <OpenFormButton form="aliados" detail={{ kind: "aliado" }} variant="cta">Quiero ser aliado</OpenFormButton>
                     </EmptyState>
                 ) : (
                     <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -82,7 +83,7 @@ export default async function AliadosPage() {
                                     {p.description && <p className="mt-3 text-sm text-muted-foreground">{p.description}</p>}
                                 </>
                             )
-                            const cls = "block h-full rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-lift)]"
+                            const cls = "block h-full rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)] hover-lift"
                             return (
                                 <li key={p.id}>
                                     {p.website_url ? <a href={p.website_url} target="_blank" rel="noopener noreferrer" className={cls}>{body}</a> : <div className={cls}>{body}</div>}
@@ -94,18 +95,21 @@ export default async function AliadosPage() {
             </section>
 
             <section id="colaborar" className="container mx-auto scroll-mt-20 px-4 pb-6">
-                <div className="mx-auto max-w-3xl space-y-6">
-                    <div className="text-center">
-                        <h2 className="font-display text-3xl text-primary md:text-4xl">Quiero colaborar</h2>
-                        <p className="mt-2 text-muted-foreground">Cuéntanos cómo quieres ayudar y te escribimos.</p>
+                <div className="relative overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-primary-foreground md:py-16">
+                    <div aria-hidden className="paws-white pointer-events-none absolute inset-0 opacity-[0.07]" />
+                    <div className="relative mx-auto max-w-xl space-y-4">
+                        <Handshake className="mx-auto h-9 w-9 text-orange-200" aria-hidden />
+                        <h2 className="font-display text-3xl leading-tight md:text-4xl">Quiero colaborar</h2>
+                        <p className="text-primary-foreground/90">Cuéntanos cómo quieres ayudar y te escribimos.</p>
+                        <div className="flex flex-col justify-center gap-3 pt-2 sm:flex-row">
+                            <OpenFormButton form="aliados" detail={{ kind: "aliado" }} variant="cta" size="lg" className="rounded-full"><Building2 className="mr-2 h-5 w-5" aria-hidden /> Quiero ser aliado</OpenFormButton>
+                            <OpenFormButton form="aliados" detail={{ kind: "voluntario" }} variant="outline" size="lg" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"><HeartHandshake className="mr-2 h-5 w-5" aria-hidden /> Quiero ser voluntario</OpenFormButton>
+                        </div>
                     </div>
-                    <PromoRequestForm
-                        loggedIn={Boolean(user)}
-                        kinds={[{ value: "aliado", label: "Ser aliado (empresa, veterinaria, refugio)" }, { value: "voluntario", label: "Ser voluntario" }]}
-                        defaultKind="aliado"
-                    />
                 </div>
             </section>
+
+            <PromoDialog form="aliados" loggedIn={Boolean(user)} />
         </div>
     )
 }

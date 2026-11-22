@@ -7,7 +7,7 @@ import { registerSchema, RegisterSchema } from "@/lib/schemas/auth"
 import { registerAction, resendConfirmationAction } from "@/app/auth/actions"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Loader2, Eye, EyeOff, MailCheck } from "lucide-react"
+import { Loader2, Eye, EyeOff, MailCheck, Mail, Lock, User } from "lucide-react"
 import { useToast } from "@/components/ui/toast-modern"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -68,20 +68,21 @@ export function RegisterForm({ next, loginHref }: { next: string; loginHref: str
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
             <div className="space-y-1.5">
                 <label htmlFor="reg-fullName" className={label}>Nombre</label>
-                <Input id="reg-fullName" autoComplete="name" enterKeyHint="next" className={field} aria-invalid={!!errors.fullName} {...register("fullName")} />
+                <div className="group/field relative"><User aria-hidden className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-muted-foreground transition-all duration-200 group-focus-within/field:scale-110 group-focus-within/field:text-primary" /><Input id="reg-fullName" autoComplete="name" enterKeyHint="next" className={`${field} pl-12`} aria-invalid={!!errors.fullName} {...register("fullName")} /></div>
                 {errors.fullName && <p className="text-sm text-destructive">{errors.fullName.message}</p>}
             </div>
 
             <div className="space-y-1.5">
                 <label htmlFor="reg-email" className={label}>Correo</label>
-                <Input id="reg-email" type="email" inputMode="email" autoComplete="email" enterKeyHint="next" className={field} aria-invalid={!!errors.email} {...register("email")} />
+                <div className="group/field relative"><Mail aria-hidden className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-muted-foreground transition-all duration-200 group-focus-within/field:scale-110 group-focus-within/field:text-primary" /><Input id="reg-email" type="email" inputMode="email" autoComplete="email" enterKeyHint="next" className={`${field} pl-12`} aria-invalid={!!errors.email} {...register("email")} /></div>
                 {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
             </div>
 
             <div className="space-y-1.5">
                 <label htmlFor="reg-password" className={label}>Contraseña</label>
-                <div className="relative">
-                    <Input id="reg-password" type={show ? "text" : "password"} autoComplete="new-password" enterKeyHint="go" className={`${field} pr-12`} aria-invalid={!!errors.password} aria-describedby="reg-password-hint" {...register("password")} />
+                <div className="group/field relative">
+                    <Lock aria-hidden className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-muted-foreground transition-all duration-200 group-focus-within/field:scale-110 group-focus-within/field:text-primary" />
+                    <Input id="reg-password" type={show ? "text" : "password"} autoComplete="new-password" enterKeyHint="go" className={`${field} pl-12 pr-12`} aria-invalid={!!errors.password} aria-describedby="reg-password-hint" {...register("password")} />
                     <button type="button" onClick={() => setShow((v) => !v)} aria-label={show ? "Ocultar contraseña" : "Mostrar contraseña"} aria-pressed={show}
                         className="absolute right-0.5 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                         {show ? <EyeOff className="h-5 w-5" aria-hidden /> : <Eye className="h-5 w-5" aria-hidden />}

@@ -158,6 +158,9 @@ body::before {
   transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
   &:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
   &:active { transform: translateY(-1px) scale(0.99); }
+  /* Los iconos del contenedor tambien reaccionan. */
+  & svg { transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  &:hover svg:not(.animate-spin) { transform: scale(1.12) rotate(-5deg); }
 }
 /* Imagen que se acerca suavemente dentro de su contenedor al pasar el mouse sobre el grupo. */
 @utility img-zoom {
@@ -194,11 +197,12 @@ dialog[open]::backdrop { background-color: rgb(0 0 0 / 0.4); }
 /* Toques sin el destello gris del navegador móvil: la respuesta visual la dan los estados :active. */
 a, button, summary, label { -webkit-tap-highlight-color: transparent; }
 
+/* "Reducir movimiento" del sistema: se quitan las animaciones largas (entradas, fundidos) y el desplazamiento suave.
+   Las respuestas cortas al pasar el mouse o tocar (hover/clic, <=0.3 s) se mantienen: son retroalimentacion, no decoracion. */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { loginAction, resendConfirmationAction } from "@/app/auth/actions"
 import type { LoginActionState } from "@/app/auth/actions"
 import Link from "next/link"
-import { Loader2, AlertTriangle, CheckCircle2, Eye, EyeOff } from "lucide-react"
+import { Loader2, AlertTriangle, CheckCircle2, Eye, EyeOff, Mail, Lock } from "lucide-react"
 import { useToast } from "@/components/ui/toast-modern"
 
 // Define the initial state type
@@ -65,7 +65,7 @@ export function LoginForm({ next, forgotHref }: { next: string; forgotHref: stri
 
             <div className="space-y-1.5">
                 <label htmlFor="email" className={label}>Correo</label>
-                <Input ref={emailRef} id="email" name="email" type="email" enterKeyHint="next" autoComplete="email" inputMode="email" required className={field} defaultValue={state.email || ""} aria-invalid={!!state?.validationErrors?.email} aria-describedby={state?.validationErrors?.email ? "email-error" : undefined} />
+                <div className="group/field relative"><Mail aria-hidden className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-muted-foreground transition-all duration-200 group-focus-within/field:scale-110 group-focus-within/field:text-primary" /><Input ref={emailRef} id="email" name="email" type="email" enterKeyHint="next" autoComplete="email" inputMode="email" required className={`${field} pl-12`} defaultValue={state.email || ""} aria-invalid={!!state?.validationErrors?.email} aria-describedby={state?.validationErrors?.email ? "email-error" : undefined} /></div>
                 {state?.validationErrors?.email && <p id="email-error" className="text-sm text-destructive">{state.validationErrors.email[0]}</p>}
             </div>
 
@@ -74,8 +74,9 @@ export function LoginForm({ next, forgotHref }: { next: string; forgotHref: stri
                     <label htmlFor="password" className={label}>Contraseña</label>
                     <Link href={forgotHref} className="-my-3 inline-flex min-h-11 items-center text-sm font-medium text-primary underline-offset-4 hover:underline">¿La olvidaste?</Link>
                 </div>
-                <div className="relative">
-                    <Input id="password" name="password" enterKeyHint="go" type={show ? "text" : "password"} autoComplete="current-password" required className={`${field} pr-12`} aria-invalid={!!state?.validationErrors?.password} aria-describedby={state?.validationErrors?.password ? "password-error" : undefined} />
+                <div className="group/field relative">
+                    <Lock aria-hidden className="pointer-events-none absolute left-4 top-1/2 z-10 h-5 w-5 -translate-y-1/2 text-muted-foreground transition-all duration-200 group-focus-within/field:scale-110 group-focus-within/field:text-primary" />
+                    <Input id="password" name="password" enterKeyHint="go" type={show ? "text" : "password"} autoComplete="current-password" required className={`${field} pl-12 pr-12`} aria-invalid={!!state?.validationErrors?.password} aria-describedby={state?.validationErrors?.password ? "password-error" : undefined} />
                     <button
                         type="button"
                         onClick={() => setShow((v) => !v)}

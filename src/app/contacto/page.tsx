@@ -4,7 +4,8 @@ import { HeartHandshake, Building2, LifeBuoy, ChevronDown, Mail, Phone, MessageC
 import { Reveal } from "@/components/ui/reveal"
 import { PageHeader } from "@/components/ui/page-header"
 import { Button } from "@/components/ui/button"
-import { ContactForm } from "@/components/contact/contact-form"
+import { ContactDialog } from "@/components/contact/contact-dialog"
+import { OpenFormButton } from "@/components/ui/form-dialog"
 import { CONTACT_KINDS, type ContactKind } from "@/lib/contact-kinds"
 import { CopyButton } from "@/components/contact/copy-button"
 import { SITE_CONTACT, SUPPORT_METHODS } from "@/lib/site-config"
@@ -35,7 +36,7 @@ const FAQ_JSON_LD = {
     mainEntity: FAQ.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
 }
 
-const lift = "transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]"
+const lift = "hover-lift"
 
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
     const { tipo } = await searchParams
@@ -57,7 +58,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                 <div className="relative space-y-5 p-8 md:p-12">
                     <PageHeader title="Contacto, alianzas y apoyo" text="Escríbenos, súmate como aliado o voluntario, o apoya el proyecto para que más mascotas vuelvan a casa." />
                     <div className="flex flex-wrap gap-3">
-                        <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#formulario">Escribir un mensaje</a></Button>
+                        <OpenFormButton form="contacto" detail={{ kind: "consulta" }} variant="cta" size="lg" className="rounded-full"><MessageCircle className="mr-2 h-5 w-5" aria-hidden /> Escribir un mensaje</OpenFormButton>
                         <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><a href="#apoyar"><HandHeart className="mr-2 h-5 w-5" aria-hidden /> Apoyar el proyecto</a></Button>
                     </div>
                 </div>
@@ -89,12 +90,12 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                 <ul className="grid gap-4 md:grid-cols-3">
                     {PATHS.map((p, i) => (
                         <Reveal as="li" key={p.kind} delay={i * 0.06}>
-                            <Link href={`/contacto?tipo=${p.kind}#formulario`} scroll className={`group block h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)] active:scale-[0.99] ${lift}`}>
+                            <OpenFormButton plain form="contacto" detail={{ kind: p.kind }} className={`group block h-full w-full rounded-3xl border bg-card p-6 text-left shadow-[var(--shadow-soft)] active:scale-[0.99] ${lift}`}>
                                 <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"><p.icon className="h-6 w-6" aria-hidden /></span>
                                 <h3 className="text-lg font-semibold">{p.title}</h3>
                                 <p className="mt-1 text-sm text-muted-foreground">{p.text}</p>
                                 <span className="mt-4 inline-flex items-center text-sm font-semibold text-primary">Quiero sumarme <span className="ml-1 transition-transform duration-300 group-hover:translate-x-1" aria-hidden>→</span></span>
-                            </Link>
+                            </OpenFormButton>
                         </Reveal>
                     ))}
                 </ul>
@@ -111,7 +112,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                             <h2 id="h-apoyo" className="font-display text-3xl leading-tight md:text-4xl">Apoya el proyecto</h2>
                             <p className="text-primary-foreground/90">Busco mi mascota es gratis y seguirá siéndolo. Tu aporte, grande o pequeño, es voluntario y ayuda a cubrir servidor, avisos por correo y la difusión de casos.</p>
                             <p className="text-sm text-primary-foreground/80">¿Ya apoyaste? Avísanos para agradecerte: puedes adjuntar tu comprobante y, si quieres, unirte al grupo de colaboradores.</p>
-                            <Button asChild variant="cta" size="lg" className="rounded-full"><Link href="/contacto?tipo=apoyo#formulario">Ya apoyé, avisar</Link></Button>
+                            <OpenFormButton form="contacto" detail={{ kind: "apoyo" }} variant="cta" size="lg" className="rounded-full"><HandHeart className="mr-2 h-5 w-5" aria-hidden /> Ya apoyé, avisar</OpenFormButton>
                         </div>
                     </div>
                     <div className="space-y-4 p-8 md:p-12">
@@ -132,7 +133,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                                 ))}
                             </ul>
                         ) : (
-                            <p className="rounded-2xl border border-dashed p-5 text-sm text-muted-foreground">Estamos preparando los medios de apoyo (Yape y Plin). Mientras tanto puedes <Link href="/contacto?tipo=colaborar#formulario" className="font-semibold text-primary underline-offset-2 hover:underline">escribirnos</Link> y te contamos cómo colaborar.</p>
+                            <p className="rounded-2xl border border-dashed p-5 text-sm text-muted-foreground">Estamos preparando los medios de apoyo (Yape y Plin). Mientras tanto puedes <OpenFormButton plain form="contacto" detail={{ kind: "colaborar" }} className="font-semibold text-primary underline-offset-2 hover:underline">escribirnos</OpenFormButton> y te contamos cómo colaborar.</p>
                         )}
                         <ul className="space-y-2 text-sm text-muted-foreground">
                             <li className="flex gap-2"><PawPrint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> También aceptamos ayuda en especie: difusión, diseño, tiempo.</li>
@@ -142,17 +143,21 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                 </div>
             </section>
 
-            {/* Formulario */}
-            <section id="formulario" aria-labelledby="h-form" className="scroll-mt-20 grid gap-8 lg:grid-cols-[1fr_1.5fr]">
-                <div className="space-y-5">
-                    <h2 id="h-form" className="font-display text-3xl text-primary md:text-4xl">Escríbenos</h2>
-                    <p className="text-muted-foreground">Cuéntanos qué necesitas: una consulta, una alianza, ser voluntario, colaborar o avisarnos que apoyaste. Te respondemos al correo que indiques.</p>
-                    <ul className="space-y-3 text-sm">
-                        <li className="flex gap-3 rounded-2xl bg-accent/50 p-4"><Users className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden /><span><strong className="block">Grupo de colaboradores</strong><span className="text-muted-foreground">Voluntarios, aliados y personas que apoyan se coordinan en un grupo. Marca la opción en el formulario o elige «Unirme al grupo».</span></span></li>
-                        <li className="flex gap-3 rounded-2xl bg-accent/50 p-4"><LifeBuoy className="mt-0.5 h-5 w-5 shrink-0 text-primary" aria-hidden /><span><strong className="block">¿Un reporte falso o un abuso?</strong><span className="text-muted-foreground">Incluye el enlace del reporte en tu mensaje.</span></span></li>
-                    </ul>
+            {/* Escríbenos: el formulario vive en un modal */}
+            <section id="formulario" aria-labelledby="h-form" className="scroll-mt-20">
+                <div className="relative overflow-hidden rounded-[2rem] border bg-card px-6 py-12 shadow-[var(--shadow-soft)] md:px-12 md:py-16">
+                    <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.05]" />
+                    <div className="relative mx-auto max-w-2xl space-y-5 text-center">
+                        <MessageCircle className="mx-auto h-10 w-10 text-primary" aria-hidden />
+                        <h2 id="h-form" className="font-display text-3xl text-primary md:text-4xl">Escríbenos</h2>
+                        <p className="text-muted-foreground">Una consulta, una alianza, ser voluntario, colaborar o avisarnos que apoyaste: elige y completa el formulario en un momento. Te respondemos al correo que indiques.</p>
+                        <div className="flex flex-col justify-center gap-3 sm:flex-row">
+                            <OpenFormButton form="contacto" detail={{ kind: "consulta" }} variant="cta" size="lg" className="rounded-full"><MessageCircle className="mr-2 h-5 w-5" aria-hidden /> Abrir formulario</OpenFormButton>
+                            <OpenFormButton form="contacto" detail={{ kind: "grupo" }} variant="outline" size="lg" className="rounded-full"><Users className="mr-2 h-5 w-5" aria-hidden /> Unirme al grupo de colaboradores</OpenFormButton>
+                        </div>
+                        <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground"><LifeBuoy className="h-4 w-4 shrink-0 text-primary" aria-hidden /> ¿Un reporte falso o un abuso? Incluye el enlace del reporte en tu mensaje.</p>
+                    </div>
                 </div>
-                <ContactForm key={initialKind} initialKind={initialKind} groupUrl={collabGroupUrl} />
             </section>
 
             {/* Preguntas frecuentes */}
@@ -168,6 +173,8 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                     </details>
                 ))}
             </section>
+
+            <ContactDialog groupUrl={collabGroupUrl} openKind={tipo ? initialKind : undefined} />
         </div>
     )
 }

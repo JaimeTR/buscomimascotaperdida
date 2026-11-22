@@ -2,7 +2,8 @@ import Image from "next/image"
 import { Check, Megaphone, Eye, MousePointerClick, ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Reveal } from "@/components/ui/reveal"
-import { PromoRequestForm } from "@/components/promo/request-form"
+import { PromoDialog } from "@/components/promo/promo-dialog"
+import { OpenFormButton } from "@/components/ui/form-dialog"
 import { PLANS } from "@/lib/ads"
 import { STOCK } from "@/lib/stock-images"
 import { createClient } from "@/utils/supabase/server"
@@ -35,7 +36,7 @@ export default async function AnunciosPage() {
                         <p className="text-lg text-primary-foreground/90">Aparece como destacado en la portada y junto a los casos de tu zona. Y ayudas a sostener la red.</p>
                         <div className="flex flex-wrap gap-3">
                             <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#planes">Ver planes</a></Button>
-                            <Button asChild size="lg" variant="outline" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"><a href="#solicitud">Enviar solicitud</a></Button>
+                            <OpenFormButton form="anuncios" size="lg" variant="outline" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white">Enviar solicitud</OpenFormButton>
                         </div>
                     </div>
                     <div className="relative min-h-64 md:min-h-[26rem]">
@@ -47,7 +48,7 @@ export default async function AnunciosPage() {
             <section aria-label="Beneficios" className="container mx-auto grid gap-4 px-4 py-12 md:grid-cols-3">
                 {BENEFITS.map((b, i) => (
                     <Reveal key={b.t} delay={i * 0.06}>
-                        <div className="h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
+                        <div className="hover-lift h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
                             <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground"><b.icon className="h-6 w-6" aria-hidden /></span>
                             <h2 className="text-lg font-semibold">{b.t}</h2>
                             <p className="mt-1 text-sm text-muted-foreground">{b.d}</p>
@@ -69,7 +70,7 @@ export default async function AnunciosPage() {
                                 <ul className="mt-5 flex-1 space-y-3 text-sm">
                                     {p.perks.map((perk) => <li key={perk} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> {perk}</li>)}
                                 </ul>
-                                <Button asChild variant={"highlight" in p && p.highlight ? "cta" : "default"} className="mt-6 w-full rounded-full"><a href="#solicitud">Elegir {p.name}</a></Button>
+                                <OpenFormButton form="anuncios" detail={{ plan: p.key }} variant={"highlight" in p && p.highlight ? "cta" : "default"} className="mt-6 w-full rounded-full">Elegir {p.name}</OpenFormButton>
                             </div>
                         </Reveal>
                     ))}
@@ -81,7 +82,7 @@ export default async function AnunciosPage() {
                 <ol className="grid gap-4 md:grid-cols-3">
                     {STEPS.map((s, i) => (
                         <Reveal as="li" key={s.t} delay={i * 0.06}>
-                            <div className="h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
+                            <div className="hover-lift h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
                                 <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">{i + 1}</span>
                                 <h3 className="mb-1 text-lg font-semibold">{s.t}</h3>
                                 <p className="text-sm text-muted-foreground">{s.d}</p>
@@ -92,14 +93,18 @@ export default async function AnunciosPage() {
             </section>
 
             <section id="solicitud" className="container mx-auto scroll-mt-20 px-4 pb-6">
-                <div className="mx-auto max-w-3xl space-y-6">
-                    <div className="text-center">
+                <div className="relative overflow-hidden rounded-[2rem] border bg-card px-6 py-12 text-center shadow-[var(--shadow-soft)] md:py-16">
+                    <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.05]" />
+                    <div className="relative mx-auto max-w-xl space-y-4">
+                        <Megaphone className="mx-auto h-9 w-9 text-primary" aria-hidden />
                         <h2 className="font-display text-3xl text-primary md:text-4xl">Solicita tu anuncio</h2>
-                        <p className="mt-2 text-muted-foreground">Completa el formulario y te contactamos.</p>
+                        <p className="text-muted-foreground">Cuéntanos de tu negocio y te contactamos para coordinar todo.</p>
+                        <OpenFormButton form="anuncios" variant="cta" size="lg" className="rounded-full">Enviar solicitud</OpenFormButton>
                     </div>
-                    <PromoRequestForm loggedIn={Boolean(user)} kinds={[{ value: "anuncio", label: "Quiero anunciar mi negocio" }]} defaultKind="anuncio" />
                 </div>
             </section>
+
+            <PromoDialog form="anuncios" loggedIn={Boolean(user)} />
         </div>
     )
 }
