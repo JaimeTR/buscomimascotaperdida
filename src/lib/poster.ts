@@ -15,8 +15,8 @@ export const FORMATS: Record<FormatId, { label: string; hint: string; w: number;
 }
 
 export const TEMPLATES: Record<TemplateId, { label: string; hint: string; head: string; headText: string; accent: string }> = {
+    marca: { label: 'Marca', hint: 'Colores de la web', head: '#0f766e', headText: '#ffffff', accent: '#c2410c' },
     alerta: { label: 'Alerta', hint: 'Amarillo de alto contraste', head: '#FFD600', headText: '#111111', accent: '#0f766e' },
-    marca: { label: 'Marca', hint: 'Teal de la web', head: '#0f766e', headText: '#ffffff', accent: '#c2410c' },
     foto: { label: 'Foto completa', hint: 'La foto manda', head: '#c2410c', headText: '#ffffff', accent: '#FFD600' },
     urgente: { label: 'Urgente', hint: 'Rojo, para llamar la atención', head: '#b81e1e', headText: '#ffffff', accent: '#FFD600' },
     encontrado: { label: 'Encontrado', hint: 'Verde, busca a su dueño', head: '#1d724a', headText: '#ffffff', accent: '#FFD600' },
@@ -70,7 +70,7 @@ const SIZES: Record<string, string> = { small: 'Pequeño', medium: 'Mediano', la
 const KINDS: Record<string, string> = { dog: 'Perro', cat: 'Gato', other: 'Mascota' }
 
 export function templateForStatus(status: string): TemplateId {
-    return status === 'found' ? 'encontrado' : 'alerta'
+    return 'marca' // la plantilla de la marca va primero; se puede cambiar en el editor
 }
 
 /** Cartel inicial de un reporte. El contacto ya viene filtrado por privacidad desde el servidor. */

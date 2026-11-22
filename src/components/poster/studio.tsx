@@ -45,7 +45,7 @@ export function PosterStudio({ petId, initial, photos, fresh }: Props) {
     const url = typeof window === "undefined" ? "" : `${window.location.origin}/mascotas/${petId}`
 
     // Recupera los ajustes guardados de este reporte (la foto subida a mano no se guarda: pesa).
-    const key = `cartel:${petId}`
+    const key = `cartel:v2:${petId}` // v2: la plantilla de la marca pasó a ser la inicial
     useEffect(() => {
         try {
             const saved = JSON.parse(localStorage.getItem(key) ?? "null")
@@ -71,7 +71,7 @@ export function PosterStudio({ petId, initial, photos, fresh }: Props) {
     useEffect(() => {
         const el = boxRef.current
         if (!el) return
-        const fit = () => setScale(Math.min(1, el.clientWidth / f.w, (window.innerHeight * 0.78) / f.h))
+        const fit = () => setScale(Math.min(1, (el.clientWidth - parseFloat(getComputedStyle(el).paddingLeft) * 2) / f.w, (window.innerHeight * 0.78) / f.h))
         fit()
         const ro = new ResizeObserver(fit)
         ro.observe(el)
@@ -113,10 +113,10 @@ export function PosterStudio({ petId, initial, photos, fresh }: Props) {
                 </div>
             )}
 
-            <div className="mt-4 grid gap-6 lg:grid-cols-[minmax(0,1fr)_420px] print:hidden">
+            <div className="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_420px] print:hidden">
                 {/* Vista previa + acciones */}
-                <div className="space-y-4">
-                    <div ref={boxRef} className="flex justify-center rounded-3xl border bg-secondary p-3 md:p-6">
+                <div className="min-w-0 space-y-4">
+                    <div ref={boxRef} className="flex justify-center overflow-hidden rounded-3xl border bg-secondary p-3 md:p-6">
                         <div style={{ width: f.w * scale, height: f.h * scale }} className="shadow-2xl">
                             <div style={{ width: f.w, height: f.h, transform: `scale(${scale})`, transformOrigin: "top left" }}>
                                 <Poster ref={posterRef} state={s} photo={photo} qr={qr} />
@@ -127,13 +127,13 @@ export function PosterStudio({ petId, initial, photos, fresh }: Props) {
                         <Button variant="cta" size="lg" onClick={() => window.print()} className="col-span-2 sm:col-span-1"><Printer className="mr-2 h-5 w-5" aria-hidden /> Imprimir / PDF</Button>
                         <Button size="lg" variant="outline" onClick={download} disabled={busy}>{busy ? <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> : <Download className="mr-2 h-5 w-5" aria-hidden />} Imagen PNG</Button>
                         <Button size="lg" variant="outline" onClick={share} disabled={busy}><Share2 className="mr-2 h-5 w-5" aria-hidden /> Compartir</Button>
-                        <Button size="lg" variant="outline" onClick={copy}>{copied ? <Check className="mr-2 h-5 w-5" aria-hidden /> : <Copy className="mr-2 h-5 w-5" aria-hidden />} {copied ? "Copiado" : "Copiar enlace"}</Button>
+                        <Button size="lg" variant="outline" onClick={copy} className="col-span-2 sm:col-span-1">{copied ? <Check className="mr-2 h-5 w-5" aria-hidden /> : <Copy className="mr-2 h-5 w-5" aria-hidden />} {copied ? "Copiado" : "Copiar enlace"}</Button>
                     </div>
                     <p className="text-xs text-muted-foreground">En el diálogo de impresión elige «Guardar como PDF» para obtener el archivo. Desactiva «Encabezados y pies de página» para un resultado limpio. Los cambios se guardan solos en este dispositivo.</p>
                 </div>
 
                 {/* Panel de edición */}
-                <div className="rounded-3xl border bg-card p-4 md:p-5">
+                <div className="min-w-0 rounded-3xl border bg-card p-4 md:p-5">
                     <Tabs defaultValue="diseno">
                         <TabsList className="grid w-full grid-cols-4">
                             <TabsTrigger value="diseno">Diseño</TabsTrigger>
