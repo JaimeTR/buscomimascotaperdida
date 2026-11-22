@@ -19,12 +19,12 @@ const LINKS = [
 ]
 
 // Logo: isologo (símbolo) y, si `showName`, el nombre como texto real (nítido a cualquier tamaño).
-export function BrandMark({ className, showName = false }: { className?: string; showName?: boolean }) {
+export function BrandMark({ className, showName = false, nameClassName }: { className?: string; showName?: boolean; nameClassName?: string }) {
     return (
         <span className={cn("flex shrink-0 items-center gap-2.5 whitespace-nowrap", className)}>
             <Image src="/logo_symbol.svg" alt="" width={36} height={44} className="h-9 w-auto sm:h-11" priority unoptimized />
             {showName && (
-                <span className="font-display text-[16px] leading-[1.0] sm:text-[19px] lg:text-[21px]">
+                <span className={cn("font-display text-[16px] leading-[1.0] sm:text-[19px] lg:text-[21px]", nameClassName)}>
                     <span className="block text-primary">busco mi</span>
                     <span className="block text-cta">mascota</span>
                 </span>
@@ -42,7 +42,7 @@ export function Navbar() {
     return (
         <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
             <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
-                <Link href="/" aria-label="Busco mi mascota, inicio"><BrandMark showName /></Link>
+                <Link href="/" aria-label="Busco mi mascota, inicio"><BrandMark showName nameClassName="lg:hidden xl:block" /></Link>
 
                 <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
                     {LINKS.map((l) => (

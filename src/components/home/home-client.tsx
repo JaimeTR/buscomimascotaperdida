@@ -52,6 +52,8 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
       {/* Portada: panel suave con titular, búsqueda y símbolo de la marca */}
       <section className="container mx-auto px-4 pt-6 md:pt-10">
         <div className="relative overflow-hidden rounded-[1.5rem] bg-accent px-5 py-6 sm:rounded-[2rem] sm:px-8 md:px-14 md:py-16">
+          <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.08]" />
+          <PawPrint aria-hidden className="pointer-events-none absolute -bottom-6 -left-4 h-28 w-28 -rotate-12 text-primary/10 md:h-40 md:w-40" />
           <div className="relative grid grid-cols-1 items-center gap-6 md:grid-cols-[1.25fr_1fr] md:gap-10">
           <div className="min-w-0 space-y-5 md:order-first md:space-y-6">
             <p className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]">
@@ -172,10 +174,11 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
 
       {/* Cierre */}
       <section className="container mx-auto px-4 pb-6">
-        <div className="rounded-[2rem] bg-primary px-6 py-12 text-center text-primary-foreground md:py-16">
-          <h2 className="mx-auto max-w-2xl font-display text-3xl leading-tight md:text-4xl">¿Perdiste a tu mascota o encontraste una?</h2>
-          <p className="mx-auto mt-3 max-w-xl text-primary-foreground/90">Cada minuto cuenta. Publica ahora y activa la red de tu zona.</p>
-          <Button asChild variant="cta" size="lg" className="mt-6 rounded-full">
+        <div className="relative overflow-hidden rounded-[2rem] bg-primary px-6 py-12 text-center text-primary-foreground md:py-16">
+          <div aria-hidden className="paws-white pointer-events-none absolute inset-0 opacity-[0.07]" />
+          <h2 className="relative mx-auto max-w-2xl font-display text-3xl leading-tight md:text-4xl">¿Perdiste a tu mascota o encontraste una?</h2>
+          <p className="relative mx-auto mt-3 max-w-xl text-primary-foreground/90">Cada minuto cuenta. Publica ahora y activa la red de tu zona.</p>
+          <Button asChild variant="cta" size="lg" className="relative mt-6 rounded-full">
             <Link href="/reportar">Reportar una mascota</Link>
           </Button>
         </div>

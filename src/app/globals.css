@@ -126,6 +126,31 @@
   }
 }
 
+/* Huellitas de marca como marca de agua. Mosaico SVG con la huella del isologo (almohadilla + 4 dedos),
+   dos tamaños y giros distintos para que no se note la repetición. `.paws-teal` va sobre fondos claros, `.paws-white` sobre teal. */
+.paws-teal,
+.paws-white {
+  background-size: 220px 220px;
+}
+.paws-teal {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220' fill='%230f766e'%3E%3Cg transform='translate(22 26) rotate(-22 25 31) scale(.5)'%3E%3Cellipse cx='50' cy='59' rx='15' ry='11.5'/%3E%3Cellipse cx='31.5' cy='47' rx='5.5' ry='7.5' transform='rotate(-28 31.5 47)'/%3E%3Cellipse cx='43' cy='36.5' rx='5.8' ry='8.2' transform='rotate(-9 43 36.5)'/%3E%3Cellipse cx='57' cy='36.5' rx='5.8' ry='8.2' transform='rotate(9 57 36.5)'/%3E%3Cellipse cx='68.5' cy='47' rx='5.5' ry='7.5' transform='rotate(28 68.5 47)'/%3E%3C/g%3E%3Cg transform='translate(128 120) rotate(24 25 31) scale(.4)'%3E%3Cellipse cx='50' cy='59' rx='15' ry='11.5'/%3E%3Cellipse cx='31.5' cy='47' rx='5.5' ry='7.5' transform='rotate(-28 31.5 47)'/%3E%3Cellipse cx='43' cy='36.5' rx='5.8' ry='8.2' transform='rotate(-9 43 36.5)'/%3E%3Cellipse cx='57' cy='36.5' rx='5.8' ry='8.2' transform='rotate(9 57 36.5)'/%3E%3Cellipse cx='68.5' cy='47' rx='5.5' ry='7.5' transform='rotate(28 68.5 47)'/%3E%3C/g%3E%3C/svg%3E");
+}
+.paws-white {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220' fill='%23ffffff'%3E%3Cg transform='translate(22 26) rotate(-22 25 31) scale(.5)'%3E%3Cellipse cx='50' cy='59' rx='15' ry='11.5'/%3E%3Cellipse cx='31.5' cy='47' rx='5.5' ry='7.5' transform='rotate(-28 31.5 47)'/%3E%3Cellipse cx='43' cy='36.5' rx='5.8' ry='8.2' transform='rotate(-9 43 36.5)'/%3E%3Cellipse cx='57' cy='36.5' rx='5.8' ry='8.2' transform='rotate(9 57 36.5)'/%3E%3Cellipse cx='68.5' cy='47' rx='5.5' ry='7.5' transform='rotate(28 68.5 47)'/%3E%3C/g%3E%3Cg transform='translate(128 120) rotate(24 25 31) scale(.4)'%3E%3Cellipse cx='50' cy='59' rx='15' ry='11.5'/%3E%3Cellipse cx='31.5' cy='47' rx='5.5' ry='7.5' transform='rotate(-28 31.5 47)'/%3E%3Cellipse cx='43' cy='36.5' rx='5.8' ry='8.2' transform='rotate(-9 43 36.5)'/%3E%3Cellipse cx='57' cy='36.5' rx='5.8' ry='8.2' transform='rotate(9 57 36.5)'/%3E%3Cellipse cx='68.5' cy='47' rx='5.5' ry='7.5' transform='rotate(28 68.5 47)'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Marca de agua fija detrás de todo el sitio: no se mueve al hacer scroll ni intercepta clics. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220' fill='%230f766e'%3E%3Cg transform='translate(22 26) rotate(-22 25 31) scale(.5)'%3E%3Cellipse cx='50' cy='59' rx='15' ry='11.5'/%3E%3Cellipse cx='31.5' cy='47' rx='5.5' ry='7.5' transform='rotate(-28 31.5 47)'/%3E%3Cellipse cx='43' cy='36.5' rx='5.8' ry='8.2' transform='rotate(-9 43 36.5)'/%3E%3Cellipse cx='57' cy='36.5' rx='5.8' ry='8.2' transform='rotate(9 57 36.5)'/%3E%3Cellipse cx='68.5' cy='47' rx='5.5' ry='7.5' transform='rotate(28 68.5 47)'/%3E%3C/g%3E%3Cg transform='translate(128 120) rotate(24 25 31) scale(.4)'%3E%3Cellipse cx='50' cy='59' rx='15' ry='11.5'/%3E%3Cellipse cx='31.5' cy='47' rx='5.5' ry='7.5' transform='rotate(-28 31.5 47)'/%3E%3Cellipse cx='43' cy='36.5' rx='5.8' ry='8.2' transform='rotate(-9 43 36.5)'/%3E%3Cellipse cx='57' cy='36.5' rx='5.8' ry='8.2' transform='rotate(9 57 36.5)'/%3E%3Cellipse cx='68.5' cy='47' rx='5.5' ry='7.5' transform='rotate(28 68.5 47)'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 220px 220px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
