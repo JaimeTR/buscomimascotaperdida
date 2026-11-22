@@ -65,7 +65,7 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
             <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
               Busca entre los reportes de tu zona o publica el tuyo. Es gratis y lo ve toda la comunidad.
             </p>
-            <PetFilters edge="-mx-5 px-5 sm:-mx-8 sm:px-8 md:mx-0 md:px-0" value={filters} onChange={setFilters} onSubmit={() => document.getElementById("resultados")?.scrollIntoView({ behavior: "smooth" })} />
+            <PetFilters compact value={filters} onChange={setFilters} onSubmit={() => document.getElementById("resultados")?.scrollIntoView({ behavior: "smooth" })} />
             <Button asChild variant="cta" size="lg" className="rounded-full">
               <Link href="/reportar">Reportar una mascota</Link>
             </Button>

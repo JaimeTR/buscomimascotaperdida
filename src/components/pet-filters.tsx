@@ -72,22 +72,23 @@ function Option({ selected, onClick, children }: { selected: boolean; onClick: (
 }
 
 // Chip + popover. Activo: se rellena y muestra una X para quitar solo ese filtro.
-function FilterChip({ icon: Icon, label, active, onClear, className, children }: {
+function FilterChip({ icon: Icon, label, active, onClear, className, fill, children }: {
     icon: React.ElementType; label: string; active: boolean; onClear: () => void; className?: string
+    fill?: boolean // ocupa todo el ancho de su celda (vista compacta en cuadrícula)
     children: (close: () => void) => React.ReactNode
 }) {
     const [open, setOpen] = useState(false)
     return (
         <Popover open={open} onOpenChange={setOpen}>
-            <div className={cn("inline-flex h-10 shrink-0 items-center rounded-full border border-input bg-card", active && "border-primary/40 bg-accent text-accent-foreground")}>
+            <div className={cn("inline-flex h-10 shrink-0 items-center rounded-full border border-input bg-card", fill && "flex w-full min-w-0", active && "border-primary/40 bg-accent text-accent-foreground")}>
                 <PopoverTrigger asChild>
                     <button
                         type="button"
-                        className={cn("inline-flex h-full items-center gap-2 rounded-full pl-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", active ? "pr-2" : "pr-3")}
+                        className={cn("inline-flex h-full items-center gap-2 rounded-full pl-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", fill && "min-w-0 flex-1 justify-center gap-1 pl-2 text-[13px] sm:gap-2 sm:pl-3 sm:text-sm", active ? "pr-2" : "pr-2 sm:pr-3")}
                     >
-                        <Icon className="h-4 w-4 opacity-70" aria-hidden />
-                        <span className="max-w-[9rem] truncate">{label}</span>
-                        {!active && <ChevronDown className="h-3.5 w-3.5 opacity-60" aria-hidden />}
+                        <Icon className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
+                        <span className={cn("max-w-[9rem] truncate", fill && "max-w-none")}>{label}</span>
+                        {!active && <ChevronDown className={cn("h-3.5 w-3.5 opacity-60", fill && "hidden sm:block")} aria-hidden />}
                     </button>
                 </PopoverTrigger>
                 {active && (
@@ -114,7 +115,8 @@ const Title = ({ children }: { children: React.ReactNode }) => (
 
 // Barra de búsqueda + chips (lugar, tipo, estado, raza, color, fecha). El estado vive en el padre.
 // `edge`: margen/padding negativo para que los chips lleguen al borde del contenedor en móvil (según su padding).
-export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx-0 sm:px-0" }: { value: Filters; onChange: (f: Filters) => void; onSubmit?: () => void; edge?: string }) {
+// `compact`: solo lo esencial (lugar, mascota, estado) en una cuadrícula ordenada bajo el buscador; raza, color y fecha quedan para /mascotas.
+export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx-0 sm:px-0", compact = false }: { value: Filters; onChange: (f: Filters) => void; onSubmit?: () => void; edge?: string; compact?: boolean }) {
     const set = (patch: Partial<Filters>) => onChange({ ...value, ...patch })
     const loc = value.location
     const type = TYPES.find((t) => t.value === value.petType) ?? TYPES[0]
@@ -144,8 +146,11 @@ export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx
                 <Button type="submit" className="absolute right-1.5 top-1.5 h-11 rounded-full px-5 sm:px-6">Buscar</Button>
             </form>
 
-            <div className={cn("flex flex-nowrap items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] sm:flex-wrap sm:overflow-visible [&::-webkit-scrollbar]:hidden", edge)}>
+            <div className={compact
+                ? "grid grid-cols-[1fr_1.3fr_1fr] items-center gap-2"
+                : cn("flex flex-nowrap items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] sm:flex-wrap sm:overflow-visible [&::-webkit-scrollbar]:hidden", edge)}>
                 <FilterChip
+                    fill={compact}
                     icon={MapPin}
                     label={loc.district || loc.province || loc.department || "Lugar"}
                     active={Boolean(loc.department)}
@@ -181,7 +186,7 @@ export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx
                     )}
                 </FilterChip>
 
-                <FilterChip icon={type.icon} label={value.petType === "all" ? "Mascota" : type.label} active={value.petType !== "all"} onClear={() => set({ petType: "all", breed: "", color: "" })} className="w-52 p-2">
+                <FilterChip fill={compact} icon={type.icon} label={value.petType === "all" ? "Mascota" : type.label} active={value.petType !== "all"} onClear={() => set({ petType: "all", breed: "", color: "" })} className="w-52 p-2">
                     {(close) => (
                         <>
                             {TYPES.map((t) => (
@@ -193,7 +198,7 @@ export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx
                     )}
                 </FilterChip>
 
-                <FilterChip icon={Flag} label={value.status === "all" ? "Estado" : status.label} active={value.status !== "all"} onClear={() => set({ status: "all" })} className="w-52 p-2">
+                <FilterChip fill={compact} icon={Flag} label={value.status === "all" ? "Estado" : status.label} active={value.status !== "all"} onClear={() => set({ status: "all" })} className="w-52 p-2">
                     {(close) => (
                         <>
                             {STATUSES.map((s) => (
@@ -203,7 +208,7 @@ export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx
                     )}
                 </FilterChip>
 
-                {value.petType !== "other" && (
+                {!compact && value.petType !== "other" && (
                     <FilterChip icon={PawPrint} label={value.breed || "Raza"} active={Boolean(value.breed)} onClear={() => set({ breed: "" })} className="w-60 p-2">
                         {(close) => (
                             <>
@@ -215,7 +220,7 @@ export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx
                     </FilterChip>
                 )}
 
-                <FilterChip icon={Palette} label={value.color || "Color"} active={Boolean(value.color)} onClear={() => set({ color: "" })} className="w-72">
+                {!compact && <FilterChip icon={Palette} label={value.color || "Color"} active={Boolean(value.color)} onClear={() => set({ color: "" })} className="w-72">
                     {(close) => (
                         <div className="grid grid-cols-4 gap-2">
                             {colors.map((c) => (
@@ -231,9 +236,9 @@ export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx
                             ))}
                         </div>
                     )}
-                </FilterChip>
+                </FilterChip>}
 
-                <FilterChip icon={Calendar} label={value.dateFrom ? `Desde ${fmtDate(value.dateFrom)}` : "Fecha"} active={Boolean(value.dateFrom)} onClear={() => set({ dateFrom: "" })} className="w-64 p-2">
+                {!compact && <FilterChip icon={Calendar} label={value.dateFrom ? `Desde ${fmtDate(value.dateFrom)}` : "Fecha"} active={Boolean(value.dateFrom)} onClear={() => set({ dateFrom: "" })} className="w-64 p-2">
                     {(close) => (
                         <>
                             {DATE_PRESETS.map((p) => (
@@ -245,10 +250,10 @@ export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx
                             </div>
                         </>
                     )}
-                </FilterChip>
+                </FilterChip>}
 
                 {hasActiveFilters(value) && (
-                    <Button type="button" variant="ghost" size="sm" onClick={() => onChange(EMPTY_FILTERS)} className="h-10 shrink-0 gap-1.5 rounded-full text-muted-foreground">
+                    <Button type="button" variant="ghost" size="sm" onClick={() => onChange(EMPTY_FILTERS)} className={cn("h-10 shrink-0 gap-1.5 rounded-full text-muted-foreground", compact && "col-span-3")}>
                         <X className="h-4 w-4" aria-hidden /> Limpiar todo
                     </Button>
                 )}
