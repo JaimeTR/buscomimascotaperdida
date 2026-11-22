@@ -1,178 +1,73 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Download, X, Smartphone } from "lucide-react"
+import { Download, X, Share } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { claimPrompt, markDismissed, releasePrompt } from "@/lib/prompt-gate"
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>
-    userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>
+    userChoice: Promise<{ outcome: "accepted" | "dismissed" }>
 }
 
+const KEY = "pwa"
+const DELAY = 45_000 // después de un rato de uso, nunca apenas se entra
+
+// Aviso discreto para instalar la app: una línea y un botón. Si se cierra, vuelve a salir recién a las 24 h;
+// si ya está instalada o la persona instala, no vuelve a salir.
 export function PWAInstallPrompt() {
-    const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null)
-    const [showPrompt, setShowPrompt] = useState(false)
-    const [isIOS, setIsIOS] = useState(false)
-    const [isStandalone, setIsStandalone] = useState(false)
+    const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null)
+    const [show, setShow] = useState(false)
+    const [ios, setIos] = useState(false)
 
     useEffect(() => {
-        // Check if already installed
-        const isInStandaloneMode = window.matchMedia('(display-mode: standalone)').matches
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setIsStandalone(isInStandaloneMode)
+        if (window.matchMedia("(display-mode: standalone)").matches) return
+        const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent)
+        let timer: ReturnType<typeof setTimeout> | undefined
+        const arm = () => { timer = setTimeout(() => { if (claimPrompt(KEY)) { setIos(isIos); setShow(true) } }, DELAY) }
 
-        // Check if iOS
-        const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
-        setIsIOS(iOS)
+        const onPrompt = (e: Event) => { e.preventDefault(); setDeferred(e as BeforeInstallPromptEvent); arm() }
+        const onInstalled = () => { markDismissed(KEY, true); releasePrompt(KEY); setShow(false) }
 
-        // Check if user already dismissed the prompt
-        const dismissed = localStorage.getItem('pwa-prompt-dismissed')
-        if (dismissed) return
-
-        // iOS nunca dispara beforeinstallprompt: mostrar las instrucciones manuales por tiempo.
-        if (iOS && !isInStandaloneMode) {
-            const t = setTimeout(() => setShowPrompt(true), 30000)
-            return () => clearTimeout(t)
-        }
-
-        // Listen for the install prompt
-        const handler = (e: Event) => {
-            e.preventDefault()
-            setDeferredPrompt(e as BeforeInstallPromptEvent)
-
-            // Show prompt after 30 seconds
-            setTimeout(() => {
-                setShowPrompt(true)
-            }, 30000)
-        }
-
-        window.addEventListener('beforeinstallprompt', handler)
-
+        if (isIos) arm() // iOS no dispara beforeinstallprompt: se muestran las instrucciones manuales
+        else window.addEventListener("beforeinstallprompt", onPrompt)
+        window.addEventListener("appinstalled", onInstalled)
         return () => {
-            window.removeEventListener('beforeinstallprompt', handler)
+            clearTimeout(timer)
+            releasePrompt(KEY)
+            window.removeEventListener("beforeinstallprompt", onPrompt)
+            window.removeEventListener("appinstalled", onInstalled)
         }
     }, [])
 
-    const handleInstallClick = async () => {
-        if (!deferredPrompt) return
-
-        deferredPrompt.prompt()
-        const { outcome } = await deferredPrompt.userChoice
-
-        if (outcome === 'accepted') {
-            console.log('PWA instalada')
-        }
-
-        setDeferredPrompt(null)
-        setShowPrompt(false)
+    const close = () => { markDismissed(KEY); releasePrompt(KEY); setShow(false) }
+    const install = async () => {
+        if (!deferred) return
+        await deferred.prompt()
+        const { outcome } = await deferred.userChoice
+        markDismissed(KEY, outcome === "accepted")
+        releasePrompt(KEY)
+        setDeferred(null)
+        setShow(false)
     }
 
-    const handleDismiss = () => {
-        setShowPrompt(false)
-        localStorage.setItem('pwa-prompt-dismissed', 'true')
-    }
+    if (!show) return null
 
-    // Don't show if already installed or dismissed
-    if (isStandalone || !showPrompt) {
-        return null
-    }
-
-    // iOS Installation Instructions
-    if (isIOS && !isStandalone) {
-        return (
-            <div className="fixed bottom-24 left-4 right-4 md:bottom-20 md:left-auto md:right-4 md:w-96 bg-card rounded-2xl shadow-2xl border border-border p-5 z-50 animate-in slide-in-from-bottom-5 fade-in">
-                <button
-                    onClick={handleDismiss}
-                    className="absolute top-3 right-3 text-muted-foreground hover:text-muted-foreground"
-                >
-                    <X className="h-4 w-4" />
-                </button>
-
-                <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                        <div className="bg-accent p-2 rounded-xl">
-                            <Smartphone className="h-6 w-6 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                            <h3 className="font-bold text-foreground">
-                                Instala la App
-                            </h3>
-                            <p className="text-sm text-muted-foreground mt-1">
-                                Accede más rápido y recibe notificaciones
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="bg-background rounded-xl p-4 space-y-2">
-                        <p className="text-xs text-foreground font-medium">
-                            Para instalar en iOS:
-                        </p>
-                        <ol className="text-xs text-muted-foreground space-y-2 list-decimal list-inside">
-                            <li>Toca el botón de Compartir (cuadrado con flecha)</li>
-                            <li>Desliza y selecciona &quot;Añadir a pantalla de inicio&quot;</li>
-                            <li>Confirma tocando &quot;Añadir&quot;</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    // Android/Desktop Installation Prompt
     return (
-        <div className="fixed bottom-24 left-4 right-4 md:bottom-20 md:left-auto md:right-4 md:w-96 bg-gradient-to-br from-teal-700 to-teal-800 rounded-2xl shadow-2xl p-5 z-50 animate-in slide-in-from-bottom-5 fade-in">
-            <button
-                onClick={handleDismiss}
-                className="absolute top-3 right-3 text-white/80 hover:text-white"
-            >
-                <X className="h-4 w-4" />
-            </button>
-
-            <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                    <div className="bg-white/20 backdrop-blur-sm p-2 rounded-xl">
-                        <Download className="h-6 w-6 text-white" />
-                    </div>
-                    <div className="flex-1">
-                        <h3 className="font-bold text-white">
-                            ¡Instala nuestra App!
-                        </h3>
-                        <p className="text-sm text-teal-100 mt-1">
-                            Encuentra a tu mascota más rápido con la app instalada
-                        </p>
-                    </div>
-                </div>
-
-                <ul className="space-y-2 text-sm text-teal-50">
-                    <li className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-card rounded-full" />
-                        Acceso rápido desde tu pantalla de inicio
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-card rounded-full" />
-                        Notificaciones de mascotas cerca de ti
-                    </li>
-                    <li className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 bg-card rounded-full" />
-                        Funciona sin conexión
-                    </li>
-                </ul>
-
-                <Button
-                    onClick={handleInstallClick}
-                    className="w-full bg-card text-primary hover:bg-accent font-semibold"
-                >
-                    <Download className="h-4 w-4 mr-2" />
-                    Instalar App
-                </Button>
-
-                <button
-                    onClick={handleDismiss}
-                    className="w-full text-center text-xs text-teal-100 hover:text-white"
-                >
-                    Ahora no
-                </button>
+        <div role="dialog" aria-label="Instalar la app" className="fixed inset-x-3 bottom-24 z-40 mx-auto flex max-w-sm items-center gap-3 rounded-2xl border bg-card p-3 pr-2 shadow-[var(--shadow-lift)] duration-300 animate-in fade-in slide-in-from-bottom-4 md:inset-x-auto md:bottom-6 md:right-6 md:mx-0">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-accent text-primary">
+                {ios ? <Share className="h-5 w-5" aria-hidden /> : <Download className="h-5 w-5" aria-hidden />}
+            </span>
+            <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold leading-tight text-foreground">Instala la app</p>
+                <p className="text-xs leading-snug text-muted-foreground">
+                    {ios ? "Toca Compartir y luego “Añadir a pantalla de inicio”." : "Alertas de mascotas cerca de ti, en un toque."}
+                </p>
             </div>
+            {!ios && <Button size="sm" onClick={install} className="h-8 rounded-full px-3 text-xs">Instalar</Button>}
+            <button type="button" onClick={close} aria-label="Cerrar" className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary">
+                <X className="h-4 w-4" aria-hidden />
+            </button>
         </div>
     )
 }

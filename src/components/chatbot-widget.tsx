@@ -5,6 +5,7 @@ import { X, Send, Sparkles, PawPrint, RotateCcw, MapPin, ArrowUpRight, Clock, Ma
 import { useRouter } from "next/navigation"
 import { formatDistanceToNow } from "date-fns"
 import { es } from "date-fns/locale"
+import { claimPrompt, dismissedToday, markDismissed, releasePrompt } from "@/lib/prompt-gate"
 
 type Filters = Partial<Record<"type" | "size" | "district" | "color" | "breed", string>>
 
@@ -120,10 +121,11 @@ export function ChatbotWidget() {
                 setFilters(saved.filters ?? {})
                 idRef.current = Math.max(...saved.messages.map((m: Message) => m.id)) + 1
             }
-            if (!sessionStorage.getItem(STORAGE_KEY + ".teaser")) {
-                const t = setTimeout(() => setShowPrompt(true), 4000)
+            if (!dismissedToday("assistant")) {
+                // El globo del asistente sale una vez al día y espera a que no haya otro aviso a la vista.
+                const t = setTimeout(() => { if (claimPrompt("assistant")) setShowPrompt(true) }, 12000)
                 setRestored(true)
-                return () => clearTimeout(t)
+                return () => { clearTimeout(t); releasePrompt("assistant") }
             }
         } catch { /* sin storage: funciona sin memoria */ }
         setRestored(true)
@@ -243,11 +245,11 @@ export function ChatbotWidget() {
     const open = () => {
         setIsOpen(true)
         setShowPrompt(false)
-        try { sessionStorage.setItem(STORAGE_KEY + ".teaser", "1") } catch { /* nada */ }
+        markDismissed("assistant"); releasePrompt("assistant")
     }
     const dismissPrompt = () => {
         setShowPrompt(false)
-        try { sessionStorage.setItem(STORAGE_KEY + ".teaser", "1") } catch { /* nada */ }
+        markDismissed("assistant"); releasePrompt("assistant")
     }
 
     const active = Object.entries(filters)

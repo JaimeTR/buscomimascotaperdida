@@ -5,17 +5,16 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ArrowRight, Star, X } from "lucide-react"
 import { StatusBadge } from "@/components/status-badge"
+import { claimPrompt, markDismissed, releasePrompt } from "@/lib/prompt-gate"
 
 type Featured = { id: string; name: string; type: string; status: string; district: string | null; image: string | null }
 
 const HIDE = [/^\/$/, /^\/reportar/, /^\/panel/, /^\/admin/, /^\/mascotas\/[^/]+\/avistamiento/, /^\/cartel\/[^/]+/]
 const DELAY = 18_000 // se muestra después de un rato de navegación, no apenas se entra
-const KEY = "bmm.featured.dismissed"
-
-const read = (): string[] => { try { return JSON.parse(sessionStorage.getItem(KEY) ?? "[]") } catch { return [] } }
+const KEY = "featured"
 
 // Aviso flotante con un caso destacado (aporte voluntario) mientras la persona visita otras páginas.
-// Sale el de mayor aporte que aún no se haya cerrado en esta sesión; nunca el caso que ya se está viendo.
+// Sale una vez al día como máximo (si se cierra, no vuelve hasta mañana) y nunca el caso que ya se está viendo.
 export function FeaturedPopup() {
     const pathname = usePathname()
     const [pet, setPet] = useState<Featured | null>(null)
@@ -28,18 +27,18 @@ export function FeaturedPopup() {
                 const res = await fetch("/api/featured")
                 if (!res.ok) return
                 const list: Featured[] = await res.json()
-                const closed = read()
                 const viewing = pathname.match(/^\/mascotas\/([^/]+)/)?.[1]
-                const next = list.find((p) => !closed.includes(p.id) && p.id !== viewing)
-                if (alive && next) setPet(next)
+                const next = list.find((p) => p.id !== viewing)
+                if (alive && next && claimPrompt(KEY)) setPet(next)
             } catch { /* sin conexión: simplemente no se muestra */ }
         }, DELAY)
-        return () => { alive = false; clearTimeout(t); setPet(null) }
+        return () => { alive = false; clearTimeout(t); releasePrompt(KEY); setPet(null) }
     }, [pathname])
 
     if (!pet) return null
     const close = () => {
-        try { sessionStorage.setItem(KEY, JSON.stringify([...read(), pet.id])) } catch { /* sin storage */ }
+        markDismissed(KEY)
+        releasePrompt(KEY)
         setPet(null)
     }
 

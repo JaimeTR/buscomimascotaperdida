@@ -6,6 +6,7 @@ import { Bell, Camera, FileText, HandHeart, PawPrint, UserPlus, X } from "lucide
 
 import { ReportActionButton } from "@/components/report-action-button"
 import { STOCK } from "@/lib/stock-images"
+import { claimPrompt, markDismissed, releasePrompt } from "@/lib/prompt-gate"
 
 export type ReportCtaVariant = "aviso" | "pasos" | "seccion"
 
@@ -75,16 +76,18 @@ export function ReportCta({ variant }: { variant: ReportCtaVariant }) {
     return variant === "aviso" ? <Aviso /> : variant === "pasos" ? <Pasos /> : <Seccion />
 }
 
-// 4) Ventana flotante: aparece una vez por sesión cuando la persona ya recorrió una parte de la lista.
+// 4) Ventana flotante: aparece como máximo una vez al día cuando la persona ya recorrió una parte de la lista.
 export function ReportPopup({ active }: { active: boolean }) {
-    const [closed, setClosed] = useState(true)
+    const [shown, setShown] = useState(false)
     useEffect(() => {
-        const t = setTimeout(() => { try { setClosed(sessionStorage.getItem("bmm.reportPopup") === "1") } catch { setClosed(false) } }, 0)
-        return () => clearTimeout(t)
-    }, [])
-    if (!active || closed) return null
+        if (!active) return
+        if (!claimPrompt("report")) return
+        const t = setTimeout(() => setShown(true), 0)
+        return () => { clearTimeout(t); releasePrompt("report"); setShown(false) }
+    }, [active])
+    if (!active || !shown) return null
 
-    const close = () => { setClosed(true); try { sessionStorage.setItem("bmm.reportPopup", "1") } catch { /* sin storage */ } }
+    const close = () => { markDismissed("report"); releasePrompt("report"); setShown(false) }
     return (
         <div role="dialog" aria-label="Reportar una mascota" className="fixed inset-x-4 bottom-24 z-40 mx-auto max-w-sm rounded-3xl border bg-card p-5 shadow-[var(--shadow-lift)] duration-300 animate-in fade-in slide-in-from-bottom-4 lg:inset-x-auto lg:bottom-28 lg:right-6 lg:mx-0">
             <button onClick={close} aria-label="Cerrar" className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary"><X className="h-4 w-4" aria-hidden /></button>
