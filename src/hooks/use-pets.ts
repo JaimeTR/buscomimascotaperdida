@@ -125,8 +125,11 @@ export function usePets(options: UsePetsOptions = {}) {
 
 
                 if (options.color && options.color !== 'all') {
-                    // Assuming colors is an array in DB, check if it contains the selected color
-                    query = query.contains('colors', [options.color])
+                    // `colors` es un arreglo y `contains` distingue mayúsculas: los casos importados guardan "blanco"
+                    // y el formulario "Blanco", así que se buscan ambas formas.
+                    const lower = options.color.trim().toLowerCase().replace(/[^\p{L} ]/gu, '')
+                    const cap = lower.charAt(0).toUpperCase() + lower.slice(1)
+                    query = query.or(`colors.cs.{${lower}},colors.cs.{${cap}}`)
                 }
 
                 if (options.size && options.size !== 'all') {

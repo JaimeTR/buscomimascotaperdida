@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from "react"
-import { Search, ChevronDown, Calendar, X, MapPin, Dog, Palette, PawPrint, Cat, Squirrel, Flag, Check } from "lucide-react"
+import { useRef, useState } from "react"
+import { Search, ChevronDown, Calendar, X, MapPin, Dog, Palette, PawPrint, Cat, Squirrel, Flag, Check, SlidersHorizontal, Ruler } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -11,11 +11,14 @@ import { PERU_LOCATIONS, PERU_DEPARTMENTS } from "@/lib/peru-locations"
 import { cn } from "@/lib/utils"
 
 export type Location = { department: string; province: string; district: string }
-export type Filters = { q: string; location: Location; petType: string; status: string; breed: string; color: string; dateFrom: string }
+export type Filters = { q: string; location: Location; petType: string; status: string; breed: string; color: string; dateFrom: string; size: string }
 export const EMPTY_LOCATION: Location = { department: "", province: "", district: "" }
-export const EMPTY_FILTERS: Filters = { q: "", location: EMPTY_LOCATION, petType: "all", status: "all", breed: "", color: "", dateFrom: "" }
+export const EMPTY_FILTERS: Filters = { q: "", location: EMPTY_LOCATION, petType: "all", status: "all", breed: "", color: "", dateFrom: "", size: "all" }
 export const hasActiveFilters = (f: Filters) =>
-    Boolean(f.q || f.location.department || f.petType !== "all" || f.status !== "all" || f.breed || f.color || f.dateFrom)
+    Boolean(f.q || f.location.department || f.petType !== "all" || f.status !== "all" || f.breed || f.color || f.dateFrom || f.size !== "all")
+// Cantidad de filtros aplicados (sin contar el texto de búsqueda): se muestra en el botón "Filtros".
+const countFilters = (f: Filters) =>
+    [f.location.department, f.petType !== "all", f.status !== "all", f.breed, f.color, f.dateFrom, f.size !== "all"].filter(Boolean).length
 
 const TYPES = [
     { value: "all", label: "Todas", icon: PawPrint },
@@ -29,10 +32,18 @@ const STATUSES = [
     { value: "found", label: "Encontradas" },
     { value: "reunited", label: "Reunidas" },
 ]
+// Mismos valores que guarda el formulario de reporte.
+const SIZES = [
+    { value: "all", label: "Todos" },
+    { value: "Pequeño", label: "Pequeño" },
+    { value: "Mediano", label: "Mediano" },
+    { value: "Grande", label: "Grande" },
+]
 
-// Colores = los mismos nombres que guarda el formulario de reporte (color-popover).
+// Colores = los nombres que guarda el formulario de reporte y los que traen los casos importados.
 const SWATCH: Record<string, string> = {
     Blanco: "#ffffff", Negro: "#1c1917", Marrón: "#78492a", Dorado: "#d9a441", Gris: "#9ca3af", Naranja: "#f08a24",
+    Beige: "#e8d5b5", Crema: "#f3e8cf", Caramelo: "#b8742f",
     Manchado: "radial-gradient(circle at 30% 30%, #1c1917 0 22%, transparent 24%), radial-gradient(circle at 70% 65%, #78492a 0 20%, transparent 22%), #fff",
     Atigrado: "repeating-linear-gradient(45deg, #78492a 0 5px, #d9a441 5px 10px)",
     Bicolor: "linear-gradient(90deg, #1c1917 50%, #fff 50%)",
@@ -42,8 +53,8 @@ const SWATCH: Record<string, string> = {
     Colorido: "linear-gradient(135deg, #ef4444, #f59e0b, #22c55e, #3b82f6)",
 }
 const COLORS: Record<string, string[]> = {
-    dog: ["Blanco", "Negro", "Marrón", "Dorado", "Gris", "Manchado", "Atigrado", "Bicolor"],
-    cat: ["Blanco", "Negro", "Gris", "Atigrado", "Calicó", "Carey", "Siamés", "Naranja"],
+    dog: ["Blanco", "Negro", "Marrón", "Beige", "Caramelo", "Dorado", "Gris", "Crema", "Manchado", "Atigrado", "Bicolor"],
+    cat: ["Blanco", "Negro", "Gris", "Beige", "Crema", "Atigrado", "Calicó", "Carey", "Siamés", "Naranja"],
     other: ["Blanco", "Gris", "Marrón", "Colorido"],
     all: Object.keys(SWATCH),
 }
@@ -56,6 +67,7 @@ const DATE_PRESETS = [
     { label: "Últimos 30 días", days: 30 },
 ]
 const fmtDate = (v: string) => new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "short" }).format(new Date(`${v}T00:00`))
+const breedsFor = (petType: string) => petType === "dog" ? DOG_BREEDS : petType === "cat" ? CAT_BREEDS : [...new Set([...DOG_BREEDS, ...CAT_BREEDS])].sort()
 
 // Opción de lista dentro de un popover (marca la activa).
 function Option({ selected, onClick, children }: { selected: boolean; onClick: () => void; children: React.ReactNode }) {
@@ -80,14 +92,14 @@ function FilterChip({ icon: Icon, label, active, onClear, className, fill, child
     const [open, setOpen] = useState(false)
     return (
         <Popover open={open} onOpenChange={setOpen}>
-            <div className={cn("inline-flex h-10 shrink-0 items-center rounded-full border border-input bg-card", fill && "flex w-full min-w-0", active && "border-primary/40 bg-accent text-accent-foreground")}>
+            <div className={cn("inline-flex h-10 shrink-0 items-center rounded-full border border-input bg-card", fill && "max-sm:flex max-sm:w-full max-sm:min-w-0", active && "border-primary/40 bg-accent text-accent-foreground")}>
                 <PopoverTrigger asChild>
                     <button
                         type="button"
-                        className={cn("inline-flex h-full items-center gap-2 rounded-full pl-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", fill && "min-w-0 flex-1 justify-center gap-1 pl-2 text-[13px] sm:gap-2 sm:pl-3 sm:text-sm", active ? "pr-2" : "pr-2 sm:pr-3")}
+                        className={cn("inline-flex h-full items-center gap-2 rounded-full pl-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring", fill && "max-sm:min-w-0 max-sm:flex-1 max-sm:justify-center max-sm:gap-1 max-sm:pl-2 max-sm:text-[13px]", active ? "pr-2" : fill ? "pr-2 sm:pr-3" : "pr-3")}
                     >
                         <Icon className="h-4 w-4 shrink-0 opacity-70" aria-hidden />
-                        <span className={cn("max-w-[9rem] truncate", fill && "max-w-none")}>{label}</span>
+                        <span className={cn("max-w-[9rem] truncate", fill && "max-sm:max-w-none")}>{label}</span>
                         {!active && <ChevronDown className={cn("h-3.5 w-3.5 opacity-60", fill && "hidden sm:block")} aria-hidden />}
                     </button>
                 </PopoverTrigger>
@@ -113,19 +125,173 @@ const Title = ({ children }: { children: React.ReactNode }) => (
     <p className="px-1 pb-2 text-xs font-semibold text-muted-foreground">{children}</p>
 )
 
-// Barra de búsqueda + chips (lugar, tipo, estado, raza, color, fecha). El estado vive en el padre.
-// `edge`: margen/padding negativo para que los chips lleguen al borde del contenedor en móvil (según su padding).
-// `compact`: solo lo esencial (lugar, mascota, estado) en una cuadrícula ordenada bajo el buscador; raza, color y fecha quedan para /mascotas.
-export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx-0 sm:px-0", compact = false }: { value: Filters; onChange: (f: Filters) => void; onSubmit?: () => void; edge?: string; compact?: boolean }) {
+// Chips de selección única dentro del panel completo.
+function Choice({ selected, onClick, children }: { selected: boolean; onClick: () => void; children: React.ReactNode }) {
+    return (
+        <button
+            type="button"
+            onClick={onClick}
+            aria-pressed={selected}
+            className={cn("inline-flex min-h-10 items-center gap-1.5 rounded-full border px-4 text-sm font-medium transition-colors", selected ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card hover:bg-accent")}
+        >
+            {children}
+        </button>
+    )
+}
+
+const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
+    <section className="space-y-2.5">
+        <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+        {children}
+    </section>
+)
+
+const selectCls = "h-11 w-full rounded-xl border border-input bg-card px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+
+// Panel completo de filtros: hoja inferior en móvil, ventana centrada en escritorio. Trabaja con un borrador y se aplica al final.
+function FiltersSheet({ value, onApply, onClose }: { value: Filters; onApply: (f: Filters) => void; onClose: () => void }) {
+    const [draft, setDraft] = useState<Filters>(value)
+    const set = (patch: Partial<Filters>) => setDraft((d) => ({ ...d, ...patch }))
+    const loc = draft.location
+    const provinces = loc.department ? Object.keys(PERU_LOCATIONS[loc.department] ?? {}) : []
+    const districts = loc.department && loc.province ? PERU_LOCATIONS[loc.department]?.[loc.province] ?? [] : []
+    const colors = COLORS[draft.petType] ?? COLORS.all
+    const n = countFilters(draft)
+
+    return (
+        <>
+            <div className="flex items-center justify-between border-b px-5 py-4">
+                <h2 className="font-display text-xl text-primary">Filtros</h2>
+                <button type="button" onClick={onClose} aria-label="Cerrar filtros" className="flex h-10 w-10 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary">
+                    <X className="h-5 w-5" aria-hidden />
+                </button>
+            </div>
+
+            <div className="flex-1 space-y-6 overflow-y-auto px-5 py-5">
+                <Section title="Mascota">
+                    <div className="flex flex-wrap gap-2">
+                        {TYPES.map((t) => (
+                            <Choice key={t.value} selected={draft.petType === t.value} onClick={() => set({ petType: t.value, breed: "", color: "" })}>
+                                <t.icon className="h-4 w-4" aria-hidden /> {t.label}
+                            </Choice>
+                        ))}
+                    </div>
+                </Section>
+
+                <Section title="Estado">
+                    <div className="flex flex-wrap gap-2">
+                        {STATUSES.map((s) => <Choice key={s.value} selected={draft.status === s.value} onClick={() => set({ status: s.value })}>{s.label}</Choice>)}
+                    </div>
+                </Section>
+
+                <Section title="Lugar">
+                    <div className="grid gap-2 sm:grid-cols-3">
+                        <select aria-label="Departamento" className={selectCls} value={loc.department} onChange={(e) => set({ location: { department: e.target.value, province: "", district: "" } })}>
+                            <option value="">Departamento</option>
+                            {PERU_DEPARTMENTS.map((d) => <option key={d} value={d}>{d}</option>)}
+                        </select>
+                        <select aria-label="Provincia" className={selectCls} disabled={!loc.department} value={loc.province} onChange={(e) => set({ location: { ...loc, province: e.target.value, district: "" } })}>
+                            <option value="">Provincia</option>
+                            {provinces.map((p) => <option key={p} value={p}>{p}</option>)}
+                        </select>
+                        <select aria-label="Distrito" className={selectCls} disabled={!loc.province} value={loc.district} onChange={(e) => set({ location: { ...loc, district: e.target.value } })}>
+                            <option value="">Distrito</option>
+                            {districts.map((d) => <option key={d} value={d}>{d}</option>)}
+                        </select>
+                    </div>
+                </Section>
+
+                {draft.petType !== "other" && (
+                    <Section title="Raza">
+                        <select aria-label="Raza" className={selectCls} value={draft.breed} onChange={(e) => set({ breed: e.target.value })}>
+                            <option value="">Todas las razas</option>
+                            <option value="Mestizo">Mestizo</option>
+                            {breedsFor(draft.petType).map((b) => <option key={b} value={b}>{b}</option>)}
+                        </select>
+                    </Section>
+                )}
+
+                <Section title="Color">
+                    <div className="grid grid-cols-4 gap-2 sm:grid-cols-5">
+                        {colors.map((c) => (
+                            <button
+                                key={c}
+                                type="button"
+                                aria-pressed={draft.color === c}
+                                onClick={() => set({ color: draft.color === c ? "" : c })}
+                                className={cn("flex flex-col items-center gap-1.5 rounded-xl p-2 hover:bg-accent", draft.color === c && "bg-accent ring-2 ring-primary")}
+                            >
+                                <span className="h-9 w-9 rounded-full border border-stone-300" style={{ background: SWATCH[c] }} aria-hidden />
+                                <span className="text-[11px] font-medium leading-tight">{c}</span>
+                            </button>
+                        ))}
+                    </div>
+                </Section>
+
+                <Section title="Tamaño">
+                    <div className="flex flex-wrap gap-2">
+                        {SIZES.map((s) => <Choice key={s.value} selected={draft.size === s.value} onClick={() => set({ size: s.value })}>{s.label}</Choice>)}
+                    </div>
+                </Section>
+
+                <Section title="Fecha del reporte">
+                    <div className="flex flex-wrap gap-2">
+                        {DATE_PRESETS.map((p) => <Choice key={p.label} selected={draft.dateFrom === daysAgo(p.days)} onClick={() => set({ dateFrom: draft.dateFrom === daysAgo(p.days) ? "" : daysAgo(p.days) })}>{p.label}</Choice>)}
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <label htmlFor="filtro-desde" className="shrink-0 text-sm text-muted-foreground">Desde</label>
+                        <Input id="filtro-desde" type="date" max={iso(new Date())} value={draft.dateFrom} onChange={(e) => set({ dateFrom: e.target.value })} className="h-11 rounded-xl sm:max-w-[12rem]" />
+                    </div>
+                </Section>
+            </div>
+
+            <div className="flex items-center gap-3 border-t bg-card px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+                <Button type="button" variant="ghost" className="h-12 rounded-full" onClick={() => setDraft({ ...EMPTY_FILTERS, q: value.q })} disabled={n === 0}>Limpiar</Button>
+                <Button type="button" className="h-12 flex-1 rounded-full text-base" onClick={() => { onApply(draft); onClose() }}>
+                    Aplicar{n > 0 ? ` (${n})` : ""}
+                </Button>
+            </div>
+        </>
+    )
+}
+
+// Barra de búsqueda + filtros rápidos (lugar, mascota, estado) + botón "Filtros" con el panel completo.
+// `compact`: filtros rápidos en cuadrícula de 3 (portada); si no, en fila. El estado vive en el padre.
+export function PetFilters({ value, onChange, onSubmit, compact = false }: { value: Filters; onChange: (f: Filters) => void; onSubmit?: () => void; compact?: boolean }) {
+    const dialog = useRef<HTMLDialogElement>(null)
+    const [sheetKey, setSheetKey] = useState(0)
     const set = (patch: Partial<Filters>) => onChange({ ...value, ...patch })
     const loc = value.location
     const type = TYPES.find((t) => t.value === value.petType) ?? TYPES[0]
     const status = STATUSES.find((s) => s.value === value.status) ?? STATUSES[0]
-    const breeds = value.petType === "dog" ? DOG_BREEDS : value.petType === "cat" ? CAT_BREEDS : [...new Set([...DOG_BREEDS, ...CAT_BREEDS])].sort()
-    const colors = COLORS[value.petType] ?? COLORS.all
+    const setLoc = (patch: Partial<Location>) => set({ location: { ...loc, ...patch } })
+    const total = countFilters(value)
     const provinces = loc.department ? Object.keys(PERU_LOCATIONS[loc.department] ?? {}) : []
     const districts = loc.department && loc.province ? PERU_LOCATIONS[loc.department]?.[loc.province] ?? [] : []
-    const setLoc = (patch: Partial<Location>) => set({ location: { ...loc, ...patch } })
+
+    const openSheet = () => { setSheetKey((k) => k + 1); dialog.current?.showModal() } // clave nueva = borrador desde lo aplicado
+    const closeSheet = () => dialog.current?.close()
+
+    // Filtros avanzados aplicados (raza, color, tamaño, fecha) como chips que se quitan de a uno.
+    const extra: { key: string; label: string; clear: () => void }[] = [
+        value.breed && { key: "breed", label: value.breed, clear: () => set({ breed: "" }) },
+        value.color && { key: "color", label: value.color, clear: () => set({ color: "" }) },
+        value.size !== "all" && { key: "size", label: `Tamaño ${value.size.toLowerCase()}`, clear: () => set({ size: "all" }) },
+        value.dateFrom && { key: "date", label: `Desde ${fmtDate(value.dateFrom)}`, clear: () => set({ dateFrom: "" }) },
+    ].filter(Boolean) as { key: string; label: string; clear: () => void }[]
+
+    const filtersButton = (
+        <Button
+            type="button"
+            variant="outline"
+            onClick={openSheet}
+            aria-haspopup="dialog"
+            className={cn("h-10 shrink-0 gap-2 rounded-full border-input bg-card px-4 font-medium", compact && "max-sm:w-full")}
+        >
+            <SlidersHorizontal className="h-4 w-4 opacity-70" aria-hidden /> Filtros
+            {total > 0 && <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] font-bold text-primary-foreground">{total}</span>}
+        </Button>
+    )
 
     return (
         <div className="space-y-3">
@@ -146,9 +312,7 @@ export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx
                 <Button type="submit" className="absolute right-1.5 top-1.5 h-11 rounded-full px-5 sm:px-6">Buscar</Button>
             </form>
 
-            <div className={compact
-                ? "grid grid-cols-[1fr_1.3fr_1fr] items-center gap-2"
-                : cn("flex flex-nowrap items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] sm:flex-wrap sm:overflow-visible [&::-webkit-scrollbar]:hidden", edge)}>
+            <div className={compact ? "grid grid-cols-[1fr_1.3fr_1fr] items-center gap-2 sm:flex sm:flex-wrap" : "flex flex-wrap items-center gap-2"}>
                 <FilterChip
                     fill={compact}
                     icon={MapPin}
@@ -208,56 +372,33 @@ export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx
                     )}
                 </FilterChip>
 
-                {!compact && value.petType !== "other" && (
-                    <FilterChip icon={PawPrint} label={value.breed || "Raza"} active={Boolean(value.breed)} onClear={() => set({ breed: "" })} className="w-60 p-2">
-                        {(close) => (
-                            <>
-                                {["Mestizo", ...breeds].map((b) => (
-                                    <Option key={b} selected={value.breed === b} onClick={() => { set({ breed: b }); close() }}>{b}</Option>
-                                ))}
-                            </>
-                        )}
-                    </FilterChip>
-                )}
-
-                {!compact && <FilterChip icon={Palette} label={value.color || "Color"} active={Boolean(value.color)} onClear={() => set({ color: "" })} className="w-72">
-                    {(close) => (
-                        <div className="grid grid-cols-4 gap-2">
-                            {colors.map((c) => (
-                                <button
-                                    key={c}
-                                    type="button"
-                                    onClick={() => { set({ color: c }); close() }}
-                                    className={cn("flex flex-col items-center gap-1.5 rounded-xl p-2 hover:bg-accent", value.color === c && "bg-accent ring-2 ring-primary")}
-                                >
-                                    <span className="h-9 w-9 rounded-full border border-stone-300" style={{ background: SWATCH[c] }} aria-hidden />
-                                    <span className="text-[11px] font-medium leading-tight">{c}</span>
-                                </button>
-                            ))}
-                        </div>
-                    )}
-                </FilterChip>}
-
-                {!compact && <FilterChip icon={Calendar} label={value.dateFrom ? `Desde ${fmtDate(value.dateFrom)}` : "Fecha"} active={Boolean(value.dateFrom)} onClear={() => set({ dateFrom: "" })} className="w-64 p-2">
-                    {(close) => (
-                        <>
-                            {DATE_PRESETS.map((p) => (
-                                <Option key={p.label} selected={value.dateFrom === daysAgo(p.days)} onClick={() => { set({ dateFrom: daysAgo(p.days) }); close() }}>{p.label}</Option>
-                            ))}
-                            <div className="mt-1 border-t px-1 pt-3">
-                                <label htmlFor="desde-fecha" className="mb-1.5 block text-xs font-semibold text-muted-foreground">Desde otra fecha</label>
-                                <Input id="desde-fecha" type="date" max={iso(new Date())} value={value.dateFrom} onChange={(e) => set({ dateFrom: e.target.value })} className="h-10" />
-                            </div>
-                        </>
-                    )}
-                </FilterChip>}
-
-                {hasActiveFilters(value) && (
-                    <Button type="button" variant="ghost" size="sm" onClick={() => onChange(EMPTY_FILTERS)} className={cn("h-10 shrink-0 gap-1.5 rounded-full text-muted-foreground", compact && "col-span-3")}>
-                        <X className="h-4 w-4" aria-hidden /> Limpiar todo
-                    </Button>
-                )}
+                {compact ? <div className="col-span-3 sm:col-auto">{filtersButton}</div> : filtersButton}
             </div>
+
+            {(extra.length > 0 || total > 0) && (
+                <div className="flex flex-wrap items-center gap-2" aria-label="Filtros aplicados">
+                    {extra.map((e) => (
+                        <button key={e.key} type="button" onClick={e.clear} aria-label={`Quitar filtro: ${e.label}`} className="inline-flex h-8 items-center gap-1.5 rounded-full border border-primary/30 bg-accent px-3 text-xs font-medium text-accent-foreground hover:bg-accent/70">
+                            {e.key === "color" ? <Palette className="h-3.5 w-3.5" aria-hidden /> : e.key === "date" ? <Calendar className="h-3.5 w-3.5" aria-hidden /> : e.key === "size" ? <Ruler className="h-3.5 w-3.5" aria-hidden /> : <PawPrint className="h-3.5 w-3.5" aria-hidden />}
+                            {e.label} <X className="h-3.5 w-3.5" aria-hidden />
+                        </button>
+                    ))}
+                    {total > 0 && (
+                        <Button type="button" variant="ghost" size="sm" onClick={() => onChange({ ...EMPTY_FILTERS, q: value.q })} className="h-8 gap-1 rounded-full px-3 text-xs text-muted-foreground">
+                            <X className="h-3.5 w-3.5" aria-hidden /> Limpiar filtros
+                        </Button>
+                    )}
+                </div>
+            )}
+
+            <dialog
+                ref={dialog}
+                aria-label="Filtros"
+                onClick={(e) => { if (e.target === dialog.current) closeSheet() }}
+                className="fixed inset-x-0 bottom-0 top-auto m-0 max-h-[92dvh] w-full max-w-none flex-col overflow-hidden rounded-t-3xl bg-card p-0 text-foreground shadow-[var(--shadow-lift)] backdrop:bg-black/40 open:flex md:inset-0 md:m-auto md:h-fit md:max-h-[88dvh] md:max-w-xl md:rounded-3xl"
+            >
+                <FiltersSheet key={sheetKey} value={value} onApply={onChange} onClose={closeSheet} />
+            </dialog>
         </div>
     )
 }

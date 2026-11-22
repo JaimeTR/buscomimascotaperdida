@@ -35,6 +35,7 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
         breed: filters.breed,
         color: filters.color,
         dateFrom: filters.dateFrom,
+        size: filters.size,
     })
 
     // Scroll infinito con precarga: el siguiente bloque se pide cuando falta ~1 pantalla para llegar al final.

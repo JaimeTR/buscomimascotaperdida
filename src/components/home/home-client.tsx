@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Search, Megaphone, MapPinned, Share2, Loader2, PawPrint } from "lucide-react"
+import { ArrowRight, Search, Megaphone, MapPinned, Share2, Loader2, PawPrint, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
 import { PetCard } from "@/components/pet-card"
@@ -43,36 +43,60 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
     breed: filters.breed,
     color: filters.color,
     dateFrom: filters.dateFrom,
+    size: filters.size,
   })
   const pets = active ? found : initialPets
   const isLoading = active && searching
 
   return (
     <div>
-      {/* Portada: panel suave con titular, búsqueda y símbolo de la marca */}
+      {/* Portada: panel con titular, acciones y foto; el buscador flota sobre su borde inferior */}
       <section className="container mx-auto px-4 pt-6 md:pt-10">
-        <div className="relative overflow-hidden rounded-[1.5rem] bg-accent px-5 py-6 sm:rounded-[2rem] sm:px-8 md:px-14 md:py-16">
+        <div className="relative overflow-hidden rounded-[1.5rem] bg-accent px-5 pb-14 pt-6 sm:rounded-[2rem] sm:px-8 md:px-14 md:pb-24 md:pt-14">
           <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.08]" />
           <PawPrint aria-hidden className="pointer-events-none absolute -bottom-6 -left-4 h-28 w-28 -rotate-12 text-primary/10 md:h-40 md:w-40" />
-          <div className="relative grid grid-cols-1 items-center gap-6 md:grid-cols-[1.25fr_1fr] md:gap-10">
-          <div className="min-w-0 space-y-5 md:order-first md:space-y-6">
-            <p className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]">
-              <PawPrint className="h-4 w-4" aria-hidden /> Red comunitaria de ayuda
-            </p>
-            <h1 className="text-balance font-display text-[2rem] leading-[1.08] text-primary sm:text-4xl md:text-6xl md:leading-[1.05]">
-              Ayúdanos a traerlos de <span className="text-cta">vuelta a casa</span>
-            </h1>
-            <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
-              Busca entre los reportes de tu zona o publica el tuyo. Es gratis y lo ve toda la comunidad.
-            </p>
+          <div className="relative grid grid-cols-1 items-center gap-6 md:grid-cols-[1.2fr_1fr] md:gap-12">
+            <div className="min-w-0 space-y-5 md:space-y-6">
+              <p className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]">
+                <PawPrint className="h-4 w-4" aria-hidden /> Red comunitaria de ayuda
+              </p>
+              <h1 className="text-balance font-display text-[2rem] leading-[1.08] text-primary sm:text-4xl md:text-6xl md:leading-[1.05]">
+                Ayúdanos a traerlos de <span className="text-cta">vuelta a casa</span>
+              </h1>
+              <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
+                Publica el reporte de tu mascota o busca entre los casos de tu zona. Es gratis y lo ve toda la comunidad.
+              </p>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <Button asChild variant="cta" size="lg" className="h-12 rounded-full px-7 text-base shadow-[var(--shadow-soft)]">
+                  <Link href="/reportar">Reportar una mascota</Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="h-12 rounded-full border-primary/30 bg-card px-7 text-base text-primary hover:bg-card/80">
+                  <Link href="/reportar?tipo=encontrada">Encontré una mascota</Link>
+                </Button>
+              </div>
+              <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-muted-foreground">
+                {["Gratis", "Avisamos a tu zona", "Cartel listo para imprimir"].map((t) => (
+                  <li key={t} className="inline-flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-primary" aria-hidden /> {t}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="relative order-first aspect-[16/10] md:order-none md:aspect-[4/5]">
+              <div className="absolute inset-0 overflow-hidden rounded-[1.25rem] shadow-[var(--shadow-lift)] md:rounded-[2rem]">
+                <Image src={STOCK.reencuentro.src} alt={STOCK.reencuentro.alt} fill priority quality={90} sizes="(min-width: 768px) 38vw, 100vw" className="object-cover object-[50%_35%] md:object-center" />
+              </div>
+              <div className="absolute -bottom-3 left-3 flex items-center gap-2 rounded-2xl bg-card px-3.5 py-2.5 text-sm font-semibold text-primary shadow-[var(--shadow-lift)] md:-left-6">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-800"><MapPinned className="h-4 w-4" aria-hidden /></span>
+                Aviso a tu zona al instante
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Buscador flotante */}
+        <div className="relative z-10 -mt-9 px-2 sm:px-6 md:-mt-14 md:px-14">
+          <div className="rounded-3xl border bg-card p-4 shadow-[var(--shadow-lift)] md:p-6">
+            <p className="mb-3 text-sm font-semibold text-foreground">¿Buscas a tu mascota?</p>
             <PetFilters compact value={filters} onChange={setFilters} onSubmit={() => document.getElementById("resultados")?.scrollIntoView({ behavior: "smooth" })} />
-            <Button asChild variant="cta" size="lg" className="rounded-full">
-              <Link href="/reportar">Reportar una mascota</Link>
-            </Button>
-          </div>
-          <div className="relative order-first aspect-[16/10] overflow-hidden rounded-[1.25rem] shadow-[var(--shadow-lift)] md:order-none md:aspect-[4/5] md:rounded-[2rem]">
-            <Image src={STOCK.reencuentro.src} alt={STOCK.reencuentro.alt} fill priority quality={90} sizes="(min-width: 768px) 38vw, 100vw" className="object-cover object-[50%_35%] transition-transform duration-700 hover:scale-105 md:object-center" />
-          </div>
           </div>
         </div>
       </section>
