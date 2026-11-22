@@ -47,7 +47,7 @@ const START_CHIPS: Chip[] = [
     { label: "Busco un perro", filters: { type: "dog" } },
     { label: "Busco un gato", filters: { type: "cat" } },
     { label: "Perdí a mi mascota", href: "/reportar" },
-    { label: "Encontré una mascota", href: "/reportar" },
+    { label: "Encontré una mascota", href: "/reportar?tipo=encontrada" },
 ]
 
 const WELCOME: Message = {
