@@ -51,25 +51,25 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
     <div>
       {/* Portada: panel suave con titular, búsqueda y símbolo de la marca */}
       <section className="container mx-auto px-4 pt-6 md:pt-10">
-        <div className="relative overflow-hidden rounded-[2rem] bg-accent px-6 py-10 md:px-14 md:py-16">
-          <div className="relative grid items-center gap-10 md:grid-cols-[1.25fr_1fr]">
-          <div className="space-y-6">
+        <div className="relative overflow-hidden rounded-[1.5rem] bg-accent px-5 py-6 sm:rounded-[2rem] sm:px-8 md:px-14 md:py-16">
+          <div className="relative grid grid-cols-1 items-center gap-6 md:grid-cols-[1.25fr_1fr] md:gap-10">
+          <div className="min-w-0 space-y-5 md:order-first md:space-y-6">
             <p className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]">
               <PawPrint className="h-4 w-4" aria-hidden /> Red comunitaria de ayuda
             </p>
-            <h1 className="font-display text-4xl leading-[1.05] text-primary md:text-6xl">
+            <h1 className="text-balance font-display text-[2rem] leading-[1.08] text-primary sm:text-4xl md:text-6xl md:leading-[1.05]">
               Ayúdanos a traerlos de <span className="text-cta">vuelta a casa</span>
             </h1>
-            <p className="max-w-xl text-lg text-muted-foreground">
+            <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
               Busca entre los reportes de tu zona o publica el tuyo. Es gratis y lo ve toda la comunidad.
             </p>
-            <PetFilters value={filters} onChange={setFilters} onSubmit={() => document.getElementById("resultados")?.scrollIntoView({ behavior: "smooth" })} />
+            <PetFilters edge="-mx-5 px-5 sm:-mx-8 sm:px-8 md:mx-0 md:px-0" value={filters} onChange={setFilters} onSubmit={() => document.getElementById("resultados")?.scrollIntoView({ behavior: "smooth" })} />
             <Button asChild variant="cta" size="lg" className="rounded-full">
               <Link href="/reportar">Reportar una mascota</Link>
             </Button>
           </div>
-          <div className="relative hidden aspect-[4/5] overflow-hidden rounded-[2rem] shadow-[var(--shadow-lift)] md:block">
-            <Image src={STOCK.reencuentro.src} alt={STOCK.reencuentro.alt} fill priority quality={90} sizes="(min-width: 768px) 38vw, 0px" className="object-cover transition-transform duration-700 hover:scale-105" />
+          <div className="relative order-first aspect-[16/10] overflow-hidden rounded-[1.25rem] shadow-[var(--shadow-lift)] md:order-none md:aspect-[4/5] md:rounded-[2rem]">
+            <Image src={STOCK.reencuentro.src} alt={STOCK.reencuentro.alt} fill priority quality={90} sizes="(min-width: 768px) 38vw, 100vw" className="object-cover object-[50%_35%] transition-transform duration-700 hover:scale-105 md:object-center" />
           </div>
           </div>
         </div>

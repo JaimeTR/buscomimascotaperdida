@@ -113,7 +113,8 @@ const Title = ({ children }: { children: React.ReactNode }) => (
 )
 
 // Barra de búsqueda + chips (lugar, tipo, estado, raza, color, fecha). El estado vive en el padre.
-export function PetFilters({ value, onChange, onSubmit }: { value: Filters; onChange: (f: Filters) => void; onSubmit?: () => void }) {
+// `edge`: margen/padding negativo para que los chips lleguen al borde del contenedor en móvil (según su padding).
+export function PetFilters({ value, onChange, onSubmit, edge = "-mx-4 px-4 sm:mx-0 sm:px-0" }: { value: Filters; onChange: (f: Filters) => void; onSubmit?: () => void; edge?: string }) {
     const set = (patch: Partial<Filters>) => onChange({ ...value, ...patch })
     const loc = value.location
     const type = TYPES.find((t) => t.value === value.petType) ?? TYPES[0]
@@ -143,7 +144,7 @@ export function PetFilters({ value, onChange, onSubmit }: { value: Filters; onCh
                 <Button type="submit" className="absolute right-1.5 top-1.5 h-11 rounded-full px-5 sm:px-6">Buscar</Button>
             </form>
 
-            <div className="-mx-4 flex flex-nowrap items-center gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
+            <div className={cn("flex flex-nowrap items-center gap-2 overflow-x-auto pb-1 [scrollbar-width:none] sm:flex-wrap sm:overflow-visible [&::-webkit-scrollbar]:hidden", edge)}>
                 <FilterChip
                     icon={MapPin}
                     label={loc.district || loc.province || loc.department || "Lugar"}
