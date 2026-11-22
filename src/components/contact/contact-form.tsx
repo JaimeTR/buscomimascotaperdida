@@ -60,7 +60,7 @@ export function ContactForm({ initialKind = "consulta", initialAmount, initialMo
                 <p className="text-muted-foreground">Te escribiremos al correo que indicaste.</p>
                 {groupUrl && (
                     <Button asChild variant="cta" size="lg" className="rounded-full">
-                        <a href={groupUrl} target="_blank" rel="noopener noreferrer"><Users className="mr-2 h-5 w-5" aria-hidden /> Entrar al grupo de colaboradores</a>
+                        <a href={groupUrl} target="_blank" rel="noopener noreferrer"><Users className="mr-2 h-5 w-5" aria-hidden /> Pedir acceso al grupo por WhatsApp</a>
                     </Button>
                 )}
                 <div><Button variant="ghost" onClick={onDone}>Cerrar</Button></div>

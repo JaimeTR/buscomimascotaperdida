@@ -174,7 +174,9 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                         <p className="text-muted-foreground">Una consulta, una alianza, ser voluntario, colaborar o avisarnos que apoyaste: elige y completa el formulario en un momento. Te respondemos al correo que indiques.</p>
                         <div className="flex flex-col justify-center gap-3 sm:flex-row">
                             <OpenFormButton form="contacto" detail={{ kind: "consulta" }} variant="cta" size="lg" className="rounded-full"><MessageCircle className="mr-2 h-5 w-5" aria-hidden /> Abrir formulario</OpenFormButton>
-                            <OpenFormButton form="contacto" detail={{ kind: "grupo" }} variant="outline" size="lg" className="rounded-full"><Users className="mr-2 h-5 w-5" aria-hidden /> Unirme al grupo de colaboradores</OpenFormButton>
+                            {collabGroupUrl
+                                ? <Button asChild variant="outline" size="lg" className="rounded-full"><a href={collabGroupUrl} target="_blank" rel="noopener noreferrer"><Users className="mr-2 h-5 w-5" aria-hidden /> Pedir acceso al grupo por WhatsApp</a></Button>
+                                : <OpenFormButton form="contacto" detail={{ kind: "grupo" }} variant="outline" size="lg" className="rounded-full"><Users className="mr-2 h-5 w-5" aria-hidden /> Unirme al grupo de colaboradores</OpenFormButton>}
                         </div>
                         <p className="flex items-center justify-center gap-2 text-sm text-muted-foreground"><LifeBuoy className="h-4 w-4 shrink-0 text-primary" aria-hidden /> ¿Un reporte falso o un abuso? Incluye el enlace del reporte en tu mensaje.</p>
                     </div>
