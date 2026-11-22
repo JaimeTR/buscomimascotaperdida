@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { Search, List, Map as MapIcon, Loader2 } from "lucide-react"
+import Link from "next/link"
+import { Search, List, Map as MapIcon, Loader2, MapPinned, PawPrint } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { PetFilters, EMPTY_FILTERS, type Filters } from "@/components/pet-filters"
@@ -56,36 +57,53 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
         <div className="min-h-screen bg-background">
             <ReportPopup active={pets.length > PAGE && view === "list"} />
 
-            {/* Hero Header */}
-            <div className="bg-accent/50 pb-10 pt-12 md:pt-16 px-4 relative overflow-hidden">
-                <div className="container max-w-7xl mx-auto relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
-                    <div className="max-w-xl space-y-4">
-                        <h1 className="font-display text-4xl md:text-5xl text-primary leading-[1.1]">
-                            Encuentra o reporta mascotas perdidas cerca de ti
-                        </h1>
-                        <p className="text-lg text-muted-foreground">
-                            Ayuda a otras personas a encontrar sus mascotas perdidas y genera carteles fácilmente.
-                        </p>
-                    </div>
-
-                    <div className="hidden md:flex items-center gap-4">
-                        <div className="h-48 w-48 bg-teal-200 rounded-full opacity-50 blur-3xl absolute right-0 top-0 -z-10"></div>
-                        <div className="relative">
-                            <Image src={STOCK.perritoDuena.src} width={256} height={192} alt={STOCK.perritoDuena.alt} priority className="h-48 w-64 -rotate-3 rounded-2xl border-4 border-white object-cover shadow-xl" />
+            {/* Portada: mismo estilo que el resto del sitio; el buscador flota sobre su borde inferior */}
+            <section className="container mx-auto px-4 pt-6 md:pt-10">
+                <div className="relative overflow-hidden rounded-[1.5rem] bg-accent px-5 pb-14 pt-8 sm:rounded-[2rem] sm:px-8 md:px-14 md:pb-24 md:pt-12">
+                    <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.08]" />
+                    <PawPrint aria-hidden className="pointer-events-none absolute -bottom-6 -left-4 h-28 w-28 -rotate-12 text-primary/10 md:h-40 md:w-40" />
+                    <div className="relative grid items-center gap-8 md:grid-cols-[1.2fr_1fr] md:gap-12">
+                        <div className="min-w-0 space-y-5 md:space-y-6">
+                            <p className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]">
+                                <MapPinned className="h-4 w-4" aria-hidden /> Búsqueda por zona, raza y color
+                            </p>
+                            <h1 className="text-balance font-display text-[2rem] leading-[1.08] text-primary sm:text-4xl md:text-5xl md:leading-[1.05]">
+                                Encuentra o reporta mascotas perdidas <span className="text-cta">cerca de ti</span>
+                            </h1>
+                            <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
+                                Mira los casos de tu zona en lista o en el mapa. Si viste a una mascota, avisa a su familia; si perdiste a la tuya, publícala y crea su cartel.
+                            </p>
+                            <div className="flex flex-col gap-3 sm:flex-row">
+                                <Button asChild variant="cta" size="lg" className="h-12 rounded-full px-7 text-base shadow-[var(--shadow-soft)]">
+                                    <Link href="/reportar">Reportar una mascota</Link>
+                                </Button>
+                                <Button asChild variant="outline" size="lg" className="h-12 rounded-full border-primary/30 bg-card px-7 text-base text-primary hover:bg-card/80">
+                                    <Link href="/cartel">Crear cartel</Link>
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="relative order-first aspect-[16/10] md:order-none md:aspect-[4/3]">
+                            <div className="absolute inset-0 overflow-hidden rounded-[1.25rem] shadow-[var(--shadow-lift)] md:rounded-[2rem]">
+                                <Image src={STOCK.perritoDuena.src} alt={STOCK.perritoDuena.alt} fill priority sizes="(min-width: 768px) 38vw, 100vw" className="object-cover object-[50%_30%]" />
+                            </div>
+                            <div className="absolute -bottom-3 left-3 flex items-center gap-2 rounded-2xl bg-card px-3.5 py-2.5 text-sm font-semibold text-primary shadow-[var(--shadow-lift)] md:-left-6">
+                                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-100 text-orange-800"><Search className="h-4 w-4" aria-hidden /></span>
+                                Filtra por lo que recuerdas
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Floating Search Bar */}
-                <div className="container max-w-7xl mx-auto mt-10 relative z-20">
-                    <div className="bg-card rounded-2xl shadow-xl p-4 border border-border">
+                {/* Buscador flotante */}
+                <div className="relative z-10 -mt-9 px-2 sm:px-6 md:-mt-14 md:px-14">
+                    <div className="rounded-3xl border bg-card p-4 shadow-[var(--shadow-lift)] md:p-6">
                         <PetFilters value={filters} onChange={applyFilters} />
                     </div>
                 </div>
-            </div>
+            </section>
 
             {/* Resultados */}
-            <div className="container max-w-7xl mx-auto px-4 pt-10 pb-20">
+            <div className="container max-w-7xl mx-auto px-4 pt-12 pb-20">
                 <div className="space-y-6">
 
                     {/* Header & Controls */}
