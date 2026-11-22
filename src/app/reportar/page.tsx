@@ -482,7 +482,7 @@ export default function ReportPage() {
                                     initialLng={location.lng}
                                 />
                                 <p className="text-xs text-muted-foreground font-medium">
-                                    💡 Haz clic en el mapa para marcar exactamente dónde viste o perdiste a tu mascota. Esto ayudará a otros usuarios a saber dónde buscar.
+                                    💡 Usa “Mi ubicación”, busca la dirección o toca el mapa para marcar exactamente dónde viste o perdiste a tu mascota. Esto ayudará a otros usuarios a saber dónde buscar.
                                 </p>
                             </div>
                         </div>

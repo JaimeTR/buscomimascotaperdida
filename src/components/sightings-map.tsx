@@ -1,21 +1,15 @@
 "use client"
 
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
-import L from 'leaflet'
+import { MapContainer, Marker, Popup, useMap } from 'react-leaflet'
 import { useState, useEffect } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { es } from 'date-fns/locale'
 
-// Fix for default marker icons
-const createIcon = (color: string) => L.divIcon({
-    html: `<div style="background-color: ${color}; width: 24px; height: 24px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); border: 2px solid white; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);"></div>`,
-    className: 'custom-pin',
-    iconSize: [24, 24],
-    iconAnchor: [12, 24],
-})
+import { dotPin } from '@/lib/map-kit'
+import { BaseMapLayer } from '@/components/base-map-layer'
 
-const INITIAL_ICON = createIcon('#ef4444') // red-500
-const SIGHTING_ICON = createIcon('#0f766e') // teal-700
+const INITIAL_ICON = dotPin('#ea580c')
+const SIGHTING_ICON = dotPin('#0f766e')
 
 function MapViewHandler({ center }: { center: [number, number] }) {
     const map = useMap()
@@ -38,10 +32,11 @@ interface SightingsMapProps {
     initialLat: number
     initialLng: number
     sightings: SightingLocation[]
+    zoom?: number
     className?: string
 }
 
-export function SightingsMap({ initialLat, initialLng, sightings, className }: SightingsMapProps) {
+export function SightingsMap({ initialLat, initialLng, sightings, zoom = 16, className }: SightingsMapProps) {
     const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
@@ -56,15 +51,13 @@ export function SightingsMap({ initialLat, initialLng, sightings, className }: S
     return (
         <MapContainer
             center={[initialLat, initialLng]}
-            zoom={16}
+            zoom={zoom}
+            maxZoom={19}
             scrollWheelZoom={true}
             className={`rounded-[2.5rem] overflow-hidden ${className}`}
             style={{ height: '100%', width: '100%' }}
         >
-            <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+            <BaseMapLayer />
 
             {/* Initial Loss Marker */}
             <Marker position={[initialLat, initialLng]} icon={INITIAL_ICON} title="Punto inicial">

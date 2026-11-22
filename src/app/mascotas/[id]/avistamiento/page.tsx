@@ -206,7 +206,7 @@ export default function SightingReportPage() {
                                         lng={formData.lng}
                                     />
                                     <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1000] bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-lg border border-border text-[10px] font-bold uppercase text-muted-foreground">
-                                        Mueve el pin azul al lugar exacto
+                                        Toca el mapa, arrastra el pin o usa Mi ubicación
                                     </div>
                                 </div>
                             </div>

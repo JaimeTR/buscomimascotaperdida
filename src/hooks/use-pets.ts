@@ -181,7 +181,7 @@ export function useInfinitePets(options: Omit<UsePetsOptions, 'limit' | 'enabled
     const loaded = useRef(0)
 
     const fetchPage = useCallback(async (from: number, gen: number) => {
-        let query = supabase.from('pets').select('*', { count: 'exact' }).order('created_at', { ascending: false }).range(from, from + pageSize - 1)
+        let query = supabase.from('pets').select('*', { count: 'exact' }).order('created_at', { ascending: false }).order('id').range(from, from + pageSize - 1)
         query = applyFilters(query, options)
         const { data, error, count } = await query
         if (gen !== generation.current) return null

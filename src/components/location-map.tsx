@@ -10,8 +10,12 @@ const MapContainer = dynamic(
     () => import("react-leaflet").then((mod) => mod.MapContainer),
     { ssr: false }
 )
-const TileLayer = dynamic(
-    () => import("react-leaflet").then((mod) => mod.TileLayer),
+const BaseMapLayer = dynamic(
+    () => import("@/components/base-map-layer").then((mod) => mod.BaseMapLayer),
+    { ssr: false }
+)
+const MapTools = dynamic(
+    () => import("@/components/map-tools").then((mod) => mod.MapTools),
     { ssr: false }
 )
 const Marker = dynamic(
@@ -34,6 +38,7 @@ export function LocationMap({ onLocationSelect, initialLat, initialLng }: Locati
     const [isLoadingLocation, setIsLoadingLocation] = useState(
         initialLat === undefined || initialLng === undefined
     )
+    const [pin, setPin] = useState<import("leaflet").DivIcon | null>(null) // leaflet solo existe en el navegador
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [MapEventsComponent, setMapEventsComponent] = useState<any>(null)
 
@@ -41,6 +46,7 @@ export function LocationMap({ onLocationSelect, initialLat, initialLng }: Locati
     const defaultCenter: [number, number] = [-12.0464, -77.0428]
 
     useEffect(() => {
+        import("@/lib/map-kit").then((k) => setPin(k.dotPin("#ea580c")))
         // Dynamically import the hooks component
         import("react-leaflet").then((mod) => {
             const MapEvents = () => {
@@ -121,15 +127,21 @@ export function LocationMap({ onLocationSelect, initialLat, initialLng }: Locati
             <MapContainer
                 center={position}
                 zoom={15}
+                maxZoom={19}
                 style={{ height: "100%", width: "100%" }}
                 className="z-0"
             >
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
+                <BaseMapLayer />
                 <MapEventsComponent />
-                {position && <Marker position={position} />}
+                {position && pin && (
+                    <Marker
+                        position={position}
+                        icon={pin}
+                        draggable
+                        eventHandlers={{ dragend: (e: { target: { getLatLng: () => { lat: number; lng: number } } }) => { const p = e.target.getLatLng(); setPosition([p.lat, p.lng]); onLocationSelect(p.lat, p.lng) } }}
+                    />
+                )}
+                <MapTools onPick={(lat, lng) => { setPosition([lat, lng]); onLocationSelect(lat, lng) }} />
             </MapContainer>
         </div>
     )
