@@ -1,38 +1,39 @@
-# Estado del proyecto — 2026-11-21
+# Estado del proyecto — 2026-11-22
 
-Punto de partida para retomar el trabajo. Actualizar al cerrar cada sesión.
+Punto de partida para retomar el trabajo. Actualizar al cerrar cada sesión. Contexto para asistentes: `CLAUDE.md`.
 
 ## Qué es
-Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimascotaperdida.com). Next.js 16 (App Router) + Supabase (Postgres, Auth, Storage, RLS) + Tailwind/shadcn. PWA con push. Hosting previsto: Hostinger (Node.js), ver `DEPLOYMENT.md`.
+Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimascotaperdida.com). Next.js 16 + Supabase (Postgres, Auth, Storage, RLS) + Tailwind. PWA con push. **En línea en Vercel:** https://buscomimascotaperdida.vercel.app (`main` = producción, `dev` = vista previa; sin dominio propio todavía).
 
 ## Hecho
-- **Marca y diseño:** logo pin+huella, tipografía Outfit, tokens (`docs/marca.md`, `DESIGN.md`, `docs/componentes.md`).
-- **Público:** home (hero, historias de reencuentro), búsqueda con lista/mapa, detalle de mascota, avistamientos, cartel por reporte, aliados, anuncios, promocionar, contacto.
-- **Reportar:** flujo de 3 pasos, subida de imágenes validada, coincidencias perdido↔encontrado con correo al dueño, imagen OG para casos sin foto.
-- **Dashboard:** reportes propios, pistas recibidas, perfil con avatar y notificaciones push.
-- **Admin:** moderación, usuarios, anuncios/aliados/promociones, auditoría (`admin_users`, RLS).
-- **Imágenes HD:** hero (`reencuentro-atardecer.webp`, 2400px) y login/registro (`paseo-en-el-parque.webp`, 2000px). Créditos en `docs/creditos-imagenes.md`. `next.config.ts` permite `quality` 75/85/90.
-- **Encabezado:** solo isologo (el nombre en texto queda en el menú del dashboard).
-- **Acceso** (ver `docs/autenticacion.md`): guard de servidor, Google + Facebook, registro mínimo, recordar correo, avatar instantáneo.
-- **Casos de éxito** (ver `docs/casos-de-exito.md`): flujo de reencuentro con foto y relato, páginas públicas y recordatorios.
-- **Legal** (ver `docs/legal.md`): términos, privacidad (Ley 29733), cookies, libro de reclamaciones.
-- **Calidad:** tests `node --test` (`npm test`), CI en `.github/workflows/ci.yml`, tsc/eslint limpios.
+- **Marca y diseño:** logo pin+huella, Outfit + Poppins, tokens (`docs/marca.md`, `DESIGN.md`, `docs/componentes.md`). Fondo con marca de agua de huellitas, banners en panel de color con buscador flotante, encabezado fijo que se encoge al hacer scroll (escritorio: solo isologo y foto de perfil), movimiento al pasar el cursor y al hacer clic (también en iconos).
+- **Rutas en español** con redirecciones 301 (`/ingresar`, `/registro`, `/panel`…), SEO/GEO (JSON-LD, canonical, sitemap, robots, `noindex` en panel y admin).
+- **Búsqueda:** portada y `/mascotas` con «Consultar a nuestra IA» (abre el asistente con tus filtros), filtros rápidos centrados en escritorio y panel de filtros completo en móvil (color, raza, tamaño, fecha, lugar), lista con paginación real de 12 en 12, scroll infinito con precarga y llamados a reportar entre bloques.
+- **Reportar** (`/reportar`): pasos mascota → lugar → fotos → **apoyo voluntario (opcional)**; modo «perdí» o «encontré», fecha, fotos con controles táctiles.
+- **Perfil de la mascota** rediseñado: galería, tarjeta de contacto, historial como línea de tiempo, compartir. Ver `docs/perfil-mascota-y-contacto.md`.
+- **Cartel** (`/cartel`): página completa con vistas reales de 5 plantillas y 6 formatos; plantilla de la marca por defecto; franja «¿Lo viste? Repórtalo en buscomimascotaperdida.com».
+- **Apoyo voluntario y destacados:** sin planes; el monto confirmado ordena «Mascotas destacadas» (portada), aviso flotante en otras páginas y anuncios de negocios. Ver `docs/apoyo-voluntario.md`.
+- **Contacto y formularios en modal**, bandeja de mensajes del admin, grupo de colaboradores por WhatsApp. Ver `docs/contacto-y-formularios.md`.
+- **Acceso:** Google funcionando y publicado; Facebook oculto (ver pendiente). Guard de servidor, registro mínimo. Ver `docs/autenticacion.md`.
+- **Casos de éxito, legal, admin** (reportes, usuarios, promociones, anuncios, aliados, mensajes, impulsos, auditoría), cron diario de recordatorios (`vercel.json`).
+- **Calidad:** `tsc`, `eslint` sin errores, 18 pruebas, `check:production-config`.
 
 ## Pendiente (acciones tuyas, paneles externos)
-1. Supabase → Auth: Site URL y Redirect URLs de producción; activar proveedores **Google** y **Facebook**; decidir "Confirm email" (recomendado: activo).
-2. Aplicar migraciones pendientes (incluye `20261121140000_reunion_stories.sql`) y programar el cron `/api/cron/remind-owners` con `CRON_SECRET`; de `supabase/migrations` (última de acceso: `20261121130500_oauth_profile_metadata.sql`; revisar también `push_subscriptions` y `promos`).
-3. Resend: verificar dominio y remitente.
-4. `insert into admin_users` con tu usuario.
-5. Variables de producción en el hosting (`.env.example`): `SUPABASE_SERVICE_ROLE_KEY`, `NEXT_PUBLIC_APP_URL`, VAPID, Sentry.
-6. Datos legales reales (RUC, razón social, domicilio): ver `docs/legal.md`.
+1. **Admin:** insertar tu usuario en `admin_users` (`insert into admin_users`). Sin eso no se ven `/admin/*` (mensajes, impulsos, promociones).
+2. **Vercel:** `SUPABASE_SERVICE_ROLE_KEY` (eliminar cuenta, cron, límites compartidos), `NEXT_PUBLIC_APP_URL`/`ALLOWED_ORIGIN` con la URL real, `CRON_SECRET`. Ya cargadas: Yape/Plin, titular, WhatsApp, teléfono y correo de contacto.
+3. **Dominio propio** (`buscomimascotaperdida.com`): agregar al proyecto de Vercel, y actualizar Google Cloud (orígenes y marca), Supabase (Site URL y redirects) y el correo `contacto@…` (hoy no recibe nada hasta tener buzón).
+4. **Facebook login:** crear app en Meta con el callback de Supabase y activar el proveedor; luego `FACEBOOK_ENABLED = true` en `social-buttons.tsx`.
+5. **Resend:** verificar dominio y remitente.
+6. **Datos legales reales** (RUC, razón social, domicilio): `docs/legal.md`.
 
 ## Pendiente (desarrollo)
-- ~~Eliminar cuenta~~ hecho: Mi perfil → Seguridad (`delete-account.ts`, requiere `SUPABASE_SERVICE_ROLE_KEY`; admins no pueden autoeliminarse).
-- Revisar `notify-nearby-users` (parece corregido por otra sesión; verificar).
-- Libro de reclamaciones: hoy por correo; si hay volumen, guardarlo en tabla.
-- Si se añade analítica, revisar cookies y banner de consentimiento (hoy solo hay cookies técnicas).
-- Casos reales para reemplazar los demo; fotos reales en lugar de stock.
-- Probar en navegador el flujo de acceso completo con Supabase real (no se verificó visualmente).
+- **Mapa con MapLibre** (otra sesión): `pets-map`, `sightings-map`, `map-picker`, `location-map` y `base-map-layer` en curso; no está en `main`.
+- Avisos por correo: al admin cuando llega un mensaje/impulso y a la persona cuando se confirma su aporte.
+- Estado del impulso visible para el dueño (panel y perfil).
+- Sección pública de agradecimiento a colaboradores.
+- Probar con una cuenta real: reportar con aporte, subir comprobante, aprobar en `/admin/impulsos`, contacto público y avistamientos (aún no hay datos reales de esos flujos).
+- Casos reales para reemplazar los importados y fotos reales en lugar de stock. Los 63 casos importados enlazan la foto de su fuente (no está alojada aquí): riesgo de derechos de autor, quitar a pedido.
+- Libro de reclamaciones hoy por correo; si hay volumen, tabla.
 
 ## Cómo trabajar
-`npm run dev` · `npm test` · `npx tsc --noEmit` · `npx eslint src`. Varias sesiones trabajan en paralelo: commitear solo los archivos propios y revisar `git status` antes de subir.
+`npm run dev` · `npm test` · `npx tsc --noEmit` · `npx eslint src`. Dev → `main` sin PR; el push a `main` despliega. Varias sesiones pueden editar el mismo directorio: commitear solo los archivos propios y revisar `git status`.

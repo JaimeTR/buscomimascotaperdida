@@ -14,19 +14,25 @@ Tokens y marca: ver `DESIGN.md` y `docs/marca.md`. Todo usa los tokens de `globa
 ## Mascotas
 | Componente | Uso |
 |---|---|
-| `PetCard` | Tarjeta de reporte con hover (elevación + zoom de foto). |
+| `PetCard` | Tarjeta de reporte (`hover-lift`, zoom de foto, insignia `featured`). |
 | `StatusBadge` | Perdido / Encontrado / Reunido. |
-| `PetFilters` | Filtros de búsqueda. |
-| `PetsSearch` (`components/pets-search.tsx`) | Listado con buscador, filtros y `ad` (slot de anuncio) en la barra lateral. |
+| `PetFilters` | IA + filtros: fila centrada en escritorio; en móvil Lugar, Mascota y botón «Filtros» (hoja completa). |
+| `PetsSearch` (`components/pets-search.tsx`) | Banner con «Consultar a nuestra IA» y filtros, lista paginada (`useInfinitePets`) con llamados a reportar (`pets/report-ctas.tsx`) entre bloques de 12. |
 
-## Anuncios y aliados (`src/components/ads`, `src/lib/ads.ts`)
-- `AdSlot placement variant` (servidor): muestra un anuncio activo al azar o `HouseAd` (invitación a anunciar). Espacios: `home_banner`, `detail_sidebar`, `listing_inline`, `ads_page`.
-- `AdCard` variantes `card | banner | side`; siempre rotulado «Anuncio», `rel="sponsored"`, clics contados vía `/anuncios/ir/[id]`.
-- `PromoRequestForm` (`components/promo`): solicitud de anuncio/aliado/voluntario; requiere sesión.
+## Formularios en modal y campos
+| Componente | Uso |
+|---|---|
+| `FormDialog` + `OpenFormButton` (`ui/form-dialog.tsx`) | Modal grande de formulario (panel de información + formulario; hoja en móvil). Las páginas solo ponen botones que lo abren por evento. |
+| `IconField` + `iconFieldClass` (`ui/icon-field.tsx`) | Campo con icono a la izquierda que reacciona al foco. |
+| `ContactDialog`, `PromoDialog`, `BoostDialog` | Modales ya armados: contacto, aliados/anuncios y «Destacar mi caso». |
 
-## Módulo de promoción
-- Solicitudes → `/admin/promociones`; el admin aprueba y crea el anuncio. Gestión en `/admin/anuncios` y `/admin/aliados`.
-- No hay pago en línea: el cobro se coordina manualmente. Los precios de `PLANS` son **provisionales**.
+## Mascota (`src/components/pet`)
+`PetGallery`, `ContactCard`, `SightingTimeline`. Compartir: `SocialShare variant="button"`. Ver `docs/perfil-mascota-y-contacto.md`.
+
+## Apoyo voluntario y anuncios
+- `BoostFields` / `submitBoost` (`components/boost`): monto, método, comprobante y registro del impulso. Ver `docs/apoyo-voluntario.md`.
+- `FeaturedPets` (portada), `FeaturedPopup` (aviso flotante), `FeaturedAds` (anuncios de negocios destacados), `AdCard`, `HouseAd`, `AdSlot placement variant`. Espacios: `home_banner`, `detail_sidebar`, `listing_inline` (`ads_page` quedó sin uso: ya no hay lista pública).
+- Anuncios y solicitudes: se aprueban en `/admin/promociones`; el aporte confirmado ordena. **No hay planes fijos ni cobro en línea.**
 
 ## Imágenes
 - Fotos de stock locales en `public/img/stock`, referenciadas desde `src/lib/stock-images.ts`. Créditos en `docs/creditos-imagenes.md`.
