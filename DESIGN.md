@@ -100,7 +100,13 @@ Ancho de línea máximo del texto: 65–70 caracteres.
 - **Íconos:** Lucide, trazo 1.75 px, tamaño 16/20/24 px, decorativos con `aria-hidden`.
 
 ## 7. Movimiento
-Transiciones de 150–250 ms con `ease-out`; solo transformaciones y opacidad. Respetar `prefers-reduced-motion` (ya está en `globals.css`). Nada de animaciones decorativas en bucle.
+Respuesta visible a cada acción, siempre breve (150–300 ms, `ease-out`), solo transformaciones, sombra y opacidad.
+- **Botones** (`ui/button.tsx`): al pasar el cursor suben 2 px con sombra; al presionar se hunden (`active:scale-[0.97]`). Sus **iconos** se agrandan y giran un poco (excepto los que giran solos, `animate-spin`). Por eso los botones principales llevan icono.
+- **Contenedores:** clase `hover-lift` (`globals.css`): se elevan 4 px con la sombra `--shadow-lift`, se hunden al presionar y sus iconos reaccionan. **Imágenes:** `img-zoom` (acercamiento suave dentro de un contenedor con `overflow-hidden` y `group`).
+- **Campos con icono** (`IconField`): el icono se tiñe y crece con el foco. Chips y opciones elevan 2 px al pasar el cursor.
+- **Entradas:** cada página aparece con un fundido corto (`app/template.tsx`, `.page-enter`); las secciones con `Reveal` al llegar al scroll. **Modales y hojas** (`<dialog>`) entran y salen con transición (opacidad + desplazamiento; el fondo oscurece). Popovers y avisos usan `animate-in`.
+- **`prefers-reduced-motion`:** se anulan las animaciones largas (entradas, fundidos) y el scroll suave; **se conservan las respuestas cortas de hover/clic**, porque son retroalimentación y no decoración.
+- Nada de animaciones decorativas en bucle.
 
 ## 8. Imagen e ilustración
 - Fotografía real de mascotas, recortada 4:3, con `alt`. Sin fotos de stock inventadas ni casos falsos.
@@ -118,19 +124,32 @@ Contraste AA, teclado completo, orden de foco lógico, `aria-current` en la nave
 | Página | Objetivo | Cambios clave |
 |---|---|---|
 | `/` | Buscar o publicar en segundos | Hero con `Display` en Outfit y búsqueda protagonista, CTA naranja, casos recientes reales, "cómo funciona" |
-| `/mascotas` | Explorar y filtrar | Filtros en panel (móvil) y barra (escritorio), mapa diferido, estados de carga/vacío/error |
-| `/mascotas/[id]` | Ayudar a un caso | Galería accesible, estado, mapa aproximado, contacto solo si es público, compartir |
+| `/mascotas` | Explorar y filtrar | Banner en panel con «Consultar a nuestra IA» y filtros (fila centrada en escritorio, panel completo en móvil), lista paginada con llamados a reportar entre bloques, mapa diferido |
+| `/mascotas/[id]` | Ayudar a un caso | Galería táctil, tarjeta de acción, contacto solo si es público, línea de tiempo de avistamientos, compartir (`docs/perfil-mascota-y-contacto.md`) |
 | `/reportar` y `/mascotas/[id]/avistamiento` | Publicar sin perderse | Formulario en pasos (datos → fotos → ubicación → contacto), vista previa de fotos |
-| `/cartel`, `/promocionar` | Difundir | Cartel desde datos reales; quitar contenido de ejemplo |
-| `/contacto` | Escribirnos | Formulario real (Server Action + Zod) o quitarlo |
+| `/cartel`, `/anuncios` | Difundir y apoyar | Página de carteles con vistas reales; `/anuncios` solo promoción con aporte voluntario (`docs/apoyo-voluntario.md`) |
+| `/contacto` | Escribirnos y apoyar | Botones que abren el formulario en modal; apoyo por Yape/Plin (`docs/contacto-y-formularios.md`) |
 | `/login`, `/register`, `/forgot-password`, `/update-password` | Entrar fácil | Disposición única, Google primero, errores traducidos |
 | `/dashboard/*` | Gestionar mis casos | Resumen real, lista con filtros y acciones de estado |
 | `/admin/*` | Moderar | Tablas paginadas, confirmaciones, auditoría |
 | `/privacidad`, `/terminos`, `/offline` | Confianza | Texto revisado con datos reales (retención, borrado) |
 
-## 12. Estado de implementación (rediseño aplicado)
-- **Hecho:** Poppins (`next/font/google`) y Outfit (`next/font/google`) cargadas en `layout.tsx`; utilidades `font-sans` y `font-display`; tokens y variante de botón `cta`; barra superior, barra de pestañas móvil y pie; portada con panel, accesos rápidos y filtros (`PetFilters`); `PetCard`; dashboard (barra lateral, pestañas móviles, resumen, mis reportes) y panel de administración (barra lateral oscura, resumen con barras, reportes, usuarios y auditoría); clases `stone-*` y `teal-*` migradas a tokens en el resto de páginas; títulos principales en Outfit.
-- **Pendiente:** `/reportar` por pasos, detalle `/mascotas/[id]` y `/cartel` con el estilo nuevo en profundidad, ajustes del dashboard, modo oscuro.
+## 12. Estado de implementación
+- **Hecho:** fuentes, tokens y botón `cta`; barra superior fija que se encoge, barra de pestañas móvil y pie; portada, `/mascotas`, `/cartel`, `/anuncios`, `/aliados`, `/contacto`, `/reportar` y perfil de la mascota con el estilo nuevo; dashboard y administración; formularios en modal; movimiento (sección 7); patrones de la sección 14.
+- **Pendiente:** ajustes del dashboard, modo oscuro, mapa con MapLibre (en curso).
 
 ## 13. Orden recomendado
 1. Fuentes (Poppins y Outfit) y revisión de tokens. 2. Barra, pie y portada. 3. Búsqueda y detalle. 4. Reportar y avistamiento. 5. Auth. 6. Dashboard y admin. Cada paso con el flujo de calidad: `npx eslint . --max-warnings 0`, `npx tsc --noEmit`, `npm run build` y revisión en 375, 768, 1024 y 1440 px.
+
+## 14. Patrones de la web actual (noviembre 2026)
+- **Banner de página:** panel de color (`bg-accent` claro o `bg-primary` oscuro) con esquinas de 2rem, marca de agua de huellitas, etiqueta redondeada, título en Outfit con una palabra en naranja, texto, dos botones con icono y una línea de confianza. Foto a la derecha (arriba en móvil) con una etiqueta flotante. Mismo esqueleto en `/`, `/mascotas`, `/cartel`, `/contacto`, `/aliados`, `/anuncios`.
+- **Buscador flotante:** tarjeta blanca que se superpone al borde inferior del banner. Contiene «Consultar a nuestra IA» (centrado, no un buscador de texto largo) y los filtros. Escritorio: Lugar, Mascota, Raza, Color, Tamaño y Fecha en una fila centrada. Móvil: Lugar, Mascota y el botón **Filtros**, que abre una hoja inferior con todas las opciones (el botón no existe en escritorio).
+- **Marca de agua:** huellas del isologo en teal (`.paws-teal`, 4.5 % de opacidad fija al fondo del sitio) y en blanco sobre teal (`.paws-white`).
+- **Encabezado:** fijo en escritorio y de 64 px; al hacer scroll pasa a 48 px con sombra suave y logo, menú y botón más chicos. Móvil: solo logo, no fijo; cuenta y accesos en la barra inferior. Escritorio con sesión: solo la foto de perfil (nombre dentro de su menú). Entre 768 y 1023 px se usa la barra inferior (el menú de arriba empieza en 1024 px).
+- **Barra inferior móvil:** Inicio, Buscar, Reportar (destacado), **Asistente** (abre el chat a pantalla completa) y Menú (o Perfil con la foto). En escritorio el chat es un botón flotante que alterna abrir/cerrar.
+- **Modales de formulario** (`FormDialog`): panel de información (teal, a la izquierda) + formulario; hoja inferior en móvil. Las páginas solo muestran botones que los abren.
+- **Selector de color de mascota:** círculos de 48 px con nombre y check; 4/5/6 columnas según ancho.
+- **Línea de tiempo de avistamientos:** avatar con línea vertical, tarjeta con zona, hora relativa, foto y botones de contacto con etiqueta (solo los que la persona compartió).
+- **Destacados:** insignia naranja «Destacado»; sección de portada y aviso flotante (`docs/apoyo-voluntario.md`). El aviso flotante nunca coincide con el chat (izquierda abajo) ni con la barra inferior (se sube en móvil).
+- **Insignias de estado** siempre con texto; «Destacado» y «Caso destacado» usan `cta`.
+- **Sin cifras ni datos inventados:** secciones de contacto y apoyo se ocultan si falta la variable `NEXT_PUBLIC_*`.
