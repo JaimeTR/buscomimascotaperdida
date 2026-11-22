@@ -40,8 +40,9 @@ export function Navbar() {
     if (pathname.startsWith("/panel") || pathname.startsWith("/admin")) return null
 
     return (
-        <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur">
-            <div className="container mx-auto flex h-16 items-center justify-between gap-4 px-4">
+        // Móvil: encabezado simple que se va con el scroll (solo logo); cuenta y accesos viven en la barra inferior.
+        <header className="z-50 bg-background md:sticky md:top-0 md:border-b md:bg-background/90 md:backdrop-blur">
+            <div className="container mx-auto flex h-14 items-center justify-center gap-4 px-4 md:h-16 md:justify-between">
                 <Link href="/" aria-label="Busco mi mascota, inicio"><BrandMark showName nameClassName="lg:hidden xl:block" /></Link>
 
                 <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
@@ -60,13 +61,13 @@ export function Navbar() {
                     ))}
                 </nav>
 
-                <div className="flex items-center gap-3">
+                <div className="hidden items-center gap-3 md:flex">
                     <ReportActionButton
                         nextUrl="/reportar"
                         label="Reportar mascota"
                         icon={<Plus className="mr-2 h-4 w-4" aria-hidden />}
                         variant="cta"
-                        className="hidden rounded-full sm:inline-flex"
+                        className="rounded-full"
                     />
                     <UserNav />
                 </div>

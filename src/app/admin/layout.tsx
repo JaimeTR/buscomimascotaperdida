@@ -3,12 +3,15 @@ import Image from "next/image"
 import { LayoutDashboard, Home, ShieldCheck } from "lucide-react"
 import { requireAdmin } from "@/lib/admin"
 import { AdminNav } from "@/components/admin/admin-nav"
+import { AdminSession } from "@/components/admin/admin-session"
 
 export const metadata = { title: "Administración | Busco mi mascota", robots: { index: false, follow: false } }
 
 // Marco de administración: barra lateral oscura en escritorio; barra superior con chips en móvil.
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-    await requireAdmin()
+    const { supabase, user } = await requireAdmin()
+    const { data: profile } = await supabase.from("profiles").select("full_name, avatar_url").eq("id", user.id).maybeSingle()
+    const name = profile?.full_name ?? user.email ?? ""
 
     return (
         <div className="min-h-screen bg-background lg:pl-64">
@@ -23,12 +26,13 @@ export default async function AdminLayout({ children }: { children: React.ReactN
                 <div className="space-y-1 border-t border-white/15 pt-4 text-sm">
                     <Link href="/panel" className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-white/70 hover:bg-white/10 hover:text-white"><LayoutDashboard className="h-5 w-5" aria-hidden /> Mi panel</Link>
                     <Link href="/" className="flex items-center gap-3 rounded-2xl px-4 py-2.5 text-white/70 hover:bg-white/10 hover:text-white"><Home className="h-5 w-5" aria-hidden /> Ir a la web</Link>
+                    <div className="pt-3"><AdminSession name={name} avatarUrl={profile?.avatar_url} variant="side" /></div>
                 </div>
             </aside>
 
             <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-foreground px-4 text-background lg:hidden">
                 <Link href="/" aria-label="Ir al inicio"><Image src="/brand/isologo-horizontal-blanco.svg" alt="Busco mi mascota" width={300} height={85} className="h-10 w-auto" unoptimized /></Link>
-                <Link href="/panel" className="text-sm font-medium text-white/80">Mi panel</Link>
+                <AdminSession name={name} avatarUrl={profile?.avatar_url} variant="top" />
             </header>
             <AdminNav variant="top" />
 

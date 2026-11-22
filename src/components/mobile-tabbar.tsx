@@ -1,14 +1,17 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import {
-    Home, Search, Plus, Megaphone, Menu, X, FileText, Lightbulb, UserRound, LogIn, UserPlus,
+    Home, Search, Plus, Megaphone, Menu, X, FileText, Lightbulb, UserRound, LogIn, UserPlus, LogOut,
     Handshake, Newspaper, Store, Mail, ChevronRight,
 } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { createClient } from "@/utils/supabase/client"
 import { cn } from "@/lib/utils"
+
+type Me = { email: string; name: string | null; avatar: string | null }
 
 const TABS = [
     { href: "/", label: "Inicio", icon: Home },
@@ -53,12 +56,36 @@ function Row({ href, label, icon: Icon }: { href: string; label: string; icon: t
 export function MobileTabbar() {
     const pathname = usePathname()
     const sheet = useRef<HTMLDialogElement>(null)
-    const [logged, setLogged] = useState<boolean | null>(null)
+    const [me, setMe] = useState<Me | null>(null)
+    const router = useRouter()
+
+    // Foto/nombre en caché (la guarda UserNav) al instante; luego se confirma la sesión.
+    useEffect(() => {
+        const t = setTimeout(() => { // fuera del cuerpo síncrono del efecto
+            try { setMe(JSON.parse(localStorage.getItem("bmm.me") ?? "null")) } catch { /* sin storage */ }
+        }, 0)
+        const supabase = createClient()
+        supabase.auth.getSession().then(({ data }) => {
+            const u = data.session?.user
+            if (!u) { setMe(null); return }
+            setMe((prev) => prev ?? { email: u.email ?? "", name: u.user_metadata?.full_name ?? u.user_metadata?.name ?? null, avatar: u.user_metadata?.avatar_url ?? u.user_metadata?.picture ?? null })
+        })
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => { if (event === "SIGNED_OUT") setMe(null) })
+        return () => { clearTimeout(t); subscription.unsubscribe() }
+    }, [pathname])
+
     if (pathname.startsWith("/panel") || pathname.startsWith("/admin")) return null
 
-    const open = () => {
-        sheet.current?.showModal()
-        createClient().auth.getSession().then(({ data }) => setLogged(!!data.session))
+    const logged = !!me
+    const display = me ? me.name || me.email.split("@")[0] : ""
+    const open = () => sheet.current?.showModal()
+    const logout = async () => {
+        sheet.current?.close()
+        await createClient().auth.signOut()
+        try { localStorage.removeItem("bmm.me") } catch { /* sin storage */ }
+        setMe(null)
+        router.push("/")
+        router.refresh()
     }
 
     const tab = "flex min-h-14 flex-col items-center justify-center gap-0.5 px-2 text-[11px] font-medium"
@@ -86,7 +113,15 @@ export function MobileTabbar() {
                     })}
                     <li className="flex justify-center">
                         <button onClick={open} aria-haspopup="dialog" className={cn(tab, "text-muted-foreground")}>
-                            <Menu className="h-6 w-6" aria-hidden /> Menú
+                            {me ? (
+                                <Avatar className="h-7 w-7 border border-border">
+                                    {me.avatar && <AvatarImage src={me.avatar} alt="" referrerPolicy="no-referrer" />}
+                                    <AvatarFallback className="bg-accent text-[11px] font-bold text-primary">{display.substring(0, 2).toUpperCase()}</AvatarFallback>
+                                </Avatar>
+                            ) : (
+                                <Menu className="h-6 w-6" aria-hidden />
+                            )}
+                            {me ? "Perfil" : "Menú"}
                         </button>
                     </li>
                 </ul>
@@ -110,11 +145,30 @@ export function MobileTabbar() {
                         </button>
                     </div>
 
+                    {me && (
+                        <div className="mb-1 flex items-center gap-3 rounded-2xl bg-accent/60 p-3">
+                            <Avatar className="h-12 w-12 border-2 border-card">
+                                {me.avatar && <AvatarImage src={me.avatar} alt="" referrerPolicy="no-referrer" />}
+                                <AvatarFallback className="bg-card font-bold text-primary">{display.substring(0, 2).toUpperCase()}</AvatarFallback>
+                            </Avatar>
+                            <div className="min-w-0">
+                                <p className="truncate text-sm font-bold">{display}</p>
+                                <p className="truncate text-xs text-muted-foreground">{me.email}</p>
+                            </div>
+                        </div>
+                    )}
                     <p className="px-3 pb-1 pt-2 text-xs font-semibold text-muted-foreground">Mi cuenta</p>
                     {(logged ? ACCOUNT : GUEST).map((r) => <Row key={r.href} {...r} />)}
 
                     <p className="px-3 pb-1 pt-4 text-xs font-semibold text-muted-foreground">Explorar</p>
                     {EXPLORE.map((r) => <Row key={r.href} {...r} />)}
+
+                    {logged && (
+                        <button onClick={logout} className="mt-2 flex min-h-12 w-full items-center gap-3 rounded-2xl px-3 text-[15px] font-medium text-destructive active:bg-destructive/10">
+                            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-destructive/10"><LogOut className="h-[18px] w-[18px]" aria-hidden /></span>
+                            Cerrar sesión
+                        </button>
+                    )}
 
                     <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 border-t px-3 pt-3 text-xs text-muted-foreground">
                         {LEGAL.map((l) => <Link key={l.href} href={l.href} className="py-1.5 underline-offset-2 hover:underline">{l.label}</Link>)}
