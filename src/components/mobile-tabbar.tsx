@@ -93,7 +93,7 @@ export function MobileTabbar() {
 
     return (
         <>
-            <nav aria-label="Navegación móvil" className="fixed inset-x-0 bottom-0 z-40 border-t bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">
+            <nav aria-label="Navegación móvil" className="fixed inset-x-0 bottom-0 z-40 border-t bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
                 <ul className="mx-auto grid max-w-md grid-cols-5 items-end px-2">
                     {TABS.map((t) => {
                         if (t.chat) {
@@ -144,7 +144,7 @@ export function MobileTabbar() {
                 onClick={(e) => {
                     if (e.target === sheet.current || (e.target as HTMLElement).closest("a")) sheet.current?.close()
                 }}
-                className="fixed inset-x-0 bottom-0 top-auto m-0 max-h-[88dvh] w-full max-w-none overflow-y-auto rounded-t-3xl bg-card p-0 text-foreground backdrop:bg-black/40 md:hidden"
+                className="fixed inset-x-0 bottom-0 top-auto m-0 max-h-[88dvh] w-full max-w-none overflow-y-auto rounded-t-3xl bg-card p-0 text-foreground backdrop:bg-black/40 lg:hidden"
             >
                 <div className="px-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))] pt-3">
                     <div className="mx-auto mb-2 h-1.5 w-10 rounded-full bg-border" aria-hidden />

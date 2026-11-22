@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { User, FileText, Lightbulb, LogOut } from "lucide-react"
+import { User, FileText, Lightbulb, LogOut, LogIn } from "lucide-react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
@@ -74,9 +74,12 @@ export function UserNav() {
     if (!me) {
         return (
             // En móvil, ingresar y crear cuenta están en el menú inferior.
-            <div className="hidden items-center gap-2 sm:flex">
-                <Button variant="ghost" asChild className="font-semibold text-muted-foreground">
+            <div className="hidden items-center gap-2 lg:flex">
+                <Button variant="ghost" asChild className="hidden font-semibold text-muted-foreground xl:inline-flex">
                     <Link href="/ingresar">Iniciar sesión</Link>
+                </Button>
+                <Button variant="ghost" size="icon" asChild className="xl:hidden">
+                    <Link href="/ingresar" aria-label="Iniciar sesión"><LogIn className="h-5 w-5" aria-hidden /></Link>
                 </Button>
                 <Button asChild className="rounded-full bg-primary px-5 font-bold shadow-md shadow-primary/20 hover:bg-primary">
                     <Link href="/registro">Unirme</Link>

@@ -41,8 +41,8 @@ export function Navbar() {
 
     return (
         // Móvil: encabezado simple que se va con el scroll (solo logo); cuenta y accesos viven en la barra inferior.
-        <header className="z-50 bg-background md:sticky md:top-0 md:border-b md:bg-background/90 md:backdrop-blur">
-            <div className="container mx-auto flex h-14 items-center justify-center gap-4 px-4 md:h-16 md:justify-between">
+        <header className="z-50 bg-background lg:sticky lg:top-0 lg:border-b lg:bg-background/90 lg:backdrop-blur">
+            <div className="container mx-auto flex h-14 items-center justify-center gap-2 px-4 lg:h-16 lg:justify-between xl:gap-4">
                 <Link href="/" aria-label="Busco mi mascota, inicio"><BrandMark showName nameClassName="lg:hidden xl:block" /></Link>
 
                 <nav aria-label="Principal" className="hidden items-center gap-1 lg:flex">
@@ -52,7 +52,7 @@ export function Navbar() {
                             href={l.href}
                             aria-current={pathname === l.href ? "page" : undefined}
                             className={cn(
-                                "whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground",
+                                "whitespace-nowrap rounded-full px-2 py-2 text-sm font-medium text-muted-foreground xl:px-4 transition-colors hover:bg-accent hover:text-accent-foreground",
                                 pathname === l.href && "bg-accent text-accent-foreground"
                             )}
                         >
@@ -61,7 +61,7 @@ export function Navbar() {
                     ))}
                 </nav>
 
-                <div className="hidden items-center gap-3 md:flex">
+                <div className="hidden items-center gap-3 lg:flex">
                     <ReportActionButton
                         nextUrl="/reportar"
                         label="Reportar mascota"

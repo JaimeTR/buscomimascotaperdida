@@ -9,5 +9,5 @@ export const metadata = {
 
 export default async function PetsPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
     const { q } = await searchParams
-    return <PetsSearch key={q} initialQuery={q ?? ""} ad={<AdSlot placement="listing_inline" variant="side" />} />
+    return <PetsSearch key={q} initialQuery={q ?? ""} ad={<AdSlot placement="listing_inline" variant="banner" />} />
 }
