@@ -24,9 +24,12 @@ const FacebookIcon = () => (
     </svg>
 )
 
+// Facebook oculto hasta configurar la app de Meta y activarlo en Supabase; poner en true para mostrarlo.
+const FACEBOOK_ENABLED = false
+
 const PROVIDERS: { id: Extract<Provider, "google" | "facebook">; label: string; Icon: () => React.JSX.Element }[] = [
     { id: "google", label: "Continuar con Google", Icon: GoogleIcon },
-    { id: "facebook", label: "Continuar con Facebook", Icon: FacebookIcon },
+    ...(FACEBOOK_ENABLED ? [{ id: "facebook" as const, label: "Continuar con Facebook", Icon: FacebookIcon }] : []),
 ]
 
 // Acceso con un clic (OAuth): mismo componente para login y registro.
