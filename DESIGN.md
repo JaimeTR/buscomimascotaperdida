@@ -136,7 +136,8 @@ Contraste AA, teclado completo, orden de foco lógico, `aria-current` en la nave
 
 ## 12. Estado de implementación
 - **Hecho:** fuentes, tokens y botón `cta`; barra superior fija que se encoge, barra de pestañas móvil y pie; portada, `/mascotas`, `/cartel`, `/anuncios`, `/aliados`, `/contacto`, `/reportar` y perfil de la mascota con el estilo nuevo; dashboard y administración; formularios en modal; movimiento (sección 7); patrones de la sección 14.
-- **Pendiente:** ajustes del dashboard, modo oscuro, mapa con MapLibre (en curso).
+- **Mapas:** base vectorial (MapLibre + OpenFreeMap sobre Leaflet), marcadores con foto, agrupación, «ubícame» y búsqueda de dirección. Avisos flotantes de uno en uno (`lib/prompt-gate.ts`).
+- **Pendiente:** ajustes del dashboard y modo oscuro.
 
 ## 13. Orden recomendado
 1. Fuentes (Poppins y Outfit) y revisión de tokens. 2. Barra, pie y portada. 3. Búsqueda y detalle. 4. Reportar y avistamiento. 5. Auth. 6. Dashboard y admin. Cada paso con el flujo de calidad: `npx eslint . --max-warnings 0`, `npx tsc --noEmit`, `npm run build` y revisión en 375, 768, 1024 y 1440 px.

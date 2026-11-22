@@ -36,4 +36,4 @@ Si `tsc` falla con `.next/types/validator.ts`, borra `.next/types` (caché vieja
 - Variables de entorno: en Vercel (Settings → Environment Variables). Las `NEXT_PUBLIC_*` se leen al construir: tras cambiarlas hay que redesplegar.
 
 ## Pendientes conocidos
-Ver la sección "Pendiente" de `docs/ESTADO-DEL-PROYECTO.md` (Facebook login, dominio propio, clave de servicio en Vercel, correo del dominio, mapa con MapLibre en curso).
+Ver la sección "Pendiente" de `docs/ESTADO-DEL-PROYECTO.md` (Facebook login, dominio propio, clave de servicio en Vercel, correo del dominio).

@@ -16,6 +16,7 @@ Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimasco
 - **Contacto y formularios en modal**, bandeja de mensajes del admin, grupo de colaboradores por WhatsApp. Ver `docs/contacto-y-formularios.md`.
 - **Acceso:** Google funcionando y publicado; Facebook oculto (ver pendiente). Guard de servidor, registro mínimo. Ver `docs/autenticacion.md`.
 - **Casos de éxito, legal, admin** (reportes, usuarios, promociones, anuncios, aliados, mensajes, impulsos, auditoría), cron diario de recordatorios (`vercel.json`).
+- **Mapas rediseñados** (`pets-map`, `sightings-map`, `map-picker`, `location-map`, `base-map-layer`, `map-tools`, `lib/map-kit.ts`): base vectorial gratuita (MapLibre + OpenFreeMap) sobre Leaflet, marcadores con foto, agrupación, zona aproximada por distrito cuando no hay coordenadas, «ubícame», búsqueda de dirección y pin arrastrable. Avisos no invasivos: uno a la vez y una vez al día tras cerrarlos (`lib/prompt-gate.ts`), tarjeta compacta para instalar la app.
 - **Calidad:** `tsc`, `eslint` sin errores, 18 pruebas, `check:production-config`.
 
 ## Pendiente (acciones tuyas, paneles externos)
@@ -27,7 +28,7 @@ Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimasco
 6. **Datos legales reales** (RUC, razón social, domicilio): `docs/legal.md`.
 
 ## Pendiente (desarrollo)
-- **Mapa con MapLibre** (otra sesión): `pets-map`, `sightings-map`, `map-picker`, `location-map` y `base-map-layer` en curso; no está en `main`.
+- Mapas: probar en celular real el mapa nuevo (MapLibre + marcadores con foto + agrupación; ver abajo) y la tarjeta compacta de «instalar app».
 - Avisos por correo: al admin cuando llega un mensaje/impulso y a la persona cuando se confirma su aporte.
 - Estado del impulso visible para el dueño (panel y perfil).
 - Sección pública de agradecimiento a colaboradores.

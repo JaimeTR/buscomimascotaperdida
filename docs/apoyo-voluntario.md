@@ -12,7 +12,7 @@ No hay planes ni precios fijos. Cualquier persona (o negocio) puede aportar **el
 | Lugar | Detalle |
 |---|---|
 | Portada | Sección «Mascotas destacadas» tras el banner (`components/home/featured-pets.tsx`), ordenada por monto confirmado. Sin destacados no se dibuja. |
-| Aviso flotante | `components/featured-popup.tsx`: tras ~18 s en páginas que no son portada, reportar, panel, admin, avistamiento ni cartel. Muestra el de mayor aporte aún no cerrado en la sesión (nunca el que ya se ve). Datos desde `GET /api/featured` (dinámico, caché CDN 5 min). |
+| Aviso flotante | `components/featured-popup.tsx`: tras ~18 s en páginas que no son portada, reportar, panel, admin, avistamiento ni cartel. Muestra el de mayor aporte aún no cerrado (nunca el que ya se ve). Al cerrarlo no vuelve a salir por 24 horas y nunca hay dos avisos flotantes a la vez (`lib/prompt-gate.ts`). Datos desde `GET /api/featured` (dinámico, caché CDN 5 min). |
 | Tarjetas y detalle | Insignia «Destacado» (`PetCard featured`, «Caso destacado» en el detalle). |
 
 ## Datos
