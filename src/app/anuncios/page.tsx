@@ -1,26 +1,28 @@
 import Image from "next/image"
-import { ArrowRight, Check, Gem, Megaphone, Eye, MousePointerClick, Send, ShieldCheck } from "lucide-react"
+import { ArrowRight, ArrowUpNarrowWide, Eye, HandHeart, Heart, Megaphone, MousePointerClick, Send, ShieldCheck, Sparkles, Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Reveal } from "@/components/ui/reveal"
 import { PromoDialog } from "@/components/promo/promo-dialog"
 import { OpenFormButton } from "@/components/ui/form-dialog"
-import { PLANS } from "@/lib/ads"
 import { STOCK } from "@/lib/stock-images"
 import { createClient } from "@/utils/supabase/server"
-import { cn } from "@/lib/utils"
 
-export const metadata = { title: "Anuncia tu negocio | Busco mi mascota", description: "Muestra tu marca como destacado en la portada y en los casos de la comunidad que ama a sus mascotas. Planes, cómo funciona y solicitud.", alternates: { canonical: "/anuncios" } }
+export const metadata = { title: "Anuncia tu negocio o destaca tu caso | Busco mi mascota", description: "Apoya con un aporte voluntario: tu negocio o el caso de tu mascota aparece como destacado, ordenado según el aporte. Sin planes fijos.", alternates: { canonical: "/anuncios" } }
 
-const STEPS = [
-    { t: "Elige un plan", d: "Básico, Destacado o Premium, según dónde quieras aparecer." },
-    { t: "Envía la solicitud", d: "Cuéntanos de tu negocio. La revisamos en pocos días." },
-    { t: "Coordinamos y publicamos", d: "Te escribimos para el pago y tu anuncio sale como destacado en las páginas de tu plan." },
-]
+const AMOUNTS = [20, 50, 100, 200]
+const lift = "hover-lift"
 
 const BENEFITS = [
-    { icon: Eye, t: "Visibilidad real", d: "Tu anuncio aparece como destacado en la portada y, según el plan, en el detalle de cada caso y entre los resultados." },
-    { icon: MousePointerClick, t: "Clics medidos", d: "Cada anuncio cuenta sus clics para que sepas cuánta gente llega a tu web o redes." },
-    { icon: ShieldCheck, t: "Con transparencia", d: "Siempre marcado como anuncio y revisado antes de publicarse; nunca se mezcla con los reportes." },
+    { icon: Eye, t: "Más visibilidad", d: "Apareces como destacado en la portada y como aviso en otras páginas, mientras la gente recorre el sitio." },
+    { icon: ArrowUpNarrowWide, t: "A mayor aporte, más adelante", d: "Los destacados se ordenan del mayor al menor aporte confirmado. Así de simple y transparente." },
+    { icon: MousePointerClick, t: "Clics medidos", d: "Los anuncios de negocios cuentan sus clics para que sepas cuánta gente llega a tu web o redes." },
+    { icon: ShieldCheck, t: "Con transparencia", d: "Todo se marca como destacado o anuncio y el equipo verifica cada aporte antes de publicar." },
+]
+
+const STEPS = [
+    { t: "Decide tu aporte", d: "No hay planes: el monto es voluntario. Elige el que quieras y ayudas a sostener la red." },
+    { t: "Envíalo por Yape o Plin", d: "Te mostramos el número al momento de reportar o de enviar tu solicitud. Puedes adjuntar tu captura." },
+    { t: "Verificamos y publicamos", d: "Confirmamos el monto y tu caso o negocio sale como destacado, en el orden que corresponde." },
 ]
 
 export default async function AnunciosPage() {
@@ -31,12 +33,12 @@ export default async function AnunciosPage() {
             <section className="container mx-auto px-4 pt-6 md:pt-10">
                 <div className="grid overflow-hidden rounded-[2rem] bg-primary text-primary-foreground md:grid-cols-[1.1fr_1fr]">
                     <div className="flex flex-col justify-center gap-5 p-8 md:p-14">
-                        <p className="inline-flex w-fit items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-medium"><Megaphone className="h-4 w-4" aria-hidden /> Promociones</p>
-                        <h1 className="font-display text-4xl leading-[1.05] md:text-5xl">Tu marca, junto a quienes <span className="text-orange-300">aman a sus mascotas</span></h1>
-                        <p className="text-lg text-primary-foreground/90">Aparece como destacado en la portada y junto a los casos de tu zona. Y ayudas a sostener la red.</p>
+                        <p className="inline-flex w-fit items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-medium"><Star className="h-4 w-4 fill-current" aria-hidden /> Apoyo voluntario</p>
+                        <h1 className="font-display text-4xl leading-[1.05] md:text-5xl">Destaca tu caso o tu negocio <span className="text-orange-300">con un aporte voluntario</span></h1>
+                        <p className="text-lg text-primary-foreground/90">Sin planes ni precios fijos. Aportas lo que quieras y apareces como destacado: a mayor aporte, más adelante sales.</p>
                         <div className="flex flex-wrap gap-3">
-                            <Button asChild variant="cta" size="lg" className="rounded-full"><a href="#planes"><Gem className="mr-2 h-5 w-5" aria-hidden /> Ver planes</a></Button>
-                            <OpenFormButton form="anuncios" size="lg" variant="outline" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"><Send className="mr-2 h-5 w-5" aria-hidden /> Enviar solicitud</OpenFormButton>
+                            <OpenFormButton form="anuncios" variant="cta" size="lg" className="rounded-full"><Megaphone className="mr-2 h-5 w-5" aria-hidden /> Anunciar mi negocio</OpenFormButton>
+                            <Button asChild size="lg" variant="outline" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"><a href="/reportar"><Heart className="mr-2 h-5 w-5" aria-hidden /> Destacar mi mascota</a></Button>
                         </div>
                     </div>
                     <div className="relative min-h-64 md:min-h-[26rem]">
@@ -45,11 +47,11 @@ export default async function AnunciosPage() {
                 </div>
             </section>
 
-            <section aria-label="Beneficios" className="container mx-auto grid gap-4 px-4 py-12 md:grid-cols-3">
+            <section aria-label="Beneficios" className="container mx-auto grid gap-4 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
                 {BENEFITS.map((b, i) => (
                     <Reveal key={b.t} delay={i * 0.06}>
-                        <div className="hover-lift h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
-                            <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground"><b.icon className="h-6 w-6" aria-hidden /></span>
+                        <div className={`${lift} group h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]`}>
+                            <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"><b.icon className="h-6 w-6" aria-hidden /></span>
                             <h2 className="text-lg font-semibold">{b.t}</h2>
                             <p className="mt-1 text-sm text-muted-foreground">{b.d}</p>
                         </div>
@@ -57,24 +59,23 @@ export default async function AnunciosPage() {
                 ))}
             </section>
 
-            <section id="planes" className="container mx-auto scroll-mt-20 px-4 py-6">
-                <h2 className="mb-2 text-center font-display text-3xl text-primary md:text-4xl">Planes</h2>
-                <p className="mb-8 text-center text-sm text-muted-foreground">Precios referenciales por 30 días; el equipo confirma el monto al coordinar contigo.</p>
-                <ul className="grid gap-5 lg:grid-cols-3">
-                    {PLANS.map((p, i) => (
-                        <Reveal as="li" key={p.key} delay={i * 0.07}>
-                            <div className={cn("relative flex h-full flex-col rounded-3xl border p-7 shadow-[var(--shadow-soft)] transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]", p.tone, "highlight" in p && p.highlight && "ring-2 ring-primary")}>
-                                {"highlight" in p && p.highlight && <span className="absolute -top-3 left-6 rounded-full bg-primary px-3 py-1 text-xs font-bold text-primary-foreground">Más elegido</span>}
-                                <h3 className="font-display text-2xl text-primary">{p.name}</h3>
-                                <p className="mt-2"><span className="text-4xl font-bold">{p.price}</span> <span className="text-sm text-muted-foreground">/ {p.period}</span></p>
-                                <ul className="mt-5 flex-1 space-y-3 text-sm">
-                                    {p.perks.map((perk) => <li key={perk} className="flex gap-2"><Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> {perk}</li>)}
-                                </ul>
-                                <OpenFormButton form="anuncios" detail={{ plan: p.key }} variant={"highlight" in p && p.highlight ? "cta" : "default"} className="mt-6 w-full rounded-full">Elegir {p.name} <ArrowRight className="ml-2 h-4 w-4" aria-hidden /></OpenFormButton>
-                            </div>
+            <section id="aporte" aria-labelledby="h-aporte" className="container mx-auto scroll-mt-20 space-y-8 px-4 py-6">
+                <div className="mx-auto max-w-2xl text-center">
+                    <h2 id="h-aporte" className="font-display text-3xl text-primary md:text-4xl">Tú decides cuánto aportar</h2>
+                    <p className="mt-2 text-muted-foreground">Estos montos son solo una guía. Cualquier aporte suma y el orden lo decide el monto confirmado.</p>
+                </div>
+                <ul className="mx-auto grid max-w-4xl grid-cols-2 gap-4 md:grid-cols-4">
+                    {AMOUNTS.map((a, i) => (
+                        <Reveal as="li" key={a} delay={i * 0.06}>
+                            <OpenFormButton plain form="anuncios" detail={{ amount: String(a) }} className={`${lift} group flex w-full flex-col items-center gap-1 rounded-3xl border bg-card p-6 text-center shadow-[var(--shadow-soft)] ${i === 1 ? "ring-2 ring-primary" : ""}`}>
+                                <HandHeart className="h-6 w-6 text-primary" aria-hidden />
+                                <span className="font-display text-3xl">S/ {a}</span>
+                                <span className="text-xs text-muted-foreground">{i === 0 ? "Para empezar" : i === 1 ? "El más común" : i === 2 ? "Mayor visibilidad" : "Máxima visibilidad"}</span>
+                            </OpenFormButton>
                         </Reveal>
                     ))}
                 </ul>
+                <p className="text-center text-sm text-muted-foreground">¿Otro monto? Escríbelo en el formulario. ¿Quieres destacar a tu mascota? Lo ofrecemos al <a href="/reportar" className="font-semibold text-primary underline-offset-2 hover:underline">reportarla</a> o desde su página.</p>
             </section>
 
             <section aria-labelledby="h-pasos" className="container mx-auto px-4 py-14">
@@ -82,7 +83,7 @@ export default async function AnunciosPage() {
                 <ol className="grid gap-4 md:grid-cols-3">
                     {STEPS.map((s, i) => (
                         <Reveal as="li" key={s.t} delay={i * 0.06}>
-                            <div className="hover-lift h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
+                            <div className={`${lift} h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]`}>
                                 <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">{i + 1}</span>
                                 <h3 className="mb-1 text-lg font-semibold">{s.t}</h3>
                                 <p className="text-sm text-muted-foreground">{s.d}</p>
@@ -96,10 +97,10 @@ export default async function AnunciosPage() {
                 <div className="relative overflow-hidden rounded-[2rem] border bg-card px-6 py-12 text-center shadow-[var(--shadow-soft)] md:py-16">
                     <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.05]" />
                     <div className="relative mx-auto max-w-xl space-y-4">
-                        <Megaphone className="mx-auto h-9 w-9 text-primary" aria-hidden />
-                        <h2 className="font-display text-3xl text-primary md:text-4xl">Solicita tu anuncio</h2>
-                        <p className="text-muted-foreground">Cuéntanos de tu negocio y te contactamos para coordinar todo.</p>
-                        <OpenFormButton form="anuncios" variant="cta" size="lg" className="rounded-full"><Send className="mr-2 h-5 w-5" aria-hidden /> Enviar solicitud</OpenFormButton>
+                        <Sparkles className="mx-auto h-9 w-9 text-primary" aria-hidden />
+                        <h2 className="font-display text-3xl text-primary md:text-4xl">Anuncia tu negocio</h2>
+                        <p className="text-muted-foreground">Cuéntanos de tu negocio y cuánto quieres aportar. Te contactamos para coordinar todo.</p>
+                        <OpenFormButton form="anuncios" variant="cta" size="lg" className="rounded-full"><Send className="mr-2 h-5 w-5" aria-hidden /> Enviar solicitud <ArrowRight className="ml-2 h-4 w-4" aria-hidden /></OpenFormButton>
                     </div>
                 </div>
             </section>

@@ -8,7 +8,7 @@ const optional = (max: number) => z.string().trim().max(max).optional().transfor
 
 const schema = z.object({
     kind: z.enum(["anuncio", "aliado", "voluntario"]),
-    plan: z.enum(["basico", "destacado", "premium"]).optional().catch(undefined),
+    amount: z.preprocess((v) => (v === "" || v == null ? undefined : v), z.coerce.number().min(0).max(99999).optional()),
     business_name: text(120),
     contact_name: text(120),
     email: z.string().trim().email().max(160),

@@ -25,7 +25,7 @@ const STEPS = [
   { t: "Vuelve a casa", d: "Te contactan de forma segura. Marca el caso como resuelto." },
 ]
 
-export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; initialPets: Pet[] }) {
+export function HomeClient({ adSlot, featured, initialPets }: { adSlot: React.ReactNode; featured?: React.ReactNode; initialPets: Pet[] }) {
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS)
   const active = hasActiveFilters(filters)
 
@@ -100,6 +100,9 @@ export function HomeClient({ adSlot, initialPets }: { adSlot: React.ReactNode; i
           </div>
         </div>
       </section>
+
+      {/* Mascotas destacadas por aporte voluntario (lista servida desde el servidor) */}
+      {featured}
 
       {/* Accesos rápidos */}
       <section aria-label="Accesos rápidos" className="container mx-auto px-4 py-10">

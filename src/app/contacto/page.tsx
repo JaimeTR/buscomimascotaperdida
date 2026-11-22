@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { HeartHandshake, Building2, LifeBuoy, ChevronDown, Mail, Phone, MessageCircle, Handshake, HandHeart, Users, PawPrint, Sparkles } from "lucide-react"
+import { HeartHandshake, Building2, LifeBuoy, ChevronDown, Mail, Phone, MessageCircle, Handshake, HandHeart, Users, PawPrint, Sparkles, Heart } from "lucide-react"
 import { Reveal } from "@/components/ui/reveal"
 import { PageHeader } from "@/components/ui/page-header"
 import { Button } from "@/components/ui/button"
@@ -17,6 +17,12 @@ const PATHS: { kind: ContactKind; icon: typeof Handshake; title: string; text: s
     { kind: "aliado", icon: Building2, title: "Ser aliado", text: "Veterinarias, refugios, tiendas y marcas que quieren sumarse a la red y ayudar a su comunidad." },
     { kind: "voluntario", icon: HeartHandshake, title: "Ser voluntario", text: "Reparte carteles, comparte casos y acompaña a quienes perdieron a una mascota." },
     { kind: "colaborar", icon: Sparkles, title: "Colaborar en el proyecto", text: "Difusión, diseño, programación, traducciones o donaciones en especie: todo suma." },
+]
+
+const MEMBERSHIPS = [
+    { name: "Amigo", amount: 10, text: "Un cafecito al mes para sostener la red.", icon: Heart },
+    { name: "Aliado", amount: 25, text: "Ayudas a cubrir servidor, correos y avisos.", icon: HandHeart },
+    { name: "Guardián", amount: 50, text: "Financias la difusión de casos que lo necesitan.", icon: Sparkles },
 ]
 
 const FAQ = [
@@ -135,6 +141,21 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                         ) : (
                             <p className="rounded-2xl border border-dashed p-5 text-sm text-muted-foreground">Estamos preparando los medios de apoyo (Yape y Plin). Mientras tanto puedes <OpenFormButton plain form="contacto" detail={{ kind: "colaborar" }} className="font-semibold text-primary underline-offset-2 hover:underline">escribirnos</OpenFormButton> y te contamos cómo colaborar.</p>
                         )}
+                        <div className="space-y-3 border-t pt-4">
+                            <h3 className="text-lg font-semibold">Apoyo mensual (voluntario)</h3>
+                            <p className="text-sm text-muted-foreground">Si quieres apoyar de forma constante, elige un nivel. No es obligatorio ni hay cobro automático: nos escribes, coordinamos y tú envías tu aporte cada mes por Yape o Plin.</p>
+                            <ul className="grid gap-3 sm:grid-cols-3">
+                                {MEMBERSHIPS.map((m) => (
+                                    <li key={m.name}>
+                                        <OpenFormButton plain form="contacto" detail={{ kind: "apoyo", amount: String(m.amount), monthly: "1" }} className={`group flex h-full w-full flex-col gap-1 rounded-2xl border p-4 text-left active:scale-[0.99] ${lift}`}>
+                                            <span className="flex items-center gap-2 font-semibold"><m.icon className="h-4 w-4 text-primary" aria-hidden /> {m.name}</span>
+                                            <span className="font-display text-2xl">S/ {m.amount}<span className="text-sm font-normal text-muted-foreground"> / mes</span></span>
+                                            <span className="text-xs text-muted-foreground">{m.text}</span>
+                                        </OpenFormButton>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                         <ul className="space-y-2 text-sm text-muted-foreground">
                             <li className="flex gap-2"><PawPrint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> También aceptamos ayuda en especie: difusión, diseño, tiempo.</li>
                             <li className="flex gap-2"><PawPrint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> Si quieres, mencionamos tu apoyo en la sección de colaboradores.</li>

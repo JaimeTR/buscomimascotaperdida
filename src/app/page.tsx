@@ -1,5 +1,6 @@
 import { HomeClient } from "@/components/home/home-client"
 import { FeaturedAds } from "@/components/ads/featured-ads"
+import { FeaturedPets } from "@/components/home/featured-pets"
 import { ReunitedStories } from "@/components/home/reunited-stories"
 import { createPublicClient } from "@/utils/supabase/public"
 import type { Pet } from "@/hooks/use-pets"
@@ -14,7 +15,7 @@ export default async function Home() {
   const { data } = await createPublicClient().from("pets").select("*").eq("is_hidden", false).order("created_at", { ascending: false }).limit(20)
   return (
     <>
-      <HomeClient adSlot={<FeaturedAds />} initialPets={(data ?? []) as Pet[]} />
+      <HomeClient adSlot={<FeaturedAds />} featured={<FeaturedPets />} initialPets={(data ?? []) as Pet[]} />
       <ReunitedStories />
     </>
   )

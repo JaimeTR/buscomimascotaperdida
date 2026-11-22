@@ -13,14 +13,14 @@ const STATUS: Record<string, { label: string; cls: string }> = {
 
 type Msg = {
     id: string; created_at: string; kind: string; name: string; email: string; phone: string | null; message: string | null
-    amount: number | null; attachment_path: string | null; join_group: boolean; allow_mention: boolean; status: string
+    amount: number | null; attachment_path: string | null; join_group: boolean; allow_mention: boolean; monthly: boolean; status: string
 }
 
 export default async function AdminMessages() {
     const { supabase } = await requireAdmin()
     const { data } = await supabase
         .from("contact_messages")
-        .select("id, created_at, kind, name, email, phone, message, amount, attachment_path, join_group, allow_mention, status")
+        .select("id, created_at, kind, name, email, phone, message, amount, attachment_path, join_group, allow_mention, monthly, status")
         .order("created_at", { ascending: false })
         .limit(100)
         .returns<Msg[]>()
@@ -55,6 +55,7 @@ export default async function AdminMessages() {
                             {r.message && <p className="mt-3 whitespace-pre-wrap rounded-2xl bg-secondary/60 p-3 text-sm">{r.message}</p>}
                             <div className="mt-3 flex flex-wrap gap-2 text-xs font-medium">
                                 {r.amount != null && <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-800">Aporte: S/ {Number(r.amount).toFixed(2)}</span>}
+                                {r.monthly && <span className="rounded-full bg-orange-100 px-3 py-1 text-orange-800">Apoyo mensual</span>}
                                 {r.join_group && <span className="rounded-full bg-sky-100 px-3 py-1 text-sky-800">Quiere unirse al grupo</span>}
                                 {r.allow_mention && <span className="rounded-full bg-violet-100 px-3 py-1 text-violet-800">Permite mencionar su apoyo</span>}
                                 {links.get(r.id) && <a href={links.get(r.id)} target="_blank" rel="noopener noreferrer" className="rounded-full bg-secondary px-3 py-1 text-primary hover:underline">Ver comprobante</a>}

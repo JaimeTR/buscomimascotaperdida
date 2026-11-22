@@ -2,21 +2,20 @@
 
 import { useActionState } from "react"
 import Link from "next/link"
-import { Building2, CheckCircle2, Gem, Link2, ListChecks, Loader2, Mail, MessageSquareText, Phone, Send, User, UserCheck } from "lucide-react"
+import { Building2, CheckCircle2, HandCoins, Link2, ListChecks, Loader2, Mail, MessageSquareText, Phone, Send, User, UserCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { IconField, iconFieldClass } from "@/components/ui/icon-field"
 import { submitPromoRequest, type PromoState } from "@/app/anuncios/actions"
-import { PLANS } from "@/lib/ads"
 import { cn } from "@/lib/utils"
 
 const sel = cn(iconFieldClass, "h-12")
 
 // Formulario único para anuncios, alianzas y voluntariado (vive dentro de un modal). `kinds` limita las opciones del selector.
-export function PromoRequestForm({ loggedIn, kinds, defaultKind, defaultPlan, nextPath, onDone }: {
+export function PromoRequestForm({ loggedIn, kinds, defaultKind, defaultAmount, nextPath, onDone }: {
     loggedIn: boolean
     kinds: { value: "anuncio" | "aliado" | "voluntario"; label: string }[]
     defaultKind: "anuncio" | "aliado" | "voluntario"
-    defaultPlan?: string
+    defaultAmount?: string
     nextPath: string
     onDone?: () => void
 }) {
@@ -59,12 +58,8 @@ export function PromoRequestForm({ loggedIn, kinds, defaultKind, defaultPlan, ne
                     </IconField>
                 </label>
                 {onlyAds && (
-                    <label className="block space-y-1.5 text-sm font-medium">Plan
-                        <IconField icon={Gem}>
-                            <select name="plan" defaultValue={defaultPlan ?? "destacado"} className={sel}>
-                                {PLANS.map((p) => <option key={p.key} value={p.key}>{p.name} · {p.price}</option>)}
-                            </select>
-                        </IconField>
+                    <label className="block space-y-1.5 text-sm font-medium">Aporte voluntario (S/) <span className="font-normal text-muted-foreground">(opcional)</span>
+                        <IconField icon={HandCoins}><input name="amount" type="number" inputMode="decimal" min={0} max={99999} step="0.5" defaultValue={defaultAmount} className={sel} placeholder="Ej. 50" /></IconField>
                     </label>
                 )}
                 <label className="block space-y-1.5 text-sm font-medium">Negocio o nombre
@@ -91,7 +86,7 @@ export function PromoRequestForm({ loggedIn, kinds, defaultKind, defaultPlan, ne
             <Button type="submit" variant="cta" size="lg" disabled={pending} className="w-full rounded-full sm:w-auto">
                 {pending ? <Loader2 className="mr-2 h-5 w-5 animate-spin" aria-hidden /> : <Send className="mr-2 h-5 w-5" aria-hidden />} Enviar solicitud
             </Button>
-            <p className="text-xs text-muted-foreground">No cobramos en línea: el equipo revisa tu solicitud y coordina contigo los detalles y el pago.</p>
+            <p className="text-xs text-muted-foreground">No cobramos en línea: el aporte es voluntario y a mayor aporte confirmado, más adelante apareces. El equipo coordina contigo los detalles.</p>
         </form>
     )
 }

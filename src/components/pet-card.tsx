@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { CalendarDays, MapPin, Dog, Cat, Squirrel } from "lucide-react"
+import { CalendarDays, MapPin, Dog, Cat, Squirrel, Star } from "lucide-react"
 import { StatusBadge } from "@/components/status-badge"
 
 interface PetCardProps {
@@ -15,6 +15,7 @@ interface PetCardProps {
     status: 'lost' | 'found' | 'reunited'
     timeLeft?: string
     sourceName?: string | null // caso tomado de una fuente externa
+    featured?: boolean // caso destacado por aporte voluntario
 }
 
 const COLOR_MAP: Record<string, string> = {
@@ -31,7 +32,7 @@ const COLOR_MAP: Record<string, string> = {
 }
 
 // Tarjeta de caso: foto 4:3, estado arriba, y datos clave. Toda la tarjeta es un solo enlace.
-export function PetCard({ id, name, type, breed, district, province, colors = [], imageUrl, status, lostDate, sourceName }: PetCardProps) {
+export function PetCard({ id, name, type, breed, district, province, colors = [], imageUrl, status, lostDate, sourceName, featured }: PetCardProps) {
     const TypeIcon = type === 'dog' ? Dog : type === 'cat' ? Cat : Squirrel
     const date = new Date(lostDate).toLocaleDateString('es-PE', { day: 'numeric', month: 'short' })
 
@@ -48,6 +49,7 @@ export function PetCard({ id, name, type, breed, district, province, colors = []
                     className="h-full w-full object-cover img-zoom"
                 />
                 <StatusBadge status={status} className="absolute left-3 top-3 shadow-md" />
+                {featured && <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-cta px-2.5 py-1 text-[11px] font-bold text-cta-foreground shadow-md"><Star className="h-3 w-3 fill-current" aria-hidden /> Destacado</span>}
                 {sourceName && (
                     <span className="absolute bottom-3 left-3 max-w-[70%] truncate rounded-full bg-black/70 px-2.5 py-1 text-[11px] font-semibold text-white">
                         Fuente: {sourceName}

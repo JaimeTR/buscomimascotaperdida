@@ -9,7 +9,7 @@ const field = "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm"
 const KIND: Record<string, string> = { anuncio: "Anuncio", aliado: "Aliado", voluntario: "Voluntario" }
 
 type Req = {
-    id: string; kind: string; plan: string | null; business_name: string; contact_name: string; email: string
+    id: string; kind: string; plan: string | null; amount: number | null; business_name: string; contact_name: string; email: string
     phone: string | null; link_url: string | null; message: string | null; status: string; created_at: string
 }
 
@@ -17,7 +17,7 @@ export default async function AdminPromos() {
     const { supabase } = await requireAdmin()
     const { data } = await supabase
         .from("promo_requests")
-        .select("id, kind, plan, business_name, contact_name, email, phone, link_url, message, status, created_at")
+        .select("id, kind, plan, amount, business_name, contact_name, email, phone, link_url, message, status, created_at")
         .order("created_at", { ascending: false })
         .limit(100)
         .returns<Req[]>()
@@ -36,7 +36,7 @@ export default async function AdminPromos() {
                         <li key={r.id} className="rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)]">
                             <div className="flex flex-wrap items-start justify-between gap-3">
                                 <div>
-                                    <p className="font-semibold">{r.business_name} <span className="ml-1 rounded-full bg-accent px-2.5 py-0.5 text-xs font-bold text-accent-foreground">{KIND[r.kind]}{r.plan ? ` · ${r.plan}` : ""}</span></p>
+                                    <p className="font-semibold">{r.business_name} <span className="ml-1 rounded-full bg-accent px-2.5 py-0.5 text-xs font-bold text-accent-foreground">{KIND[r.kind]}{r.amount ? ` · ofrece S/ ${Number(r.amount).toFixed(2)}` : ""}</span></p>
                                     <p className="text-sm text-muted-foreground">{r.contact_name} · <a className="text-primary hover:underline" href={`mailto:${r.email}`}>{r.email}</a>{r.phone ? ` · ${r.phone}` : ""}</p>
                                     <p className="text-xs text-muted-foreground">{fmt.format(new Date(r.created_at))}</p>
                                 </div>
@@ -67,6 +67,7 @@ export default async function AdminPromos() {
                                         <label className="space-y-1 text-sm font-medium">Enlace de destino (https)<input name="link_url" defaultValue={r.link_url ?? "https://"} required className={field} /></label>
                                         <label className="space-y-1 text-sm font-medium">Imagen (https o /img/stock/…)<input name="image_url" placeholder="/img/stock/paseo-en-el-parque.webp" className={field} /></label>
                                         <label className="space-y-1 text-sm font-medium">Texto del botón<input name="cta_label" defaultValue="Conocer más" maxLength={30} className={field} /></label>
+                                        <label className="space-y-1 text-sm font-medium">Aporte confirmado (S/) — define el orden<input name="amount" type="number" min={0} step="0.5" defaultValue={r.amount ?? 0} className={field} /></label>
                                         <label className="space-y-1 text-sm font-medium">Días en línea<input name="days" type="number" min={1} max={365} defaultValue={30} className={field} /></label>
                                         <fieldset className="sm:col-span-2">
                                             <legend className="mb-1 text-sm font-medium">Espacios</legend>

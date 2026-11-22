@@ -18,7 +18,7 @@ export function ContactDialog({ groupUrl, openKind }: { groupUrl?: string; openK
             points={["Te respondemos al correo que indiques.", "Puedes adjuntar tu comprobante si apoyaste.", "Sin cuenta ni costo: es solo un mensaje.", "Tus datos se usan únicamente para responderte."]}
             openOnLoad={openKind ? { form: "contacto", kind: openKind } : undefined}
         >
-            {(detail, close) => <ContactForm initialKind={isKind(detail.kind) ? detail.kind : "consulta"} groupUrl={groupUrl} onDone={close} />}
+            {(detail, close) => <ContactForm initialKind={isKind(detail.kind) ? detail.kind : "consulta"} initialAmount={detail.amount} initialMonthly={detail.monthly === "1"} groupUrl={groupUrl} onDone={close} />}
         </FormDialog>
     )
 }

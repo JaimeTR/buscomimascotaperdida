@@ -20,15 +20,15 @@ const PLACEHOLDER: Record<ContactKind, string> = {
     grupo: "Si quieres, cuéntanos un poco sobre ti y en qué te gustaría ayudar.",
 }
 
-const Check = ({ name, children }: { name: string; children: React.ReactNode }) => (
+const Check = ({ name, defaultChecked, children }: { name: string; defaultChecked?: boolean; children: React.ReactNode }) => (
     <label className="flex cursor-pointer items-start gap-3 rounded-xl border bg-background p-3 text-sm transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-accent/50">
-        <input type="checkbox" name={name} className="mt-0.5 h-4 w-4 shrink-0 accent-[hsl(var(--primary))]" />
+        <input type="checkbox" name={name} defaultChecked={defaultChecked} className="mt-0.5 h-4 w-4 shrink-0 accent-[hsl(var(--primary))]" />
         <span>{children}</span>
     </label>
 )
 
 // Formulario de contacto (vive dentro del modal de /contacto).
-export function ContactForm({ initialKind = "consulta", groupUrl, onDone }: { initialKind?: ContactKind; groupUrl?: string; onDone?: () => void }) {
+export function ContactForm({ initialKind = "consulta", initialAmount, initialMonthly, groupUrl, onDone }: { initialKind?: ContactKind; initialAmount?: string; initialMonthly?: boolean; groupUrl?: string; onDone?: () => void }) {
     const [kind, setKind] = useState<ContactKind>(initialKind)
     const [sending, setSending] = useState(false)
     const [error, setError] = useState("")
@@ -110,8 +110,9 @@ export function ContactForm({ initialKind = "consulta", groupUrl, onDone }: { in
                 <div className="space-y-4 rounded-2xl border border-dashed bg-accent/40 p-4 animate-in fade-in slide-in-from-top-2 duration-300">
                     <p className="text-sm text-muted-foreground">Todo esto es opcional. Nos ayuda a agradecerte y a llevar la cuenta del proyecto.</p>
                     <label className="block space-y-1.5 text-sm font-medium">Monto aportado (S/)
-                        <IconField icon={HandCoins} className="sm:max-w-[14rem]"><input name="amount" type="number" min={0} max={999999} step="0.01" inputMode="decimal" className={cn(iconFieldClass, "h-12")} placeholder="Ej. 20" /></IconField>
+                        <IconField icon={HandCoins} className="sm:max-w-[14rem]"><input name="amount" type="number" min={0} max={999999} step="0.01" inputMode="decimal" defaultValue={initialAmount} className={cn(iconFieldClass, "h-12")} placeholder="Ej. 20" /></IconField>
                     </label>
+                    <Check name="monthly" defaultChecked={initialMonthly}>Quiero apoyar cada mes (voluntario). Les escribimos para coordinarlo, sin cobros automáticos.</Check>
                     <div className="space-y-1.5 text-sm font-medium">Comprobante
                         <label className="group flex cursor-pointer items-center gap-3 rounded-xl border border-input bg-background px-4 py-3 font-normal transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-accent/50">
                             <Paperclip className="h-5 w-5 shrink-0 text-primary transition-transform duration-200 group-hover:-rotate-12 group-hover:scale-110" aria-hidden />

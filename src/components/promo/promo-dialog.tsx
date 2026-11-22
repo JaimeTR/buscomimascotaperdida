@@ -19,15 +19,15 @@ const CONFIG = {
     anuncios: {
         icon: Megaphone,
         title: "Solicita tu anuncio",
-        intro: "Cuéntanos de tu negocio y elige el plan que más te conviene.",
-        points: ["Aparece como destacado en la portada.", "Siempre marcado como anuncio.", "Revisamos cada solicitud antes de publicar.", "Coordinamos el pago contigo, sin cobros en línea."],
+        intro: "Cuéntanos de tu negocio y cuánto quieres aportar (voluntario).",
+        points: ["Apareces como destacado en la portada.", "A mayor aporte, más adelante sales.", "Siempre marcado como anuncio.", "Verificamos cada aporte antes de publicar."],
         nextPath: "/anuncios",
         kinds: [{ value: "anuncio" as Kind, label: "Quiero anunciar mi negocio" }],
         defaultKind: "anuncio" as Kind,
     },
 }
 
-// Modal de solicitudes (aliados/voluntarios y anuncios): se abre con <OpenFormButton form="aliados" detail={{ kind }} /> o form="anuncios" detail={{ plan }}.
+// Modal de solicitudes (aliados/voluntarios y anuncios): se abre con <OpenFormButton form="aliados" detail={{ kind }} /> o form="anuncios" detail={{ amount }}.
 export function PromoDialog({ form, loggedIn }: { form: keyof typeof CONFIG; loggedIn: boolean }) {
     const c = CONFIG[form]
     return (
@@ -37,7 +37,7 @@ export function PromoDialog({ form, loggedIn }: { form: keyof typeof CONFIG; log
                     loggedIn={loggedIn}
                     kinds={c.kinds}
                     defaultKind={(c.kinds.some((k) => k.value === detail.kind) ? detail.kind : c.defaultKind) as Kind}
-                    defaultPlan={detail.plan}
+                    defaultAmount={detail.amount}
                     nextPath={c.nextPath}
                     onDone={close}
                 />

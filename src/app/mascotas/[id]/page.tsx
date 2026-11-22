@@ -1,7 +1,7 @@
 
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { Calendar, ChevronRight, Download, Flag, MapPin, Megaphone, Pencil, PartyPopper, Ruler, ShieldAlert, Tag, UserRound, VenusAndMars, Cake, Cpu, Palette, PawPrint, Dog } from "lucide-react"
+import { Calendar, ChevronRight, Download, Flag, MapPin, Megaphone, Star, Rocket, Pencil, PartyPopper, Ruler, ShieldAlert, Tag, UserRound, VenusAndMars, Cake, Cpu, Palette, PawPrint, Dog } from "lucide-react"
 import { formatDistanceToNow } from "date-fns"
 import { es } from "date-fns/locale"
 
@@ -12,11 +12,15 @@ import { createClient } from "@/utils/supabase/server"
 import { Sighting } from "@/hooks/use-pets"
 import { ReportActionButton } from "@/components/report-action-button"
 import { SocialShare } from "@/components/social-share"
+import { districtCenter } from "@/lib/district-coords"
 import { SightingsMapWrapper } from "@/components/sightings-map-wrapper"
 import { PetGallery } from "@/components/pet/pet-gallery"
 import { ContactCard } from "@/components/pet/contact-card"
 import { SightingTimeline } from "@/components/pet/sighting-timeline"
 import { Reveal } from "@/components/ui/reveal"
+import { OpenFormButton } from "@/components/ui/form-dialog"
+import { BoostDialog } from "@/components/boost/boost-dialog"
+import { getFeaturedPets } from "@/lib/featured"
 import { AdSlot } from "@/components/ads/ad-slot"
 import { matchScore } from "@/lib/matches"
 
@@ -113,13 +117,16 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
         .sort((a, b) => b.score - a.score)
         .slice(0, 4)
 
+    const isFeatured = (await getFeaturedPets(50)).some((f) => f.id === pet.id)
     const found = pet.status === 'found'
     const reunited = pet.status === 'reunited'
     const kind = TYPE_LABEL[pet.type] ?? "Mascota"
     const lastSignal = new Date(sightings[0].created_at)
     const validSightings = sightings.filter(s => s.lat != null && s.lng != null)
-    const mapCenterLat = validSightings[0]?.lat || pet.last_seen_lat || -12.0464
-    const mapCenterLng = validSightings[0]?.lng || pet.last_seen_lng || -77.0428
+    // Sin coordenadas exactas se usa el centro del distrito (zona aproximada) en vez de un punto fijo de Lima.
+    const districtPos = districtCenter(pet.last_seen_district)
+    const mapCenterLat = validSightings[0]?.lat || pet.last_seen_lat || districtPos?.[0] || -12.0464
+    const mapCenterLng = validSightings[0]?.lng || pet.last_seen_lng || districtPos?.[1] || -77.0428
     const place = [pet.last_seen_district, pet.last_seen_province].filter(Boolean).join(", ")
     const colors: string[] = pet.colors ?? []
 
@@ -157,6 +164,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
         <div className="min-h-screen pb-28 lg:pb-20">
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} />
             <div className="container mx-auto max-w-7xl space-y-8 px-4 py-6 md:py-10">
+                {isOwner && <BoostDialog petId={pet.id} />}
 
                 {/* Encabezado del caso */}
                 <header className="space-y-4">
@@ -170,6 +178,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                             <div className="flex flex-wrap items-center gap-3">
                                 <h1 className="font-display text-4xl leading-tight text-primary md:text-5xl">{pet.name}</h1>
                                 <StatusBadge status={pet.status} className="px-3.5 py-1 text-xs" />
+                                {isFeatured && <span className="inline-flex items-center gap-1 rounded-full bg-cta px-3 py-1 text-xs font-bold text-cta-foreground"><Star className="h-3.5 w-3.5 fill-current" aria-hidden /> Caso destacado</span>}
                             </div>
                             <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-medium text-muted-foreground">
                                 <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-cta" aria-hidden /> {place || "Zona no indicada"}</span>
@@ -194,6 +203,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                     )}
                                     <div className="flex flex-wrap gap-2">
                                         <Button asChild size="sm" className="rounded-full"><Link href={`/panel/reportes/${pet.id}/editar`}><Pencil className="mr-1.5 h-4 w-4" aria-hidden /> Editar</Link></Button>
+                                        <OpenFormButton form="impulso" size="sm" variant="cta" className="rounded-full"><Rocket className="mr-1.5 h-4 w-4" aria-hidden /> Destacar mi caso</OpenFormButton>
                                         <Button asChild size="sm" variant="outline" className="rounded-full bg-card"><Link href="/panel/reportes">Mis reportes</Link></Button>
                                         <Button asChild size="sm" variant="outline" className="rounded-full bg-card"><Link href="/panel/ajustes">Datos de contacto</Link></Button>
                                     </div>
@@ -310,6 +320,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                 <SightingsMapWrapper
                                     initialLat={mapCenterLat}
                                     initialLng={mapCenterLng}
+                                    zoom={validSightings.length || pet.last_seen_lat ? 16 : 14}
                                     sightings={validSightings.map(s => ({
                                         id: s.id,
                                         lat: s.lat as number,

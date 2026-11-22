@@ -18,6 +18,7 @@ import { ColorPopover } from "@/components/color-popover"
 import { LocationMap } from "@/components/location-map"
 import { CompleteProfileDialog } from "@/components/auth/complete-profile-dialog"
 import { getImageUploadError, prepareImageForUpload } from "@/lib/image-upload"
+import { BoostFields, EMPTY_BOOST, boostAmount, boostFileError, submitBoost, type BoostValue } from "@/components/boost/boost-fields"
 
 const MAX_PHOTOS = 6
 
@@ -58,6 +59,7 @@ export default function ReportPage() {
     })
 
     // Images State
+    const [boost, setBoost] = useState<BoostValue>(EMPTY_BOOST)
     const [images, setImages] = useState<{ file: File | null, url: string, isMain: boolean }[]>([])
 
     // Auth Protection
@@ -122,11 +124,11 @@ export default function ReportPage() {
         })
     }
 
-    const STEPS = ["La mascota", "El lugar", "Las fotos"]
+    const STEPS = ["La mascota", "El lugar", "Las fotos", "Apoyo"]
     const goNext = () => {
         if (step === 0 && !isFound && !name.trim()) return toast("Escribe el nombre de la mascota (o \"Sin nombre\").", { type: "error" })
         if (step === 1 && !location.district) return toast(isFound ? "Elige al menos el distrito donde la encontraste." : "Elige al menos el distrito donde la viste por última vez.", { type: "error" })
-        setStep((s) => Math.min(s + 1, 2))
+        setStep((s) => Math.min(s + 1, 3))
         window.scrollTo({ top: 0, behavior: "smooth" })
     }
     const goBack = () => {
@@ -149,6 +151,9 @@ export default function ReportPage() {
             toast("Nombre, tipo y ubicación son obligatorios", { type: "error" })
             return
         }
+
+        const proofError = boostFileError(boost.file)
+        if (proofError) { toast(proofError, { type: "error" }); return }
 
         setIsSubmitting(true)
 
@@ -246,6 +251,12 @@ export default function ReportPage() {
                     // Don't fail the report if notifications fail
                     console.error('Failed to send notifications:', notifError)
                 }
+            }
+
+            if (insertedPet && boostAmount(boost) > 0) {
+                const res = await submitBoost(supabase, { petId: insertedPet.id, userId, value: boost })
+                if (!res.ok) toast(`${res.error} Puedes intentarlo de nuevo desde tu reporte.`, { type: "error" })
+                else if (!res.skipped) toast("Registramos tu aporte. Lo verificaremos y tu caso saldrá destacado.", { type: "success", title: "¡Gracias por apoyar!" })
             }
 
             toast("Reporte creado con éxito", { type: "success", title: "¡Excelente!" })
@@ -523,12 +534,21 @@ export default function ReportPage() {
                     </section>
                     )}
 
+                    {step === 3 && (
+                    <section className="space-y-6">
+                        <h3 className="text-xl font-bold text-foreground flex items-center gap-2">
+                            <HandHeart className="h-5 w-5 text-cta" aria-hidden /> Apoyo voluntario
+                        </h3>
+                        <BoostFields value={boost} onChange={setBoost} />
+                    </section>
+                    )}
+
                     {/* Acciones */}
                     <div className="flex flex-col-reverse gap-3 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
                         <Button variant="ghost" className="h-12 sm:h-10" onClick={goBack} disabled={isSubmitting}>
                             <ArrowLeft className="mr-2 h-4 w-4" /> {step === 0 ? "Cancelar" : "Atrás"}
                         </Button>
-                        {step < 2 ? (
+                        {step < 3 ? (
                             <Button size="lg" className="h-12 w-full rounded-full px-8 sm:w-auto" onClick={goNext}>
                                 Siguiente <ArrowRight className="ml-2 h-5 w-5" />
                             </Button>

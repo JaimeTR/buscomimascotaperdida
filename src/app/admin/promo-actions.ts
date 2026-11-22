@@ -18,6 +18,7 @@ const schemas = {
         image_url: imageUrl,
         link_url: https,
         cta_label: z.string().trim().min(2).max(30).default("Conocer más"),
+        amount: z.coerce.number().min(0).max(99999).default(0),
         days: z.coerce.number().int().min(1).max(365),
     }),
     status: z.object({ id, status: z.enum(["pending", "approved", "rejected"]) }),

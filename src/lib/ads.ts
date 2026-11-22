@@ -56,6 +56,7 @@ export async function getAds(placement: Placement, limit = 12): Promise<Ad[]> {
             .from("ads")
             .select("id, advertiser, title, body, image_url, link_url, cta_label, placements")
             .contains("placements", [placement])
+            .order("amount", { ascending: false })
             .order("created_at", { ascending: false })
             .limit(limit)
             .returns<Ad[]>()

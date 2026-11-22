@@ -2,13 +2,14 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutDashboard, FileText, Users, ScrollText, Megaphone, ImageIcon, Handshake, Mail } from "lucide-react"
+import { LayoutDashboard, FileText, Users, ScrollText, Megaphone, ImageIcon, Handshake, Mail, Rocket } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const NAV = [
     { href: "/admin", label: "Resumen", icon: LayoutDashboard, exact: true },
     { href: "/admin/reports", label: "Reportes", icon: FileText },
     { href: "/admin/mensajes", label: "Mensajes", icon: Mail },
+    { href: "/admin/impulsos", label: "Impulsos", icon: Rocket },
     { href: "/admin/promociones", label: "Promociones", icon: Megaphone },
     { href: "/admin/anuncios", label: "Anuncios", icon: ImageIcon },
     { href: "/admin/aliados", label: "Aliados", icon: Handshake },

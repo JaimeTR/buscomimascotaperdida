@@ -17,6 +17,7 @@ const schema = z.object({
     amount: z.coerce.number().min(0).max(999999).optional(),
     join_group: z.boolean(),
     allow_mention: z.boolean(),
+    monthly: z.boolean(),
 })
 
 const str = (f: FormData, k: string) => { const v = f.get(k); return typeof v === 'string' && v.trim() ? v : undefined }
@@ -41,6 +42,7 @@ export async function POST(request: NextRequest) {
             amount: str(form, 'amount'),
             join_group: form.get('join_group') === 'on',
             allow_mention: form.get('allow_mention') === 'on',
+            monthly: form.get('monthly') === 'on',
         })
         if (!parsed.success) return NextResponse.json({ error: 'Revisa los datos: falta tu nombre, un correo válido o el mensaje es muy largo.' }, { status: 400 })
         const d = parsed.data
@@ -72,6 +74,7 @@ export async function POST(request: NextRequest) {
             attachment_path: attachment,
             join_group: d.join_group || d.kind === 'grupo',
             allow_mention: d.allow_mention,
+            monthly: d.monthly && d.kind === 'apoyo',
             user_id: user?.id ?? null,
         })
         if (error) {

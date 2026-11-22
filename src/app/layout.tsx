@@ -8,6 +8,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { MobileTabbar } from "@/components/mobile-tabbar";
 import { ChatbotWidget } from "@/components/chatbot-widget";
+import { FeaturedPopup } from "@/components/featured-popup";
 import { ToastProvider } from "@/components/ui/toast-modern";
 import { ConfirmProvider } from "@/components/ui/confirm-modern";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
@@ -121,6 +122,7 @@ export default function RootLayout({
             <ChromeGate><Footer /></ChromeGate>
             <ChromeGate><MobileTabbar /></ChromeGate>
             <ChromeGate><ChatbotWidget /></ChromeGate>
+            <ChromeGate><FeaturedPopup /></ChromeGate>
             <ChromeGate><PWAInstallPrompt /></ChromeGate>
           </ConfirmProvider>
         </ToastProvider>
