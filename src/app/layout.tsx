@@ -62,7 +62,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "./" },
   keywords: ["mascotas perdidas", "perro perdido", "gato perdido", "mascota encontrada", "Lima", "Perú", "cartel de mascota perdida"],
   other: { "geo.region": "PE", "geo.placename": "Perú", language: "es" },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", title: "Mascotas perdidas en Perú: reporta y encuentra", description: "Red comunitaria gratuita para que las mascotas perdidas vuelvan a casa.", images: ["/og.png"] },
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

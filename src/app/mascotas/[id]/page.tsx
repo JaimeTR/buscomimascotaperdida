@@ -30,11 +30,13 @@ import { createPublicClient } from "@/utils/supabase/public"
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
     const { id } = await params
     const { data: pet } = await createPublicClient().from('pets')
-        .select('name, type, breed, status, last_seen_district, image_urls').eq('id', id).eq('is_hidden', false).maybeSingle()
+        .select('name, type, breed, status, last_seen_district, last_seen_province, last_seen_date, colors, image_urls').eq('id', id).eq('is_hidden', false).maybeSingle()
     if (!pet) return {}
     const kind = pet.type === 'cat' ? 'Gato' : pet.type === 'dog' ? 'Perro' : 'Mascota'
     const title = `${pet.status === 'found' ? 'Encontrado' : 'Perdido'}: ${pet.name ?? kind}${pet.last_seen_district ? ` en ${pet.last_seen_district}` : ''}`
-    const description = `${kind}${pet.breed ? ` ${pet.breed}` : ''}. Ayúdanos a ${pet.status === 'found' ? 'encontrar a su dueño' : 'traerlo de vuelta a casa'}.`
+    const where = [pet.last_seen_district, pet.last_seen_province].filter(Boolean).join(', ')
+    const when = pet.last_seen_date ? new Date(pet.last_seen_date).toLocaleDateString('es-PE', { day: 'numeric', month: 'long', year: 'numeric' }) : ''
+    const description = `${kind}${pet.breed ? ` ${pet.breed}` : ''}${pet.colors?.length ? ` de color ${pet.colors.join(', ')}` : ''}${pet.status === 'found' ? ' encontrado' : ' perdido'}${where ? ` en ${where}` : ''}${when ? ` el ${when}` : ''}. Ayúdanos a ${pet.status === 'found' ? 'encontrar a su dueño' : 'traerlo de vuelta a casa'}.`
     const images = [pet.image_urls?.[0] ?? `/mascotas/${id}/opengraph-image`]
     return { title, description, alternates: { canonical: `/mascotas/${id}` }, openGraph: { title, description, url: `/mascotas/${id}`, images }, twitter: { card: 'summary_large_image', title, description, images } }
 }
@@ -140,13 +142,13 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                 itemListElement: [
                     { '@type': 'ListItem', position: 1, name: 'Inicio', item: site },
                     { '@type': 'ListItem', position: 2, name: 'Mascotas', item: `${site}/mascotas` },
-                    { '@type': 'ListItem', position: 3, name: pet.name, item: `${site}/mascotas/${pet.id}` },
+                    { '@type': 'ListItem', position: 3, name: pet.name ?? kind, item: `${site}/mascotas/${pet.id}` },
                 ],
             },
             {
                 '@type': 'WebPage',
                 url: `${site}/mascotas/${pet.id}`,
-                name: `${found ? 'Encontrado' : 'Perdido'}: ${pet.name}`,
+                name: `${found ? 'Encontrado' : 'Perdido'}: ${pet.name ?? kind}`,
                 inLanguage: 'es-PE',
                 datePublished: pet.created_at,
                 ...(pet.image_urls?.[0] ? { primaryImageOfPage: { '@type': 'ImageObject', url: pet.image_urls[0] } } : {}),

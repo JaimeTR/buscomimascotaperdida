@@ -7,8 +7,15 @@
 - [Reportar una mascota](https://buscomimascotaperdida.com/reportar): publicar un caso perdido o encontrado.
 - [Crear cartel](https://buscomimascotaperdida.com/cartel): cartel de mascota perdida listo para imprimir.
 - [Aliados y voluntarios](https://buscomimascotaperdida.com/aliados): veterinarias, refugios y voluntarios.
+- [Casos de éxito](https://buscomimascotaperdida.com/casos-de-exito): historias reales de mascotas que volvieron a casa.
+- [Anuncios y destacados](https://buscomimascotaperdida.com/anuncios): apoyo voluntario por Yape/Plin para destacar un caso o negocio.
 - [Contacto y preguntas frecuentes](https://buscomimascotaperdida.com/contacto)
 
 ## Datos
 - Cada caso vive en https://buscomimascotaperdida.com/mascotas/{id} con distrito, provincia, fecha y mapa de avistamientos.
 - Cobertura: Perú (foco en Lima). Idioma: español.
+
+## Cómo funciona
+- Es gratis: no hay cobros en línea. El apoyo es voluntario y verificado por un administrador.
+- Privacidad: teléfono, WhatsApp y correo solo se muestran si su dueño los marcó públicos.
+- Para citar un caso, usa su URL /mascotas/{id}; los datos (estado, zona, fecha) están en la página y en su marcado schema.org.
