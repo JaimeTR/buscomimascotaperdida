@@ -8,7 +8,7 @@ import { FormDialog } from "@/components/ui/form-dialog"
 import { BoostFields, EMPTY_BOOST, boostAmount, submitBoost, type BoostValue } from "@/components/boost/boost-fields"
 import { createClient } from "@/utils/supabase/client"
 
-function BoostForm({ petId, onDone }: { petId: string; onDone: () => void }) {
+function BoostForm({ petId, onDone, onSubmitted }: { petId: string; onDone: () => void; onSubmitted?: () => void }) {
     const router = useRouter()
     const [value, setValue] = useState<BoostValue>(EMPTY_BOOST)
     const [busy, setBusy] = useState(false)
@@ -25,6 +25,7 @@ function BoostForm({ petId, onDone }: { petId: string; onDone: () => void }) {
         setBusy(false)
         if (!res.ok) { setError(res.error); return }
         setDone(true)
+        onSubmitted?.()
         router.refresh()
     }
 
@@ -50,7 +51,7 @@ function BoostForm({ petId, onDone }: { petId: string; onDone: () => void }) {
 }
 
 // Modal "Destacar mi caso" para un reporte ya publicado (lo abre el dueño desde su reporte).
-export function BoostDialog({ petId }: { petId: string }) {
+export function BoostDialog({ petId, onSubmitted }: { petId: string; onSubmitted?: () => void }) {
     return (
         <FormDialog
             id="impulso"
@@ -59,7 +60,7 @@ export function BoostDialog({ petId }: { petId: string }) {
             intro="Un aporte voluntario hace que más gente vea tu reporte."
             points={["El aporte es libre y voluntario.", "Los casos con más aporte salen primero.", "Aparecen en la portada y como aviso en otras páginas.", "El equipo verifica cada aporte."]}
         >
-            {(_, close) => <BoostForm petId={petId} onDone={close} />}
+            {(_, close) => <BoostForm petId={petId} onDone={close} onSubmitted={onSubmitted} />}
         </FormDialog>
     )
 }

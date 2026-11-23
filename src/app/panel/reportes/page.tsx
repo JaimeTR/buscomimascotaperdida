@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import Link from "next/link"
-import { Check, Copy, Eye, FileText, Lightbulb, Loader2, Megaphone, MapPin, Pause, PenLine, Play, Plus, Search, Trash2 } from "lucide-react"
+import { Check, Copy, Eye, FileText, Lightbulb, Loader2, Megaphone, MapPin, Pause, PenLine, Play, Plus, Rocket, Search, Star, Trash2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -15,6 +15,7 @@ import { useConfirm } from "@/components/ui/confirm-modern"
 import { cn } from "@/lib/utils"
 import { ReunionDialog } from "@/components/reunion-dialog"
 import { reminderDue } from "@/lib/reunion"
+import { BoostDialog } from "@/components/boost/boost-dialog"
 
 type Report = {
     id: string
@@ -29,6 +30,7 @@ type Report = {
     sightings: { id: string }[] | null
 }
 
+type Boost = { pet_id: string; status: string; amount_claimed: number; amount_confirmed: number | null; ends_at: string | null }
 const ACTIVE = ["lost", "found", "in_contact"]
 const FILTERS = [
     { key: "all", label: "Todos", test: () => true },
@@ -48,6 +50,8 @@ export default function MyReportsPage() {
     const [query, setQuery] = useState("")
     const [copied, setCopied] = useState<string | null>(null)
     const [reuniting, setReuniting] = useState<Report | null>(null)
+    const [boosts, setBoosts] = useState<Boost[]>([])
+    const [boostFor, setBoostFor] = useState<string>("")
 
     const load = useCallback(async () => {
         const { data: { user } } = await supabase.auth.getUser()
@@ -60,6 +64,9 @@ export default function MyReportsPage() {
             .returns<Report[]>()
         if (error) toast("Error al cargar tus reportes", { type: "error" })
         else setReports(data ?? [])
+        // Estado de mis aportes voluntarios (RLS: solo veo los míos)
+        const { data: b } = await supabase.from("pet_boosts").select("pet_id, status, amount_claimed, amount_confirmed, ends_at").eq("user_id", user.id).order("created_at", { ascending: false }).returns<Boost[]>()
+        setBoosts(b ?? [])
         setLoading(false)
     }, [supabase, toast])
 
@@ -98,6 +105,19 @@ export default function MyReportsPage() {
         if (error) return toast("No se pudo eliminar el reporte", { type: "error" })
         setReports((prev) => prev.filter((x) => x.id !== r.id))
         toast("Reporte eliminado", { type: "success" })
+    }
+
+    // Apoyo de cada reporte: destacado vigente > aporte en revisión > nada.
+    const boostChip = (petId: string) => {
+        const mine = boosts.filter((b) => b.pet_id === petId)
+        const live = mine.find((b) => b.status === "approved" && (!b.ends_at || new Date(b.ends_at) > new Date()))
+        if (live) return <span className="inline-flex items-center gap-1 rounded-full bg-cta px-2.5 py-0.5 text-xs font-bold text-cta-foreground"><Star className="h-3 w-3 fill-current" aria-hidden /> Destacado{live.ends_at ? ` hasta ${fmt.format(new Date(live.ends_at))}` : ""}</span>
+        if (mine.some((b) => b.status === "pending")) return <span className="inline-flex items-center gap-1 rounded-full bg-warning/15 px-2.5 py-0.5 text-xs font-bold text-warning">Aporte en revisión</span>
+        return null
+    }
+    const openBoost = (petId: string) => {
+        setBoostFor(petId)
+        setTimeout(() => window.dispatchEvent(new CustomEvent("bmm:open-form", { detail: { form: "impulso" } })), 0)
     }
 
     const copyLink = async (id: string) => {
@@ -173,7 +193,10 @@ export default function MyReportsPage() {
                                                 {[r.last_seen_district, r.last_seen_department].filter(Boolean).join(", ") || "Sin ubicación"} · {fmt.format(new Date(r.created_at))}
                                             </p>
                                         </div>
-                                        <StatusBadge status={r.status} />
+                                        <div className="flex flex-wrap items-center gap-1.5">
+                                            {boostChip(r.id)}
+                                            <StatusBadge status={r.status} />
+                                        </div>
                                     </div>
                                     <p className="flex items-center gap-1.5 text-sm text-muted-foreground"><Lightbulb className="h-4 w-4" aria-hidden /> {r.sightings?.length ?? 0} {r.sightings?.length === 1 ? "pista" : "pistas"}</p>
 
@@ -184,6 +207,7 @@ export default function MyReportsPage() {
                                         <Button size="sm" variant="outline" onClick={() => copyLink(r.id)}>
                                             {copied === r.id ? <Check className="mr-1.5 h-4 w-4" aria-hidden /> : <Copy className="mr-1.5 h-4 w-4" aria-hidden />} Copiar enlace
                                         </Button>
+                                        {isActive && <Button size="sm" variant="outline" onClick={() => openBoost(r.id)}><Rocket className="mr-1.5 h-4 w-4" aria-hidden /> Destacar</Button>}
                                         {isActive && <Button size="sm" onClick={() => setReuniting(r)}><Check className="mr-1.5 h-4 w-4" aria-hidden /> Marcar reunido</Button>}
                                         {isActive && <Button size="sm" variant="ghost" onClick={() => setStatus(r.id, "paused")}><Pause className="mr-1.5 h-4 w-4" aria-hidden /> Pausar</Button>}
                                         {(r.status === "paused" || r.status === "closed") && <Button size="sm" variant="ghost" onClick={() => setStatus(r.id, "lost")}><Play className="mr-1.5 h-4 w-4" aria-hidden /> Reactivar</Button>}
@@ -198,6 +222,7 @@ export default function MyReportsPage() {
                 </ul>
                 </>
             )}
+            <BoostDialog petId={boostFor} onSubmitted={() => void load()} />
             {reuniting && <ReunionDialog pet={reuniting} onClose={() => setReuniting(null)} onDone={() => { setReuniting(null); void load() }} />}
         </div>
     )

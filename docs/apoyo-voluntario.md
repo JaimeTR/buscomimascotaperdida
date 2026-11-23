@@ -32,5 +32,5 @@ En `/contacto` → «Apoyo mensual (voluntario)»: Amigo S/ 10, Aliado S/ 25, Gu
 
 ## Pendiente / ideas
 - Avisar por correo a la persona cuando su aporte se confirme.
-- Mostrar al dueño el estado de su impulso en el panel.
+- Mostrar el estado del impulso en el perfil (en `/panel/reportes` ya sale «Destacado hasta…» / «Aporte en revisión» y el botón «Destacar»).
 - Sección pública de agradecimiento a colaboradores (quienes marcaron «pueden mencionar mi apoyo»).

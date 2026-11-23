@@ -30,7 +30,7 @@ Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimasco
 ## Pendiente (desarrollo)
 - Mapas: probar en celular real el mapa nuevo (MapLibre + marcadores con foto + agrupación; ver abajo) y la tarjeta compacta de «instalar app».
 - Avisos por correo: al admin cuando llega un mensaje/impulso y a la persona cuando se confirma su aporte.
-- Estado del impulso visible para el dueño (panel y perfil).
+- Estado del impulso visible para el dueño en el perfil de la mascota (en el panel ya está).
 - Sección pública de agradecimiento a colaboradores.
 - Probar con una cuenta real: reportar con aporte, subir comprobante, aprobar en `/admin/impulsos`, contacto público y avistamientos (aún no hay datos reales de esos flujos).
 - Casos reales para reemplazar los importados y fotos reales en lugar de stock. Los 63 casos importados enlazan la foto de su fuente (no está alojada aquí): riesgo de derechos de autor, quitar a pedido.
