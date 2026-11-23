@@ -20,7 +20,7 @@ Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimasco
 - **Calidad:** `tsc`, `eslint` sin errores, 18 pruebas, `check:production-config`.
 
 ## Pendiente (acciones tuyas, paneles externos)
-1. **Admin:** insertar tu usuario en `admin_users` (`insert into admin_users`). Sin eso no se ven `/admin/*` (mensajes, impulsos, promociones).
+1. ~~Admin~~ **Hecho (2026-11-22):** `devmarkpe@gmail.com` es administrador (`admin_users`). Para dar acceso a otra persona: `insert into admin_users (user_id) values ('<id de auth.users>')`.
 2. **Vercel:** `SUPABASE_SERVICE_ROLE_KEY` (eliminar cuenta, cron, límites compartidos), `NEXT_PUBLIC_APP_URL`/`ALLOWED_ORIGIN` con la URL real, `CRON_SECRET`. Ya cargadas: Yape/Plin, titular, WhatsApp, teléfono y correo de contacto.
 3. **Dominio propio** (`buscomimascotaperdida.com`): agregar al proyecto de Vercel, y actualizar Google Cloud (orígenes y marca), Supabase (Site URL y redirects) y el correo `contacto@…` (hoy no recibe nada hasta tener buzón).
 4. **Facebook login:** crear app en Meta con el callback de Supabase y activar el proveedor; luego `FACEBOOK_ENABLED = true` en `social-buttons.tsx`.
