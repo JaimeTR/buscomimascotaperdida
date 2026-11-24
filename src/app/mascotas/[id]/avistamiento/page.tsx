@@ -139,7 +139,7 @@ export default function SightingReportPage() {
                 imageUrl = publicUrl
             }
 
-            const { error } = await supabase
+            const { data: created, error } = await supabase
                 .from('sightings')
                 .insert({
                     pet_id: petId,
@@ -155,8 +155,12 @@ export default function SightingReportPage() {
                     share_email: formData.share_email,
                     share_whatsapp: formData.share_whatsapp
                 })
+                .select('id')
+                .single()
 
             if (error) throw error
+            // Aviso al dueño: no bloquea ni rompe el envío si falla.
+            if (created?.id) void fetch('/api/notify-sighting', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sightingId: created.id }) }).catch(() => {})
 
             toast("Avistamiento reportado con éxito. ¡Gracias por ayudar!", { type: "success", title: "¡Enviado!" })
             router.push(`/mascotas/${petId}`)

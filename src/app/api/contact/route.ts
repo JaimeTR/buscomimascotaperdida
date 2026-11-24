@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createClient } from '@/utils/supabase/server'
 import { allowRequest } from '@/lib/rate-limit'
+import { notifyAdminContact } from '@/lib/owner-alerts'
 import { getSafeErrorCode, methodNotAllowedResponse } from '@/lib/safe-error'
 
 const MAX_FILE = 5 * 1024 * 1024
@@ -81,6 +82,7 @@ export async function POST(request: NextRequest) {
             console.error('contact insert failed', { code: getSafeErrorCode(error) })
             return NextResponse.json({ error: 'No pudimos enviar tu mensaje. Intenta de nuevo.' }, { status: 500 })
         }
+        await notifyAdminContact(d.kind, d.name)
         return NextResponse.json({ ok: true })
     } catch (error: unknown) {
         console.error('contact API error', { code: getSafeErrorCode(error) })

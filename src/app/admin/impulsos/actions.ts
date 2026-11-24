@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache"
 import { z } from "zod"
 import { requireAdmin } from "@/lib/admin"
+import { notifyBoostConfirmed } from "@/lib/owner-alerts"
 
 const schema = z.object({
     id: z.string().uuid(),
@@ -27,6 +28,7 @@ export async function decideBoost(formData: FormData) {
             starts_at: now.toISOString(),
             ends_at: new Date(now.getTime() + (days ?? 30) * 86_400_000).toISOString(),
         }).eq("id", id)
+        await notifyBoostConfirmed(id)
     }
     revalidatePath("/admin/impulsos")
     revalidatePath("/")

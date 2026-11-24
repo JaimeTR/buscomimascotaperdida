@@ -107,6 +107,14 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
         .sort((a, b) => b.score - a.score)
         .slice(0, 4)
 
+    // Estado del último aporte voluntario (solo lo ve el dueño; RLS ya lo limita a sus propios aportes).
+    const { data: lastBoost } = isOwner
+        ? await supabase.from('pet_boosts').select('status, amount_confirmed, ends_at').eq('pet_id', id).order('created_at', { ascending: false }).limit(1).maybeSingle()
+        : { data: null }
+    const boostNote = !lastBoost ? null
+        : lastBoost.status === 'pending' ? 'Tu apoyo está en revisión. Te avisaremos por correo cuando lo confirmemos.'
+        : lastBoost.status === 'rejected' ? 'No pudimos confirmar tu último apoyo. Escríbenos si crees que es un error.'
+        : lastBoost.ends_at && new Date(lastBoost.ends_at) > new Date() ? `Tu caso está destacado hasta el ${dateFmt.format(new Date(lastBoost.ends_at))}.` : null
     const isFeatured = (await getFeaturedPets(50)).some((f) => f.id === pet.id)
     const found = pet.status === 'found'
     const reunited = pet.status === 'reunited'
@@ -191,6 +199,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                     {!hasPublicContact && (
                                         <p className="flex gap-2 rounded-xl bg-card p-3 text-sm text-muted-foreground"><ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-cta" aria-hidden /><span>Nadie puede contactarte directamente porque no muestras datos de contacto. Las personas te escribirán por avistamientos. <Link href="/panel/ajustes" className="font-semibold text-primary underline-offset-2 hover:underline">Elige qué datos mostrar</Link>.</span></p>
                                     )}
+                                    {boostNote && <p className="rounded-xl bg-card p-3 text-sm text-muted-foreground">{boostNote}</p>}
                                     <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
                                         <Button asChild size="sm" className="rounded-full"><Link href={`/panel/reportes/${pet.id}/editar`}><Pencil className="mr-1.5 h-4 w-4" aria-hidden /> Editar</Link></Button>
                                         <OpenFormButton form="impulso" size="sm" variant="cta" className="rounded-full"><Rocket className="mr-1.5 h-4 w-4" aria-hidden /> Destacar mi caso</OpenFormButton>
