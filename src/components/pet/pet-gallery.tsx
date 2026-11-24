@@ -1,6 +1,8 @@
 "use client"
 
 import { useCallback, useRef, useState } from "react"
+import Image from "next/image"
+import { canOptimize } from "@/lib/img"
 import { ChevronLeft, ChevronRight, Expand, X } from "lucide-react"
 import { StatusBadge } from "@/components/status-badge"
 import { cn } from "@/lib/utils"
@@ -32,7 +34,7 @@ export function PetGallery({ images, petName, status }: { images: string[]; petN
                     if (Math.abs(dx) > 40 && many) go(dx < 0 ? 1 : -1)
                 }}
             >
-                <img key={index} src={gallery[index]} alt={`${petName}, foto ${index + 1} de ${gallery.length}`} className="h-full w-full object-cover animate-in fade-in duration-300 transition-transform duration-700 group-hover:scale-105" />
+                <Image key={index} src={gallery[index]} alt={`${petName}, foto ${index + 1} de ${gallery.length}`} fill priority={index === 0} sizes="(min-width: 1024px) 58vw, 100vw" unoptimized={!canOptimize(gallery[index])} className="object-cover animate-in fade-in duration-300 transition-transform duration-700 group-hover:scale-105" />
 
                 <StatusBadge status={status} className="absolute left-4 top-4 px-4 py-1.5 text-xs shadow-lg sm:left-5 sm:top-5" />
 

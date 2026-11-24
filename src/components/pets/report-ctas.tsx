@@ -90,7 +90,7 @@ export function ReportPopup({ active }: { active: boolean }) {
     const close = () => { markDismissed("report"); releasePrompt("report"); setShown(false) }
     return (
         <div role="dialog" aria-label="Reportar una mascota" className="fixed inset-x-4 bottom-24 z-40 mx-auto max-w-sm rounded-3xl border bg-card p-5 shadow-[var(--shadow-lift)] duration-300 animate-in fade-in slide-in-from-bottom-4 lg:inset-x-auto lg:bottom-28 lg:right-6 lg:mx-0">
-            <button onClick={close} aria-label="Cerrar" className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary"><X className="h-4 w-4" aria-hidden /></button>
+            <button onClick={close} aria-label="Cerrar" className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary after:absolute after:-inset-2 after:content-['']"><X className="h-4 w-4" aria-hidden /></button>
             <span className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-orange-100 text-orange-800"><PawPrint className="h-5 w-5" aria-hidden /></span>
             <p className="pr-6 font-display text-lg leading-tight text-primary">¿Perdiste o encontraste una mascota?</p>
             <p className="mt-1 text-sm text-muted-foreground">Publícala gratis y avisamos a tu zona.</p>

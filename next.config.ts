@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
-  images: { qualities: [75, 85, 90] },
+  images: { qualities: [75, 85, 90], remotePatterns: [{ protocol: 'https', hostname: '*.supabase.co', pathname: '/storage/v1/object/public/**' }] },
   async redirects() {
     return [
       { source: '/promocionar', destination: '/anuncios', permanent: true },

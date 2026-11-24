@@ -1,6 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
-import { Building2, HeartHandshake, Stethoscope, Newspaper, ArrowUpRight, Handshake, HandHeart, Megaphone } from "lucide-react"
+import { Building2, HeartHandshake, Stethoscope, Newspaper, ChevronRight, Handshake, HandHeart, Megaphone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { EmptyState } from "@/components/ui/empty-state"
 import { Reveal } from "@/components/ui/reveal"
@@ -78,7 +78,7 @@ export default async function AliadosPage() {
                                             <h3 className="truncate font-semibold">{p.name}</h3>
                                             <p className="text-xs text-muted-foreground">{PARTNER_KINDS[p.kind]}{p.city ? ` · ${p.city}` : ""}</p>
                                         </div>
-                                        {p.website_url && <ArrowUpRight className="h-5 w-5 shrink-0 text-primary sm:ml-auto" aria-hidden />}
+                                        <ChevronRight className="h-5 w-5 shrink-0 text-primary sm:ml-auto" aria-hidden />
                                     </div>
                                     {p.description && <p className="mt-3 text-center text-sm sm:text-left text-muted-foreground">{p.description}</p>}
                                 </>
@@ -86,7 +86,7 @@ export default async function AliadosPage() {
                             const cls = "block h-full rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)] hover-lift"
                             return (
                                 <li key={p.id}>
-                                    {p.website_url ? <a href={p.website_url} target="_blank" rel="noopener noreferrer" className={cls}>{body}</a> : <div className={cls}>{body}</div>}
+                                    <Link href={`/aliados/${p.id}`} className={cls}>{body}</Link>
                                 </li>
                             )
                         })}

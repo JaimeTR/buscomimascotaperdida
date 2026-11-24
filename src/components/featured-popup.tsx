@@ -44,7 +44,7 @@ export function FeaturedPopup() {
 
     return (
         <aside aria-label="Mascota destacada" className="fixed bottom-24 left-4 z-40 w-[min(22rem,calc(100vw-2rem))] overflow-hidden rounded-3xl border bg-card shadow-[var(--shadow-lift)] duration-500 animate-in fade-in slide-in-from-left-6 lg:bottom-6 lg:left-6">
-            <button type="button" onClick={close} aria-label="Cerrar aviso" className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur transition-all hover:rotate-90 hover:bg-black/65 active:scale-90">
+            <button type="button" onClick={close} aria-label="Cerrar aviso" className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/45 text-white backdrop-blur transition-all hover:rotate-90 hover:bg-black/65 active:scale-90 after:absolute after:-inset-2 after:content-['']">
                 <X className="h-4 w-4" aria-hidden />
             </button>
             <Link href={`/mascotas/${pet.id}`} onClick={close} className="group block">

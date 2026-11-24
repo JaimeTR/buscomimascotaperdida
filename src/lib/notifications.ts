@@ -6,6 +6,7 @@ import { getSafeErrorCode } from '@/lib/safe-error'
 import { createAdminClient } from '@/utils/supabase/admin'
 import { matchScore } from '@/lib/matches'
 import { sendPushToUsers } from '@/lib/push'
+import { EMAIL_FROM } from '@/lib/email-from'
 
 export type NotifiablePet = {
     id: string
@@ -56,7 +57,7 @@ async function notifyMatchOwners(pet: NotifiablePet, admin: ReturnType<typeof cr
             if (!owner?.email) continue
             try {
                 await resend.emails.send({
-                    from: 'BuscoMiMascotaPerdida <notificaciones@buscomimascotaperdida.com>',
+                    from: EMAIL_FROM,
                     to: owner.email,
                     subject: `Posible coincidencia para ${c.name || 'tu mascota'}`,
                     html: `<p>Hola ${esc(owner.full_name || '')},</p>` +
@@ -127,7 +128,7 @@ export async function notifyNearbyUsers(pet: NotifiablePet) {
                     })
                 )
                 await resend.emails.send({
-                    from: 'BuscoMiMascotaPerdida <notificaciones@buscomimascotaperdida.com>',
+                    from: EMAIL_FROM,
                     to: t.email,
                     subject: `Mascota perdida cerca de ti: ${pet.name || 'sin nombre'} en ${pet.last_seen_district || 'tu zona'}`,
                     html,

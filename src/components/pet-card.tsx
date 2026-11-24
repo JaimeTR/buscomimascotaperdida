@@ -1,4 +1,6 @@
 import Link from "next/link"
+import Image from "next/image"
+import { canOptimize } from "@/lib/img"
 import { CalendarDays, MapPin, Dog, Cat, Squirrel, Star } from "lucide-react"
 import { StatusBadge } from "@/components/status-badge"
 
@@ -42,11 +44,13 @@ export function PetCard({ id, name, type, breed, district, province, colors = []
             className="group hover-lift block overflow-hidden rounded-3xl border bg-card shadow-[var(--shadow-soft)]"
         >
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-muted">
-                <img
+                <Image
                     src={imageUrl}
                     alt={`${name}, ${breed}`}
-                    loading="lazy"
-                    className="h-full w-full object-cover img-zoom"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    unoptimized={!canOptimize(imageUrl)}
+                    className="object-cover img-zoom"
                 />
                 <StatusBadge status={status} className="absolute left-3 top-3 shadow-md" />
                 {featured && <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-cta px-2.5 py-1 text-[11px] font-bold text-cta-foreground shadow-md"><Star className="h-3 w-3 fill-current" aria-hidden /> Destacado</span>}

@@ -395,7 +395,7 @@ export default function EditReportPage() {
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                             {images.map((img, index) => (
                                 <div key={index} className={`relative aspect-square rounded-2xl overflow-hidden group border-2 ${img.isMain ? 'border-orange-400 ring-2 ring-orange-100' : 'border-white'}`}>
-                                    <img src={img.url} className="w-full h-full object-cover" alt={`Pet ${index}`} />
+                                    <img src={img.url} className="w-full h-full object-cover" alt={`Foto ${index + 1} de la mascota`} />
 
                                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
                                         {!img.isMain && (
@@ -403,8 +403,8 @@ export default function EditReportPage() {
                                                 Hacer Principal
                                             </Button>
                                         )}
-                                        <Button size="icon" variant="destructive" className="h-8 w-8 rounded-full" onClick={() => removeImage(index)}>
-                                            <Trash2 className="h-4 w-4" />
+                                        <Button type="button" size="icon" variant="destructive" aria-label="Quitar foto" className="h-8 w-8 rounded-full" onClick={() => removeImage(index)}>
+                                            <Trash2 className="h-4 w-4" aria-hidden />
                                         </Button>
                                     </div>
 

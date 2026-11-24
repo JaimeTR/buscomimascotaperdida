@@ -15,6 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const db = createPublicClient()
     // Los casos reencontrados viven en /casos-de-exito, no se repiten como casos activos.
     const { data } = await db.from('pets').select('id, created_at, last_seen_district').eq('is_hidden', false).neq('status', 'reunited').order('created_at', { ascending: false }).limit(5000)
+    const { data: partners } = await db.from('partners').select('id').eq('is_active', true).limit(500)
     const { data: stories } = await db.from('pets').select('id, reunited_at').eq('status', 'reunited').eq('reunion_public', true).eq('is_hidden', false).limit(1000)
     // Solo distritos que tienen casos: una página vacía no aporta nada al buscador.
     const districts = Array.from(new Set((data ?? []).map((p) => p.last_seen_district).filter(Boolean) as string[]))
@@ -22,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ...pages.map(([p, priority]) => ({ url: base + p, priority })),
         ...districts.map((d) => ({ url: `${base}/mascotas/distrito/${slugify(d)}`, priority: 0.6 })),
         ...(data ?? []).map((p) => ({ url: `${base}/mascotas/${p.id}`, lastModified: p.created_at, priority: 0.7 })),
+        ...(partners ?? []).map((p) => ({ url: `${base}/aliados/${p.id}`, priority: 0.5 })),
         ...(stories ?? []).map((p) => ({ url: `${base}/casos-de-exito/${p.id}`, lastModified: p.reunited_at ?? undefined, priority: 0.6 })),
     ]
 }

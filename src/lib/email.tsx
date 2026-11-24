@@ -3,9 +3,10 @@ import { Resend } from 'resend'
 import { render } from '@react-email/render'
 import { assertServerEnv } from '@/lib/env'
 import { getSafeErrorCode } from '@/lib/safe-error'
+import { EMAIL_FROM } from '@/lib/email-from'
 
 // Configuración
-const FROM_EMAIL = 'BuscoMiMascota <onboarding@resend.dev>' // Cambiar a tu dominio verificado
+const FROM_EMAIL = EMAIL_FROM
 
 export interface SendEmailOptions {
     to: string | string[]

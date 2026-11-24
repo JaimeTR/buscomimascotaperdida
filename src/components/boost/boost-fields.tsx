@@ -29,8 +29,10 @@ export async function submitBoost(supabase: SupabaseClient, { petId, userId, val
         const { error } = await supabase.storage.from("boost-proofs").upload(proof, value.file, { contentType: value.file.type, upsert: false })
         if (error) return { ok: false as const, error: "No se pudo subir el comprobante." }
     }
-    const { error } = await supabase.from("pet_boosts").insert({ pet_id: petId, user_id: userId, amount_claimed: amount, method: value.method, proof_path: proof })
+    const { data: created, error } = await supabase.from("pet_boosts").insert({ pet_id: petId, user_id: userId, amount_claimed: amount, method: value.method, proof_path: proof }).select("id").single()
     if (error) return { ok: false as const, error: "No se pudo registrar tu aporte." }
+    // Aviso al equipo: no bloquea ni rompe el registro si falla.
+    if (created?.id) void fetch("/api/notify-boost", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ boostId: created.id }) }).catch(() => {})
     return { ok: true as const, skipped: false }
 }
 

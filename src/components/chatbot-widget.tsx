@@ -384,7 +384,7 @@ export function ChatbotWidget() {
                         <p className="text-xs font-bold text-foreground">¿Buscas a tu mascota?</p>
                         <p className="text-[11px] text-muted-foreground">Dime cómo es y la busco en los reportes</p>
                     </button>
-                    <button onClick={dismissPrompt} aria-label="Cerrar aviso" className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:bg-accent">
+                    <button onClick={dismissPrompt} aria-label="Cerrar aviso" className="absolute right-1.5 top-1.5 flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground hover:bg-accent after:absolute after:-inset-2 after:content-['']">
                         <X className="h-3.5 w-3.5" />
                     </button>
                 </div>

@@ -31,8 +31,8 @@ Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimasco
 
 ## Pendiente (desarrollo)
 - Mapas: probar en celular real el mapa nuevo (MapLibre + marcadores con foto + agrupación; ver abajo) y la tarjeta compacta de «instalar app».
-- Avisos por correo: falta el aviso al admin cuando llega un impulso (mensaje, avistamiento y aporte confirmado ya avisan). Requieren Resend con dominio verificado.
-- Ficha pública por aliado, métricas en admin, auditoría de contraste, migrar `<img>` restantes a `next/image` (requiere `remotePatterns`).
+- Avisos por correo ya implementados (avistamiento, aporte nuevo y confirmado, mensaje). Para que lleguen a todos: verificar el dominio en Resend y definir `EMAIL_FROM` en Vercel (hoy, sin esa variable, solo llegan al correo de la cuenta de Resend).
+- Política de contenido como página propia (opcional) y probar en celular real las páginas nuevas.
 - Sección pública de agradecimiento a colaboradores.
 - Probar con una cuenta real: reportar con aporte, subir comprobante, aprobar en `/admin/impulsos`, contacto público y avistamientos (aún no hay datos reales de esos flujos).
 - Casos reales para reemplazar los importados y fotos reales en lugar de stock. Los 63 casos importados enlazan la foto de su fuente (no está alojada aquí): riesgo de derechos de autor, quitar a pedido.

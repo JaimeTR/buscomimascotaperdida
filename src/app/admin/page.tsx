@@ -1,4 +1,4 @@
-import { FileText, CalendarDays, EyeOff, Users } from "lucide-react"
+import { FileText, CalendarDays, EyeOff, Users, Rocket, Inbox } from "lucide-react"
 import { requireAdmin } from "@/lib/admin"
 import { PageHeader } from "@/components/ui/page-header"
 import { StatCard } from "@/components/ui/stat-card"
@@ -15,11 +15,13 @@ export default async function AdminHome() {
     const count = (q: PromiseLike<{ count: number | null }>) => q.then((r) => r.count ?? 0)
     const head = { count: "exact", head: true } as const
 
-    const [total, hidden, recent, users, ...byStatus] = await Promise.all([
+    const [total, hidden, recent, users, pendingBoosts, newMessages, ...byStatus] = await Promise.all([
         count(supabase.from("pets").select("id", head)),
         count(supabase.from("pets").select("id", head).eq("is_hidden", true)),
         count(supabase.from("pets").select("id", head).gte("created_at", since)),
         count(supabase.from("profiles").select("id", head)),
+        count(supabase.from("pet_boosts").select("id", head).eq("status", "pending")),
+        count(supabase.from("contact_messages").select("id", head).eq("status", "new")),
         ...STATUSES.map((s) => count(supabase.from("pets").select("id", head).eq("status", s))),
     ])
 
@@ -44,6 +46,8 @@ export default async function AdminHome() {
                 <StatCard label="Últimos 30 días" value={recent} icon={CalendarDays} tone="orange" />
                 <StatCard label="Ocultos (moderados)" value={hidden} icon={EyeOff} tone="amber" />
                 <StatCard label="Usuarios" value={users} icon={Users} tone="green" />
+                <StatCard label="Aportes por verificar" value={pendingBoosts} icon={Rocket} tone="orange" href="/admin/impulsos" />
+                <StatCard label="Mensajes nuevos" value={newMessages} icon={Inbox} tone="teal" href="/admin/mensajes" />
             </section>
 
             <div className="grid gap-6 lg:grid-cols-2">

@@ -507,7 +507,7 @@ export default function ReportPage() {
                                     <img src={img.url} className="w-full h-full object-cover" alt={`Foto ${index + 1} de la mascota`} />
 
                                     {/* Controles siempre visibles: en el celular no existe "hover". */}
-                                    <Button type="button" size="icon" variant="destructive" aria-label="Quitar foto" className="absolute right-1.5 top-1.5 h-8 w-8 rounded-full shadow-md" onClick={() => removeImage(index)}>
+                                    <Button type="button" size="icon" variant="destructive" aria-label="Quitar foto" className="absolute right-1.5 top-1.5 h-8 w-8 rounded-full shadow-md after:absolute after:-inset-2 after:content-['']" onClick={() => removeImage(index)}>
                                         <Trash2 className="h-4 w-4" aria-hidden />
                                     </Button>
                                     {img.isMain ? (

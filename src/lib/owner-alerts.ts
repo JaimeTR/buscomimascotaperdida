@@ -4,6 +4,7 @@ import { assertServerEnv } from '@/lib/env'
 import { getSafeErrorCode } from '@/lib/safe-error'
 import { createAdminClient } from '@/utils/supabase/admin'
 import { sendPushToUsers } from '@/lib/push'
+import { EMAIL_FROM } from '@/lib/email-from'
 
 const esc = (v: string) => v.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
 
@@ -13,7 +14,7 @@ export async function sendPlainEmail(to: string, subject: string, bodyHtml: stri
         const { resendApiKey } = assertServerEnv()
         if (!resendApiKey || !to) return false
         const { error } = await new Resend(resendApiKey).emails.send({
-            from: 'BuscoMiMascota <notificaciones@buscomimascotaperdida.com>',
+            from: EMAIL_FROM,
             to,
             subject,
             html: `<div style="font-family:Arial,sans-serif;max-width:560px">${bodyHtml}</div>`,
@@ -69,6 +70,19 @@ export async function notifyBoostConfirmed(boostId: string) {
         `<p>Hola ${esc(user.full_name || '')},</p><p>Confirmamos tu apoyo de <strong>S/ ${Number(b.amount_confirmed ?? 0)}</strong>. ` +
         `El caso de <strong>${esc(pet?.name || 'tu mascota')}</strong> aparece destacado${until ? ` hasta el ${until}` : ''}.</p>` +
         `<p><a href="${appUrl()}/mascotas/${b.pet_id}">Ver el caso</a></p><p>Gracias por ayudar a que más mascotas vuelvan a casa.</p>`)
+}
+
+/** Aviso al equipo cuando alguien registra un aporte pendiente de verificar. Solo lo dispara el dueño del aporte. */
+export async function notifyAdminBoost(boostId: string, userId: string) {
+    const to = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim()
+    if (!to) return false
+    const admin = createAdminClient()
+    const { data: claimed } = await admin.from('pet_boosts')
+        .update({ admin_notified_at: new Date().toISOString() })
+        .eq('id', boostId).eq('user_id', userId).is('admin_notified_at', null).select('amount_claimed')
+    if (!claimed?.length) return false
+    return sendPlainEmail(to, 'Nuevo aporte por verificar',
+        `<p>Hay un aporte de <strong>S/ ${Number(claimed[0].amount_claimed)}</strong> pendiente de verificar.</p><p><a href="${appUrl()}/admin/impulsos">Abrir impulsos</a></p>`)
 }
 
 /** Aviso al equipo cuando llega un mensaje por el formulario de contacto. */

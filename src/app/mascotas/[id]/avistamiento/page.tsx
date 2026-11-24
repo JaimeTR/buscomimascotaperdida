@@ -244,7 +244,7 @@ export default function SightingReportPage() {
 
                                 {imagePreview ? (
                                     <div className="relative rounded-2xl overflow-hidden border-2 border-border">
-                                        <img src={imagePreview} alt="Preview" className="w-full h-64 object-cover" />
+                                        <img src={imagePreview} alt="Vista previa de la foto del avistamiento" className="w-full h-64 object-cover" />
                                         <button
                                             type="button"
                                             onClick={removeImage}
