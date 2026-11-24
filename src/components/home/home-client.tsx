@@ -56,17 +56,17 @@ export function HomeClient({ adSlot, featured, initialPets }: { adSlot: React.Re
           <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.08]" />
           <PawPrint aria-hidden className="pointer-events-none absolute -bottom-6 -left-4 h-28 w-28 -rotate-12 text-primary/10 md:h-40 md:w-40" />
           <div className="relative grid grid-cols-1 items-center gap-6 md:grid-cols-[1.2fr_1fr] md:gap-12">
-            <div className="min-w-0 space-y-5 md:space-y-6">
+            <div className="flex min-w-0 flex-col items-center space-y-5 text-center md:block md:space-y-6 md:text-left">
               <p className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]">
                 <PawPrint className="h-4 w-4" aria-hidden /> Red comunitaria de ayuda
               </p>
               <h1 className="text-balance font-display text-[2rem] leading-[1.08] text-primary sm:text-4xl md:text-6xl md:leading-[1.05]">
                 Ayúdanos a traerlos de <span className="text-cta">vuelta a casa</span>
               </h1>
-              <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
+              <p className="max-w-xl text-pretty text-base text-muted-foreground sm:text-lg">
                 Publica el reporte de tu mascota o busca entre los casos de tu zona. Es gratis y lo ve toda la comunidad.
               </p>
-              <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:justify-center md:justify-start">
                 <Button asChild variant="cta" size="lg" className="h-12 rounded-full px-7 text-base shadow-[var(--shadow-soft)]">
                   <Link href="/reportar"><PawPrint className="mr-2 h-5 w-5" aria-hidden /> Reportar una mascota</Link>
                 </Button>
@@ -74,7 +74,7 @@ export function HomeClient({ adSlot, featured, initialPets }: { adSlot: React.Re
                   <Link href="/reportar?tipo=encontrada"><HandHeart className="mr-2 h-5 w-5" aria-hidden /> Encontré una mascota</Link>
                 </Button>
               </div>
-              <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-muted-foreground">
+              <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm md:justify-start font-medium text-muted-foreground">
                 {["Gratis", "Avisamos a tu zona", "Cartel listo para imprimir"].map((t) => (
                   <li key={t} className="inline-flex items-center gap-1.5"><CheckCircle2 className="h-4 w-4 text-primary" aria-hidden /> {t}</li>
                 ))}
@@ -95,7 +95,7 @@ export function HomeClient({ adSlot, featured, initialPets }: { adSlot: React.Re
         {/* Buscador flotante */}
         <div className="relative z-10 -mt-9 px-2 sm:px-6 md:-mt-14 md:px-14">
           <div className="rounded-3xl border bg-card p-4 shadow-[var(--shadow-lift)] md:p-6">
-            <p className="mb-3 text-sm font-semibold text-foreground">¿Buscas a tu mascota?</p>
+            <p className="mb-3 text-center text-sm font-semibold text-foreground md:text-left">¿Buscas a tu mascota?</p>
             <PetFilters compact value={filters} onChange={setFilters} onSubmit={() => document.getElementById("resultados")?.scrollIntoView({ behavior: "smooth" })} />
           </div>
         </div>
@@ -109,8 +109,8 @@ export function HomeClient({ adSlot, featured, initialPets }: { adSlot: React.Re
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {ACTIONS.map((a, i) => (
             <Reveal as="li" key={a.href} delay={i * 0.06}>
-              <Link href={a.href} className="group hover-lift block h-full rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)]">
-                <span className={`mb-4 flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6 ${a.tone}`}><a.icon className="h-6 w-6" aria-hidden /></span>
+              <Link href={a.href} className="group hover-lift block h-full rounded-3xl border bg-card p-5 text-center shadow-[var(--shadow-soft)] sm:text-left">
+                <span className={`mx-auto mb-4 flex h-12 sm:mx-0 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6 ${a.tone}`}><a.icon className="h-6 w-6" aria-hidden /></span>
                 <h2 className="text-lg font-semibold">{a.title}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">{a.text}</p>
               </Link>
@@ -121,7 +121,7 @@ export function HomeClient({ adSlot, featured, initialPets }: { adSlot: React.Re
 
       {/* Casos */}
       <section id="resultados" className="container mx-auto scroll-mt-20 space-y-6 px-4 py-6">
-        <div className="flex flex-wrap items-end justify-between gap-3">
+        <div className="flex flex-col items-center gap-2 text-center md:flex-row md:flex-wrap md:items-end md:justify-between md:gap-3 md:text-left">
           <h2 className="text-2xl font-semibold md:text-3xl">
             {active ? `Resultados de tu búsqueda (${pets.length})` : "Casos recientes"}
           </h2>
@@ -173,8 +173,8 @@ export function HomeClient({ adSlot, featured, initialPets }: { adSlot: React.Re
         <h2 className="mb-8 text-center font-display text-3xl text-primary md:text-4xl">Cómo funciona</h2>
         <ol className="grid gap-4 md:grid-cols-3">
           {STEPS.map((s, i) => (
-            <Reveal as="li" key={s.t} delay={i * 0.06} className="hover-lift rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
-              <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">{i + 1}</span>
+            <Reveal as="li" key={s.t} delay={i * 0.06} className="hover-lift rounded-3xl border bg-card p-6 text-center shadow-[var(--shadow-soft)] md:text-left">
+              <span className="mx-auto mb-4 flex h-11 md:mx-0 w-11 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">{i + 1}</span>
               <h3 className="mb-1 text-lg font-semibold">{s.t}</h3>
               <p className="text-sm text-muted-foreground">{s.d}</p>
             </Reveal>
@@ -188,10 +188,10 @@ export function HomeClient({ adSlot, featured, initialPets }: { adSlot: React.Re
           <div className="group relative min-h-60 overflow-hidden">
             <Image src={STOCK.veterinarios.src} alt={STOCK.veterinarios.alt} fill sizes="(min-width: 768px) 50vw, 100vw" className="img-zoom object-cover" />
           </div>
-          <div className="flex flex-col justify-center gap-4 p-8 md:p-12">
+          <div className="flex flex-col justify-center gap-4 p-8 text-center md:p-12 md:text-left">
             <h2 className="font-display text-3xl leading-tight text-primary">Empresas y voluntarios que suman</h2>
             <p className="text-muted-foreground">Veterinarias, refugios, negocios y personas que ayudan a que más mascotas vuelvan a casa. Súmate o promociona tu negocio.</p>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap justify-center gap-3 md:justify-start">
               <Button asChild className="rounded-full"><Link href="/aliados"><Handshake className="mr-2 h-4 w-4" aria-hidden /> Ser aliado</Link></Button>
               <Button asChild variant="outline" className="rounded-full"><Link href="/anuncios"><Megaphone className="mr-2 h-4 w-4" aria-hidden /> Promocionar mi negocio</Link></Button>
             </div>

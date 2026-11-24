@@ -16,11 +16,11 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
             </aside>
 
             <div className="flex flex-col bg-background px-6 py-6 sm:px-12 lg:py-8">
-                <div className="flex items-center justify-between">
+                <div className="flex flex-col items-center gap-1 sm:flex-row sm:justify-between">
                     <Link href="/" aria-label="Busco mi mascota, ir al inicio" className="w-fit">
                         <Image src="/brand/isologo-horizontal.svg" alt="Busco mi mascota" width={176} height={48} priority unoptimized className="h-11 w-auto" />
                     </Link>
-                    <Link href="/mascotas" className="-mr-3 inline-flex min-h-11 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+                    <Link href="/mascotas" className="inline-flex sm:-mr-3 min-h-11 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
                         <ArrowLeft className="h-4 w-4" aria-hidden /> Ver mascotas
                     </Link>
                 </div>
@@ -28,13 +28,13 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
                 <div className="relative mt-6 h-32 overflow-hidden rounded-2xl lg:hidden" aria-hidden>
                     <Image src={STOCK.paseo.src} alt="" fill quality={85} sizes="(max-width: 1024px) 100vw, 0px" className="object-cover object-[50%_40%]" />
                     <div className="absolute inset-0 bg-gradient-to-t from-primary-deep/85 to-transparent" />
-                    <p className="absolute bottom-3 left-4 font-display text-xl text-white">{SLOGAN}</p>
+                    <p className="absolute inset-x-4 bottom-3 text-center font-display text-xl text-white">{SLOGAN}</p>
                 </div>
 
-                <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-8 lg:py-10">
+                <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-8 text-center lg:py-10 lg:text-left">
                     <h1 className="font-display text-4xl leading-none text-primary">{title}</h1>
                     {subtitle && <p className="mt-3 text-muted-foreground">{subtitle}</p>}
-                    <div className="mt-8">{children}</div>
+                    <div className="mt-8 text-left">{children}</div>
                 </div>
             </div>
         </div>

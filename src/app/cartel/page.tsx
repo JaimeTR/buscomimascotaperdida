@@ -65,15 +65,15 @@ export default async function PosterHubPage({ searchParams }: { searchParams: Pr
                 <div className="relative overflow-hidden rounded-[1.5rem] bg-accent px-5 py-8 sm:rounded-[2rem] sm:px-8 md:px-14 md:py-14">
                     <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.08]" />
                     <div className="relative grid items-center gap-10 md:grid-cols-[1.15fr_1fr]">
-                        <div className="min-w-0 space-y-5 md:space-y-6">
+                        <div className="flex min-w-0 flex-col items-center space-y-5 text-center md:block md:space-y-6 md:text-left">
                             <p className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]"><Megaphone className="h-4 w-4" aria-hidden /> Carteles de mascota perdida</p>
                             <h1 className="text-balance font-display text-[2rem] leading-[1.08] text-primary sm:text-4xl md:text-6xl md:leading-[1.05]">Un cartel <span className="text-cta">profesional</span> en minutos</h1>
                             <p className="max-w-xl text-base text-muted-foreground sm:text-lg">Elige una plantilla, personaliza los textos y la foto, y descárgalo o imprímelo. Con QR directo al reporte y en el tamaño que necesites.</p>
-                            <div className="flex flex-col gap-3 sm:flex-row">
+                            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:justify-center md:justify-start">
                                 <Button asChild variant="cta" size="lg" className="h-12 rounded-full px-7 text-base"><a href="#mis-reportes"><Megaphone className="mr-2 h-5 w-5" aria-hidden /> Crear el cartel de mi reporte</a></Button>
                                 <Button asChild variant="outline" size="lg" className="h-12 rounded-full border-primary/30 bg-card px-7 text-base text-primary hover:bg-card/80"><Link href="/reportar"><PawPrint className="mr-2 h-5 w-5" aria-hidden /> Reportar una mascota</Link></Button>
                             </div>
-                            <ul className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-muted-foreground">
+                            <ul className="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm font-medium md:justify-start text-muted-foreground">
                                 {["Gratis", "PDF, PNG o impreso", "Se guarda solo"].map((t) => <li key={t} className="inline-flex items-center gap-1.5"><BadgeCheck className="h-4 w-4 text-primary" aria-hidden /> {t}</li>)}
                             </ul>
                         </div>
@@ -139,8 +139,8 @@ export default async function PosterHubPage({ searchParams }: { searchParams: Pr
                 <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {FEATURES.map((f, i) => (
                         <Reveal as="li" key={f.t} delay={(i % 3) * 0.06}>
-                            <div className={`group h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)] ${lift}`}>
-                                <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"><f.icon className="h-6 w-6" aria-hidden /></span>
+                            <div className={`group h-full rounded-3xl border bg-card p-6 text-center shadow-[var(--shadow-soft)] sm:text-left ${lift}`}>
+                                <span className="mx-auto mb-4 sm:mx-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"><f.icon className="h-6 w-6" aria-hidden /></span>
                                 <h3 className="text-lg font-semibold">{f.t}</h3>
                                 <p className="mt-1 text-sm text-muted-foreground">{f.d}</p>
                             </div>
@@ -181,10 +181,10 @@ export default async function PosterHubPage({ searchParams }: { searchParams: Pr
                         const h = f.w >= f.h ? (44 * f.h) / f.w : 44
                         return (
                             <Reveal as="li" key={id} delay={(i % 3) * 0.06}>
-                                <div className={`flex h-full items-center gap-4 rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)] ${lift}`}>
+                                <div className={`flex h-full flex-col items-center gap-3 rounded-3xl border bg-card p-5 text-center sm:flex-row sm:gap-4 sm:text-left shadow-[var(--shadow-soft)] ${lift}`}>
                                     <span className="grid h-16 w-16 shrink-0 place-items-center rounded-2xl bg-secondary"><span className="rounded-[3px] border-2 border-primary bg-card" style={{ width: w, height: h }} aria-hidden /></span>
                                     <div className="min-w-0">
-                                        <p className="flex items-center gap-2 font-semibold"><Icon className="h-4 w-4 text-primary" aria-hidden /> {f.label} <span className="text-xs font-normal text-muted-foreground">· {f.hint}</span></p>
+                                        <p className="flex flex-wrap items-center justify-center gap-2 font-semibold sm:justify-start"><Icon className="h-4 w-4 text-primary" aria-hidden /> {f.label} <span className="text-xs font-normal text-muted-foreground">· {f.hint}</span></p>
                                         <p className="mt-0.5 text-sm text-muted-foreground">{FORMAT_USE[id]}</p>
                                     </div>
                                 </div>
@@ -197,11 +197,11 @@ export default async function PosterHubPage({ searchParams }: { searchParams: Pr
             {/* Cómo funciona + consejos */}
             <section aria-labelledby="h-como" className="container mx-auto grid gap-8 px-4 lg:grid-cols-[1.1fr_1fr]">
                 <div className="space-y-5">
-                    <h2 id="h-como" className="font-display text-3xl text-primary md:text-4xl">Así de simple</h2>
+                    <h2 id="h-como" className="text-center font-display lg:text-left text-3xl text-primary md:text-4xl">Así de simple</h2>
                     <ol className="space-y-4">
                         {STEPS.map((s, i) => (
                             <Reveal as="li" key={s.t} delay={i * 0.06}>
-                                <div className="flex gap-4 rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)]">
+                                <div className="flex flex-col items-center gap-3 rounded-3xl border bg-card p-5 text-center shadow-[var(--shadow-soft)] sm:flex-row sm:items-start sm:gap-4 sm:text-left">
                                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">{i + 1}</span>
                                     <div><h3 className="font-semibold">{s.t}</h3><p className="text-sm text-muted-foreground">{s.d}</p></div>
                                 </div>
@@ -211,11 +211,11 @@ export default async function PosterHubPage({ searchParams }: { searchParams: Pr
                 </div>
                 <div className="relative overflow-hidden rounded-[2rem] bg-primary p-7 text-primary-foreground md:p-10">
                     <div aria-hidden className="paws-white pointer-events-none absolute inset-0 opacity-[0.07]" />
-                    <div className="relative space-y-4">
-                        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15"><Sparkles className="h-6 w-6" aria-hidden /></span>
+                    <div className="relative space-y-4 text-center md:text-left">
+                        <span className="mx-auto flex h-12 w-12 md:mx-0 items-center justify-center rounded-2xl bg-white/15"><Sparkles className="h-6 w-6" aria-hidden /></span>
                         <h2 className="font-display text-2xl leading-tight md:text-3xl">Consejos para un buen cartel</h2>
                         <ul className="space-y-3 text-sm text-primary-foreground/95">
-                            {TIPS.map((t) => <li key={t} className="flex gap-2.5"><Hand className="mt-0.5 h-4 w-4 shrink-0 text-orange-200" aria-hidden /> {t}</li>)}
+                            {TIPS.map((t) => <li key={t} className="flex gap-2.5 text-left"><Hand className="mt-0.5 h-4 w-4 shrink-0 text-orange-200" aria-hidden /> {t}</li>)}
                         </ul>
                     </div>
                 </div>

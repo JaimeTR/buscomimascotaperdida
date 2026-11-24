@@ -32,11 +32,11 @@ export default async function AnunciosPage() {
         <div>
             <section className="container mx-auto px-4 pt-6 md:pt-10">
                 <div className="grid overflow-hidden rounded-[2rem] bg-primary text-primary-foreground md:grid-cols-[1.1fr_1fr]">
-                    <div className="flex flex-col justify-center gap-5 p-8 md:p-14">
+                    <div className="flex flex-col items-center justify-center gap-5 p-8 text-center md:items-start md:p-14 md:text-left">
                         <p className="inline-flex w-fit items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-medium"><Star className="h-4 w-4 fill-current" aria-hidden /> Apoyo voluntario</p>
                         <h1 className="font-display text-4xl leading-[1.05] md:text-5xl">Destaca tu caso o tu negocio <span className="text-orange-300">con un aporte voluntario</span></h1>
                         <p className="text-lg text-primary-foreground/90">Sin planes ni precios fijos. Aportas lo que quieras y apareces como destacado: a mayor aporte, más adelante sales.</p>
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-wrap justify-center gap-3 md:justify-start">
                             <OpenFormButton form="anuncios" variant="cta" size="lg" className="rounded-full"><Megaphone className="mr-2 h-5 w-5" aria-hidden /> Anunciar mi negocio</OpenFormButton>
                             <Button asChild size="lg" variant="outline" className="rounded-full border-white/40 bg-transparent text-white hover:bg-white/10 hover:text-white"><a href="/reportar"><Heart className="mr-2 h-5 w-5" aria-hidden /> Destacar mi mascota</a></Button>
                         </div>
@@ -50,8 +50,8 @@ export default async function AnunciosPage() {
             <section aria-label="Beneficios" className="container mx-auto grid gap-4 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
                 {BENEFITS.map((b, i) => (
                     <Reveal key={b.t} delay={i * 0.06}>
-                        <div className={`${lift} group h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]`}>
-                            <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"><b.icon className="h-6 w-6" aria-hidden /></span>
+                        <div className={`${lift} group h-full rounded-3xl border bg-card p-6 text-center shadow-[var(--shadow-soft)] sm:text-left`}>
+                            <span className="mx-auto mb-4 sm:mx-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"><b.icon className="h-6 w-6" aria-hidden /></span>
                             <h2 className="text-lg font-semibold">{b.t}</h2>
                             <p className="mt-1 text-sm text-muted-foreground">{b.d}</p>
                         </div>
@@ -83,8 +83,8 @@ export default async function AnunciosPage() {
                 <ol className="grid gap-4 md:grid-cols-3">
                     {STEPS.map((s, i) => (
                         <Reveal as="li" key={s.t} delay={i * 0.06}>
-                            <div className={`${lift} h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]`}>
-                                <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">{i + 1}</span>
+                            <div className={`${lift} h-full rounded-3xl border bg-card p-6 text-center shadow-[var(--shadow-soft)] md:text-left`}>
+                                <span className="mx-auto mb-4 md:mx-0 flex h-11 w-11 items-center justify-center rounded-full bg-primary font-display text-lg text-primary-foreground">{i + 1}</span>
                                 <h3 className="mb-1 text-lg font-semibold">{s.t}</h3>
                                 <p className="text-sm text-muted-foreground">{s.d}</p>
                             </div>

@@ -46,8 +46,8 @@ export function Navbar() {
     if (pathname.startsWith("/panel") || pathname.startsWith("/admin")) return null
 
     return (
-        // Móvil: encabezado simple que se va con el scroll (solo logo); cuenta y accesos viven en la barra inferior.
-        <header className={cn("z-50 bg-background transition-shadow duration-300 lg:sticky lg:top-0 lg:border-b lg:bg-background/90 lg:backdrop-blur", scrolled && "lg:bg-background/95 lg:shadow-[0_6px_20px_-12px_rgb(11_43_42/0.35)]")}>
+        // Móvil: sin encabezado (como una app); cuenta y accesos viven en la barra inferior.
+        <header className={cn("z-50 hidden bg-background transition-shadow duration-300 lg:sticky lg:block lg:top-0 lg:border-b lg:bg-background/90 lg:backdrop-blur", scrolled && "lg:bg-background/95 lg:shadow-[0_6px_20px_-12px_rgb(11_43_42/0.35)]")}>
             <div className={cn("container mx-auto flex h-14 items-center justify-center gap-2 px-4 transition-[height] duration-300 lg:justify-between xl:gap-4", scrolled ? "lg:h-12" : "lg:h-16")}>
                 <Link href="/" aria-label="Busco mi mascota, inicio"><BrandMark showName nameClassName="lg:hidden" symbolClassName={scrolled ? "lg:h-8" : undefined} /></Link>
 

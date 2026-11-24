@@ -116,7 +116,7 @@ export default function RootLayout({
         <ToastProvider>
           <ConfirmProvider>
             <ChromeGate><Navbar /></ChromeGate>
-            <main className="flex-1">
+            <main className="flex-1 pt-[env(safe-area-inset-top)] lg:pt-0">
               {children}
             </main>
             <ChromeGate><Footer /></ChromeGate>

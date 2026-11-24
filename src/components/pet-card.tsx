@@ -68,8 +68,8 @@ export function PetCard({ id, name, type, breed, district, province, colors = []
             </div>
 
             <div className="space-y-3 p-5">
-                <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
+                <div className="flex flex-col-reverse items-center gap-2 text-center sm:flex-row sm:items-start sm:justify-between sm:gap-3 sm:text-left">
+                    <div className="min-w-0 max-w-full">
                         <h3 className="truncate text-lg font-semibold leading-tight">{name || "Sin nombre"}</h3>
                         <p className="truncate text-sm text-muted-foreground">{breed}</p>
                     </div>
@@ -77,7 +77,7 @@ export function PetCard({ id, name, type, breed, district, province, colors = []
                         <TypeIcon className="h-4 w-4" />
                     </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+                <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-muted-foreground sm:justify-start">
                     <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-cta" aria-hidden />{district}{province ? `, ${province}` : ''}</span>
                     <span className="inline-flex items-center gap-1.5"><CalendarDays className="h-4 w-4" aria-hidden />{date}</span>
                 </div>

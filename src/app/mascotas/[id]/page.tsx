@@ -50,7 +50,7 @@ const dateFmt = new Intl.DateTimeFormat("es-PE", { day: "numeric", month: "long"
 
 function Fact({ icon: Icon, label, children }: { icon: typeof Tag; label: string; children: React.ReactNode }) {
     return (
-        <div className="flex items-start gap-3 rounded-2xl bg-background p-3.5">
+        <div className="flex flex-col items-center gap-2 rounded-2xl bg-background p-3.5 text-center sm:flex-row sm:items-start sm:gap-3 sm:text-left">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-accent text-accent-foreground"><Icon className="h-4 w-4" aria-hidden /></span>
             <div className="min-w-0"><p className="text-xs font-semibold text-muted-foreground">{label}</p><div className="font-semibold">{children}</div></div>
         </div>
@@ -170,19 +170,19 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                 {/* Encabezado del caso */}
                 <header className="space-y-4">
-                    <nav aria-label="Migas de pan" className="flex flex-wrap items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                    <nav aria-label="Migas de pan" className="flex flex-wrap items-center justify-center gap-1.5 md:justify-start text-xs font-medium text-muted-foreground">
                         <Link href="/" className="hover:text-foreground">Inicio</Link><ChevronRight className="h-3 w-3 opacity-50" aria-hidden />
                         <Link href="/mascotas" className="hover:text-foreground">Mascotas</Link><ChevronRight className="h-3 w-3 opacity-50" aria-hidden />
                         <span className="text-foreground">{pet.name}</span>
                     </nav>
-                    <div className="flex flex-wrap items-end justify-between gap-4">
+                    <div className="flex flex-wrap items-end justify-center gap-4 text-center md:justify-between md:text-left">
                         <div className="min-w-0 space-y-2">
-                            <div className="flex flex-wrap items-center gap-3">
+                            <div className="flex flex-wrap items-center justify-center gap-3 md:justify-start">
                                 <h1 className="font-display text-4xl leading-tight text-primary md:text-5xl">{pet.name}</h1>
                                 <StatusBadge status={pet.status} className="px-3.5 py-1 text-xs" />
                                 {isFeatured && <span className="inline-flex items-center gap-1 rounded-full bg-cta px-3 py-1 text-xs font-bold text-cta-foreground"><Star className="h-3.5 w-3.5 fill-current" aria-hidden /> Caso destacado</span>}
                             </div>
-                            <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm font-medium text-muted-foreground">
+                            <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm font-medium text-muted-foreground md:justify-start">
                                 <span className="inline-flex items-center gap-1.5"><MapPin className="h-4 w-4 text-cta" aria-hidden /> {place || "Zona no indicada"}</span>
                                 <span className="inline-flex items-center gap-1.5"><Calendar className="h-4 w-4" aria-hidden /> {found ? "Encontrado" : "Visto por última vez"} {formatDistanceToNow(new Date(pet.last_seen_date), { addSuffix: true, locale: es })}</span>
                             </p>
@@ -199,11 +199,11 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                         <div className="space-y-5 lg:sticky lg:top-20">
                             {isOwner && (
                                 <div className="space-y-3 rounded-[1.5rem] border border-primary/30 bg-accent p-5">
-                                    <p className="flex items-center gap-2 font-semibold text-accent-foreground"><UserRound className="h-5 w-5" aria-hidden /> Este es tu reporte</p>
+                                    <p className="flex items-center justify-center gap-2 font-semibold text-accent-foreground lg:justify-start"><UserRound className="h-5 w-5" aria-hidden /> Este es tu reporte</p>
                                     {!hasPublicContact && (
                                         <p className="flex gap-2 rounded-xl bg-card p-3 text-sm text-muted-foreground"><ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-cta" aria-hidden /><span>Nadie puede contactarte directamente porque no muestras datos de contacto. Las personas te escribirán por avistamientos. <Link href="/panel/ajustes" className="font-semibold text-primary underline-offset-2 hover:underline">Elige qué datos mostrar</Link>.</span></p>
                                     )}
-                                    <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap justify-center gap-2 lg:justify-start">
                                         <Button asChild size="sm" className="rounded-full"><Link href={`/panel/reportes/${pet.id}/editar`}><Pencil className="mr-1.5 h-4 w-4" aria-hidden /> Editar</Link></Button>
                                         <OpenFormButton form="impulso" size="sm" variant="cta" className="rounded-full"><Rocket className="mr-1.5 h-4 w-4" aria-hidden /> Destacar mi caso</OpenFormButton>
                                         <Button asChild size="sm" variant="outline" className="rounded-full bg-card"><Link href="/panel/reportes">Mis reportes</Link></Button>
@@ -221,7 +221,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                             <div className="space-y-4 rounded-[1.5rem] border bg-card p-5 shadow-[var(--shadow-lift)] sm:rounded-[2rem] sm:p-7">
                                 {!reunited && (
-                                    <div className="space-y-1">
+                                    <div className="space-y-1 text-center lg:text-left">
                                         <h2 className="font-display text-2xl text-primary">{found ? "¿Es tu mascota?" : `¿Viste a ${pet.name}?`}</h2>
                                         <p className="text-sm text-muted-foreground">{found ? "Escríbele a quien la encontró o reporta un dato que ayude." : "Cualquier dato ayuda: dónde y a qué hora."}</p>
                                     </div>
@@ -258,7 +258,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-3 rounded-2xl border bg-card p-4 text-sm">
+                            <div className="flex flex-col items-center gap-3 rounded-2xl border bg-card p-4 text-center text-sm sm:flex-row sm:text-left">
                                 <span className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-accent font-bold text-primary">
                                     {owner.avatar_url
                                         ? <img src={owner.avatar_url} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
@@ -278,8 +278,8 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                     {/* Detalle, mapa, historial */}
                     <div className="space-y-6 lg:col-span-7">
                         <section aria-labelledby="h-sobre" className="space-y-5 rounded-[1.5rem] border bg-card p-5 shadow-[var(--shadow-soft)] sm:rounded-[2rem] sm:p-8">
-                            <h2 id="h-sobre" className="font-display text-2xl text-primary sm:text-3xl">Sobre {pet.name}</h2>
-                            <p className="whitespace-pre-wrap leading-relaxed text-foreground/90">{pet.description || "Sin descripción proporcionada."}</p>
+                            <h2 id="h-sobre" className="text-center font-display text-2xl text-primary sm:text-left sm:text-3xl">Sobre {pet.name}</h2>
+                            <p className="whitespace-pre-wrap text-center leading-relaxed text-foreground/90 sm:text-left">{pet.description || "Sin descripción proporcionada."}</p>
 
                             <div className="grid gap-3 sm:grid-cols-2">
                                 <Fact icon={Dog} label="Tipo">{kind}</Fact>
@@ -290,7 +290,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                 {pet.microchip && <Fact icon={Cpu} label="Microchip">Sí tiene</Fact>}
                                 <Fact icon={Palette} label="Colores">
                                     {colors.length ? (
-                                        <span className="flex flex-wrap gap-x-3 gap-y-1">
+                                        <span className="flex flex-wrap justify-center gap-x-3 gap-y-1 sm:justify-start">
                                             {colors.map((c) => (
                                                 <span key={c} className="inline-flex items-center gap-1.5 text-sm">
                                                     <span className="h-3.5 w-3.5 rounded-full border border-stone-300" style={{ background: SWATCH[c.toLowerCase()] ?? "#cbd5e0" }} aria-hidden /> {c}
@@ -305,7 +305,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                 <div className="space-y-3 border-t pt-4">
                                     {pet.markings && <p className="text-sm"><span className="font-semibold">Señas particulares:</span> <span className="text-muted-foreground">{pet.markings}</span></p>}
                                     {pet.personality?.length > 0 && (
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
                                             {pet.personality.map((t: string) => <span key={t} className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">{t}</span>)}
                                         </div>
                                     )}
@@ -314,7 +314,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                         </section>
 
                         <section aria-labelledby="h-mapa" className="space-y-4 rounded-[1.5rem] border bg-card p-5 shadow-[var(--shadow-soft)] sm:rounded-[2rem] sm:p-8">
-                            <div className="flex flex-wrap items-center justify-between gap-2">
+                            <div className="flex flex-col items-center justify-between gap-2 text-center sm:flex-row sm:text-left">
                                 <h2 id="h-mapa" className="font-display text-2xl text-primary sm:text-3xl">Mapa de avistamientos</h2>
                                 <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">Última señal: {dateFmt.format(lastSignal)}</span>
                             </div>
@@ -340,7 +340,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                         {!reunited && (
                             <section aria-labelledby="h-ves" className="space-y-4 rounded-[1.5rem] border bg-accent p-5 sm:rounded-[2rem] sm:p-8">
-                                <h2 id="h-ves" className="flex items-center gap-2 font-display text-2xl text-primary"><Megaphone className="h-6 w-6" aria-hidden /> {found ? "Si crees que es tu mascota" : `Si ves a ${pet.name}`}</h2>
+                                <h2 id="h-ves" className="flex items-center justify-center gap-2 text-center font-display sm:justify-start sm:text-left text-2xl text-primary"><Megaphone className="h-6 w-6" aria-hidden /> {found ? "Si crees que es tu mascota" : `Si ves a ${pet.name}`}</h2>
                                 <ol className="space-y-2 text-sm text-accent-foreground">
                                     {(found
                                         ? ["Mira bien las fotos y los datos del reporte.", "Escribe a quien la encontró con una foto tuya de ella.", "Preparen un punto de encuentro seguro y público.", "Si ya es tuya, marca el caso como reunido desde tu cuenta."]
@@ -354,7 +354,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                 {matches.length > 0 && (
                     <section className="space-y-6 border-t pt-10">
-                        <h2 className="font-display text-3xl text-primary">Posibles coincidencias con {found ? 'mascotas perdidas' : 'mascotas encontradas'}</h2>
+                        <h2 className="text-center font-display text-3xl text-primary sm:text-left">Posibles coincidencias con {found ? 'mascotas perdidas' : 'mascotas encontradas'}</h2>
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
                             {matches.map(({ pet: m }, i) => (
                                 <Reveal key={m.id} delay={i * 0.05}>
@@ -367,7 +367,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
 
                 {similarPets && similarPets.length > 0 && (
                     <section className="space-y-6 border-t pt-10">
-                        <div className="flex items-center gap-3">
+                        <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:text-left">
                             <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-accent text-primary"><Flag className="h-5 w-5" aria-hidden /></span>
                             <h2 className="font-display text-3xl text-primary">Otras alertas en {pet.last_seen_district}</h2>
                         </div>

@@ -63,7 +63,7 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
                     <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.08]" />
                     <PawPrint aria-hidden className="pointer-events-none absolute -bottom-6 -left-4 h-28 w-28 -rotate-12 text-primary/10 md:h-40 md:w-40" />
                     <div className="relative grid items-center gap-8 md:grid-cols-[1.2fr_1fr] md:gap-12">
-                        <div className="min-w-0 space-y-5 md:space-y-6">
+                        <div className="flex min-w-0 flex-col items-center space-y-5 text-center md:block md:space-y-6 md:text-left">
                             <p className="inline-flex items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]">
                                 <MapPinned className="h-4 w-4" aria-hidden /> Búsqueda por zona, raza y color
                             </p>
@@ -73,7 +73,7 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
                             <p className="max-w-xl text-base text-muted-foreground sm:text-lg">
                                 Mira los casos de tu zona en lista o en el mapa. Si viste a una mascota, avisa a su familia; si perdiste a la tuya, publícala y crea su cartel.
                             </p>
-                            <div className="flex flex-col gap-3 sm:flex-row">
+                            <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:justify-center md:justify-start">
                                 <Button asChild variant="cta" size="lg" className="h-12 rounded-full px-7 text-base shadow-[var(--shadow-soft)]">
                                     <Link href="/reportar"><PawPrint className="mr-2 h-5 w-5" aria-hidden /> Reportar una mascota</Link>
                                 </Button>
@@ -107,11 +107,11 @@ function SearchContent({ ad, initialQuery }: { ad?: React.ReactNode; initialQuer
                 <div className="space-y-6">
 
                     {/* Header & Controls */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
                         <h2 className="text-2xl font-bold text-foreground">
                             {isLoading ? "Buscando..." : `${total} ${total === 1 ? "mascota encontrada" : "mascotas encontradas"}`}
                         </h2>
-                        <div className="flex gap-1 rounded-lg border border-border p-1 self-start" role="group" aria-label="Vista">
+                        <div className="flex gap-1 rounded-lg border border-border p-1" role="group" aria-label="Vista">
                             <Button size="sm" variant={view === "list" ? "default" : "ghost"} aria-pressed={view === "list"} onClick={() => setView("list")}><List className="mr-1 h-4 w-4" />Lista</Button>
                             <Button size="sm" variant={view === "map" ? "default" : "ghost"} aria-pressed={view === "map"} onClick={() => setView("map")}><MapIcon className="mr-1 h-4 w-4" />Mapa</Button>
                         </div>

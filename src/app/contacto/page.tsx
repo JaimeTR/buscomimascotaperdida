@@ -63,7 +63,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                 <div aria-hidden className="paws-teal pointer-events-none absolute inset-0 opacity-[0.07]" />
                 <div className="relative space-y-5 p-8 md:p-12">
                     <PageHeader title="Contacto, alianzas y apoyo" text="Escríbenos, súmate como aliado o voluntario, o apoya el proyecto para que más mascotas vuelvan a casa." />
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap justify-center gap-3 md:justify-start">
                         <OpenFormButton form="contacto" detail={{ kind: "consulta" }} variant="cta" size="lg" className="rounded-full"><MessageCircle className="mr-2 h-5 w-5" aria-hidden /> Escribir un mensaje</OpenFormButton>
                         <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><a href="#apoyar"><HandHeart className="mr-2 h-5 w-5" aria-hidden /> Apoyar el proyecto</a></Button>
                     </div>
@@ -78,7 +78,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                 <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {channels.map((c, i) => (
                         <Reveal as="li" key={c.label} delay={i * 0.06}>
-                            <a href={c.href} {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})} className={`group flex items-center gap-4 rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)] ${lift}`}>
+                            <a href={c.href} {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})} className={`group flex flex-col items-center gap-3 rounded-3xl border bg-card p-5 text-center sm:flex-row sm:gap-4 sm:text-left shadow-[var(--shadow-soft)] ${lift}`}>
                                 <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110"><c.icon className="h-6 w-6" aria-hidden /></span>
                                 <span className="min-w-0"><span className="block text-sm text-muted-foreground">{c.label}</span><span className="block truncate font-semibold">{c.value}</span></span>
                             </a>
@@ -96,8 +96,8 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                 <ul className="grid gap-4 md:grid-cols-3">
                     {PATHS.map((p, i) => (
                         <Reveal as="li" key={p.kind} delay={i * 0.06}>
-                            <OpenFormButton plain form="contacto" detail={{ kind: p.kind }} className={`group block h-full w-full rounded-3xl border bg-card p-6 text-left shadow-[var(--shadow-soft)] active:scale-[0.99] ${lift}`}>
-                                <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"><p.icon className="h-6 w-6" aria-hidden /></span>
+                            <OpenFormButton plain form="contacto" detail={{ kind: p.kind }} className={`group block h-full w-full rounded-3xl border bg-card p-6 text-center shadow-[var(--shadow-soft)] active:scale-[0.99] md:text-left ${lift}`}>
+                                <span className="mx-auto mb-4 md:mx-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6"><p.icon className="h-6 w-6" aria-hidden /></span>
                                 <h3 className="text-lg font-semibold">{p.title}</h3>
                                 <p className="mt-1 text-sm text-muted-foreground">{p.text}</p>
                                 <span className="mt-4 inline-flex items-center text-sm font-semibold text-primary">Quiero sumarme <span className="ml-1 transition-transform duration-300 group-hover:translate-x-1" aria-hidden>→</span></span>
@@ -113,8 +113,8 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                 <div className="grid md:grid-cols-[1fr_1.1fr]">
                     <div className="relative space-y-4 bg-primary p-8 text-primary-foreground md:p-12">
                         <div aria-hidden className="paws-white pointer-events-none absolute inset-0 opacity-[0.07]" />
-                        <div className="relative space-y-4">
-                            <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15"><HandHeart className="h-6 w-6" aria-hidden /></span>
+                        <div className="relative space-y-4 text-center md:text-left">
+                            <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-white/15 md:mx-0"><HandHeart className="h-6 w-6" aria-hidden /></span>
                             <h2 id="h-apoyo" className="font-display text-3xl leading-tight md:text-4xl">Apoya el proyecto</h2>
                             <p className="text-primary-foreground/90">Busco mi mascota es gratis y seguirá siéndolo. Tu aporte, grande o pequeño, es voluntario y ayuda a cubrir servidor, avisos por correo y la difusión de casos.</p>
                             <p className="text-sm text-primary-foreground/80">¿Ya apoyaste? Avísanos para agradecerte: puedes adjuntar tu comprobante y, si quieres, unirte al grupo de colaboradores.</p>
@@ -122,12 +122,12 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                         </div>
                     </div>
                     <div className="space-y-4 p-8 md:p-12">
-                        <h3 className="text-lg font-semibold">Formas de apoyar</h3>
+                        <h3 className="text-center text-lg font-semibold md:text-left">Formas de apoyar</h3>
                         {SUPPORT_METHODS.length > 0 ? (
                             <ul className="space-y-3">
                                 {SUPPORT_METHODS.map((m) => (
-                                    <li key={m.id} className={`flex flex-wrap items-center justify-between gap-3 rounded-2xl border p-4 ${lift}`}>
-                                        <div className="flex items-center gap-3">
+                                    <li key={m.id} className={`flex flex-wrap items-center justify-center gap-3 text-center sm:justify-between sm:text-left rounded-2xl border p-4 ${lift}`}>
+                                        <div className="flex flex-col items-center gap-3 sm:flex-row">
                                             <span className={`flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold ${m.color}`}>{m.name}</span>
                                             <div>
                                                 <p className="font-display text-xl tracking-wide">{m.number}</p>
@@ -142,12 +142,12 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                             <p className="rounded-2xl border border-dashed p-5 text-sm text-muted-foreground">Estamos preparando los medios de apoyo (Yape y Plin). Mientras tanto puedes <OpenFormButton plain form="contacto" detail={{ kind: "colaborar" }} className="font-semibold text-primary underline-offset-2 hover:underline">escribirnos</OpenFormButton> y te contamos cómo colaborar.</p>
                         )}
                         <div className="space-y-3 border-t pt-4">
-                            <h3 className="text-lg font-semibold">Apoyo mensual (voluntario)</h3>
-                            <p className="text-sm text-muted-foreground">Si quieres apoyar de forma constante, elige un nivel. No es obligatorio ni hay cobro automático: nos escribes, coordinamos y tú envías tu aporte cada mes por Yape o Plin.</p>
+                            <h3 className="text-center text-lg font-semibold md:text-left">Apoyo mensual (voluntario)</h3>
+                            <p className="text-center text-sm text-muted-foreground md:text-left">Si quieres apoyar de forma constante, elige un nivel. No es obligatorio ni hay cobro automático: nos escribes, coordinamos y tú envías tu aporte cada mes por Yape o Plin.</p>
                             <ul className="grid gap-3 sm:grid-cols-3">
                                 {MEMBERSHIPS.map((m) => (
                                     <li key={m.name}>
-                                        <OpenFormButton plain form="contacto" detail={{ kind: "apoyo", amount: String(m.amount), monthly: "1" }} className={`group flex h-full w-full flex-col gap-1 rounded-2xl border p-4 text-left active:scale-[0.99] ${lift}`}>
+                                        <OpenFormButton plain form="contacto" detail={{ kind: "apoyo", amount: String(m.amount), monthly: "1" }} className={`group flex h-full w-full flex-col items-center gap-1 rounded-2xl border p-4 text-center active:scale-[0.99] ${lift}`}>
                                             <span className="flex items-center gap-2 font-semibold"><m.icon className="h-4 w-4 text-primary" aria-hidden /> {m.name}</span>
                                             <span className="font-display text-2xl">S/ {m.amount}<span className="text-sm font-normal text-muted-foreground"> / mes</span></span>
                                             <span className="text-xs text-muted-foreground">{m.text}</span>
@@ -157,8 +157,8 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                             </ul>
                         </div>
                         <ul className="space-y-2 text-sm text-muted-foreground">
-                            <li className="flex gap-2"><PawPrint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> También aceptamos ayuda en especie: difusión, diseño, tiempo.</li>
-                            <li className="flex gap-2"><PawPrint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> Si quieres, mencionamos tu apoyo en la sección de colaboradores.</li>
+                            <li className="flex gap-2 text-left"><PawPrint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> También aceptamos ayuda en especie: difusión, diseño, tiempo.</li>
+                            <li className="flex gap-2 text-left"><PawPrint className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> Si quieres, mencionamos tu apoyo en la sección de colaboradores.</li>
                         </ul>
                     </div>
                 </div>

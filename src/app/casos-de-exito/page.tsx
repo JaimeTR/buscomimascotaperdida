@@ -29,7 +29,7 @@ export default async function SuccessStoriesPage() {
 
     return (
         <div className="container mx-auto max-w-7xl px-4 py-12">
-            <header className="mb-10 max-w-2xl">
+            <header className="mx-auto mb-10 max-w-2xl text-center md:mx-0 md:text-left">
                 <h1 className="font-display text-4xl text-primary md:text-5xl">Casos de éxito</h1>
                 <p className="mt-3 text-lg text-muted-foreground">Cada una de estas mascotas volvió a casa porque alguien compartió, miró y avisó. Aquí están sus historias.</p>
             </header>
@@ -52,10 +52,10 @@ export default async function SuccessStoriesPage() {
                                     <div className="relative aspect-[4/3] bg-muted">
                                         <Image src={photo} alt={`${p.name ?? "Mascota"} después de volver a casa`} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                                     </div>
-                                    <div className="space-y-2 p-5">
+                                    <div className="space-y-2 p-5 text-center sm:text-left">
                                         <h2 className="font-display text-2xl text-primary">{p.name ?? "Sin nombre"} volvió a casa</h2>
                                         {p.reunion_story && <p className="line-clamp-3 text-muted-foreground">{p.reunion_story}</p>}
-                                        <p className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 text-sm text-muted-foreground">
+                                        <p className="flex flex-wrap items-center justify-center gap-x-4 sm:justify-start gap-y-1 pt-1 text-sm text-muted-foreground">
                                             {p.last_seen_district && <span className="inline-flex items-center gap-1"><MapPin className="h-4 w-4 text-cta" aria-hidden /> {p.last_seen_district}</span>}
                                             {days !== null && <span className="inline-flex items-center gap-1"><CalendarCheck className="h-4 w-4 text-primary" aria-hidden /> {days === 0 ? "El mismo día" : `${days} ${days === 1 ? "día" : "días"} de búsqueda`}</span>}
                                         </p>

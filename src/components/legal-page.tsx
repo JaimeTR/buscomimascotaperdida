@@ -11,12 +11,12 @@ export function LegalPage({ title, intro, sections }: { title: string; intro?: R
     return (
         <div className="min-h-screen bg-background px-4 py-12 sm:px-6 lg:px-8">
             <article className="mx-auto max-w-3xl overflow-hidden rounded-2xl border border-border bg-card p-8 shadow-sm sm:p-12">
-                <Link href="/" className="-ml-2 mb-8 inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-sm font-medium text-muted-foreground hover:text-primary">
+                <Link href="/" className="mx-auto mb-8 flex w-fit sm:-ml-2 sm:mx-0 sm:inline-flex min-h-11 items-center gap-1 rounded-lg px-2 text-sm font-medium text-muted-foreground hover:text-primary">
                     <ChevronLeft className="h-4 w-4" aria-hidden /> Volver al inicio
                 </Link>
 
-                <h1 className="font-display text-4xl text-primary">{title}</h1>
-                <p className="mb-6 mt-2 text-sm text-muted-foreground">Última actualización: {LEGAL_UPDATED}</p>
+                <h1 className="text-center font-display text-4xl text-primary sm:text-left">{title}</h1>
+                <p className="mb-6 mt-2 text-center text-sm sm:text-left text-muted-foreground">Última actualización: {LEGAL_UPDATED}</p>
                 {intro && <div className="mb-8 space-y-3 leading-relaxed text-foreground">{intro}</div>}
 
                 <nav aria-label="Contenido" className="mb-10 rounded-xl bg-muted/50 p-4 text-sm">

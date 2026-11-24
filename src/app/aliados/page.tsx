@@ -27,11 +27,11 @@ export default async function AliadosPage() {
         <div>
             <section className="container mx-auto px-4 pt-6 md:pt-10">
                 <div className="grid overflow-hidden rounded-[2rem] bg-accent md:grid-cols-2">
-                    <div className="flex flex-col justify-center gap-5 p-8 md:p-14">
+                    <div className="flex flex-col items-center justify-center gap-5 p-8 text-center md:items-start md:p-14 md:text-left">
                         <p className="inline-flex w-fit items-center gap-2 rounded-full bg-card px-4 py-1.5 text-sm font-medium text-primary shadow-[var(--shadow-soft)]"><Handshake className="h-4 w-4" aria-hidden /> Aliados</p>
                         <h1 className="font-display text-4xl leading-[1.05] text-primary md:text-5xl">Juntos llegamos <span className="text-cta">más lejos</span></h1>
                         <p className="text-lg text-muted-foreground">Cada empresa, veterinaria y persona que colabora ayuda a que más mascotas vuelvan a casa.</p>
-                        <div className="flex flex-wrap gap-3">
+                        <div className="flex flex-wrap justify-center gap-3 md:justify-start">
                             <OpenFormButton form="aliados" variant="cta" size="lg" className="rounded-full"><HandHeart className="mr-2 h-5 w-5" aria-hidden /> Quiero colaborar</OpenFormButton>
                             <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><Link href="/anuncios"><Megaphone className="mr-2 h-5 w-5" aria-hidden /> Ver planes de promoción</Link></Button>
                         </div>
@@ -47,8 +47,8 @@ export default async function AliadosPage() {
                 <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {WAYS.map((w, i) => (
                         <Reveal as="li" key={w.title} delay={i * 0.06}>
-                            <div className="hover-lift h-full rounded-3xl border bg-card p-6 shadow-[var(--shadow-soft)]">
-                                <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground"><w.icon className="h-6 w-6" aria-hidden /></span>
+                            <div className="hover-lift h-full rounded-3xl border bg-card p-6 text-center shadow-[var(--shadow-soft)] sm:text-left">
+                                <span className="mx-auto mb-4 sm:mx-0 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-accent-foreground"><w.icon className="h-6 w-6" aria-hidden /></span>
                                 <h3 className="text-lg font-semibold">{w.title}</h3>
                                 <p className="mt-1 text-sm text-muted-foreground">{w.text}</p>
                             </div>
@@ -58,7 +58,7 @@ export default async function AliadosPage() {
             </section>
 
             <section aria-labelledby="h-aliados" className="container mx-auto px-4 pb-14">
-                <h2 id="h-aliados" className="mb-8 font-display text-3xl text-primary">Nuestros aliados</h2>
+                <h2 id="h-aliados" className="mb-8 text-center font-display text-3xl text-primary md:text-left">Nuestros aliados</h2>
                 {partners.length === 0 ? (
                     <EmptyState icon={Handshake} title="Aún no hay aliados publicados" text="Sé la primera empresa o persona en aparecer aquí y ayuda a que la red crezca.">
                         <OpenFormButton form="aliados" detail={{ kind: "aliado" }} variant="cta"><Handshake className="mr-2 h-4 w-4" aria-hidden /> Quiero ser aliado</OpenFormButton>
@@ -68,7 +68,7 @@ export default async function AliadosPage() {
                         {partners.map((p) => {
                             const body = (
                                 <>
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex flex-col items-center gap-3 text-center sm:flex-row sm:gap-4 sm:text-left">
                                         {p.logo_url ? (
                                             <Image src={p.logo_url} alt="" width={56} height={56} unoptimized={p.logo_url.startsWith("http")} className="h-14 w-14 rounded-2xl border object-contain p-1" />
                                         ) : (
@@ -78,9 +78,9 @@ export default async function AliadosPage() {
                                             <h3 className="truncate font-semibold">{p.name}</h3>
                                             <p className="text-xs text-muted-foreground">{PARTNER_KINDS[p.kind]}{p.city ? ` · ${p.city}` : ""}</p>
                                         </div>
-                                        {p.website_url && <ArrowUpRight className="ml-auto h-5 w-5 shrink-0 text-primary" aria-hidden />}
+                                        {p.website_url && <ArrowUpRight className="h-5 w-5 shrink-0 text-primary sm:ml-auto" aria-hidden />}
                                     </div>
-                                    {p.description && <p className="mt-3 text-sm text-muted-foreground">{p.description}</p>}
+                                    {p.description && <p className="mt-3 text-center text-sm sm:text-left text-muted-foreground">{p.description}</p>}
                                 </>
                             )
                             const cls = "block h-full rounded-3xl border bg-card p-5 shadow-[var(--shadow-soft)] hover-lift"
