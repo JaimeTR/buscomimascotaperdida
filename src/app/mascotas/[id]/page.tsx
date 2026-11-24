@@ -23,6 +23,7 @@ import { BoostDialog } from "@/components/boost/boost-dialog"
 import { getFeaturedPets } from "@/lib/featured"
 import { AdSlot } from "@/components/ads/ad-slot"
 import { matchScore } from "@/lib/matches"
+import { getSimilarPets, getMatchCandidates } from "@/lib/public-pets"
 
 import type { Metadata } from "next"
 import { createPublicClient } from "@/utils/supabase/public"
@@ -96,23 +97,10 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
     const sightings = [...dbSightings, initialSighting]
 
     // 2. Otros casos de la zona
-    const { data: similarPets } = await supabase
-        .from('pets')
-        .select('*')
-        .eq('type', pet.type)
-        .eq('last_seen_district', pet.last_seen_district)
-        .neq('id', id)
-        .limit(4)
+    const similarPets = await getSimilarPets(id, pet.type, pet.last_seen_district)
 
     // Posibles coincidencias: perdidos <-> encontrados de la misma especie, cercanos en fecha y zona.
-    const { data: candidates } = await supabase
-        .from('pets')
-        .select('*')
-        .eq('type', pet.type)
-        .eq('status', pet.status === 'found' ? 'lost' : 'found')
-        .eq('is_hidden', false)
-        .order('last_seen_date', { ascending: false })
-        .limit(100)
+    const candidates = await getMatchCandidates(pet.type, pet.status === 'found' ? 'lost' : 'found')
     const matches = (candidates ?? [])
         .map((c) => ({ pet: c, score: matchScore(pet, c) }))
         .filter((m) => m.score >= 50)

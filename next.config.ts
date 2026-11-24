@@ -63,6 +63,10 @@ const nextConfig: NextConfig = {
         headers: securityHeaders,
       },
       {
+        source: '/:dir(img|brand|icons|screenshots|maplibre)/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' }],
+      },
+      {
         source: '/sw.js',
         headers: [
           {
