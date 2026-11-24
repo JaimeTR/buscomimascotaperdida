@@ -24,7 +24,7 @@ export default function CookiesPage() {
                         </table>
                     </div>
                 ) },
-                { title: "Servicios de terceros", body: <p>Al cargar mapas, tu navegador se conecta a OpenStreetMap; si inicias sesión con Google o Facebook, esos servicios aplican sus propias políticas. Los errores técnicos pueden registrarse con Sentry.</p> },
+                { title: "Servicios de terceros", body: <p>Al cargar mapas, tu navegador se conecta a OpenStreetMap; si inicias sesión con Google o Facebook, esos servicios aplican sus propias políticas. Los errores técnicos pueden registrarse con Sentry. Medimos visitas y velocidad de carga con Vercel Web Analytics y Speed Insights, que no usan cookies ni identifican a personas.</p> },
                 { title: "Cómo controlarlas", body: <p>Puedes borrar cookies y datos del sitio desde la configuración de tu navegador. Si bloqueas las necesarias, no podrás mantener la sesión iniciada. Si cierras sesión, borramos tu nombre y foto guardados en el equipo.</p> },
                 { title: "Más información", body: <p>Consulta también la <Link href="/privacidad">Política de privacidad</Link>.</p> },
             ]}

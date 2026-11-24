@@ -1,6 +1,7 @@
 import { requireAdmin } from "@/lib/admin"
 import { PageHeader } from "@/components/ui/page-header"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { setMessageStatus } from "./actions"
 
 const fmt = new Intl.DateTimeFormat("es-PE", { dateStyle: "medium", timeStyle: "short" })
@@ -16,7 +17,10 @@ type Msg = {
     amount: number | null; attachment_path: string | null; join_group: boolean; allow_mention: boolean; monthly: boolean; status: string
 }
 
-export default async function AdminMessages() {
+const PET_ID = /\/mascotas\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i
+
+export default async function AdminMessages({ searchParams }: { searchParams: Promise<{ tipo?: string }> }) {
+    const { tipo } = await searchParams
     const { supabase } = await requireAdmin()
     const { data } = await supabase
         .from("contact_messages")
@@ -24,7 +28,10 @@ export default async function AdminMessages() {
         .order("created_at", { ascending: false })
         .limit(100)
         .returns<Msg[]>()
-    const rows = data ?? []
+    const all = data ?? []
+    const reports = all.filter((r) => r.kind === "denuncia" && r.status === "new").length
+    const rows = tipo === "denuncia" ? all.filter((r) => r.kind === "denuncia") : all
+    const chip = (on: boolean) => `inline-flex min-h-10 items-center rounded-full border px-4 text-sm font-medium ${on ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card hover:bg-accent"}`
 
     // Enlaces temporales (10 min) a los comprobantes: el bucket es privado.
     const links = new Map<string, string>()
@@ -37,6 +44,11 @@ export default async function AdminMessages() {
     return (
         <div className="space-y-6">
             <PageHeader title="Mensajes" text={`${fresh} mensajes nuevos. Consultas, alianzas, voluntarios, colaboraciones y avisos de apoyo del formulario de contacto.`} />
+
+            <nav aria-label="Filtrar mensajes" className="flex flex-wrap gap-2">
+                <Link href="/admin/mensajes" className={chip(tipo !== "denuncia")}>Todos</Link>
+                <Link href="/admin/mensajes?tipo=denuncia" className={chip(tipo === "denuncia")}>Denuncias{reports ? ` (${reports} nuevas)` : ""}</Link>
+            </nav>
 
             {rows.length === 0 ? (
                 <p className="rounded-3xl border border-dashed bg-card p-10 text-center text-muted-foreground">Todavía no hay mensajes.</p>
@@ -53,6 +65,9 @@ export default async function AdminMessages() {
                                 <span className={`rounded-full px-3 py-1 text-xs font-bold ${STATUS[r.status]?.cls}`}>{STATUS[r.status]?.label}</span>
                             </div>
                             {r.message && <p className="mt-3 whitespace-pre-wrap rounded-2xl bg-secondary/60 p-3 text-sm">{r.message}</p>}
+                            {r.kind === "denuncia" && r.message && PET_ID.test(r.message) && (
+                                <p className="mt-2 flex flex-wrap gap-3 text-sm font-semibold"><Link className="text-primary hover:underline" href={`/mascotas/${r.message.match(PET_ID)![1]}`}>Ver el reporte denunciado</Link><Link className="text-primary hover:underline" href="/admin/reports">Ir a moderar reportes</Link></p>
+                            )}
                             <div className="mt-3 flex flex-wrap gap-2 text-xs font-medium">
                                 {r.amount != null && <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-800">Aporte: S/ {Number(r.amount).toFixed(2)}</span>}
                                 {r.monthly && <span className="rounded-full bg-orange-100 px-3 py-1 text-orange-800">Apoyo mensual</span>}

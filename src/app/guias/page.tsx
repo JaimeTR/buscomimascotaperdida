@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { Metadata } from "next"
 import { Button } from "@/components/ui/button"
+import { GUIDES } from "@/lib/guides"
 
 export const metadata: Metadata = {
     title: "Qué hacer si se pierde tu mascota: guía de las primeras 24 horas",
@@ -64,6 +65,14 @@ export default function GuidesPage() {
             </header>
             <section aria-labelledby="g-perdi" className="space-y-5"><h2 id="g-perdi" className="font-display text-2xl text-primary">Si se perdió tu mascota</h2><Steps items={LOST} /></section>
             <section aria-labelledby="g-encontre" className="space-y-5"><h2 id="g-encontre" className="font-display text-2xl text-primary">Si encontraste una mascota</h2><Steps items={FOUND} /></section>
+            <section aria-labelledby="g-mas" className="space-y-4">
+                <h2 id="g-mas" className="font-display text-2xl text-primary">Más guías</h2>
+                <ul className="space-y-3">
+                    {GUIDES.map((g) => (
+                        <li key={g.slug}><Link href={`/guias/${g.slug}`} className="block rounded-2xl border bg-card p-4 hover-lift"><span className="font-semibold text-primary">{g.title}</span><span className="mt-1 block text-sm text-muted-foreground">{g.description}</span></Link></li>
+                    ))}
+                </ul>
+            </section>
             <section aria-labelledby="g-faq" className="space-y-4">
                 <h2 id="g-faq" className="font-display text-2xl text-primary">Preguntas frecuentes</h2>
                 {FAQ.map(([q, a]) => <div key={q}><h3 className="font-semibold">{q}</h3><p className="text-sm text-muted-foreground">{a}</p></div>)}

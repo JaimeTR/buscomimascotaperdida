@@ -5,6 +5,7 @@ import type { Metadata } from "next"
 import { ChevronRight, ExternalLink, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { PARTNER_KINDS, type Partner } from "@/lib/ads"
+import { PartnerLink, PartnerView } from "@/components/partner-track"
 import { createPublicClient } from "@/utils/supabase/public"
 
 export const revalidate = 600
@@ -59,6 +60,7 @@ export default async function PartnerPage({ params }: { params: Promise<{ id: st
     return (
         <div className="container mx-auto max-w-3xl space-y-8 px-4 py-8 md:py-12">
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+            <PartnerView id={p.id} />
             <nav aria-label="Migas de pan" className="flex flex-wrap items-center justify-center gap-1.5 text-xs font-medium text-muted-foreground md:justify-start">
                 <Link href="/" className="hover:text-foreground">Inicio</Link><ChevronRight className="h-3 w-3 opacity-50" aria-hidden />
                 <Link href="/aliados" className="hover:text-foreground">Aliados</Link><ChevronRight className="h-3 w-3 opacity-50" aria-hidden />
@@ -80,7 +82,7 @@ export default async function PartnerPage({ params }: { params: Promise<{ id: st
             </header>
             {p.description && <p className="text-center leading-relaxed text-foreground/90 sm:text-left">{p.description}</p>}
             <div className="flex flex-wrap justify-center gap-3 sm:justify-start">
-                {p.website_url && <Button asChild variant="cta" className="rounded-full"><a href={p.website_url} target="_blank" rel="noopener noreferrer nofollow"><ExternalLink className="mr-2 h-4 w-4" aria-hidden /> Visitar su sitio</a></Button>}
+                {p.website_url && <Button asChild variant="cta" className="rounded-full"><PartnerLink id={p.id} href={p.website_url}><ExternalLink className="mr-2 h-4 w-4" aria-hidden /> Visitar su sitio</PartnerLink></Button>}
                 <Button asChild variant="outline" className="rounded-full"><Link href="/aliados">Ver todos los aliados</Link></Button>
             </div>
         </div>

@@ -19,8 +19,13 @@ const WAYS = [
     { icon: HeartHandshake, title: "Voluntarios", text: "Reparte carteles, comparte reportes y acompaña a quienes perdieron a su mascota." },
 ]
 
-export default async function AliadosPage() {
-    const partners = await getPartners()
+export default async function AliadosPage({ searchParams }: { searchParams: Promise<{ tipo?: string; ciudad?: string }> }) {
+    const { tipo, ciudad } = await searchParams
+    const all = await getPartners()
+    const kinds = Array.from(new Set(all.map((p) => p.kind)))
+    const cities = Array.from(new Set(all.map((p) => p.city).filter((c): c is string => Boolean(c)))).sort()
+    const partners = all.filter((p) => (!tipo || p.kind === tipo) && (!ciudad || p.city === ciudad))
+    const chip = (active: boolean) => `inline-flex min-h-10 items-center rounded-full border px-4 text-sm font-medium transition-colors ${active ? "border-primary bg-primary text-primary-foreground" : "border-input bg-card hover:bg-accent"}`
     const { data: { user } } = await (await createClient()).auth.getUser()
 
     return (
@@ -59,8 +64,15 @@ export default async function AliadosPage() {
 
             <section aria-labelledby="h-aliados" className="container mx-auto px-4 pb-14">
                 <h2 id="h-aliados" className="mb-8 text-center font-display text-3xl text-primary md:text-left">Nuestros aliados</h2>
+                {(kinds.length > 1 || cities.length > 1) && (
+                    <nav aria-label="Filtrar aliados" className="mb-6 flex flex-wrap items-center justify-center gap-2 md:justify-start">
+                        <Link href="/aliados" className={chip(!tipo && !ciudad)} aria-current={!tipo && !ciudad ? "true" : undefined}>Todos</Link>
+                        {kinds.map((k) => <Link key={k} href={`/aliados?tipo=${k}`} className={chip(tipo === k)} aria-current={tipo === k ? "true" : undefined}>{PARTNER_KINDS[k]}</Link>)}
+                        {cities.map((c) => <Link key={c} href={`/aliados?ciudad=${encodeURIComponent(c)}`} className={chip(ciudad === c)} aria-current={ciudad === c ? "true" : undefined}>{c}</Link>)}
+                    </nav>
+                )}
                 {partners.length === 0 ? (
-                    <EmptyState icon={Handshake} title="Aún no hay aliados publicados" text="Sé la primera empresa o persona en aparecer aquí y ayuda a que la red crezca.">
+                    <EmptyState icon={Handshake} title={all.length ? "No hay aliados con ese filtro" : "Aún no hay aliados publicados"} text="Sé la primera empresa o persona en aparecer aquí y ayuda a que la red crezca.">
                         <OpenFormButton form="aliados" detail={{ kind: "aliado" }} variant="cta"><Handshake className="mr-2 h-4 w-4" aria-hidden /> Quiero ser aliado</OpenFormButton>
                     </EmptyState>
                 ) : (

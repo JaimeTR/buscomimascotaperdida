@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/ui/page-header"
 import { StatCard } from "@/components/ui/stat-card"
 import { StatusBadge } from "@/components/status-badge"
 import { ACTIVE_STATUSES, getOwnerData } from "@/lib/dashboard-data"
+import { createClient } from "@/utils/supabase/server"
 
 export const metadata = { title: "Resumen | Busco mi mascota" }
 
@@ -15,6 +16,7 @@ export default async function DashboardPage() {
     const { user, pets, sightings } = await getOwnerData()
     const active = pets.filter((p) => ACTIVE_STATUSES.includes(p.status))
     const resolved = pets.filter((p) => p.status === "reunited").length
+    const { data: partner } = await (await createClient()).from("partners").select("id").eq("owner_id", user.id).limit(1).maybeSingle()
     const name = (user.user_metadata?.full_name as string | undefined)?.split(" ")[0]
 
     return (
@@ -28,6 +30,8 @@ export default async function DashboardPage() {
                 <StatCard label="Pistas recibidas" value={sightings.length} icon={Lightbulb} href="/panel/mensajes" tone="teal" />
                 <StatCard label="Casos resueltos" value={resolved} icon={CheckCircle2} href="/panel/reportes" tone="green" hint="Mascotas que volvieron a casa" />
             </section>
+
+            {partner && <Link href="/panel/aliado" className="flex items-center justify-between gap-3 rounded-3xl border bg-accent p-4 text-accent-foreground hover-lift"><span className="font-semibold">Mi negocio aliado: ver visitas y clics</span><ArrowRight className="h-5 w-5" aria-hidden /></Link>}
 
             <section aria-label="Accesos rápidos" className="grid grid-cols-3 gap-2 sm:gap-4">
                 {[

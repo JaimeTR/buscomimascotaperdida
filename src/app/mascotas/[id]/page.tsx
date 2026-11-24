@@ -250,7 +250,7 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                 )}
 
                                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                                    <SocialShare petName={pet.name} variant="button" text={found ? `Encontramos a ${pet.name}. ¿Es tu mascota? Comparte para ayudar a encontrar a su familia 🐾` : undefined} />
+                                    <SocialShare petName={pet.name} variant="button" text={found ? `🐾 Encontrado: ${kind.toLowerCase()}${place ? ` en ${place}` : ""}. ¿Es tu mascota? Comparte para ayudar a encontrar a su familia.` : `🚨 Se perdió ${pet.name}, ${kind.toLowerCase()}${place ? ` en ${place}` : ""}. ¿Lo viste? Comparte para ayudar a traerlo a casa.`} />
                                     <Button asChild variant="outline" className="h-12 w-full rounded-full border-2 text-base"><Link href={`/cartel/${pet.id}`}><Download className="mr-2 h-5 w-5" aria-hidden /> Generar cartel</Link></Button>
                                 </div>
                             </div>

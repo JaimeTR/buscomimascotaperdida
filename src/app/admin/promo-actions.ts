@@ -33,6 +33,7 @@ const schemas = {
         city: z.string().trim().max(80).optional().transform((v) => v || undefined),
     }),
     partnerToggle: z.object({ id, active: z.enum(["true", "false"]) }),
+    partnerOwner: z.object({ id, email: z.string().trim().max(160).optional().transform((v) => v || "") }),
 }
 
 // Ejecuta una mutación como administrador y deja rastro en la auditoría. Los errores no revelan detalles internos.
@@ -87,4 +88,16 @@ export async function setPartnerActive(formData: FormData) {
 export async function deletePartner(formData: FormData) {
     const { id: pid } = schemas.one.parse(Object.fromEntries(formData))
     await run("partner.delete", "partner", pid, (db) => db.from("partners").delete().eq("id", pid))
+}
+
+// Asigna (o quita, con el correo vacío) al responsable de un aliado: esa persona ve sus cifras en /panel/aliado.
+export async function setPartnerOwner(formData: FormData) {
+    const { id: pid, email } = schemas.partnerOwner.parse(Object.fromEntries(formData))
+    let found = true
+    await run("partner.owner", "partner", pid, async (db) => {
+        const { data, error } = await db.rpc("admin_set_partner_owner", { p_partner: pid, p_email: email })
+        found = data !== false
+        return { error }
+    })
+    if (!found) throw new Error("Ese correo no tiene cuenta")
 }

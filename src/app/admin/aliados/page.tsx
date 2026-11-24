@@ -3,14 +3,14 @@ import { PageHeader } from "@/components/ui/page-header"
 import { Button } from "@/components/ui/button"
 import { PARTNER_KINDS } from "@/lib/ads"
 import { ConfirmSubmit } from "../reports/confirm-submit"
-import { createPartner, deletePartner, setPartnerActive } from "../promo-actions"
+import { createPartner, deletePartner, setPartnerActive, setPartnerOwner } from "../promo-actions"
 
 const field = "h-10 w-full rounded-xl border border-input bg-card px-3 text-sm"
-type Row = { id: string; name: string; kind: keyof typeof PARTNER_KINDS; city: string | null; is_active: boolean }
+type Row = { id: string; name: string; kind: keyof typeof PARTNER_KINDS; city: string | null; is_active: boolean; owner_id: string | null }
 
 export default async function AdminPartners() {
     const { supabase } = await requireAdmin()
-    const { data } = await supabase.from("partners").select("id, name, kind, city, is_active").order("sort").order("created_at", { ascending: false }).returns<Row[]>()
+    const { data } = await supabase.from("partners").select("id, name, kind, city, is_active, owner_id").order("sort").order("created_at", { ascending: false }).returns<Row[]>()
     const rows = data ?? []
 
     return (
@@ -39,6 +39,11 @@ export default async function AdminPartners() {
                     {rows.map((p) => (
                         <li key={p.id} className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border bg-card p-4 shadow-[var(--shadow-soft)]">
                             <div><p className="font-semibold">{p.name}</p><p className="text-sm text-muted-foreground">{PARTNER_KINDS[p.kind]}{p.city ? ` · ${p.city}` : ""} · {p.is_active ? "Visible" : "Oculto"}</p></div>
+                            <form action={setPartnerOwner} className="flex items-center gap-2">
+                                <input type="hidden" name="id" value={p.id} />
+                                <input name="email" type="email" placeholder={p.owner_id ? "Responsable asignado (correo para cambiar)" : "correo del responsable"} aria-label={`Correo del responsable de ${p.name}`} className="h-9 w-64 rounded-xl border border-input bg-card px-3 text-sm" />
+                                <Button size="sm" variant="outline" type="submit">Guardar</Button>
+                            </form>
                             <div className="flex items-center gap-2">
                                 <form action={setPartnerActive}><input type="hidden" name="id" value={p.id} /><input type="hidden" name="active" value={String(!p.is_active)} /><Button size="sm" variant="outline" type="submit">{p.is_active ? "Ocultar" : "Mostrar"}</Button></form>
                                 <form action={deletePartner}><input type="hidden" name="id" value={p.id} /><ConfirmSubmit message={`¿Eliminar a ${p.name}?`}>Eliminar</ConfirmSubmit></form>

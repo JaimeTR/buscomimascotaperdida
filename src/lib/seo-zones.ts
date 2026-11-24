@@ -1,4 +1,4 @@
-import { PERU_LOCATIONS } from "@/lib/peru-locations"
+import { PERU_LOCATIONS } from "./peru-locations.ts"
 
 const strip = (s: string) => s.normalize("NFD").replace(/[̀-ͯ]/g, "")
 

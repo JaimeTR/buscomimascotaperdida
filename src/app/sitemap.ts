@@ -1,11 +1,14 @@
 import type { MetadataRoute } from 'next'
 import { createPublicClient } from '@/utils/supabase/public'
 import { SPECIES, slugify } from '@/lib/seo-zones'
+import { GUIDES } from '@/lib/guides'
 
 const base = process.env.NEXT_PUBLIC_APP_URL || 'https://buscomimascotaperdida.com'
 const pages: [string, number][] = [
     ['', 1], ['/mascotas', 0.9], ['/reportar', 0.8], ['/cartel', 0.6], ['/aliados', 0.5],
     ['/guias', 0.7], ['/transparencia', 0.4], ['/casos-de-exito', 0.6], ['/anuncios', 0.4], ['/contacto', 0.5], ['/privacidad', 0.2], ['/terminos', 0.2], ['/cookies', 0.2], ['/libro-de-reclamaciones', 0.2],
+    ['/politica-de-contenido', 0.2],
+    ...GUIDES.map((g): [string, number] => [`/guias/${g.slug}`, 0.6]),
     ...Object.keys(SPECIES).map((s): [string, number] => [`/mascotas/especie/${s}`, 0.6]),
 ]
 

@@ -54,5 +54,22 @@ Hecho: `/transparencia` (cifras reales, las que valen cero no se muestran), CSV 
 - Página de transparencia con cifras reales de `pet_boosts` confirmados (solo si existen).
 - Admin: métricas simples y exportar CSV de impulsos.
 
+## Fase 8 — Segunda tanda ✅ (2026-11-24)
+- Medición sin cookies (Vercel Web Analytics y Speed Insights; se activan en el panel de Vercel) y verificación de Search Console por `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`.
+- Texto de compartir más claro (estado, especie y zona); compartir por WhatsApp, Facebook y menú nativo ya existía.
+- Guías ampliadas (`/guias/[slug]`: microchip, buscar un gato, ruido fuerte) y `/politica-de-contenido`.
+- Directorio de aliados con filtros por tipo y ciudad.
+- Panel del aliado (`/panel/aliado`): visitas y clics de su ficha (tabla `partner_stats`, RLS por responsable). El admin asigna al responsable por correo en `/admin/aliados`.
+- Moderación: filtro «Denuncias» en `/admin/mensajes` con enlace al reporte denunciado.
+- Pruebas de zonas SEO (21 pruebas en total) y guion de carga `scripts/load-test.k6.js` (correr contra la vista previa).
+
+## Ideas siguientes (no hechas)
+- Rol de moderador distinto del administrador total.
+- Detección de fotos duplicadas (hash perceptual) para frenar reportes repetidos.
+- Editar su ficha el propio aliado (hoy lo hace el admin).
+- Chapitas con QR por mascota (necesita proveedor y logística).
+- Renovar reporte a los 30 días, modo oscuro, aviso al responsable cuando su ficha reciba visitas.
+- Prueba de carga real y revisar plan de Supabase (conexiones y ancho de banda) antes de una campaña grande.
+
 ## Fuera de alcance por ahora
-Cobros en línea, chapitas con QR (requiere proveedor/logística), modo oscuro, rol de moderador.
+Cobros en línea.

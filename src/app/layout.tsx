@@ -13,6 +13,8 @@ import { ToastProvider } from "@/components/ui/toast-modern";
 import { ConfirmProvider } from "@/components/ui/confirm-modern";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { PWARegister } from "@/components/pwa-register";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 // Poppins: interfaz y texto. Outfit: títulos (sentence case, peso 600). Ver DESIGN.md.
 const poppins = Poppins({
@@ -59,6 +61,8 @@ export const metadata: Metadata = {
   title: "Mascotas perdidas en Perú: reporta y encuentra | Busco mi mascota",
   description: "Red comunitaria gratuita para encontrar mascotas perdidas en Lima y todo el Perú. Reporta un perro o gato perdido, busca por distrito y comparte el caso.",
   applicationName: "Busco mi mascota",
+  // Verificación de Google Search Console: define NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION con el código que te da Google.
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } : undefined,
   alternates: { canonical: "./" },
   keywords: ["mascotas perdidas", "perro perdido", "gato perdido", "mascota encontrada", "Lima", "Perú", "cartel de mascota perdida"],
   other: { "geo.region": "PE", "geo.placename": "Perú", language: "es" },
@@ -127,6 +131,9 @@ export default function RootLayout({
             <ChromeGate><PWAInstallPrompt /></ChromeGate>
           </ConfirmProvider>
         </ToastProvider>
+        {/* Medición sin cookies (Vercel). Se activa en el panel de Vercel; sin activarlo no hace nada. */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
