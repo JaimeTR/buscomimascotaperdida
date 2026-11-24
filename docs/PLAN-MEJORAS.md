@@ -14,6 +14,7 @@ Sin esto el sitio no está «lanzado». Detalle en `docs/ESTADO-DEL-PROYECTO.md`
 
 ## Fase 1 — Rendimiento y caché ✅ (2026-11-24)
 Meta: que un caso viral no tumbe el sitio.
+Hecho: lecturas públicas del perfil (zona y coincidencias) en caché de 60 s, índices en `pets`, caché de estáticos; los mapas ya cargaban bajo demanda. No hecho: el perfil sigue siendo dinámico porque lee la sesión (dueño/contacto), el listado `/mascotas` sigue en el cliente y quedan `<img>` por migrar.
 - Caché con revalidación en `/mascotas` (listado sin filtros) y `/mascotas/[id]`; invalidar al crear/editar/cerrar un reporte.
 - Migrar `<img>` a `next/image` donde sea seguro (listas y tarjetas).
 - Mapas cargados bajo demanda (`dynamic`, sin SSR).
