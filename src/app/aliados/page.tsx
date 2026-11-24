@@ -33,7 +33,7 @@ export default async function AliadosPage() {
                         <p className="text-lg text-muted-foreground">Cada empresa, veterinaria y persona que colabora ayuda a que más mascotas vuelvan a casa.</p>
                         <div className="flex flex-wrap justify-center gap-3 md:justify-start">
                             <OpenFormButton form="aliados" variant="cta" size="lg" className="rounded-full"><HandHeart className="mr-2 h-5 w-5" aria-hidden /> Quiero colaborar</OpenFormButton>
-                            <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><Link href="/anuncios"><Megaphone className="mr-2 h-5 w-5" aria-hidden /> Ver planes de promoción</Link></Button>
+                            <Button asChild variant="outline" size="lg" className="rounded-full bg-card"><Link href="/anuncios"><Megaphone className="mr-2 h-5 w-5" aria-hidden /> Cómo anunciarte</Link></Button>
                         </div>
                     </div>
                     <div className="relative min-h-64 md:min-h-[26rem]">

@@ -115,8 +115,9 @@ export default function RootLayout({
         <PWARegister />
         <ToastProvider>
           <ConfirmProvider>
+            <a href="#contenido" className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[100] focus:rounded-full focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground">Saltar al contenido</a>
             <ChromeGate><Navbar /></ChromeGate>
-            <main className="flex-1 pt-[env(safe-area-inset-top)] lg:pt-0">
+            <main id="contenido" className="flex-1 pt-[env(safe-area-inset-top)] lg:pt-0">
               {children}
             </main>
             <ChromeGate><Footer /></ChromeGate>

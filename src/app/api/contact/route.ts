@@ -10,7 +10,7 @@ const FILE_TYPES: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': '
 
 const text = (max: number) => z.string().trim().max(max)
 const schema = z.object({
-    kind: z.enum(['consulta', 'aliado', 'voluntario', 'colaborar', 'apoyo', 'grupo']),
+    kind: z.enum(['consulta', 'aliado', 'voluntario', 'colaborar', 'apoyo', 'grupo', 'denuncia']),
     name: text(120).min(2),
     email: text(160).email(),
     phone: text(30).optional(),

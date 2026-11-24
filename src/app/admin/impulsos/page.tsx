@@ -40,6 +40,8 @@ export default async function AdminBoosts() {
         <div className="space-y-6">
             <PageHeader title="Impulsos" text={`${pending} aportes por verificar. Confirma el monto: define el orden de las mascotas destacadas (mayor aporte, más adelante).`} />
 
+            <a href="/admin/impulsos/exportar" className="inline-block text-sm font-semibold text-primary underline-offset-2 hover:underline">Descargar CSV de aportes</a>
+
             {rows.length === 0 ? (
                 <p className="rounded-3xl border border-dashed bg-card p-10 text-center text-muted-foreground">Todavía no hay aportes.</p>
             ) : (

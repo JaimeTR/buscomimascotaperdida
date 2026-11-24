@@ -1,4 +1,4 @@
-# Estado del proyecto — 2026-11-22
+# Estado del proyecto — 2026-11-24
 
 Punto de partida para retomar el trabajo. Actualizar al cerrar cada sesión. Contexto para asistentes: `CLAUDE.md`.
 
@@ -19,6 +19,8 @@ Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimasco
 - **Mapas rediseñados** (`pets-map`, `sightings-map`, `map-picker`, `location-map`, `base-map-layer`, `map-tools`, `lib/map-kit.ts`): base vectorial gratuita (MapLibre + OpenFreeMap) sobre Leaflet, marcadores con foto, agrupación, zona aproximada por distrito cuando no hay coordenadas, «ubícame», búsqueda de dirección y pin arrastrable. Avisos no invasivos: uno a la vez y una vez al día tras cerrarlos (`lib/prompt-gate.ts`), tarjeta compacta para instalar la app.
 - **Calidad:** `tsc`, `eslint` sin errores, 18 pruebas, `check:production-config`.
 
+- **Plan de mejoras (2026-11-24, ver `docs/PLAN-MEJORAS.md`):** caché de lecturas públicas + índices, avisos por correo/push al dueño (avistamiento), al aportante (apoyo confirmado) y al admin (mensaje), estado del apoyo en el perfil, páginas SEO por distrito y especie, `/guias`, `/transparencia`, denuncias por el formulario de contacto, CSV de aportes, enlace «Saltar al contenido».
+
 ## Pendiente (acciones tuyas, paneles externos)
 1. ~~Admin~~ **Hecho (2026-11-22):** `devmarkpe@gmail.com` es administrador (`admin_users`). Para dar acceso a otra persona: `insert into admin_users (user_id) values ('<id de auth.users>')`.
 2. **Vercel:** `SUPABASE_SERVICE_ROLE_KEY` (eliminar cuenta, cron, límites compartidos), `NEXT_PUBLIC_APP_URL`/`ALLOWED_ORIGIN` con la URL real, `CRON_SECRET`. Ya cargadas: Yape/Plin, titular, WhatsApp, teléfono y correo de contacto.
@@ -29,8 +31,8 @@ Red comunitaria gratuita para encontrar mascotas perdidas en Perú (buscomimasco
 
 ## Pendiente (desarrollo)
 - Mapas: probar en celular real el mapa nuevo (MapLibre + marcadores con foto + agrupación; ver abajo) y la tarjeta compacta de «instalar app».
-- Avisos por correo: al admin cuando llega un mensaje/impulso y a la persona cuando se confirma su aporte.
-- Estado del impulso visible para el dueño en el perfil de la mascota (en el panel ya está).
+- Avisos por correo: falta el aviso al admin cuando llega un impulso (mensaje, avistamiento y aporte confirmado ya avisan). Requieren Resend con dominio verificado.
+- Ficha pública por aliado, métricas en admin, auditoría de contraste, migrar `<img>` restantes a `next/image` (requiere `remotePatterns`).
 - Sección pública de agradecimiento a colaboradores.
 - Probar con una cuenta real: reportar con aporte, subir comprobante, aprobar en `/admin/impulsos`, contacto público y avistamientos (aún no hay datos reales de esos flujos).
 - Casos reales para reemplazar los importados y fotos reales en lugar de stock. Los 63 casos importados enlazan la foto de su fuente (no está alojada aquí): riesgo de derechos de autor, quitar a pedido.

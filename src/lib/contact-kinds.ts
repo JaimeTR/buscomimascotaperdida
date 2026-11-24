@@ -6,5 +6,6 @@ export const CONTACT_KINDS = [
     { value: "colaborar", label: "Quiero colaborar" },
     { value: "apoyo", label: "Ya apoyé al proyecto" },
     { value: "grupo", label: "Unirme al grupo" },
+    { value: "denuncia", label: "Denunciar un reporte" },
 ] as const
 export type ContactKind = (typeof CONTACT_KINDS)[number]["value"]

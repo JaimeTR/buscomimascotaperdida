@@ -26,12 +26,12 @@ const MEMBERSHIPS = [
 ]
 
 const FAQ = [
-    { q: "¿Cuesta publicar un reporte?", a: "No. Publicar, buscar y compartir es gratis. Solo los negocios que quieren promocionarse contratan un plan." },
+    { q: "¿Cuesta publicar un reporte?", a: "No. Publicar, buscar y compartir es gratis. Apoyar con un aporte voluntario es opcional y nunca condiciona tu reporte." },
     { q: "¿Quién puede ver mi teléfono o correo?", a: "Solo lo que tú marques como público en Ajustes. Si no lo marcas, quien vea tu reporte puede escribirte únicamente por los canales que habilites." },
     { q: "Encontré una mascota, ¿qué hago?", a: "Busca en la lista si hay un reporte que coincida y envía un avistamiento desde su página. Si no hay reporte, toma buenas fotos y compártelas con los vecinos de la zona; también puedes llevarla a una veterinaria cercana para revisar si tiene microchip." },
     { q: "Mi mascota ya volvió, ¿cómo lo marco?", a: "Entra a tu panel, abre «Mis reportes» y pulsa «Marcar reunido». El reporte deja de aparecer como activo." },
     { q: "¿Cómo se eligen los anuncios y aliados?", a: "El equipo revisa cada solicitud. Los anuncios siempre se muestran marcados como anuncio y nunca se mezclan con los reportes de mascotas." },
-    { q: "Vi un reporte falso o un abuso, ¿cómo aviso?", a: "Escríbenos desde el formulario con el enlace del reporte y lo revisamos. Los administradores pueden ocultar o eliminar reportes que incumplan las normas." },
+    { q: "Vi un reporte falso o un abuso, ¿cómo aviso?", a: "Usa el botón «Denunciar este reporte» de su página, o escríbenos desde el formulario con el enlace, y lo revisamos. Los administradores pueden ocultar o eliminar reportes que incumplan las normas." },
     { q: "¿Para qué se usan los aportes?", a: "Apoyar el proyecto es voluntario. Ayuda a cubrir los costos de mantenerlo gratis: servidor, correos y avisos, y la difusión de casos." },
 ]
 
@@ -105,7 +105,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                         </Reveal>
                     ))}
                 </ul>
-                <p className="text-center text-sm text-muted-foreground">¿Tienes un negocio y quieres anunciarte? Mira los <Link href="/anuncios" className="font-semibold text-primary underline-offset-2 hover:underline">planes de promoción</Link>.</p>
+                <p className="text-center text-sm text-muted-foreground">¿Tienes un negocio y quieres anunciarte? Mira cómo <Link href="/anuncios" className="font-semibold text-primary underline-offset-2 hover:underline">anunciarte</Link>.</p>
             </section>
 
             {/* Apoyar el proyecto */}

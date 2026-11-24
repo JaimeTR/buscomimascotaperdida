@@ -268,6 +268,8 @@ export default async function PetPage({ params }: { params: Promise<{ id: string
                                 </div>
                             </div>
 
+                            <p className="text-center text-xs text-muted-foreground"><Link href="/contacto?tipo=denuncia" className="inline-flex items-center gap-1 underline-offset-2 hover:text-foreground hover:underline"><Flag className="h-3 w-3" aria-hidden /> Denunciar este reporte</Link> (pega su enlace en el mensaje)</p>
+
                             <AdSlot placement="detail_sidebar" variant="side" />
                         </div>
                     </aside>

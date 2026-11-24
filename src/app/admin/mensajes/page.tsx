@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { setMessageStatus } from "./actions"
 
 const fmt = new Intl.DateTimeFormat("es-PE", { dateStyle: "medium", timeStyle: "short" })
-const KIND: Record<string, string> = { consulta: "Consulta", aliado: "Aliado", voluntario: "Voluntario", colaborar: "Colaborar", apoyo: "Apoyo", grupo: "Grupo" }
+const KIND: Record<string, string> = { consulta: "Consulta", aliado: "Aliado", voluntario: "Voluntario", colaborar: "Colaborar", apoyo: "Apoyo", grupo: "Grupo", denuncia: "Denuncia" }
 const STATUS: Record<string, { label: string; cls: string }> = {
     new: { label: "Nuevo", cls: "bg-amber-100 text-amber-800" },
     read: { label: "Leído", cls: "bg-sky-100 text-sky-800" },

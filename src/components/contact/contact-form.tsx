@@ -1,14 +1,14 @@
 "use client"
 
 import { useRef, useState } from "react"
-import { Building2, CheckCircle2, HandCoins, HandHeart, HeartHandshake, HelpCircle, Loader2, Mail, MessageSquareText, Paperclip, Phone, Send, Sparkles, User, Users } from "lucide-react"
+import { Building2, Flag, CheckCircle2, HandCoins, HandHeart, HeartHandshake, HelpCircle, Loader2, Mail, MessageSquareText, Paperclip, Phone, Send, Sparkles, User, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { IconField, iconFieldClass } from "@/components/ui/icon-field"
 import { cn } from "@/lib/utils"
 import { CONTACT_KINDS, type ContactKind } from "@/lib/contact-kinds"
 
 const KIND_ICON: Record<ContactKind, typeof Mail> = {
-    consulta: HelpCircle, aliado: Building2, voluntario: HeartHandshake, colaborar: Sparkles, apoyo: HandHeart, grupo: Users,
+    consulta: HelpCircle, aliado: Building2, voluntario: HeartHandshake, colaborar: Sparkles, apoyo: HandHeart, grupo: Users, denuncia: Flag,
 }
 
 const PLACEHOLDER: Record<ContactKind, string> = {
@@ -18,6 +18,7 @@ const PLACEHOLDER: Record<ContactKind, string> = {
     colaborar: "¿Cómo te gustaría colaborar? Ej. difusión, diseño, programación, traducción, donaciones en especie.",
     apoyo: "Si quieres, cuéntanos cómo apoyaste (Yape, Plin, transferencia, donación en especie…). ¡Gracias!",
     grupo: "Si quieres, cuéntanos un poco sobre ti y en qué te gustaría ayudar.",
+    denuncia: "Pega el enlace del reporte y cuéntanos qué está mal: datos falsos, fotos ajenas, estafa, contenido ofensivo…",
 }
 
 const Check = ({ name, defaultChecked, children }: { name: string; defaultChecked?: boolean; children: React.ReactNode }) => (
@@ -135,7 +136,7 @@ export function ContactForm({ initialKind = "consulta", initialAmount, initialMo
             )}
 
             <div className="space-y-2">
-                {kind !== "grupo" && kind !== "consulta" && <Check name="join_group">Quiero unirme al grupo de colaboradores del proyecto.</Check>}
+                {kind !== "grupo" && kind !== "consulta" && kind !== "denuncia" && <Check name="join_group">Quiero unirme al grupo de colaboradores del proyecto.</Check>}
                 {(kind === "apoyo" || kind === "colaborar") && <Check name="allow_mention">Pueden mencionar mi apoyo públicamente como colaborador.</Check>}
             </div>
 
