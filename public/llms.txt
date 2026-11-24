@@ -6,12 +6,14 @@
 - [Buscar mascotas perdidas y encontradas](https://buscomimascotaperdida.com/mascotas): listado y mapa de casos, filtrables por distrito, tipo, raza y color.
 - [Reportar una mascota](https://buscomimascotaperdida.com/reportar): publicar un caso perdido o encontrado.
 - [Crear cartel](https://buscomimascotaperdida.com/cartel): cartel de mascota perdida listo para imprimir.
+- [Guía: qué hacer si se pierde tu mascota](https://buscomimascotaperdida.com/guias): pasos de las primeras 24 horas y qué hacer si encuentras una mascota.
 - [Aliados y voluntarios](https://buscomimascotaperdida.com/aliados): veterinarias, refugios y voluntarios.
 - [Casos de éxito](https://buscomimascotaperdida.com/casos-de-exito): historias reales de mascotas que volvieron a casa.
 - [Anuncios y destacados](https://buscomimascotaperdida.com/anuncios): apoyo voluntario por Yape/Plin para destacar un caso o negocio.
 - [Contacto y preguntas frecuentes](https://buscomimascotaperdida.com/contacto)
 
 ## Datos
+- Casos por zona: https://buscomimascotaperdida.com/mascotas/distrito/{distrito} y por especie: /mascotas/especie/perros, /mascotas/especie/gatos.
 - Cada caso vive en https://buscomimascotaperdida.com/mascotas/{id} con distrito, provincia, fecha y mapa de avistamientos.
 - Cobertura: Perú (foco en Lima). Idioma: español.
 

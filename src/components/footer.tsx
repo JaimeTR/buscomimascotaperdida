@@ -4,7 +4,7 @@ import { PawPrint } from "lucide-react"
 
 const COLUMNS = [
     { title: "Plataforma", links: [["/mascotas", "Buscar mascotas"], ["/reportar", "Reportar una mascota"], ["/cartel", "Crear cartel"]] },
-    { title: "Comunidad", links: [["/casos-de-exito", "Casos de éxito"], ["/aliados", "Aliados y voluntarios"], ["/anuncios", "Anunciar tu negocio"]] },
+    { title: "Comunidad", links: [["/guias", "Qué hacer si se pierde"], ["/casos-de-exito", "Casos de éxito"], ["/aliados", "Aliados y voluntarios"], ["/anuncios", "Anunciar tu negocio"]] },
     { title: "Ayuda", links: [["/contacto", "Contacto"], ["/privacidad", "Privacidad"], ["/terminos", "Términos"], ["/cookies", "Cookies"], ["/libro-de-reclamaciones", "Libro de reclamaciones"]] },
 ]
 
