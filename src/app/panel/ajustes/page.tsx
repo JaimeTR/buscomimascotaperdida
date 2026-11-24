@@ -181,9 +181,9 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="container mx-auto py-10 px-4 max-w-4xl space-y-8">
+        <div className="container mx-auto py-6 px-4 max-w-4xl space-y-8 md:py-10">
 
-            <div>
+            <div className="text-center md:text-left">
                 <h1 className="text-3xl font-bold text-foreground">Configuración</h1>
                 <p className="text-muted-foreground">Gestiona tu perfil y preferencias de la cuenta.</p>
             </div>
@@ -198,13 +198,13 @@ export default function SettingsPage() {
                 {/* Profile Tab */}
                 <TabsContent value="profile" className="space-y-6">
                     <Card className="border-border shadow-sm">
-                        <CardHeader>
+                        <CardHeader className="text-center sm:text-left">
                             <CardTitle>Información Personal</CardTitle>
                             <CardDescription>Actualiza tu foto y datos de contacto.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-8">
 
-                            <div className="flex items-center gap-6">
+                            <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:gap-6 sm:text-left">
                                 <input
                                     type="file"
                                     id="avatar-upload"

@@ -137,8 +137,8 @@ export default function MyReportsPage() {
                 <Button asChild variant="cta" className="rounded-full"><Link href="/reportar"><Plus className="mr-2 h-4 w-4" aria-hidden /> Nuevo reporte</Link></Button>
             </PageHeader>
 
-            <div className="flex flex-wrap items-center gap-3">
-                <div role="tablist" aria-label="Filtrar por estado" className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center justify-center gap-3">
+                <div role="tablist" aria-label="Filtrar por estado" className="flex flex-wrap justify-center gap-2">
                     {FILTERS.map((f) => (
                         <button
                             key={f.key}
@@ -151,7 +151,7 @@ export default function MyReportsPage() {
                         </button>
                     ))}
                 </div>
-                <div className="relative ml-auto w-full sm:w-64">
+                <div className="relative w-full sm:ml-auto sm:w-64">
                     <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
                     <Input aria-label="Buscar en mis reportes" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Nombre o distrito" className="h-10 rounded-full pl-10" />
                 </div>
@@ -171,8 +171,8 @@ export default function MyReportsPage() {
                 <>
                 {reports.filter((r) => reminderDue(r)).slice(0, 2).map((r) => (
                     <div key={r.id} role="status" className="mb-4 flex flex-col gap-3 rounded-2xl border border-cta/30 bg-cta/10 p-4 sm:flex-row sm:items-center sm:justify-between">
-                        <p className="text-sm font-medium">¿Ya apareció <strong>{r.name || "tu mascota"}</strong>? Si volvió a casa, cuéntanos y celebra su historia.</p>
-                        <div className="flex gap-2">
+                        <p className="text-center text-sm font-medium sm:text-left">¿Ya apareció <strong>{r.name || "tu mascota"}</strong>? Si volvió a casa, cuéntanos y celebra su historia.</p>
+                        <div className="flex justify-center gap-2">
                             <Button size="sm" variant="cta" onClick={() => setReuniting(r)}>Sí, ya apareció</Button>
                             <Button size="sm" variant="ghost" onClick={() => snooze(r.id)}>Todavía no</Button>
                         </div>
@@ -184,23 +184,23 @@ export default function MyReportsPage() {
                         return (
                             <li key={r.id} className="flex flex-col gap-4 rounded-3xl border bg-card p-4 shadow-[var(--shadow-soft)] sm:flex-row">
                                 <img src={r.image_urls?.[0] || "/img/sin-foto.svg"} alt={`Foto de ${r.name || "la mascota"}`} className="h-40 w-full rounded-2xl object-cover sm:h-28 sm:w-28" loading="lazy" />
-                                <div className="min-w-0 flex-1 space-y-3">
-                                    <div className="flex flex-wrap items-start justify-between gap-2">
-                                        <div className="min-w-0">
+                                <div className="min-w-0 flex-1 space-y-3 text-center sm:text-left">
+                                    <div className="flex flex-col items-center gap-2 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+                                        <div className="min-w-0 max-w-full">
                                             <h2 className="truncate text-lg font-semibold">{r.name || "Sin nombre"}</h2>
-                                            <p className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                                            <p className="flex flex-wrap items-center justify-center gap-1.5 text-sm text-muted-foreground sm:justify-start">
                                                 <MapPin className="h-4 w-4 text-cta" aria-hidden />
                                                 {[r.last_seen_district, r.last_seen_department].filter(Boolean).join(", ") || "Sin ubicación"} · {fmt.format(new Date(r.created_at))}
                                             </p>
                                         </div>
-                                        <div className="flex flex-wrap items-center gap-1.5">
+                                        <div className="flex flex-wrap items-center justify-center gap-1.5">
                                             {boostChip(r.id)}
                                             <StatusBadge status={r.status} />
                                         </div>
                                     </div>
-                                    <p className="flex items-center gap-1.5 text-sm text-muted-foreground"><Lightbulb className="h-4 w-4" aria-hidden /> {r.sightings?.length ?? 0} {r.sightings?.length === 1 ? "pista" : "pistas"}</p>
+                                    <p className="flex items-center justify-center gap-1.5 text-sm text-muted-foreground sm:justify-start"><Lightbulb className="h-4 w-4" aria-hidden /> {r.sightings?.length ?? 0} {r.sightings?.length === 1 ? "pista" : "pistas"}</p>
 
-                                    <div className="flex flex-wrap gap-2">
+                                    <div className="flex flex-wrap justify-center gap-2 sm:justify-start">
                                         <Button asChild size="sm" variant="outline"><Link href={`/mascotas/${r.id}`}><Eye className="mr-1.5 h-4 w-4" aria-hidden /> Ver</Link></Button>
                                         <Button asChild size="sm" variant="cta"><Link href={`/cartel/${r.id}`}><Megaphone className="mr-1.5 h-4 w-4" aria-hidden /> Cartel</Link></Button>
                                         <Button asChild size="sm" variant="outline"><Link href={`/panel/reportes/${r.id}/editar`}><PenLine className="mr-1.5 h-4 w-4" aria-hidden /> Editar</Link></Button>

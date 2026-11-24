@@ -82,23 +82,23 @@ export function DashboardShell({ name, avatarUrl, isAdmin, children }: Props) {
                 </div>
             </aside>
 
-            {/* Barra superior (móvil) */}
-            <header className="sticky top-0 z-30 flex h-14 items-center justify-between border-b bg-background/90 px-4 backdrop-blur md:hidden">
-                <Link href="/" aria-label="Ir al inicio"><BrandMark showName /></Link>
-                <div className="flex items-center gap-1 text-muted-foreground">
-                    <Link href="/" aria-label="Ir a la web" className="flex h-10 w-10 items-center justify-center rounded-full active:bg-secondary"><Home className="h-5 w-5" aria-hidden /></Link>
-                    {isAdmin && <Link href="/admin" aria-label="Administración" className="flex h-10 w-10 items-center justify-center rounded-full active:bg-secondary"><ShieldCheck className="h-5 w-5" aria-hidden /></Link>}
-                    <button onClick={signOut} aria-label="Cerrar sesión" className="flex h-10 w-10 items-center justify-center rounded-full active:bg-secondary hover:text-destructive"><LogOut className="h-5 w-5" aria-hidden /></button>
-                    <Link href="/panel/ajustes" aria-label="Mi perfil" className="ml-1">
-                        <Avatar className="h-9 w-9">
-                            {avatarUrl && <AvatarImage src={avatarUrl} alt="" />}
-                            <AvatarFallback className="bg-accent text-xs font-semibold text-accent-foreground">{initials}</AvatarFallback>
-                        </Avatar>
-                    </Link>
+            {/* Cuenta (móvil, solo en Resumen): sin barra superior, como una app */}
+            {pathname === "/panel" && (
+                <div className="flex flex-col items-center gap-3 px-4 pt-[calc(1.5rem+env(safe-area-inset-top))] text-center md:hidden">
+                    <Avatar className="h-16 w-16 border-2 border-card shadow-[var(--shadow-soft)]">
+                        {avatarUrl && <AvatarImage src={avatarUrl} alt="" />}
+                        <AvatarFallback className="bg-accent text-lg font-semibold text-accent-foreground">{initials}</AvatarFallback>
+                    </Avatar>
+                    <p className="max-w-full truncate text-sm font-semibold">{name || "Mi cuenta"}</p>
+                    <div className="flex items-center gap-2 text-xs font-medium">
+                        <Link href="/" className="inline-flex h-9 items-center gap-1.5 rounded-full border bg-card px-3.5"><Home className="h-4 w-4" aria-hidden /> Web</Link>
+                        {isAdmin && <Link href="/admin" className="inline-flex h-9 items-center gap-1.5 rounded-full border bg-card px-3.5"><ShieldCheck className="h-4 w-4" aria-hidden /> Admin</Link>}
+                        <button onClick={signOut} className="inline-flex h-9 items-center gap-1.5 rounded-full border bg-card px-3.5 text-destructive"><LogOut className="h-4 w-4" aria-hidden /> Salir</button>
+                    </div>
                 </div>
-            </header>
+            )}
 
-            <main className="min-h-screen pb-28 md:pb-10">{children}</main>
+            <main className={cn("min-h-screen pb-28 md:pb-10", pathname !== "/panel" && "pt-[env(safe-area-inset-top)] md:pt-0")}>{children}</main>
 
             {/* Pestañas inferiores (móvil) */}
             <nav aria-label="Dashboard" className="fixed inset-x-0 bottom-0 z-40 border-t bg-card/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden">

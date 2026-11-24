@@ -11,7 +11,7 @@ export default async function CluesPage() {
 
     return (
         <div className="mx-auto max-w-3xl space-y-6 p-4 md:p-8">
-            <header>
+            <header className="text-center md:text-left">
                 <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">Pistas recibidas</h1>
                 <p className="text-muted-foreground">Avistamientos que la comunidad reportó sobre tus mascotas.</p>
             </header>
@@ -25,8 +25,8 @@ export default async function CluesPage() {
             ) : (
                 <ul className="space-y-3">
                     {sightings.map((s) => (
-                        <li key={s.id} className="rounded-2xl border bg-card p-4">
-                            <div className="flex flex-wrap items-baseline justify-between gap-2">
+                        <li key={s.id} className="rounded-2xl border bg-card p-4 text-center sm:text-left">
+                            <div className="flex flex-col items-center gap-1 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-2">
                                 <Link href={`/mascotas/${s.pet_id}`} className="font-bold text-primary hover:underline">
                                     {s.pets?.name || "Tu mascota"}
                                 </Link>
